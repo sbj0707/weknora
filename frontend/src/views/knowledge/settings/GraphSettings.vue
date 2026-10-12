@@ -28,6 +28,18 @@
     </t-alert>
 
     <div v-if="isGraphDatabaseEnabled" class="settings-group">
+      <div class="setting-row recommendation-row">
+        <div class="setting-info">
+          <label>{{ t('graphSettings.recommendConfig') }}</label>
+          <p class="desc">{{ t('graphSettings.recommendDescription') }}</p>
+        </div>
+        <div class="setting-control">
+          <t-button theme="primary" variant="outline"
+            :disabled="tagFabring || textFabring || extracting" @click="applyRecommendedConfig">
+            {{ t('graphSettings.recommendConfig') }}
+          </t-button>
+        </div>
+      </div>
       <!-- 启用实体关系提取 -->
       <div class="setting-row">
         <div class="setting-info">
@@ -358,6 +370,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'update:graphExtract': [value: GraphExtractConfig]
+  'recommend-applied': []
 }>()
 
 const modelStatus = computed(() => ({
@@ -400,6 +413,37 @@ watch(() => props.graphExtract, (newVal) => {
 // 处理配置变更
 const handleConfigChange = () => {
   emit('update:graphExtract', localGraphExtract.value)
+}
+
+// A coherent few-shot example plus extraction guidance; no model request is
+// needed, so contributors can apply it before choosing/testing their model.
+const applyRecommendedConfig = () => {
+  const key = (name: string) => t(`graphSettings.recommended.${name}`)
+  const organization = key('organization')
+  const person = key('person')
+  const product = key('product')
+  const develops = key('develops')
+  const worksAt = key('worksAt')
+  const uses = key('uses')
+  localGraphExtract.value = {
+    enabled: true,
+    customInstructions: key('instructions'),
+    text: key('text'),
+    tags: [develops, worksAt, uses],
+    nodes: [
+      { name: organization, attributes: [key('organizationAttribute')] },
+      { name: person, attributes: [key('personAttribute')] },
+      { name: product, attributes: [key('productAttribute')] },
+    ],
+    relations: [
+      { node1: organization, node2: product, type: develops },
+      { node1: person, node2: organization, type: worksAt },
+      { node1: person, node2: product, type: uses },
+    ],
+  }
+  handleConfigChange()
+  emit('recommend-applied')
+  MessagePlugin.success(t('graphSettings.recommendApplied'))
 }
 
 // 处理启用/禁用切换

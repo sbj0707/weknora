@@ -5429,6 +5429,22 @@ export default {
     next: '下一步'
   },
   graphSettings: {
+    "recommendConfig": "推荐配置",
+    "recommendDescription": "填入通用提取要求和组织、人员、产品示例，将替换当前配置；可继续调整，保存后生效。",
+    "recommendApplied": "推荐配置已填入，请保存以生效",
+    "recommended": {
+      "instructions": "仅提取文本明确提及的实体和关系，不推测或补充事实。优先识别组织、人员、产品、项目、地点和核心概念；合并同一实体的简称、别名，保持名称一致。属性保留原文中的角色、时间、数量、版本等有意义的信息。关系使用简洁且一致的类型，明确起点和终点，避免重复关系和无信息量的孤立实体。示例仅说明输出方式，实际提取应以当前文档为准；必要时可使用其他明确的关系类型。",
+      "text": "星河科技开发了知识管理平台。李明在星河科技担任产品经理，并使用知识管理平台整理项目文档。",
+      "organization": "星河科技",
+      "person": "李明",
+      "product": "知识管理平台",
+      "develops": "开发",
+      "worksAt": "任职于",
+      "uses": "使用",
+      "organizationAttribute": "科技公司",
+      "personAttribute": "产品经理",
+      "productAttribute": "用于整理项目文档"
+    },
     title: '知识图谱配置',
     description: '配置实体-关系提取功能，自动从文本中抽取实体和关系构建知识图谱（注意：这与 Wiki 知识库中的「页面链接图谱」是两回事——前者是基于 LLM 的实体-关系图，后者是 Wiki 页面之间的引用关系图）',
     enableLabel: '启用实体关系提取',
@@ -7273,6 +7289,47 @@ export default {
     parsingInProgress: '解析中...',
     generatingSummary: '生成摘要中...',
     documentSummary: '摘要',
+    indexBuild: {
+      "title": "索引构建",
+      "embeddingModel": "Embedding 模型",
+      "currentlyDisabled": "当前未启用",
+      "details": "查看详情",
+      "lastBuiltAt": "最近构建时间",
+      "loadFailed": "索引状态暂时无法获取，请点击刷新重试。",
+      "chunkCount": "{count} 个分块",
+      "graphCount": "{count} 个实体 · {relations} 条关系",
+      "pageCount": "{count} 个页面",
+      "questionCount": "{count} 个问题 · 已索引 {indexed} 个",
+      "pagePreviewLimit": "显示前 {count} 个关联页面",
+      "kinds": {
+        "vector": "向量索引",
+        "keywords": "关键词索引（BM25）",
+        "graph": "知识图谱",
+        "wiki": "Wiki 索引",
+        "questions": "生成问题"
+      },
+      "states": {
+        "disabled": "未启用",
+        "waiting": "等待中",
+        "building": "构建中",
+        "completed": "已完成",
+        "partial_failed": "部分失败",
+        "failed": "失败",
+        "stale": "待更新",
+        "unknown": "未知",
+        "cancelled": "已停止"
+      },
+      "reasons": {
+        "history_missing": "缺少该文档的构建记录，无法确认构建是否完整。",
+        "history_incomplete": "最近一次构建记录不完整，暂时无法确认结果。",
+        "not_built": "尚未确认该文档已构建此索引，启用后需要重新解析文档。",
+        "statistics_unavailable": "当前无法读取实际索引数量，请稍后刷新重试。",
+        "configuration_changed": "当前配置与最近一次构建不同，需要重新解析以应用新配置。",
+        "content_changed": "分块内容已修改，生成问题需要更新。",
+        "missing_index": "实际索引记录少于构建结果，需要重新构建或检查失败原因。",
+        "enqueue_failed": "部分构建任务未能入队，请检查处理记录后重建。"
+      }
+    },
     detailSectionMeta: '基本信息',
     confirmDeleteDocument: '确认删除文档"{fileName}"，删除后将无法恢复',
     confirmDelete: '删除',

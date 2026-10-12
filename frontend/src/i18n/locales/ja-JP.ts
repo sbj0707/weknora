@@ -917,6 +917,47 @@ export default {
     parsingInProgress: '解析中...',
     generatingSummary: '要約を生成中...',
     documentSummary: '要約',
+    indexBuild: {
+      "title": "インデックス構築",
+      "embeddingModel": "Embedding モデル",
+      "currentlyDisabled": "現在無効",
+      "details": "詳細を表示",
+      "lastBuiltAt": "最終構築日時",
+      "loadFailed": "インデックスの状態を取得できません。更新して再試行してください。",
+      "chunkCount": "{count} チャンク",
+      "graphCount": "{count} エンティティ · {relations} 関係",
+      "pageCount": "{count} ページ",
+      "questionCount": "{count} 質問 · {indexed} 件を索引済み",
+      "pagePreviewLimit": "関連ページの先頭 {count} 件を表示",
+      "kinds": {
+        "vector": "ベクトル索引",
+        "keywords": "キーワード索引（BM25）",
+        "graph": "ナレッジグラフ",
+        "wiki": "Wiki 索引",
+        "questions": "生成された質問"
+      },
+      "states": {
+        "disabled": "未有効化",
+        "waiting": "待機中",
+        "building": "構築中",
+        "completed": "完了",
+        "partial_failed": "一部失敗",
+        "failed": "失敗",
+        "stale": "更新が必要",
+        "unknown": "不明",
+        "cancelled": "停止済み"
+      },
+      "reasons": {
+        "history_missing": "構築履歴がなく、完全性を確認できません。",
+        "history_incomplete": "最新の構築記録が不完全です。",
+        "not_built": "この文書の索引構築を確認できません。有効化後に再解析してください。",
+        "statistics_unavailable": "保存済み索引の件数を取得できません。更新して再試行してください。",
+        "configuration_changed": "設定が前回の構築と異なります。再解析して適用してください。",
+        "content_changed": "チャンクの内容が変更されました。生成された質問を更新してください。",
+        "missing_index": "索引レコードが想定より少なくなっています。再構築するかエラーを確認してください。",
+        "enqueue_failed": "一部の構築タスクをキューに登録できませんでした。処理履歴を確認して再構築してください。"
+      }
+    },
     detailSectionMeta: '基本情報',
     confirmDeleteDocument: 'ドキュメント「{fileName}」を削除しますか？削除後は復元できません',
     confirmDelete: '削除を確定',
@@ -2570,6 +2611,22 @@ export default {
     }
   },
   graphSettings: {
+    "recommendConfig": "推奨設定",
+    "recommendDescription": "抽出指示と組織・人物・製品の例を入力し、現在の設定を置き換えます。調整して保存すると適用されます。",
+    "recommendApplied": "推奨設定を入力しました。保存して適用してください。",
+    "recommended": {
+      "instructions": "本文に明記された実体と関係のみを抽出し、事実を推測しないでください。組織、人物、製品、プロジェクト、場所、主要概念を優先し、略称や別名を統合して名称を統一してください。役割、日時、数量、バージョンなど本文の有意義な属性を保持してください。簡潔で一貫した関係タイプと明確な起点・終点を使い、重複や情報のない孤立実体を避けてください。例は出力形式の説明です。実際の文書に基づき、必要に応じて他の明示的な関係タイプも使用してください。",
+      "text": "星河テクノロジーはナレッジ管理プラットフォームを開発しています。田中は星河テクノロジーのプロダクトマネージャーで、このプラットフォームを使ってプロジェクト文書を整理しています。",
+      "organization": "星河テクノロジー",
+      "person": "田中",
+      "product": "ナレッジ管理プラットフォーム",
+      "develops": "開発する",
+      "worksAt": "勤務する",
+      "uses": "使用する",
+      "organizationAttribute": "テクノロジー企業",
+      "personAttribute": "プロダクトマネージャー",
+      "productAttribute": "プロジェクト文書の整理"
+    },
     title: 'ナレッジグラフの設定',
     description: 'エンティティとリレーションの抽出を設定し、テキストからナレッジグラフを自動的に構築します（注: Wiki内の「ページリンクグラフ」とは別のものです。あちらはWikiページ間の参照関係を示し、こちらはLLMが抽出したエンティティとリレーションのグラフです）',
     enableLabel: 'エンティティとリレーションの抽出を有効化',

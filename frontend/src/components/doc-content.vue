@@ -22,6 +22,7 @@ import { diffWikiLines, type WikiDiffLine } from '@/utils/wikiLineDiff';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import DocumentPreview from '@/components/document-preview.vue';
+import DocumentIndexStatus from '@/components/document-index-status.vue';
 import DocumentFileIcon from '@/views/knowledge/components/DocumentFileIcon.vue';
 import KnowledgeProcessingTimeline from '@/components/knowledge-processing-timeline.vue';
 import { resolveKnowledgeDownloadFileName } from '@/views/knowledge/knowledgeDownloadFileName';
@@ -1688,6 +1689,8 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
               </span>
             </div>
           </div>
+          <DocumentIndexStatus :visible="!!visible" :knowledge-id="details.id"
+            :kb-id="details.knowledge_base_id || kbId" :parse-status="details.parse_status" />
         </section>
 
         <section v-if="details.id" class="setting-drawer__section metadata-section">

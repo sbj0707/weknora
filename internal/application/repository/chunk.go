@@ -1407,3 +1407,16 @@ func (r *chunkRepository) ListAllChunksByKnowledgeID(
 		Error
 	return chunks, err
 }
+
+// ListIndexStatusChunks avoids transferring chunk bodies just to inspect
+// question counts/revisions. Ownership and soft-delete scopes still apply.
+func (r *chunkRepository) ListIndexStatusChunks(
+	ctx context.Context, tenantID uint64, knowledgeID string,
+) ([]*types.Chunk, error) {
+	var chunks []*types.Chunk
+	err := r.db.WithContext(ctx).
+		Select("id", "tenant_id", "knowledge_base_id", "knowledge_id", "chunk_type", "content_revision", "metadata").
+		Where("tenant_id = ? AND knowledge_id = ?", tenantID, knowledgeID).
+		Find(&chunks).Error
+	return chunks, err
+}

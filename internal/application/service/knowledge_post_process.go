@@ -147,7 +147,13 @@ func (s *KnowledgePostProcessService) Handle(ctx context.Context, task *asynq.Ta
 	// avoiding an extra query path.
 	s.finishRunningMultimodalStage(ctx, payload.KnowledgeID, attempt)
 
-	postSpan := s.tracker().BeginStage(ctx, payload.KnowledgeID, attempt, types.StagePostProcess, nil)
+	processOverrides, _ := knowledge.ProcessOverrides()
+	eff := ResolveProcessConfig(kb, processOverrides)
+	postSpan := s.tracker().BeginStage(ctx, payload.KnowledgeID, attempt, types.StagePostProcess, types.JSONMap{
+		"graph_enabled":    eff.GraphEnabled,
+		"wiki_enabled":     kb.IsWikiEnabled(),
+		"question_enabled": eff.QuestionGenerationConfig.Enabled && kb.NeedsEmbeddingModel(),
+	})
 
 	// Skip post-processing entirely when the knowledge has been cancelled
 	// by the user or marked for deletion. We must NOT enqueue summary /
@@ -166,9 +172,6 @@ func (s *KnowledgePostProcessService) Handle(ctx context.Context, task *asynq.Ta
 			"knowledge "+knowledge.ParseStatus+" before postprocess started")
 		return nil
 	}
-
-	processOverrides, _ := knowledge.ProcessOverrides()
-	eff := ResolveProcessConfig(kb, processOverrides)
 
 	// 2. Fetch all text-like chunks. ListChunksByKnowledgeID is text-only by
 	//    design, which silently dropped the OCR / Caption chunks that
@@ -501,6 +504,8 @@ func (s *KnowledgePostProcessService) Handle(ctx context.Context, task *asynq.Ta
 	}
 
 	postOutput := types.JSONMap{
+		"planned_graph_count":     graphChunkCount,
+		"planned_question_count":  questionBatchCount,
 		"chunks_total":            len(textChunks),
 		"enqueued_summary":        enqueuedSummary,
 		"enqueued_question":       enqueuedQuestionCount > 0,

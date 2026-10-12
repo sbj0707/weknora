@@ -1,5 +1,6 @@
 import { get, post, put, del, postUpload, getDown } from "../../utils/request";
 import type { KnowledgeProcessOverrides } from '@/types/knowledgeProcess';
+import type { KnowledgeIndexStatusResponse } from '@/types/knowledgeIndexStatus';
 import type { AuditLog, AuditOutcome, ListAuditLogResponse } from '@/api/tenant/audit-log';
 import { buildListKnowledgeFilesQuery } from './knowledgeFileListQuery';
 
@@ -549,6 +550,10 @@ export function cancelKnowledgeParse(id: string) {
 export function getKnowledgeSpans(id: string, attempt?: number) {
   const qs = attempt ? `?attempt=${attempt}` : '';
   return get(`/api/v1/knowledge/${id}/spans${qs}`);
+}
+
+export function getKnowledgeIndexStatus(id: string): Promise<KnowledgeIndexStatusResponse> {
+  return get(`/api/v1/knowledge/${id}/index-status`) as unknown as Promise<KnowledgeIndexStatusResponse>;
 }
 
 export function delKnowledgeDetails(id: string) {

@@ -5427,6 +5427,22 @@ export default {
     next: '다음'
   },
   graphSettings: {
+    "recommendConfig": "추천 설정",
+    "recommendDescription": "추출 지침과 조직·인물·제품 예시를 입력하여 현재 설정을 바꿉니다. 수정 후 저장하면 적용됩니다.",
+    "recommendApplied": "추천 설정을 입력했습니다. 저장하여 적용하세요.",
+    "recommended": {
+      "instructions": "본문에 명시된 개체와 관계만 추출하고 사실을 추측하지 마세요. 조직, 인물, 제품, 프로젝트, 장소 및 핵심 개념을 우선 식별하고 별칭을 통합하여 이름을 일관되게 유지하세요. 역할, 날짜, 수량, 버전 등 원문의 의미 있는 속성을 유지하세요. 간결하고 일관된 관계 유형과 명확한 시작점·끝점을 사용하고 중복이나 정보 없는 독립 개체를 피하세요. 예시는 출력 형식을 설명합니다. 실제 문서를 기준으로 추출하고 필요한 경우 다른 명시적 관계 유형도 사용하세요.",
+      "text": "스텔라 테크놀로지는 지식 관리 플랫폼을 개발합니다. 민수는 스텔라 테크놀로지의 제품 관리자이며 지식 관리 플랫폼으로 프로젝트 문서를 정리합니다.",
+      "organization": "스텔라 테크놀로지",
+      "person": "민수",
+      "product": "지식 관리 플랫폼",
+      "develops": "개발",
+      "worksAt": "근무",
+      "uses": "사용",
+      "organizationAttribute": "기술 회사",
+      "personAttribute": "제품 관리자",
+      "productAttribute": "프로젝트 문서 정리"
+    },
     title: '지식 그래프 설정',
     description: '엔티티-관계 추출 기능을 구성하여 텍스트에서 자동으로 엔티티와 관계를 추출하여 지식 그래프를 구축합니다 (참고: Wiki의 \'페이지 링크 그래프\'와는 다릅니다. 후자는 Wiki 페이지 간의 참조 관계를 보여주며, 이쪽은 LLM이 추출한 엔티티-관계 그래프입니다)',
     enableLabel: '엔티티 관계 추출 활성화',
@@ -7271,6 +7287,47 @@ export default {
     parsingInProgress: '파싱 중...',
     generatingSummary: '요약 생성 중...',
     documentSummary: '요약',
+    indexBuild: {
+      "title": "인덱스 구축",
+      "embeddingModel": "Embedding 모델",
+      "currentlyDisabled": "현재 비활성화",
+      "details": "상세 보기",
+      "lastBuiltAt": "최근 구축 시간",
+      "loadFailed": "인덱스 상태를 가져올 수 없습니다. 새로고침하여 다시 시도하세요.",
+      "chunkCount": "{count}개 청크",
+      "graphCount": "{count}개 개체 · {relations}개 관계",
+      "pageCount": "{count}개 페이지",
+      "questionCount": "{count}개 질문 · {indexed}개 인덱싱됨",
+      "pagePreviewLimit": "관련 페이지 중 처음 {count}개 표시",
+      "kinds": {
+        "vector": "벡터 인덱스",
+        "keywords": "키워드 인덱스 (BM25)",
+        "graph": "지식 그래프",
+        "wiki": "Wiki 인덱스",
+        "questions": "생성된 질문"
+      },
+      "states": {
+        "disabled": "비활성화",
+        "waiting": "대기 중",
+        "building": "구축 중",
+        "completed": "완료",
+        "partial_failed": "일부 실패",
+        "failed": "실패",
+        "stale": "업데이트 필요",
+        "unknown": "알 수 없음",
+        "cancelled": "중지됨"
+      },
+      "reasons": {
+        "history_missing": "구축 기록이 없어 완전성을 확인할 수 없습니다.",
+        "history_incomplete": "최근 구축 기록이 불완전합니다.",
+        "not_built": "이 문서의 인덱스 구축을 확인할 수 없습니다. 활성화 후 문서를 다시 분석하세요.",
+        "statistics_unavailable": "저장된 인덱스 수를 가져올 수 없습니다. 새로고침하여 다시 시도하세요.",
+        "configuration_changed": "설정이 최근 구축 시점과 다릅니다. 다시 분석하여 적용하세요.",
+        "content_changed": "청크 내용이 변경되어 생성된 질문을 업데이트해야 합니다.",
+        "missing_index": "인덱스 레코드가 예상보다 적습니다. 재구축하거나 오류를 확인하세요.",
+        "enqueue_failed": "일부 구축 작업을 대기열에 넣지 못했습니다. 처리 기록을 확인하고 재구축하세요."
+      }
+    },
     detailSectionMeta: '기본 정보',
     confirmDeleteDocument: '"{fileName}" 문서를 삭제하시겠습니까? 삭제 후 복구할 수 없습니다',
     confirmDelete: '삭제 확인',

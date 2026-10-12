@@ -917,6 +917,47 @@ export default {
     parsingInProgress: 'Parsing...',
     generatingSummary: 'Generating summary...',
     documentSummary: 'Summary',
+    indexBuild: {
+      "title": "Index build",
+      "embeddingModel": "Embedding model",
+      "currentlyDisabled": "Currently disabled",
+      "details": "View details",
+      "lastBuiltAt": "Last build",
+      "loadFailed": "Index status is unavailable. Refresh to retry.",
+      "chunkCount": "{count} chunks",
+      "graphCount": "{count} entities · {relations} relations",
+      "pageCount": "{count} pages",
+      "questionCount": "{count} questions · {indexed} indexed",
+      "pagePreviewLimit": "Showing the first {count} related pages",
+      "kinds": {
+        "vector": "Vector index",
+        "keywords": "Keyword index (BM25)",
+        "graph": "Knowledge graph",
+        "wiki": "Wiki index",
+        "questions": "Generated questions"
+      },
+      "states": {
+        "disabled": "Disabled",
+        "waiting": "Waiting",
+        "building": "Building",
+        "completed": "Completed",
+        "partial_failed": "Partially failed",
+        "failed": "Failed",
+        "stale": "Needs update",
+        "unknown": "Unknown",
+        "cancelled": "Stopped"
+      },
+      "reasons": {
+        "history_missing": "Build history is missing; completeness cannot be confirmed.",
+        "history_incomplete": "The latest build record is incomplete.",
+        "not_built": "This index has not been confirmed built for this document. Reparse after enabling it.",
+        "statistics_unavailable": "Stored index counts are unavailable. Refresh to retry.",
+        "configuration_changed": "The configuration differs from the latest build. Reparse to apply it.",
+        "content_changed": "Chunk content changed; generated questions need updating.",
+        "missing_index": "Fewer index records exist than expected. Rebuild or inspect the errors.",
+        "enqueue_failed": "Some build tasks could not be queued. Inspect the processing history and rebuild."
+      }
+    },
     detailSectionMeta: 'Basic info',
     confirmDeleteDocument: 'Confirm deletion of document "{fileName}", recovery will be impossible after deletion',
     confirmDelete: 'Confirm Delete',
@@ -2570,6 +2611,22 @@ export default {
     }
   },
   graphSettings: {
+    "recommendConfig": "Recommended configuration",
+    "recommendDescription": "Fill extraction guidance and an organization, person and product example. Replaces the current configuration; review and save to apply.",
+    "recommendApplied": "Recommended configuration filled in. Save to apply.",
+    "recommended": {
+      "instructions": "Extract only entities and relationships explicitly stated in the text; do not infer facts. Prioritize organizations, people, products, projects, places and key concepts. Merge aliases and keep names consistent. Retain meaningful attributes such as roles, dates, quantities and versions from the source. Use concise, consistent relationship types with explicit endpoints; avoid duplicates and uninformative isolated entities. The example illustrates the output format; extract facts from the current document and use other explicit relationship types when needed.",
+      "text": "Stellar Technology develops a knowledge management platform. Alex is a product manager at Stellar Technology and uses the knowledge management platform to organize project documents.",
+      "organization": "Stellar Technology",
+      "person": "Alex",
+      "product": "Knowledge management platform",
+      "develops": "Develops",
+      "worksAt": "Works at",
+      "uses": "Uses",
+      "organizationAttribute": "Technology company",
+      "personAttribute": "Product manager",
+      "productAttribute": "Organizes project documents"
+    },
     title: 'Knowledge Graph Configuration',
     description: 'Configure entity-relationship extraction to automatically build a knowledge graph from text (note: this is different from the "page-link graph" inside the Wiki — that one shows references between Wiki pages, while this one is an LLM-extracted entity-relationship graph)',
     enableLabel: 'Enable Entity-Relationship Extraction',

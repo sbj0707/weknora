@@ -425,6 +425,31 @@ curl "$BASE/api/v1/knowledge/batch?ids=k-1&ids=k-2" -H "Authorization: Bearer $T
 curl $BASE/api/v1/knowledge/k-1 -H "Authorization: Bearer $TOKEN"
 ```
 
+### GET /api/v1/knowledge/:id/index-status
+
+用途：文档基本信息中的索引构建状态和实际存储数量。权限：Viewer+，父 KB read；API key `retrieve`/full，受 KB 白名单约束。共享文档使用所属租户的存储配置统计。
+
+响应：200 `{"success":true,"data":{"knowledge_id","attempt","refreshing","last_built_at","indexes":[...]}}`。
+
+`indexes` 固定包含 `vector`、`keywords`、`graph`、`wiki`、`questions` 五项：
+
+| 字段 | 说明 |
+| --- | --- |
+| `enabled` | 当前有效配置是否启用，与历史构建状态独立 |
+| `status` | `disabled` / `waiting` / `building` / `completed` / `partial_failed` / `failed` / `cancelled` / `stale` / `unknown` |
+| `count` | 分块数、图谱实体数、关联 Wiki 页数或生成问题数；统计不可用时为 `null` |
+| `relation_count` / `indexed_count` | 图谱关系数 / 已索引的问题数，不可用时省略 |
+| `model_id` / `model_name` | 文档向量索引使用的 Embedding 模型 |
+| `last_built_at` | 最近一次成功构建的时间，无记录时省略 |
+| `reason` / `error_message` | 状态原因与构建失败信息 |
+| `pages` | 关联 Wiki 页面的 `slug` 和 `title`，最多返回 50 项；总数不截断 |
+
+状态同时参考最近一次构建记录和实际数据。缺少历史证据时不会仅凭解析完成判定索引完成。向量/关键词实际计数支持 PostgreSQL 和 SQLite；不支持统计的存储驱动返回未知。图谱计数来自 Neo4j。`refreshing=true` 时前端每 5 秒刷新，结束后停止。
+
+```bash
+curl $BASE/api/v1/knowledge/k-1/index-status -H "Authorization: Bearer $TOKEN"
+```
+
 ### GET /api/v1/knowledge/:id/stages 与 GET /api/v1/knowledge/:id/spans
 
 用途：解析阶段/trace（两条路径同一 handler `GetKnowledgeSpans`）。权限：Viewer+，父 KB read。查询参数：`attempt`（int，0=最新一次）。

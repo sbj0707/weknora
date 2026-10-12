@@ -480,6 +480,7 @@
           :model-id="formData.modelConfig.llmModelId"
           :all-models="allModels"
           @update:graphExtract="handleNodeExtractUpdate"
+          @recommend-applied="handleGraphRecommendation"
         />
       </div>
 
@@ -1347,6 +1348,12 @@ const handleAdoptProfileGist = () => {
 const handleNodeExtractUpdate = (config: any) => {
   if (formData.value) {
     formData.value.nodeExtractConfig = { ...config }
+  }
+}
+
+const handleGraphRecommendation = () => {
+  if (formData.value?.indexingStrategy) {
+    formData.value.indexingStrategy.graphEnabled = true
   }
 }
 

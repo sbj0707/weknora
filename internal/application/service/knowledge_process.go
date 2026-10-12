@@ -655,6 +655,8 @@ func (s *knowledgeService) processChunks(ctx context.Context,
 		embedInput := types.JSONMap{
 			"chunks_to_embed": len(textChunks),
 			"model_id":        kb.EmbeddingModelID,
+			"vector_enabled":  kb.IndexingStrategy.VectorEnabled,
+			"keyword_enabled": kb.IndexingStrategy.KeywordEnabled,
 		}
 		if dim := embeddingModel.GetDimensions(); dim > 0 {
 			embedInput["dim"] = dim
