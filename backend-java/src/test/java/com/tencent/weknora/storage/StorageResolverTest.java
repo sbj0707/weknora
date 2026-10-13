@@ -1,0 +1,23 @@
+package com.tencent.weknora.storage;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.nio.file.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
+import org.springframework.mock.env.MockEnvironment;
+import static org.assertj.core.api.Assertions.*;
+
+class StorageResolverTest {
+    @TempDir Path temporary;JdbcTemplate jdbc;StorageResolver resolver;
+    @BeforeEach void initialize()throws Exception{var source=new DriverManagerDataSource("jdbc:sqlite:"+temporary.resolve("resolver.db"));source.setDriverClassName("org.sqlite.JDBC");jdbc=new JdbcTemplate(source);try(var c=source.getConnection()){ScriptUtils.executeSqlScript(c,new FileSystemResource("../migrations/sqlite/000000_init.up.sql"));}jdbc.update("INSERT INTO tenants(id,name,business,storage_engine_config) VALUES(1,'one','test','{\"default_provider\":\"local\",\"local\":{\"path_prefix\":\"legacy\"}}'),(2,'two','test','{}')");resolver=new StorageResolver(jdbc,new ObjectMapper(),new MockEnvironment().withProperty("LOCAL_STORAGE_BASE_DIR",temporary.resolve("files").toString()));}
+    void backend(String id,int owner,String prefix,boolean alias,String status){jdbc.update("INSERT INTO storage_backends(id,tenant_id,name,provider,config,legacy_alias,status) VALUES(?,?,?,'local',?,?,?)",id,owner,id,"{\"path_prefix\":\""+prefix+"\"}",alias,status);}
+    @Test void concreteBindingOverridesProviderDefaultAndCannotCrossTenant()throws Exception{backend("concrete",1,"instance",false,"active");backend("foreign",2,"other",false,"active");var selected=resolver.resolve(1,"concrete","s3");String ref=selected.files().saveBytes(new byte[]{1},1,"a",false);var resource=resolver.catalog().resolve(1,ref);assertThat(resource.storageBackendId()).isEqualTo("concrete");assertThat(Files.isDirectory(temporary.resolve("files/instance/1/exports"))).isTrue();assertThatThrownBy(()->resolver.resolve(1,"foreign","local")).isInstanceOf(IOException.class).hasMessageContaining("not found");}
+    @Test void requestedLegacyAliasPrecedesDefaultAndRetainsGoDisabledAliasBehavior()throws Exception{backend("default",1,"default",false,"active");backend("alias",1,"alias",true,"disabled");jdbc.update("UPDATE tenants SET default_storage_backend_id='default' WHERE id=1");assertThat(resolver.resolve(1,"","local").backendId()).isEqualTo("alias");assertThat(resolver.resolve(1,"","").backendId()).isEqualTo("default");assertThatThrownBy(()->resolver.resolve(1,"alias","local")).isInstanceOf(IOException.class).hasMessageContaining("not active");}
+    @Test void legacyConfigAndEnvironmentFallbackKeepTenantLayout()throws Exception{var legacy=resolver.resolve(1,"","");String ref=legacy.files().saveBytes(new byte[]{1},1,"a",false);assertThat(resolver.catalog().resolve(1,ref).storageBackendId()).isEmpty();assertThat(Files.isDirectory(temporary.resolve("files/legacy/1/exports"))).isTrue();var fallback=resolver.resolve(2,"","");fallback.files().saveBytes(new byte[]{2},2,"b",false);assertThat(Files.isDirectory(temporary.resolve("files/2/exports"))).isTrue();}
+    @Test void maliciousPrefixFallsBackWithinGlobalRootAndCloudProviderHasNoWrite()throws Exception{backend("malicious",1,"../../other",false,"active");resolver.resolve(1,"malicious","").files().saveBytes(new byte[]{1},1,"a",false);assertThat(Files.isDirectory(temporary.resolve("files/1/exports"))).isTrue();assertThat(Files.exists(temporary.resolve("other"))).isFalse();assertThatThrownBy(()->resolver.resolve(2,"","s3")).isInstanceOf(IOException.class).hasMessageContaining("not migrated");assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM resources WHERE tenant_id=2",Long.class)).isZero();}
+    @Test void knowledgeBaseUsesImmutableOwnerAndBackendBinding()throws Exception{backend("bound",1,"bound",false,"active");jdbc.update("INSERT INTO knowledge_bases(id,name,tenant_id,embedding_model_id,summary_model_id,storage_backend_id,storage_provider_config) VALUES('kb','kb',1,'','','bound','{\"provider\":\"local\"}')");assertThat(resolver.forKnowledgeBase(1,"kb").backendId()).isEqualTo("bound");assertThatThrownBy(()->resolver.forKnowledgeBase(2,"kb")).isInstanceOf(IOException.class);jdbc.update("UPDATE knowledge_bases SET deleted_at=CURRENT_TIMESTAMP WHERE id='kb'");assertThatThrownBy(()->resolver.forKnowledgeBase(1,"kb")).isInstanceOf(IOException.class);}
+}

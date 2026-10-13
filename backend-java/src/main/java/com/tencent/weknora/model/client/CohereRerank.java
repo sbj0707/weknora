@@ -1,0 +1,25 @@
+package com.tencent.weknora.model.client;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.*;
+import java.util.*;
+import java.util.concurrent.*;
+
+/** Go standard Cohere rerank protocol, bounded batches and stable probability/logit ranking. */
+public final class CohereRerank implements RerankModel {
+    private final SafeModelHttp http;private final ModelEndpoint endpoint;
+    public CohereRerank(SafeModelHttp http,ModelEndpoint endpoint){this.http=http;this.endpoint=endpoint;}
+    @Override public String modelId(){return endpoint.id;}@Override public String modelName(){return endpoint.name;}
+    @Override public int maxPassageRunes(String query){int limit=endpoint.settings.path("max_document_chars").asInt(),total=endpoint.settings.path("max_request_chars").asInt();if(total>0){int room=Math.max(total-ClientBatches.runes(query),1);if(limit<=0||room<limit)limit=room;}return Math.max(0,limit);}
+    public ObjectNode request(String query,List<String> documents){ObjectNode body=SafeModelHttp.JSON.createObjectNode();body.put("model",endpoint.wireModel);body.put("query",query);body.set("documents",SafeModelHttp.JSON.valueToTree(documents));var s=endpoint.settings;if(s.path("send_top_n").asBoolean()&&!documents.isEmpty())body.put("top_n",documents.size());if(s.path("send_return_documents").asBoolean())body.put("return_documents",true);if(s.path("accepts_truncate_prompt_tokens").asBoolean()&&s.path("truncate_prompt_tokens").asInt()!=0)body.set("truncate_prompt_tokens",s.get("truncate_prompt_tokens"));s.path("extra_body").fields().forEachRemaining(e->{if(!body.has(e.getKey()))body.set(e.getKey(),e.getValue());});return body;}
+    @Override public List<Result> rerank(CallContext context,String query,List<String> documents){if(documents.isEmpty())return List.of();int queryLimit=endpoint.settings.path("max_query_chars").asInt(),size=ClientBatches.runes(query);if(queryLimit>0&&size>queryLimit)throw new ModelClientException(endpoint.name+" rerank: query is "+size+" characters; the limit is "+queryLimit);
+        List<ClientBatches.Batch>batches;try{batches=ClientBatches.split(documents,size,endpoint.settings);}catch(ModelClientException ex){throw new ModelClientException(endpoint.name+" rerank: "+ex.getMessage());}
+        int concurrency=endpoint.settings.path("max_concurrency").asInt(4);if(concurrency<=0)concurrency=4;Semaphore limit=new Semaphore(concurrency);List<Future<List<Result>>> tasks=new ArrayList<>();
+        try(var executor=Executors.newVirtualThreadPerTaskExecutor()){
+            for(var batch:batches)tasks.add(executor.submit(()->{boolean acquired=false;try{while(!acquired){context.check();acquired=limit.tryAcquire(50,TimeUnit.MILLISECONDS);}ObjectNode response=endpoint.post(http,context,request(query,batch.items()),0);return decode(response.path("results"),batch,documents);}finally{if(acquired)limit.release();}}));
+            List<Result> out=new ArrayList<>();try{for(var task:tasks)while(true){context.check();try{out.addAll(task.get(50,TimeUnit.MILLISECONDS));break;}catch(TimeoutException ignored){}}}catch(InterruptedException ex){Thread.currentThread().interrupt();throw new CancellationException("Model call cancelled");}catch(ExecutionException ex){if(ex.getCause()instanceof RuntimeException cause)throw cause;throw new ModelClientException("Rerank request failed");}finally{for(var task:tasks)if(!task.isDone())task.cancel(true);}
+            out.sort(Comparator.comparingDouble(Result::relevanceScore).reversed());return List.copyOf(out);
+        }
+    }
+    private List<Result> decode(JsonNode results,ClientBatches.Batch batch,List<String> documents){if(results.isMissingNode()||results.isNull())return List.of();if(!results.isArray())throw new ModelClientException("decode response: rerank results must be an array");List<Result> out=new ArrayList<>();for(JsonNode item:results){if(item.hasNonNull("index")&&(!item.get("index").isIntegralNumber()||!item.get("index").canConvertToInt()))throw new ModelClientException("decode response: rerank index must be an integer");int index=item.path("index").asInt();if(index<0||index>=batch.items().size())throw new ModelClientException("rerank index "+index+" out of range for "+batch.items().size()+" documents");index+=batch.start();JsonNode score=item.hasNonNull("relevance_score")?item.get("relevance_score"):item.get("score");if(score!=null&&!score.isNull()&&!score.isNumber())throw new ModelClientException("decode response: rerank score must be numeric");double value=score==null?0:score.asDouble();if(endpoint.settings.path("score_scale").asText().equals("logit"))value=value>=0?1/(1+Math.exp(-value)):Math.exp(value)/(1+Math.exp(value));JsonNode document=item.get("document");String text="";if(document!=null&&!document.isNull()){if(document.isTextual())text=document.asText();else if(document.isObject())text=document.path("text").asText();else throw new ModelClientException("decode document: expected string or object");}if(text.isEmpty())text=documents.get(index);out.add(new Result(index,text,value));}return out;}
+}

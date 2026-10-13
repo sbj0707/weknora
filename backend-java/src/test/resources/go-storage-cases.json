@@ -1,0 +1,449 @@
+{
+  "grants": [
+    {
+      "expires": "2026-10-13T03:00:00Z",
+      "id": "420d3380-8e98-46a6-82c7-64e6600dff60",
+      "now": "2026-10-13T01:30:00Z",
+      "token": "0kWYK2zx4sKivhpLjA0HpA",
+      "ttl_nanos": 7200000000000
+    },
+    {
+      "expires": "2026-10-13T01:19:28Z",
+      "id": "420d3380-8e98-46a6-82c7-64e6600dff60",
+      "now": "2026-10-13T01:19:15.25Z",
+      "token": "ouG9ZzWgmoCw-JTclmuOKA",
+      "ttl_nanos": 17000000000
+    },
+    {
+      "expires": "2026-10-13T01:19:14.3265Z",
+      "id": "420d3380-8e98-46a6-82c7-64e6600dff60",
+      "now": "2026-10-13T01:19:14.31675Z",
+      "token": "0QyEX4Wp88VLwVXgR9B_JA",
+      "ttl_nanos": 13000000
+    }
+  ],
+  "paths": [
+    {
+      "backend": "",
+      "export_scope": true,
+      "handle": "",
+      "inner": "",
+      "path": "local://1/exports/a.png",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://1/doc/raw.pdf",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "s3://bucket/prefix/9/exports/a",
+      "provider": "s3",
+      "resource": false,
+      "scoped": false,
+      "tenant": "9",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "oss://bucket/exports/9/a",
+      "provider": "oss",
+      "resource": false,
+      "scoped": false,
+      "tenant": "9",
+      "tenant_scope": false
+    },
+    {
+      "backend": "999",
+      "export_scope": true,
+      "handle": "",
+      "inner": "local://1/exports/a",
+      "path": "storage://999/local://1/exports/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": true,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "backend",
+      "export_scope": false,
+      "handle": "",
+      "inner": "local://1/a",
+      "path": "storage://backend/local://1/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": true,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "storage:///local://1/a",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "storage://backend/",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": " storage://backend/local://1/a ",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://0/1/exports/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "s3://123/9/exports/a",
+      "provider": "s3",
+      "resource": false,
+      "scoped": false,
+      "tenant": "123",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "dummy://1/a",
+      "provider": "dummy",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "invalid://1/a",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://18446744073709551615/exports/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "18446744073709551615",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://18446744073709551616/1/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://+1/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://01/exports/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "local://1/exports2/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": false,
+      "tenant": "1",
+      "tenant_scope": true
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "abcdefghijklmnopqrstuv",
+      "inner": "",
+      "path": "resource://abcdefghijklmnopqrstuv",
+      "provider": "",
+      "resource": true,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "abcdefghijklmnopqrstuv",
+      "inner": "",
+      "path": " resource://abcdefghijklmnopqrstuv",
+      "provider": "",
+      "resource": true,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "resource://abcdefghijklmnopqrstuvw",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": "",
+      "export_scope": false,
+      "handle": "",
+      "inner": "",
+      "path": "resource://abcdefghijklmnopqrstuv/",
+      "provider": "",
+      "resource": false,
+      "scoped": false,
+      "tenant": "0",
+      "tenant_scope": false
+    },
+    {
+      "backend": " x ",
+      "export_scope": false,
+      "handle": "",
+      "inner": "local://1/a",
+      "path": "storage:// x /local://1/a",
+      "provider": "local",
+      "resource": false,
+      "scoped": true,
+      "tenant": "1",
+      "tenant_scope": true
+    }
+  ],
+  "signed": [
+    {
+      "base": "https://files.example.test",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test/api/v1/files/presigned?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1"
+    },
+    {
+      "base": "https://files.example.test",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test/api/v1/files/presigned?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615"
+    },
+    {
+      "base": "https://files.example.test///",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test/api/v1/files/presigned?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1"
+    },
+    {
+      "base": "https://files.example.test///",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test/api/v1/files/presigned?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615"
+    },
+    {
+      "base": "https://files.example.test/prefix",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test/prefix/api/v1/files/presigned?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1"
+    },
+    {
+      "base": "https://files.example.test/prefix",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test/prefix/api/v1/files/presigned?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615"
+    },
+    {
+      "base": "https://files.example.test?z=last\u0026a=first",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test?a=first%2Fapi%2Fv1%2Ffiles%2Fpresigned\u0026expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1\u0026z=last"
+    },
+    {
+      "base": "https://files.example.test?z=last\u0026a=first",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test?a=first%2Fapi%2Fv1%2Ffiles%2Fpresigned\u0026expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615\u0026z=last"
+    },
+    {
+      "base": "https://files.example.test#frag",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1#frag/api/v1/files/presigned"
+    },
+    {
+      "base": "https://files.example.test#frag",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615#frag/api/v1/files/presigned"
+    },
+    {
+      "base": "https://files.example.test?file_path=old\u0026expires=3\u0026z=x\u0026z=y",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1\u0026z=x\u0026z=y%2Fapi%2Fv1%2Ffiles%2Fpresigned"
+    },
+    {
+      "base": "https://files.example.test?file_path=old\u0026expires=3\u0026z=x\u0026z=y",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615\u0026z=x\u0026z=y%2Fapi%2Fv1%2Ffiles%2Fpresigned"
+    },
+    {
+      "base": "https://files.example.test?bad=%zz\u0026ok=yes",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026ok=yes%2Fapi%2Fv1%2Ffiles%2Fpresigned\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1"
+    },
+    {
+      "base": "https://files.example.test?bad=%zz\u0026ok=yes",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026ok=yes%2Fapi%2Fv1%2Ffiles%2Fpresigned\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615"
+    },
+    {
+      "base": "https://files.example.test/prefix space",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "local://1/exports/图 a*~.png",
+      "sig": "1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb",
+      "tenant": "1",
+      "url": "https://files.example.test/prefix%20space/api/v1/files/presigned?expires=1791861554\u0026file_path=local%3A%2F%2F1%2Fexports%2F%E5%9B%BE+a%2A~.png\u0026sig=1bc172629b99ede54e710f5c0fcd3609644c83892e7dde8b03c1ed3d8a6d6efb\u0026tenant_id=1"
+    },
+    {
+      "base": "https://files.example.test/prefix space",
+      "expires": "1791861554",
+      "now": 1791854354,
+      "path": "storage://backend/s3://bucket/18446744073709551615/a?x#y",
+      "sig": "1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702",
+      "tenant": "18446744073709551615",
+      "url": "https://files.example.test/prefix%20space/api/v1/files/presigned?expires=1791861554\u0026file_path=storage%3A%2F%2Fbackend%2Fs3%3A%2F%2Fbucket%2F18446744073709551615%2Fa%3Fx%23y\u0026sig=1fa4882e46072512b84e2fbed8cf23b31e53982133deb32a0b0a0cfcb83a6702\u0026tenant_id=18446744073709551615"
+    }
+  ]
+}

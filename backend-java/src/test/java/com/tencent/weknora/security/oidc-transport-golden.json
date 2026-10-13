@@ -1,0 +1,505 @@
+[
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token-final"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "token-same-302",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token-final"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "token-same-303",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token-final"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "token-same-307",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token-final"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "token-same-308",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<TARGET>/token-final\": redirect blocked: target URL failed SSRF validation: cross-origin request replay is forbidden",
+    "name": "token-cross-302",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<TARGET>/token-final\": redirect blocked: target URL failed SSRF validation: cross-origin request replay is forbidden",
+    "name": "token-cross-303",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<TARGET>/token-final\": redirect blocked: target URL failed SSRF validation: cross-origin request replay is forbidden",
+    "name": "token-cross-307",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<TARGET>/token-final\": redirect blocked: target URL failed SSRF validation: cross-origin request replay is forbidden",
+    "name": "token-cross-308",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "target",
+        "path": "/userinfo-final"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "userinfo-cross-302",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "target",
+        "path": "/userinfo-final"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "userinfo-cross-307",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo-final"
+      }
+    ],
+    "error": "OIDC provider did not return email",
+    "name": "userinfo-same-302",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/discovery"
+      },
+      {
+        "accept": "",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "target",
+        "path": "/discovery-final"
+      }
+    ],
+    "error": "",
+    "name": "discovery-cross-302",
+    "success": true
+  },
+  {
+    "calls": [
+      {
+        "accept": "",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/discovery"
+      }
+    ],
+    "error": "failed to load OIDC discovery document: Get \"http://169.254.169.254/private\": redirect blocked: target URL failed SSRF validation: host is not in the SSRF whitelist: 169.254.169.254 (SSRF_DNS_WHITELIST_ONLY is on; add it to SSRF_WHITELIST to allow it)",
+    "name": "discovery-private-302",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<SOURCE>/token\": stopped after 10 redirects",
+    "name": "token-redirect-loop",
+    "success": false
+  },
+  {
+    "calls": [],
+    "error": "failed to exchange OIDC code: Post \"<SOURCE>/token\": context canceled",
+    "name": "token-cancel-before",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<SOURCE>/token\": context canceled",
+    "name": "token-cancel-during",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      }
+    ],
+    "error": "failed to exchange OIDC code: Post \"<SOURCE>/token\": context deadline exceeded",
+    "name": "token-deadline",
+    "success": false
+  },
+  {
+    "calls": [
+      {
+        "accept": "application/json",
+        "authorization": "",
+        "body": "client_id=client&client_secret=SECRET_CLIENT&code=code&grant_type=authorization_code&redirect_uri=https%3A%2F%2Ffrontend.test%2Fcallback",
+        "content_type": "application/x-www-form-urlencoded",
+        "method": "POST",
+        "origin": "source",
+        "path": "/token"
+      },
+      {
+        "accept": "application/json",
+        "authorization": "Bearer transport-access",
+        "body": "",
+        "content_type": "",
+        "method": "GET",
+        "origin": "source",
+        "path": "/userinfo"
+      }
+    ],
+    "error": "failed to fetch OIDC userinfo: Get \"<SOURCE>/userinfo\": context canceled",
+    "name": "userinfo-cancel-during",
+    "success": false
+  }
+]

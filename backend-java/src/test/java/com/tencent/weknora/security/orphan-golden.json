@@ -1,0 +1,18 @@
+{
+  "audit": {
+    "action": "rbac.member_added",
+    "actor_role": "viewer",
+    "actor_user_id": "",
+    "outcome": "success",
+    "target_type": "tenant_member",
+    "target_user_id": "registrant"
+  },
+  "duplicate_error": "tenant membership already exists",
+  "recovered": {
+    "invited_by": null,
+    "role": "owner",
+    "status": "active"
+  },
+  "suspended_blocks_add": "tenant membership already exists",
+  "suspended_counts_as_active": false
+}

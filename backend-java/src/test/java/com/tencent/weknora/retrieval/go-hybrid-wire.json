@@ -1,0 +1,3833 @@
+{
+  "cases": [
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9999999999999998,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9838709677419354,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.6777777777777777,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 0,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": ""
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional",
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9231612903225807,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9839",
+              "composite_score": "0.9232",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 3,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9999999999999998,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9838709677419354,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.6777777777777777,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional",
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          },
+          {
+            "index": 2,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9231612903225807,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9839",
+              "composite_score": "0.9232",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 2.0161725067385445,
+              "MatchType": 1,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        },
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9999999999999998,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9838709677419354,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.6777777777777777,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9999999999999998,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9838709677419354,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 0,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": [
+          "tag"
+        ],
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": ""
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9231612903225807,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9839",
+              "composite_score": "0.9232",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9999999999999998,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9838709677419354,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9231612903225807,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9839",
+              "composite_score": "0.9232",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 2.0161725067385445,
+              "MatchType": 1,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        },
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9999999999999998,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9838709677419354,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9999999999999998,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.6887096774193547,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 0,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": [
+          "doc-b"
+        ],
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": ""
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-b\n\nbeta refund policy other words additional",
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9279999999999999,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.9280",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          0
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9999999999999998,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.6887096774193547,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-b\n\nbeta refund policy other words additional",
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9279999999999999,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.9280",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        },
+        {
+          "Results": [
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9999999999999998,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.6887096774193547,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.9777777777777775,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.7,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.6887096774193547,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 0,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "中国退款",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": ""
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "中国退款"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-b\n\n中国退款政策 长江大桥",
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "中国退款"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8346129032258064,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.6887",
+              "composite_score": "0.8346",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          2
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 3,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9777777777777775,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.7,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.6887096774193547,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-b\n\n中国退款政策 长江大桥",
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 2,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8346129032258064,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.6887",
+              "composite_score": "0.8346",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 2963084.1054942766,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        },
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9777777777777775,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.7,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.6887096774193547,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9922778769396245,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.868243083357811,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.31994563341140747,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 1,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "vector"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional",
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 3,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9922778769396245,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.868243083357811,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.31994563341140747,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional",
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          },
+          {
+            "index": 2,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9922778769396245,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.868243083357811,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.31994563341140747,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9922778769396245,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.868243083357811,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 1,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": [
+          "tag"
+        ],
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "vector"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9922778769396245,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.868243083357811,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9922778769396245,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.868243083357811,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.868243083357811,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.31994563341140747,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 1,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": [
+          "doc-b"
+        ],
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "vector"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "refund policy"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-b\n\nbeta refund policy other words additional",
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          0
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.868243083357811,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.31994563341140747,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-b\n\nbeta refund policy other words additional",
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.868243083357811,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.31994563341140747,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.9922778769396245,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.868243083357811,
+          "MatchType": 0,
+          "IsEnabled": false
+        },
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 0.31994563341140747,
+          "MatchType": 0,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 1,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "中国退款",
+        "Embedding": [
+          1,
+          0.125
+        ],
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "vector"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "encoding_format": "float",
+            "input": [
+              "中国退款"
+            ],
+            "model": "unknown",
+            "truncate_prompt_tokens": 511
+          },
+          "path": "/v1/embeddings"
+        },
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional",
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "中国退款"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 3,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9922778769396245,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.868243083357811,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.31994563341140747,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional",
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          },
+          {
+            "index": 2,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.8884729250073433,
+            "match_type": 0,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.8682",
+              "composite_score": "0.8885",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.9922778769396245,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 0.868243083357811,
+              "MatchType": 0,
+              "IsEnabled": false
+            },
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 0.31994563341140747,
+              "MatchType": 0,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "vector",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.9922778769396245,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.868243083357811,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.31994563341140747,
+          "match_type": 0,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 1,
+          "MatchType": 1,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.961139896373057,
+          "MatchType": 1,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 2,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": null,
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "keywords"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9163419689119171,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9611",
+              "composite_score": "0.9163",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 1,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.961139896373057,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9163419689119171,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9611",
+              "composite_score": "0.9163",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 2.0161725067385445,
+              "MatchType": 1,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 1,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.961139896373057,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "1",
+          "Content": "alpha refund policy shared words",
+          "SourceID": "alpha",
+          "SourceType": 0,
+          "ChunkID": "alpha",
+          "KnowledgeID": "doc-a",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 1,
+          "MatchType": 1,
+          "IsEnabled": false
+        },
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 0.961139896373057,
+          "MatchType": 1,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 2,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": null,
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": [
+          "tag"
+        ],
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "keywords"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-a\n\nalpha refund policy shared words",
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9163419689119171,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9611",
+              "composite_score": "0.9163",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          1
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 2,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "alpha",
+            "content": "alpha refund policy shared words",
+            "knowledge_id": "doc-a",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-a",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 1,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          },
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.961139896373057,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-a\n\nalpha refund policy shared words",
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 1,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          },
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-a\n\nalpha refund policy shared words"
+            },
+            "relevance_score": 0.74
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.9163419689119171,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "0.9611",
+              "composite_score": "0.9163",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "1",
+              "Content": "alpha refund policy shared words",
+              "SourceID": "alpha",
+              "SourceType": 0,
+              "ChunkID": "alpha",
+              "KnowledgeID": "doc-a",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 2.0161725067385445,
+              "MatchType": 1,
+              "IsEnabled": false
+            },
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "alpha",
+          "content": "alpha refund policy shared words",
+          "knowledge_id": "doc-a",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-a",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 1,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        },
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 0.961139896373057,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "2",
+          "Content": "beta refund policy other words additional",
+          "SourceID": "beta",
+          "SourceType": 0,
+          "ChunkID": "beta",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "tag",
+          "Score": 1,
+          "MatchType": 1,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 2,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "refund policy",
+        "Embedding": null,
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": [
+          "doc-b"
+        ],
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "keywords"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-b\n\nbeta refund policy other words additional"
+            ],
+            "model": "unknown",
+            "query": "refund policy"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.928,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.9280",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          0
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "ok",
+          "threshold": 0.8,
+          "effective_threshold": 0.8,
+          "top_score": 0.88,
+          "candidate_count": 1,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 1,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-b\n\nbeta refund policy other words additional"
+        ],
+        "ModelScores": [
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-b\n\nbeta refund policy other words additional"
+            },
+            "relevance_score": 0.88
+          }
+        ],
+        "Scored": [
+          {
+            "id": "beta",
+            "content": "beta refund policy other words additional",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.928,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.9280",
+              "model_score": "0.8800"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "2",
+              "Content": "beta refund policy other words additional",
+              "SourceID": "beta",
+              "SourceType": 0,
+              "ChunkID": "beta",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "tag",
+              "Score": 1.9378238341968912,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "beta",
+          "content": "beta refund policy other words additional",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 1,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    },
+    {
+      "fused": [
+        {
+          "ID": "3",
+          "Content": "中国退款政策 长江大桥",
+          "SourceID": "china",
+          "SourceType": 0,
+          "ChunkID": "china",
+          "KnowledgeID": "doc-b",
+          "KnowledgeBaseID": "kb",
+          "TagID": "",
+          "Score": 1,
+          "MatchType": 1,
+          "IsEnabled": false
+        }
+      ],
+      "mode": 2,
+      "options": {
+        "Threshold": 0.8,
+        "TopK": 2,
+        "FallbackMinScore": 0.15,
+        "MaxCandidates": 0,
+        "FAQScoreBoost": 0
+      },
+      "params": {
+        "Query": "中国退款",
+        "Embedding": null,
+        "KnowledgeBaseIDs": [
+          "kb"
+        ],
+        "KnowledgeIDs": null,
+        "TagIDs": null,
+        "ExcludeKnowledgeIDs": null,
+        "ExcludeChunkIDs": null,
+        "TopK": 10,
+        "Threshold": 0,
+        "KnowledgeType": "",
+        "AdditionalParams": null,
+        "RetrieverType": "keywords"
+      },
+      "requests": [
+        {
+          "authorization": "Bearer synthetic-api-key",
+          "body": {
+            "documents": [
+              "Document doc-b\n\n中国退款政策 长江大桥"
+            ],
+            "model": "unknown",
+            "query": "中国退款"
+          },
+          "path": "/v1/rerank"
+        }
+      ],
+      "result": {
+        "Results": [
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.7779999999999999,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.7780",
+              "model_score": "0.6300"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Indices": [
+          0
+        ],
+        "Diagnostics": {
+          "applied": true,
+          "outcome": "threshold_degraded",
+          "threshold": 0.8,
+          "effective_threshold": 0.5599999999999999,
+          "top_score": 0.63,
+          "candidate_count": 1,
+          "result_count": 1
+        },
+        "Candidates": [
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 1,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": null,
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ],
+        "Passages": [
+          "Document doc-b\n\n中国退款政策 长江大桥"
+        ],
+        "ModelScores": [
+          {
+            "index": 0,
+            "document": {
+              "text": "Document doc-b\n\n中国退款政策 长江大桥"
+            },
+            "relevance_score": 0.63
+          }
+        ],
+        "Scored": [
+          {
+            "id": "china",
+            "content": "中国退款政策 长江大桥",
+            "knowledge_id": "doc-b",
+            "chunk_index": 0,
+            "knowledge_title": "Document doc-b",
+            "start_at": 0,
+            "end_at": 0,
+            "seq": 0,
+            "score": 0.7779999999999999,
+            "match_type": 1,
+            "sub_chunk_id": null,
+            "metadata": {
+              "base_score": "1.0000",
+              "composite_score": "0.7780",
+              "model_score": "0.6300"
+            },
+            "chunk_type": "text",
+            "parent_chunk_id": "",
+            "image_info": "",
+            "knowledge_filename": "",
+            "knowledge_source": "",
+            "knowledge_channel": "",
+            "knowledge_base_id": "kb"
+          }
+        ]
+      },
+      "retrieved": [
+        {
+          "Results": [
+            {
+              "ID": "3",
+              "Content": "中国退款政策 长江大桥",
+              "SourceID": "china",
+              "SourceType": 0,
+              "ChunkID": "china",
+              "KnowledgeID": "doc-b",
+              "KnowledgeBaseID": "kb",
+              "TagID": "",
+              "Score": 2963084.1054942766,
+              "MatchType": 1,
+              "IsEnabled": false
+            }
+          ],
+          "RetrieverEngineType": "sqlite",
+          "RetrieverType": "keywords",
+          "Error": null
+        }
+      ],
+      "rows": [
+        {
+          "id": "china",
+          "content": "中国退款政策 长江大桥",
+          "knowledge_id": "doc-b",
+          "chunk_index": 0,
+          "knowledge_title": "Document doc-b",
+          "start_at": 0,
+          "end_at": 0,
+          "seq": 0,
+          "score": 1,
+          "match_type": 1,
+          "sub_chunk_id": null,
+          "metadata": null,
+          "chunk_type": "text",
+          "parent_chunk_id": "",
+          "image_info": "",
+          "knowledge_filename": "",
+          "knowledge_source": "",
+          "knowledge_channel": "",
+          "knowledge_base_id": "kb"
+        }
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "ID": "",
+      "Content": "alpha refund policy shared words",
+      "SourceID": "alpha",
+      "SourceType": 0,
+      "ChunkID": "alpha",
+      "KnowledgeID": "doc-a",
+      "KnowledgeBaseID": "kb",
+      "KnowledgeType": "",
+      "TagID": "tag",
+      "IsEnabled": true,
+      "IsRecommended": false
+    },
+    {
+      "ID": "",
+      "Content": "beta refund policy other words additional",
+      "SourceID": "beta",
+      "SourceType": 0,
+      "ChunkID": "beta",
+      "KnowledgeID": "doc-b",
+      "KnowledgeBaseID": "kb",
+      "KnowledgeType": "",
+      "TagID": "tag",
+      "IsEnabled": true,
+      "IsRecommended": false
+    },
+    {
+      "ID": "",
+      "Content": "中国退款政策 长江大桥",
+      "SourceID": "china",
+      "SourceType": 0,
+      "ChunkID": "china",
+      "KnowledgeID": "doc-b",
+      "KnowledgeBaseID": "kb",
+      "KnowledgeType": "",
+      "TagID": "",
+      "IsEnabled": true,
+      "IsRecommended": false
+    },
+    {
+      "ID": "",
+      "Content": "beta refund policy foreign",
+      "SourceID": "foreign",
+      "SourceType": 0,
+      "ChunkID": "foreign",
+      "KnowledgeID": "foreign",
+      "KnowledgeBaseID": "foreign",
+      "KnowledgeType": "",
+      "TagID": "",
+      "IsEnabled": true,
+      "IsRecommended": false
+    },
+    {
+      "ID": "",
+      "Content": "alpha refund policy disabled",
+      "SourceID": "disabled",
+      "SourceType": 0,
+      "ChunkID": "disabled",
+      "KnowledgeID": "doc-a",
+      "KnowledgeBaseID": "kb",
+      "KnowledgeType": "",
+      "TagID": "",
+      "IsEnabled": false,
+      "IsRecommended": false
+    }
+  ],
+  "vectors": {
+    "alpha": [
+      1,
+      0
+    ],
+    "beta": [
+      0.8,
+      0.6
+    ],
+    "china": [
+      0.2,
+      0.98
+    ],
+    "disabled": [
+      1,
+      0.125
+    ],
+    "foreign": [
+      1,
+      0.1
+    ]
+  }
+}

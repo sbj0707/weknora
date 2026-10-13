@@ -1,0 +1,173 @@
+{
+  "browser_default": "Default search engine: Bing.\nSearch URL: https://www.bing.com/search?q={query}",
+  "encrypted_secret": "enc:v1:pIhKhv4vv5HkY_3OodG4HNYa4wbqkeMEwbbKACMdXDrgAXfaaLjBx6RfWq5sts1KBg",
+  "login_failure": {
+    "success": false,
+    "message": "Invalid email or password",
+    "memberships": null
+  },
+  "login_user": {
+    "id": "u",
+    "username": "Go User",
+    "email": "u@example.com",
+    "avatar": "",
+    "tenant_id": 1,
+    "is_active": true,
+    "can_access_all_tenants": false,
+    "is_system_admin": false,
+    "preferences": {
+      "last_active_tenant_id": 0,
+      "oidc_only_login": false,
+      "gallery": {}
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "updated_at": "2026-01-02T03:04:05Z",
+    "deleted_at": null
+  },
+  "preferences": {
+    "last_active_tenant_id": 0,
+    "oidc_only_login": false,
+    "gallery": {}
+  },
+  "storage_configs": {
+    "cos": {
+      "region": "test-REGION",
+      "access_key_id": "test-SECRET_ID",
+      "secret_access_key": "test-SECRET_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX",
+      "app_id": "test-APP_ID",
+      "temp_bucket_name": "test-TEMP_BUCKET_NAME",
+      "temp_region": "test-TEMP_REGION"
+    },
+    "ks3": null,
+    "local": {
+      "path_prefix": "/fixture/path"
+    },
+    "minio": {
+      "mode": "remote",
+      "endpoint": "test-ENDPOINT",
+      "access_key_id": "test-ACCESS_KEY_ID",
+      "secret_access_key": "test-SECRET_ACCESS_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX",
+      "use_ssl": true
+    },
+    "obs": {
+      "endpoint": "test-ENDPOINT",
+      "region": "test-REGION",
+      "access_key_id": "test-ACCESS_KEY",
+      "secret_access_key": "test-SECRET_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX"
+    },
+    "oss": {
+      "endpoint": "test-ENDPOINT",
+      "region": "test-REGION",
+      "access_key_id": "test-ACCESS_KEY",
+      "secret_access_key": "test-SECRET_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX",
+      "use_temp_bucket": true,
+      "temp_bucket_name": "test-TEMP_BUCKET_NAME",
+      "temp_region": "test-TEMP_REGION"
+    },
+    "s3": {
+      "endpoint": "test-ENDPOINT",
+      "region": "test-REGION",
+      "access_key_id": "test-ACCESS_KEY",
+      "secret_access_key": "test-SECRET_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX",
+      "use_ssl": true,
+      "force_path_style": true
+    },
+    "tos": {
+      "endpoint": "test-ENDPOINT",
+      "region": "test-REGION",
+      "access_key_id": "test-ACCESS_KEY",
+      "secret_access_key": "test-SECRET_KEY",
+      "bucket_name": "test-BUCKET_NAME",
+      "path_prefix": "test-PATH_PREFIX",
+      "temp_bucket_name": "test-TEMP_BUCKET_NAME",
+      "temp_region": "test-TEMP_REGION"
+    }
+  },
+  "tenant_admin": {
+    "id": 1,
+    "name": "home",
+    "description": "",
+    "status": "active",
+    "retriever_engines": {
+      "engines": null
+    },
+    "business": "test",
+    "storage_quota": 100,
+    "storage_used": 10,
+    "web_search_config": {
+      "max_results": 10,
+      "include_date": false,
+      "compression_method": "none",
+      "blacklist": [],
+      "proxy_url": "***"
+    },
+    "parser_engine_config": {
+      "mineru_endpoint": "",
+      "mineru_api_key": "***",
+      "mineru_server_api_key": "***"
+    },
+    "credentials": {
+      "weknoracloud": {
+        "app_id": "app",
+        "app_secret": "***"
+      }
+    },
+    "storage_engine_config": {
+      "default_provider": "local",
+      "local": {
+        "path_prefix": "/files"
+      }
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "updated_at": "2026-01-02T03:04:05Z",
+    "deleted_at": null
+  },
+  "tenant_viewer": {
+    "id": 1,
+    "name": "home",
+    "description": "",
+    "status": "active",
+    "retriever_engines": {
+      "engines": null
+    },
+    "business": "test",
+    "storage_quota": 100,
+    "storage_used": 10,
+    "created_at": "2026-01-02T03:04:05Z",
+    "updated_at": "2026-01-02T03:04:05Z",
+    "deleted_at": null
+  },
+  "tokens": {
+    "HS256": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjQxMDI0NDQ4MDAsInRlbmFudF9pZCI6MSwidXNlcl9pZCI6InUifQ.I62i2_hwtJ_IUH2rLp-PNj3ApOn5N605uZQ_R9cyTaY",
+    "HS384": "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJleHAiOjQxMDI0NDQ4MDAsInRlbmFudF9pZCI6MSwidXNlcl9pZCI6InUifQ.X7Ve3E89qtAyW_1wLjApremWoRtvzTFAwEyNdb7lbZfhLw_tJ9OcPxqZya5CUQt4",
+    "HS512": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjQxMDI0NDQ4MDAsInRlbmFudF9pZCI6MSwidXNlcl9pZCI6InUifQ.FNHnM5UrnqEhLYSiD01CLV3OsqumxjRgIH1ZAmyJwJBjmGDL86Y1MVQQ_Uga7uDPhERlEEG-erItFg3c8DdzeA",
+    "legacy_no_exp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnRfaWQiOjEsInR5cGUiOiJsZWdhY3kiLCJ1c2VyX2lkIjoidSJ9.hTUUWNFo9RvIdp98UQnZpWTh5q5-k3JFZyAcxm5ZPvE"
+  },
+  "user_info": {
+    "id": "u",
+    "username": "Go User",
+    "email": "u@example.com",
+    "avatar": "",
+    "tenant_id": 1,
+    "is_active": true,
+    "can_access_all_tenants": false,
+    "is_system_admin": false,
+    "preferences": {
+      "last_active_tenant_id": 0,
+      "oidc_only_login": false,
+      "gallery": {}
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "updated_at": "2026-01-02T03:04:05Z"
+  }
+}

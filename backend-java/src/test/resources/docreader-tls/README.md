@@ -1,0 +1,1 @@
+These certificates and private keys are public, test-only fixtures for local gRPC TLS/mTLS verification. Never use them for a deployed service. The CA private key is intentionally not stored. Regenerate with openssl if certificates expire.

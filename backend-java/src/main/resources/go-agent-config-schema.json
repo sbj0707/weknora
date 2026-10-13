@@ -1,0 +1,321 @@
+{
+  "fields": {
+    "agent_mode": {
+      "kind": "string"
+    },
+    "agent_type": {
+      "kind": "string"
+    },
+    "allowed_tools": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "asr_model_id": {
+      "kind": "string"
+    },
+    "attachment_image_understanding": {
+      "kind": "bool"
+    },
+    "attachment_ocr_max_pages": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "attachment_parse_wait_timeout_sec": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "audio_upload_enabled": {
+      "kind": "bool"
+    },
+    "chat_parser_engine_rules": {
+      "items": {
+        "fields": {
+          "engine": {
+            "kind": "string"
+          },
+          "file_types": {
+            "items": {
+              "kind": "string"
+            },
+            "kind": "slice"
+          },
+          "xlsx_first_row_as_header": {
+            "items": {
+              "kind": "bool"
+            },
+            "kind": "pointer"
+          }
+        },
+        "kind": "struct"
+      },
+      "kind": "slice"
+    },
+    "citation_enabled": {
+      "items": {
+        "kind": "bool"
+      },
+      "kind": "pointer"
+    },
+    "context_template": {
+      "kind": "string"
+    },
+    "context_template_id": {
+      "kind": "string"
+    },
+    "data_analysis_enabled": {
+      "kind": "bool"
+    },
+    "embedding_top_k": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "enable_query_expansion": {
+      "kind": "bool"
+    },
+    "enable_rewrite": {
+      "kind": "bool"
+    },
+    "fallback_prompt": {
+      "kind": "string"
+    },
+    "fallback_response": {
+      "kind": "string"
+    },
+    "fallback_strategy": {
+      "kind": "string"
+    },
+    "faq_direct_answer_threshold": {
+      "kind": "float64"
+    },
+    "faq_priority_enabled": {
+      "kind": "bool"
+    },
+    "faq_score_boost": {
+      "kind": "float64"
+    },
+    "history_turns": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "image_storage_provider": {
+      "kind": "string"
+    },
+    "image_upload_enabled": {
+      "kind": "bool"
+    },
+    "intent_prompts": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "map"
+    },
+    "kb_selection_mode": {
+      "kind": "string"
+    },
+    "keyword_threshold": {
+      "kind": "float64"
+    },
+    "knowledge_bases": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "llm_call_timeout": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "max_completion_tokens": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "max_iterations": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "mcp_auth_wait_timeout": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "mcp_selection_mode": {
+      "kind": "string"
+    },
+    "mcp_services": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "memory_enabled": {
+      "items": {
+        "kind": "bool"
+      },
+      "kind": "pointer"
+    },
+    "model_id": {
+      "kind": "string"
+    },
+    "multi_turn_enabled": {
+      "kind": "bool"
+    },
+    "query_understand_model_id": {
+      "kind": "string"
+    },
+    "question_suggestions": {
+      "items": {
+        "fields": {
+          "follow_ups": {
+            "fields": {
+              "additional_instruction": {
+                "kind": "string"
+              },
+              "allow_regenerate": {
+                "kind": "bool"
+              },
+              "categories": {
+                "items": {
+                  "kind": "string"
+                },
+                "kind": "slice"
+              },
+              "count": {
+                "bits": 64,
+                "kind": "int"
+              },
+              "enabled": {
+                "kind": "bool"
+              },
+              "knowledge_fallback": {
+                "kind": "bool"
+              },
+              "max_context_turns": {
+                "bits": 64,
+                "kind": "int"
+              },
+              "mode": {
+                "kind": "string"
+              },
+              "model_id": {
+                "kind": "string"
+              },
+              "suppress_on_fallback": {
+                "kind": "bool"
+              },
+              "suppress_when_answer_asks_question": {
+                "kind": "bool"
+              }
+            },
+            "kind": "struct"
+          },
+          "starters": {
+            "fields": {
+              "count": {
+                "bits": 64,
+                "kind": "int"
+              },
+              "enabled": {
+                "kind": "bool"
+              },
+              "items": {
+                "items": {
+                  "kind": "string"
+                },
+                "kind": "slice"
+              },
+              "mode": {
+                "kind": "string"
+              }
+            },
+            "kind": "struct"
+          }
+        },
+        "kind": "struct"
+      },
+      "kind": "pointer"
+    },
+    "reasoning_effort": {
+      "kind": "string"
+    },
+    "rerank_model_id": {
+      "kind": "string"
+    },
+    "rerank_threshold": {
+      "kind": "float64"
+    },
+    "rerank_top_k": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "retain_retrieval_history": {
+      "kind": "bool"
+    },
+    "retrieve_kb_only_when_mentioned": {
+      "kind": "bool"
+    },
+    "rewrite_prompt_system": {
+      "kind": "string"
+    },
+    "rewrite_prompt_user": {
+      "kind": "string"
+    },
+    "sandbox_config_id": {
+      "kind": "string"
+    },
+    "selected_skills": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "skills_selection_mode": {
+      "kind": "string"
+    },
+    "supported_file_types": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "system_prompt": {
+      "kind": "string"
+    },
+    "system_prompt_id": {
+      "kind": "string"
+    },
+    "temperature": {
+      "kind": "float64"
+    },
+    "thinking": {
+      "items": {
+        "kind": "bool"
+      },
+      "kind": "pointer"
+    },
+    "vector_threshold": {
+      "kind": "float64"
+    },
+    "vlm_model_id": {
+      "kind": "string"
+    },
+    "web_fetch_enabled": {
+      "kind": "bool"
+    },
+    "web_fetch_top_n": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "web_search_enabled": {
+      "kind": "bool"
+    },
+    "web_search_max_results": {
+      "bits": 64,
+      "kind": "int"
+    },
+    "web_search_provider_id": {
+      "kind": "string"
+    }
+  },
+  "kind": "struct"
+}

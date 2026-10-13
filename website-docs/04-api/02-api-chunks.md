@@ -34,6 +34,34 @@ curl "$BASE/api/v1/chunks/k-1?page=1" -H "Authorization: Bearer $TOKEN"
 curl $BASE/api/v1/chunks/by-id/c-1 -H "Authorization: Bearer $TOKEN"
 ```
 
+### GET /api/v1/knowledge/:id/chunks/:chunk_id/details
+
+用途：单个片段的独立详情视图。只读，Viewer+ 且父 KB read，API key `retrieve`/full。`chunk_id` 必须属于 URL 中的文档；共享文档按文档所属租户读取数据。
+
+响应：200 `{"success":true,"data":{ChunkDetail}}`。
+
+| 字段 | 说明 |
+| --- | --- |
+| `chunk` | 当前片段完整内容、版本、类型、来源位置、元数据、图片信息等 |
+| `source_content` / `context_header` | 保存的原始解析内容 / 实际索引使用的标题上下文；旧片段的原始内容可能未保存 |
+| `model_id` / `model_name` | 文档使用的 Embedding 模型 |
+| `children` / `children_available` | 正文、OCR、图片描述等子片段及其查询是否成功；子片段有各自独立的索引详情 |
+| `refreshing` | 当前片段或文档仍在构建；详情视图每 5 秒刷新直到结束 |
+| `indexes` | 固定包含 `vector`、`keywords`、`graph`、`wiki`、`questions` 五项 |
+
+每项包含 `enabled`、`available`、`status` 和可选 `reason`。实际查询不可用时不会把空数组视为已完成：
+
+- 向量/关键词：`records` 为实际存储记录，包含存储引擎、记录 ID、Source ID、Chunk ID、实际索引文本、启停状态、更新时间；向量记录还包含维度及完整 `embedding` 数组。支持 PostgreSQL 和 SQLite，其他驱动返回未知。
+- 图谱：`graph.nodes` 是直接引用当前 chunk 的实体；`graph.relations` 是这些实体在同一文档图谱中的关联关系。Neo4j 未记录关系逐条对应的 chunk 来源，因此不把关系视为当前片段的直接引用证据。
+- Wiki：`pages[].scope=chunk` 表示 `chunk_refs` 直接包含当前片段；`scope=document` 表示只有来源文档关联、没有 chunk 级引用的摘要或历史页面。引用其他 chunk 的页面不会被当作当前片段的直接引用。
+- 生成问题：问题原文、ID、索引 Source ID、内容是否仍为当前版本，以及各启用检索路径中索引是否存在；无法查询的索引标记为 `null`。
+
+父片段 `parent_text` 仅提供上下文，不参与正文检索索引。返回的索引文本可能包含标题上下文或问题，因此不要求其内容与 `chunk.content` 完全相同。
+
+```bash
+curl $BASE/api/v1/knowledge/k-1/chunks/c-1/details -H "Authorization: Bearer $TOKEN"
+```
+
 ### PUT /api/v1/chunks/:knowledge_id/:id
 
 用途：编辑分块内容或启停状态（migration `000078` 起为带版本的乐观更新）。

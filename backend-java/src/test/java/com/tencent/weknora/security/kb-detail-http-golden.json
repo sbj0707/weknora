@@ -1,0 +1,1682 @@
+{
+  "agent-ambiguous-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-builtin": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-config-invalid-json": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-config-invalid-list-even-all": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-config-null": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-config-object-list": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-config-wrong-type": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-disabled": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-explicit-all": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-explicit-correct-source": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-explicit-missing-no-fallback": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-explicit-wrong-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-implicit-all": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-implicit-multiple": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-invalid-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1000,
+        "details": null,
+        "message": "invalid agent_source_tenant_id"
+      },
+      "success": false
+    },
+    "status": 400
+  },
+  "agent-is-builtin": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-negative-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1000,
+        "details": null,
+        "message": "invalid agent_source_tenant_id"
+      },
+      "success": false
+    },
+    "status": 400
+  },
+  "agent-none": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-org-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-other-malformed-any": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-overflow-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1000,
+        "details": null,
+        "message": "invalid agent_source_tenant_id"
+      },
+      "success": false
+    },
+    "status": 400
+  },
+  "agent-own-source": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-selected-kb": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "agent-selected-other": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-share-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-source-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-sql-failure": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-target-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-unknown-mode": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "agent-wrong-owner": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "api-key-full": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "other",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "api-key-ingest": {
+    "audits": [],
+    "body": {
+      "error": "Forbidden: API key scope does not allow this operation"
+    },
+    "status": 403
+  },
+  "api-key-retrieve": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "other",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "api-key-scope": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "API key scope does not allow one or more knowledge bases"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "cross-superuser-foreign": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "empty-member-role": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "editor",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "empty-share-permission": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "editor",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "faq-count-failure": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 0,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "faq",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "foreign-no-share": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "knowledge-count-failure": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": false,
+        "knowledge_count": 0,
+        "name": "KB",
+        "processing_count": 0,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "lookup-failure-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1008,
+        "details": null,
+        "message": "cannot verify KB access right now"
+      },
+      "success": false
+    },
+    "status": 503
+  },
+  "member-viewer": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "missing-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "knowledge base not found"
+      },
+      "success": false
+    },
+    "status": 404
+  },
+  "multiple-shares": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "editor",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "org-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "org-invalid-source-ignored": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "own-faq": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 1,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 0,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "faq",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "own-invalid-source-ignored": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "own-unbound": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "postgres",
+        "vector_store_name": "System default",
+        "vector_store_source": "env",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "rbac-off-foreign": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "rbac-off-own": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "other",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "share-admin": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "admin",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "share-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "share-editor": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "editor",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "share-foreign-source-member": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "editor",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "share-sql-failure": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "share-sql-failure-agent-fallback": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "share-viewer": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "shared-count-failure": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": false,
+        "knowledge_count": 0,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 0,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "shared-faq": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 1,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 0,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "faq",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "shared-unbound": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_engine_type": "postgres",
+        "vector_store_name": "System default",
+        "vector_store_source": "env",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "source-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "system-admin-viewer": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "other",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "target-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "tenant-viewer": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "my_permission": "viewer",
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 8,
+        "type": "document",
+        "vector_store_source": "shared",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "viewer-blank": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "viewer-creator": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "caller",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  },
+  "viewer-other": {
+    "audits": [],
+    "body": {
+      "data": {
+        "chunk_count": 0,
+        "creator_id": "other",
+        "id": "kb",
+        "is_processing": true,
+        "knowledge_count": 3,
+        "name": "KB",
+        "processing_count": 2,
+        "storage_config": {
+          "app_id": "",
+          "bucket_name": "",
+          "path_prefix": "",
+          "provider": "",
+          "region": "",
+          "secret_id": "",
+          "secret_key": ""
+        },
+        "tenant_id": 7,
+        "type": "document",
+        "vector_store_engine_type": "qdrant",
+        "vector_store_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "vector_store_name": "Owner private storage",
+        "vector_store_source": "user",
+        "vector_store_status": "available",
+        "vlm_config": {
+          "api_key": "",
+          "base_url": "",
+          "enabled": false,
+          "interface_type": "",
+          "model_id": "",
+          "model_name": ""
+        }
+      },
+      "success": true
+    },
+    "status": 200
+  }
+}

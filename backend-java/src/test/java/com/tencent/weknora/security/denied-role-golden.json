@@ -1,0 +1,334 @@
+{
+  "admin-system-bypass": {
+    "audits": [],
+    "responses": [
+      {
+        "body": {
+          "ok": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "api-key": {
+    "audits": [],
+    "responses": [
+      {
+        "body": {
+          "ok": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "cross-superuser": {
+    "audits": [],
+    "responses": [
+      {
+        "body": {
+          "ok": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "denied": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "different-actor": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      },
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "other",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/2",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "different-method-dedup": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "different-tenant": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      },
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/2",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 8
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "expired-window": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      },
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/2",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "failed-count": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      },
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/2",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "rbac-disabled": {
+    "audits": [],
+    "responses": [
+      {
+        "body": {
+          "ok": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "system-admin-not-owner": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  },
+  "template-dedup": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/tenants/7/invitations/1",
+          "required_role": "owner"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/tenants/:id/invitations/:inv_id",
+        "tenant_id": 7
+      }
+    ],
+    "responses": [
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      },
+      {
+        "body": {
+          "error": "Forbidden: insufficient workspace role"
+        },
+        "status": 403
+      }
+    ]
+  }
+}

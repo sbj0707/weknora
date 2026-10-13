@@ -1,0 +1,452 @@
+{
+  "admin-other": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "api-key-full": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "api-key-ingest": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "api-key-retrieval": {
+    "audits": [],
+    "body": {
+      "error": "Forbidden: API key scope does not allow this operation"
+    },
+    "status": 403
+  },
+  "api-key-scope": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "API key scope does not allow one or more knowledge bases"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "api-key-shared-editor": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "api-key-update": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "contributor-creator": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "contributor-other": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "contributor",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/knowledge-bases/kb/knowledge/file",
+          "required_role": "admin"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/knowledge-bases/:id/knowledge/file",
+        "tenant_id": 7
+      }
+    ],
+    "body": {
+      "error": "Forbidden: must own the resource or have the required role"
+    },
+    "status": 403
+  },
+  "cross-superuser-foreign": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "cross-superuser-own": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "empty-member-role": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "empty-share-permission": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "foreign-no-share": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "lookup-failure-admin": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1008,
+        "details": null,
+        "message": "cannot verify KB access right now"
+      },
+      "success": false
+    },
+    "status": 503
+  },
+  "lookup-failure-viewer": {
+    "audits": [],
+    "body": {
+      "error": "Service Unavailable: cannot verify resource ownership"
+    },
+    "status": 503
+  },
+  "member-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "missing-admin": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "knowledge base not found"
+      },
+      "success": false
+    },
+    "status": 404
+  },
+  "missing-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "knowledge base not found"
+      },
+      "success": false
+    },
+    "status": 404
+  },
+  "multiple-shares": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "org-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "owner-blank": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "rbac-off-foreign": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "rbac-off-own": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "rbac-off-tenant-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "share-admin": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "share-deleted": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "share-editor": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "share-foreign-source-member": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 8,
+      "own_tenant": false,
+      "permission": "editor"
+    },
+    "status": 200
+  },
+  "share-sql-failure": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "share-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "source-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "system-admin-viewer": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/knowledge-bases/kb/knowledge/file",
+          "required_role": "admin"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/knowledge-bases/:id/knowledge/file",
+        "tenant_id": 7
+      }
+    ],
+    "body": {
+      "error": "Forbidden: must own the resource or have the required role"
+    },
+    "status": 403
+  },
+  "target-gone": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "tenant-viewer": {
+    "audits": [],
+    "body": {
+      "error": {
+        "code": 1002,
+        "details": null,
+        "message": "Permission denied to access this knowledge base"
+      },
+      "success": false
+    },
+    "status": 403
+  },
+  "viewer-blank": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/knowledge-bases/kb/knowledge/file",
+          "required_role": "admin"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/knowledge-bases/:id/knowledge/file",
+        "tenant_id": 7
+      }
+    ],
+    "body": {
+      "error": "Forbidden: must own the resource or have the required role"
+    },
+    "status": 403
+  },
+  "viewer-creator": {
+    "audits": [],
+    "body": {
+      "caller_tenant_id": 7,
+      "effective_tenant_id": 7,
+      "own_tenant": true,
+      "permission": "admin"
+    },
+    "status": 200
+  },
+  "viewer-other": {
+    "audits": [
+      {
+        "action": "rbac.access_denied",
+        "actor_role": "viewer",
+        "actor_user_id": "caller",
+        "details": {
+          "raw_path": "/api/v1/knowledge-bases/kb/knowledge/file",
+          "required_role": "admin"
+        },
+        "outcome": "denied",
+        "request_method": "POST",
+        "request_path": "/api/v1/knowledge-bases/:id/knowledge/file",
+        "tenant_id": 7
+      }
+    ],
+    "body": {
+      "error": "Forbidden: must own the resource or have the required role"
+    },
+    "status": 403
+  }
+}

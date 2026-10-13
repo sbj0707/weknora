@@ -1,0 +1,24 @@
+package com.tencent.weknora.model.client;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.time.*;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+
+class ChatFallbackParityTest {
+    static final ObjectMapper JSON=new ObjectMapper();
+    static JsonNode normalize(JsonNode n){if(n.isNumber())return DecimalNode.valueOf(n.decimalValue().stripTrailingZeros());if(n.isObject()){ObjectNode out=JSON.createObjectNode();n.fields().forEachRemaining(e->out.set(e.getKey(),normalize(e.getValue())));return out;}if(n.isArray()){ArrayNode out=JSON.createArrayNode();n.forEach(v->out.add(normalize(v)));return out;}return n;}
+    @Test void actualGoSingleImageFallbackAndContextCacheAffinity()throws Exception{
+        JsonNode fixtures=JSON.readTree(Files.readString(Path.of(System.getProperty("weknora.chat.fallback.fixture","src/test/java/com/tencent/weknora/model/client/go-chat-fallback.json"))));int count=0;
+        for(JsonNode f:fixtures){List<ObjectNode> requests=new ArrayList<>();int[] attempts={0};try(var server=new ModelClientResponsesTest.Server(x->{ObjectNode capture=JSON.createObjectNode();capture.set("body",JSON.readTree(x.getRequestBody()));ObjectNode headers=JSON.createObjectNode();for(String k:List.of("session_id","x-client-request-id","x-session-affinity")){String v=x.getRequestHeaders().getFirst(k);if(v!=null)headers.put(k,new String(v.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8));}capture.set("headers",headers);requests.add(capture);if(attempts[0]++==0){ModelClientResponsesTest.reply(x,f.path("status").asInt(),f.path("body").asText());return;}String payload;if(f.path("stream").asBoolean())payload=f.path("protocol").asText().equals("openai-completions")?"data: {\"choices\":[{\"delta\":{\"content\":\"answer\"},\"finish_reason\":\"stop\"}]}\ndata: [DONE]\n":"data: {\"type\":\"response.output_text.delta\",\"delta\":\"answer\"}\ndata: {\"type\":\"response.completed\"}\n";else payload=f.path("protocol").asText().equals("openai-completions")?"{\"choices\":[{\"message\":{\"content\":\"answer\"},\"finish_reason\":\"stop\"}]}":"{\"output\":[{\"type\":\"message\",\"content\":[{\"type\":\"output_text\",\"text\":\"answer\"}]}]}";ModelClientResponsesTest.reply(x,200,payload);});var http=ModelClientResponsesTest.http();var call=new CallContext(Instant.now().plusSeconds(3),f.path("session").asText())){
+            ObjectNode settings=JSON.createObjectNode().put("supports_multi_content",true).put("prompt_cache_key",true).put("supports_long_cache_retention",true);ModelEndpoint e=new ModelEndpoint("id","model","wire-model",server.url(),settings,JSON.createObjectNode(),false,Map.of(),List.of());ChatModel client=f.path("protocol").asText().equals("openai-completions")?new OpenAIChat(http,e,Duration.ofSeconds(2),Duration.ofSeconds(2)):new OpenAIResponses(http,e,Duration.ofSeconds(2),Duration.ofSeconds(2));List<ObjectNode> messages=new ArrayList<>();f.path("messages").forEach(m->messages.add((ObjectNode)m.deepCopy()));ObjectNode options=(ObjectNode)f.path("options").deepCopy();List<ObjectNode> events=new ArrayList<>();ObjectNode[] response={null};Runnable action=()->{if(f.path("stream").asBoolean())client.stream(call,messages,options,events::add);else response[0]=client.chat(call,messages,options);};if(f.has("error"))assertThatThrownBy(action::run).isInstanceOf(ModelHttpException.class).hasMessageContaining("status "+f.path("status").asInt());else{action.run();JsonNode out=f.path("stream").asBoolean()?JSON.valueToTree(events):response[0];assertThat(normalize(out)).as("result %s",count).isEqualTo(normalize(f.path("result")));}assertThat(normalize(JSON.valueToTree(requests))).as("requests %s",count).isEqualTo(normalize(f.path("requests")));assertThat((JsonNode)JSON.valueToTree(messages)).isEqualTo(f.path("messages"));assertThat(options).isEqualTo(f.path("options"));
+        }count++;}assertThat(count).isEqualTo(32);
+    }
+    @Test void UnicodeHeadersUseGoUTF8BytesAndControlBytesAreRejected()throws Exception{
+        List<String> observed=new ArrayList<>();try(var server=new ModelClientResponsesTest.Server(x->{String v=x.getRequestHeaders().getFirst("X-Test");observed.add(new String(v.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8));ModelClientResponsesTest.reply(x,200,"{}");});var http=ModelClientResponsesTest.http();var call=CallContext.timeout(Duration.ofSeconds(3))){try(var ignored=http.post(call,server.url(),Map.of("X-Test","中😀\u010a"),"{}".getBytes(StandardCharsets.UTF_8),Duration.ZERO)){}assertThat(observed).containsExactly("中😀\u010a");assertThatThrownBy(()->http.post(call,server.url(),Map.of("X-Test","safe\r\nInjected: bad"),"{}".getBytes(StandardCharsets.UTF_8),Duration.ZERO)).hasMessage("Invalid model request headers");assertThat(observed).hasSize(1);}
+    }
+}

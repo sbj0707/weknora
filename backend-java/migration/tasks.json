@@ -1,0 +1,794 @@
+[
+  {
+    "task_constant": "TypeChunkExtract",
+    "task_type": "chunk:extract",
+    "handler": "params.ChunkExtractor.Handle",
+    "source": "internal/router/task.go",
+    "line": 265,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDataTableSummary",
+    "task_type": "datatable:summary",
+    "handler": "params.DataTableSummary.Handle",
+    "source": "internal/router/task.go",
+    "line": 266,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDocumentProcess",
+    "task_type": "document:process",
+    "handler": "params.KnowledgeService.ProcessDocument",
+    "source": "internal/router/task.go",
+    "line": 269,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeTemporaryDocumentProcess",
+    "task_type": "temporary_document:process",
+    "handler": "params.TemporaryDocument.Process",
+    "source": "internal/router/task.go",
+    "line": 270,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeManualProcess",
+    "task_type": "manual:process",
+    "handler": "params.KnowledgeService.ProcessManualUpdate",
+    "source": "internal/router/task.go",
+    "line": 273,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeFAQImport",
+    "task_type": "faq:import",
+    "handler": "params.KnowledgeService.ProcessFAQImport",
+    "source": "internal/router/task.go",
+    "line": 276,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeQuestionGeneration",
+    "task_type": "question:generation",
+    "handler": "params.KnowledgeService.ProcessQuestionGeneration",
+    "source": "internal/router/task.go",
+    "line": 279,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeSummaryGeneration",
+    "task_type": "summary:generation",
+    "handler": "params.KnowledgeService.ProcessSummaryGeneration",
+    "source": "internal/router/task.go",
+    "line": 282,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKBClone",
+    "task_type": "kb:clone",
+    "handler": "params.KnowledgeService.ProcessKBClone",
+    "source": "internal/router/task.go",
+    "line": 285,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeMove",
+    "task_type": "knowledge:move",
+    "handler": "params.KnowledgeService.ProcessKnowledgeMove",
+    "source": "internal/router/task.go",
+    "line": 288,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeListDelete",
+    "task_type": "knowledge:list_delete",
+    "handler": "params.KnowledgeService.ProcessKnowledgeListDelete",
+    "source": "internal/router/task.go",
+    "line": 291,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeListReparse",
+    "task_type": "knowledge:list_reparse",
+    "handler": "params.KnowledgeService.ProcessKnowledgeListReparse",
+    "source": "internal/router/task.go",
+    "line": 294,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeIndexDelete",
+    "task_type": "index:delete",
+    "handler": "params.TagService.ProcessIndexDelete",
+    "source": "internal/router/task.go",
+    "line": 297,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKBDelete",
+    "task_type": "kb:delete",
+    "handler": "params.KnowledgeBaseService.ProcessKBDelete",
+    "source": "internal/router/task.go",
+    "line": 300,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeImageMultimodal",
+    "task_type": "image:multimodal",
+    "handler": "params.ImageMultimodal.Handle",
+    "source": "internal/router/task.go",
+    "line": 303,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgePostProcess",
+    "task_type": "knowledge:post_process",
+    "handler": "params.KnowledgePostProcess.Handle",
+    "source": "internal/router/task.go",
+    "line": 306,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeAutoTag",
+    "task_type": "knowledge:auto_tag",
+    "handler": "params.KnowledgeAutoTag.Handle",
+    "source": "internal/router/task.go",
+    "line": 307,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeBaseProfile",
+    "task_type": "kb:profile",
+    "handler": "params.KnowledgeBaseProfile.Handle",
+    "source": "internal/router/task.go",
+    "line": 308,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDataSourceSync",
+    "task_type": "datasource:sync",
+    "handler": "params.DataSourceService.ProcessSync",
+    "source": "internal/router/task.go",
+    "line": 311,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeWikiIngest",
+    "task_type": "wiki:ingest",
+    "handler": "params.WikiIngest.Handle",
+    "source": "internal/router/task.go",
+    "line": 316,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeWikiFinalize",
+    "task_type": "wiki:finalize",
+    "handler": "params.WikiIngest.Handle",
+    "source": "internal/router/task.go",
+    "line": 317,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeMemoryExtract",
+    "task_type": "memory:extract",
+    "handler": "params.MemoryService.Handle",
+    "source": "internal/router/task.go",
+    "line": 320,
+    "mode": "asynq",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeChunkExtract",
+    "task_type": "chunk:extract",
+    "handler": "params.ChunkExtractor.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 247,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDataTableSummary",
+    "task_type": "datatable:summary",
+    "handler": "params.DataTableSummary.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 248,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDocumentProcess",
+    "task_type": "document:process",
+    "handler": "params.KnowledgeService.ProcessDocument",
+    "source": "internal/router/sync_task.go",
+    "line": 249,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeTemporaryDocumentProcess",
+    "task_type": "temporary_document:process",
+    "handler": "params.TemporaryDocument.Process",
+    "source": "internal/router/sync_task.go",
+    "line": 250,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeManualProcess",
+    "task_type": "manual:process",
+    "handler": "params.KnowledgeService.ProcessManualUpdate",
+    "source": "internal/router/sync_task.go",
+    "line": 251,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeFAQImport",
+    "task_type": "faq:import",
+    "handler": "params.KnowledgeService.ProcessFAQImport",
+    "source": "internal/router/sync_task.go",
+    "line": 252,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeQuestionGeneration",
+    "task_type": "question:generation",
+    "handler": "params.KnowledgeService.ProcessQuestionGeneration",
+    "source": "internal/router/sync_task.go",
+    "line": 253,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeSummaryGeneration",
+    "task_type": "summary:generation",
+    "handler": "params.KnowledgeService.ProcessSummaryGeneration",
+    "source": "internal/router/sync_task.go",
+    "line": 254,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKBClone",
+    "task_type": "kb:clone",
+    "handler": "params.KnowledgeService.ProcessKBClone",
+    "source": "internal/router/sync_task.go",
+    "line": 255,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeMove",
+    "task_type": "knowledge:move",
+    "handler": "params.KnowledgeService.ProcessKnowledgeMove",
+    "source": "internal/router/sync_task.go",
+    "line": 256,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeListDelete",
+    "task_type": "knowledge:list_delete",
+    "handler": "params.KnowledgeService.ProcessKnowledgeListDelete",
+    "source": "internal/router/sync_task.go",
+    "line": 257,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeListReparse",
+    "task_type": "knowledge:list_reparse",
+    "handler": "params.KnowledgeService.ProcessKnowledgeListReparse",
+    "source": "internal/router/sync_task.go",
+    "line": 258,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeIndexDelete",
+    "task_type": "index:delete",
+    "handler": "params.TagService.ProcessIndexDelete",
+    "source": "internal/router/sync_task.go",
+    "line": 259,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKBDelete",
+    "task_type": "kb:delete",
+    "handler": "params.KnowledgeBaseService.ProcessKBDelete",
+    "source": "internal/router/sync_task.go",
+    "line": 260,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeImageMultimodal",
+    "task_type": "image:multimodal",
+    "handler": "params.ImageMultimodal.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 261,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgePostProcess",
+    "task_type": "knowledge:post_process",
+    "handler": "params.KnowledgePostProcess.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 262,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeAutoTag",
+    "task_type": "knowledge:auto_tag",
+    "handler": "params.KnowledgeAutoTag.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 263,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeKnowledgeBaseProfile",
+    "task_type": "kb:profile",
+    "handler": "params.KnowledgeBaseProfile.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 264,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeDataSourceSync",
+    "task_type": "datasource:sync",
+    "handler": "params.DataSourceService.ProcessSync",
+    "source": "internal/router/sync_task.go",
+    "line": 265,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeWikiIngest",
+    "task_type": "wiki:ingest",
+    "handler": "params.WikiIngest.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 266,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeWikiFinalize",
+    "task_type": "wiki:finalize",
+    "handler": "params.WikiIngest.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 267,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  },
+  {
+    "task_constant": "TypeMemoryExtract",
+    "task_type": "memory:extract",
+    "handler": "params.MemoryService.Handle",
+    "source": "internal/router/sync_task.go",
+    "line": 268,
+    "mode": "sync",
+    "status": "not_started",
+    "required_validation": [
+      "retry",
+      "timeout",
+      "cancel",
+      "idempotency",
+      "dead_letter",
+      "scope_and_tenant",
+      "drain_cutover"
+    ]
+  }
+]

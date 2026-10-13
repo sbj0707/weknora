@@ -1,0 +1,8 @@
+//go:build ignore
+
+// go run backend-java/src/test/java/com/tencent/weknora/tenant/tenant_golden.go > backend-java/src/test/java/com/tencent/weknora/tenant/tenant-golden.json
+package main
+import("encoding/json";"os";"github.com/Tencent/WeKnora/internal/types";"gorm.io/driver/sqlite";"gorm.io/gorm")
+func main(){cases:=[]map[string]any{};for _,raw:=range []string{`{}`,`null`,`{"enabled":true,"write_mode":"auto","max_items":1,"extract_delay_seconds":1,"extract_min_interval_seconds":1,"interest_threshold":20,"extract_model_id":"\u0085model\u00a0","embedding_model_id":"  embedding  ","extract_instructions":"  😀text  ","vector_recall":false,"retrieval_conditioning":true}`,`{"write_mode":"old","max_items":9000,"extract_delay_seconds":99999,"extract_min_interval_seconds":99999,"interest_threshold":999}`}{var c types.MemoryConfig;_=json.Unmarshal([]byte(raw),&c);before:=c;c.Normalize();cases=append(cases,map[string]any{"request":json.RawMessage(raw),"typed":before,"normalized":c})};var r types.RetrievalConfig;_=json.Unmarshal([]byte(`{"embedding_top_k":2,"vector_threshold":0.5,"rrf_k":9223372036854775807,"unknown":true}`),&r)
+ db,err:=gorm.Open(sqlite.Open(":memory:"),&gorm.Config{});if err!=nil{panic(err)};_=db.AutoMigrate(&types.Tenant{});t:=types.Tenant{Name:"Before",Description:"Persisted",Business:""};_=db.Create(&t).Error;t.Description="";_=db.Model(&types.Tenant{}).Where("id = ?",t.ID).Updates(&t).Error;var persisted types.Tenant;_=db.First(&persisted,t.ID).Error
+ enc:=json.NewEncoder(os.Stdout);enc.SetIndent("","  ");_=enc.Encode(map[string]any{"memory":cases,"retrieval_zero":types.RetrievalConfig{},"retrieval":r,"empty_description":map[string]string{"returned":t.Description,"persisted":persisted.Description}})}

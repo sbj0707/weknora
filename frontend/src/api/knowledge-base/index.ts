@@ -1,6 +1,7 @@
 import { get, post, put, del, postUpload, getDown } from "../../utils/request";
 import type { KnowledgeProcessOverrides } from '@/types/knowledgeProcess';
 import type { KnowledgeIndexStatusResponse } from '@/types/knowledgeIndexStatus';
+import type { ChunkDetailResponse } from '@/types/chunkDetail';
 import type { AuditLog, AuditOutcome, ListAuditLogResponse } from '@/api/tenant/audit-log';
 import { buildListKnowledgeFilesQuery } from './knowledgeFileListQuery';
 
@@ -554,6 +555,10 @@ export function getKnowledgeSpans(id: string, attempt?: number) {
 
 export function getKnowledgeIndexStatus(id: string): Promise<KnowledgeIndexStatusResponse> {
   return get(`/api/v1/knowledge/${id}/index-status`) as unknown as Promise<KnowledgeIndexStatusResponse>;
+}
+
+export function getDocumentChunkDetail(knowledgeId: string, chunkId: string): Promise<ChunkDetailResponse> {
+  return get(`/api/v1/knowledge/${encodeURIComponent(knowledgeId)}/chunks/${encodeURIComponent(chunkId)}/details`) as unknown as Promise<ChunkDetailResponse>;
 }
 
 export function delKnowledgeDetails(id: string) {

@@ -1,0 +1,3152 @@
+[
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "empty",
+    "raw": "",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "spaces",
+    "raw": "ICAKCQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag\nKey: 'createInvitationRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "null",
+    "raw": "bnVsbA==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go value of type handler.createInvitationRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "array",
+    "raw": "W10=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go value of type handler.createInvitationRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "bool",
+    "raw": "dHJ1ZQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go value of type handler.createInvitationRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "number",
+    "raw": "MTIz",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal string into Go value of type handler.createInvitationRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "string",
+    "raw": "ImFiYyI=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag\nKey: 'createInvitationRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "object",
+    "raw": "e30=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "unexpected EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "truncated",
+    "raw": "ew==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "invalid character '}' looking for beginning of object key string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "syntax",
+    "raw": "eyJ0b2tlbiI6MSx9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "valid",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "trailing",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn1nYXJiYWdl",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "second-value",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn17fQ==",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "casefold",
+    "raw": "eyJFTUFJTCI6ICJ4QGV4YW1wbGUuY29tIiwgIlJPTEUiOiAiYWRtaW4iLCAiTUVTU0FHRSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "unknown",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwgInVua25vd24iOiB7ImludmFsaWQiOiBbXX19",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-null",
+    "raw": "eyJlbWFpbCI6IG51bGwsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.email of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-number",
+    "raw": "eyJlbWFpbCI6IDEyMywgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field createInvitationRequest.email of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-object",
+    "raw": "eyJlbWFpbCI6IHt9LCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field createInvitationRequest.email of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-array",
+    "raw": "eyJlbWFpbCI6IFtdLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field createInvitationRequest.email of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-false",
+    "raw": "eyJlbWFpbCI6IGZhbHNlLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-empty",
+    "raw": "eyJlbWFpbCI6ICIiLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.email of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-duplicate-error",
+    "raw": "eyJlbWFpbCI6MSwiZW1haWwiOiAieEBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-duplicate-null",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwiZW1haWwiOm51bGx9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-null",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiBudWxsLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-number",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAxMjMsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field createInvitationRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-object",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiB7fSwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field createInvitationRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-array",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiBbXSwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field createInvitationRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-false",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiBmYWxzZSwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-empty",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-duplicate-error",
+    "raw": "eyJyb2xlIjoxLCJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "role-duplicate-null",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwicm9sZSI6bnVsbH0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "message-null",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6IG51bGx9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-number",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6IDEyM30=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field createInvitationRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-object",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6IHt9fQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field createInvitationRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-array",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6IFtdfQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field createInvitationRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-false",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6IGZhbHNlfQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "message-empty",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICIifQ==",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInvitationRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-duplicate-error",
+    "raw": "eyJtZXNzYWdlIjoxLCJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "message-duplicate-null",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwibWVzc2FnZSI6bnVsbH0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-39",
+    "raw": "eyJlbWFpbCI6ICJhLi5iQGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-40",
+    "raw": "eyJlbWFpbCI6ICIuYUBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-41",
+    "raw": "eyJlbWFpbCI6ICJhLkBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-42",
+    "raw": "eyJlbWFpbCI6ICJhQGV4YW1wbGUiLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-43",
+    "raw": "eyJlbWFpbCI6ICJhQHguYyIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-44",
+    "raw": "eyJlbWFpbCI6ICJhQDEuMiIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-45",
+    "raw": "eyJlbWFpbCI6ICJcImEgYlwiQGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-46",
+    "raw": "eyJlbWFpbCI6ICJcImFcXGJcIkBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-47",
+    "raw": "eyJlbWFpbCI6ICJcImFcdTAwMDFiXCJAZXhhbXBsZS5jb20iLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-48",
+    "raw": "eyJlbWFpbCI6ICJcImFcbmJcIkBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-49",
+    "raw": "eyJlbWFpbCI6ICJcImFcdGJcIkBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-50",
+    "raw": "eyJlbWFpbCI6ICJcdTc1MjhcdTYyMzdcdTU0MGRAXHU0ZjhiXHU1YjUwLlx1NGUyZFx1NTZmZCIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-51",
+    "raw": "eyJlbWFpbCI6ICJhQGZvby4uY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-52",
+    "raw": "eyJlbWFpbCI6ICJhQGZvb35iYXIuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-53",
+    "raw": "eyJlbWFpbCI6ICJhQC1mb28uY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-54",
+    "raw": "eyJlbWFpbCI6ICJhQGZvby0uY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-55",
+    "raw": "eyJlbWFpbCI6ICJhQGZvby5jb20uIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-56",
+    "raw": "eyJlbWFpbCI6ICJhQGxvY2FsaG9zdCIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-57",
+    "raw": "eyJlbWFpbCI6ICIgYUBleGFtcGxlLmNvbSIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-58",
+    "raw": "eyJlbWFpbCI6ICJhQGV4YW1wbGUuY29tICIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-59",
+    "raw": "eyJlbWFpbCI6ICJhQGV4XHVkODNkXHVkZTAwbXBsZS5jb20iLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-60",
+    "raw": "eyJlbWFpbCI6ICJhQGV4XHUwMGEwbXBsZS5jb20iLCAicm9sZSI6ICJhZG1pbiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "email-61",
+    "raw": "eyJlbWFpbCI6ICJBIDxhQGV4YW1wbGUuY29tPiIsICJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "user with this email is not registered; ask them to sign up first"
+      },
+      "success": false
+    },
+    "name": "email-62",
+    "raw": "eyJlbWFpbCI6ICJcImFcXFwiYlwiQGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "CREATE",
+    "status": 404
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "surrogate",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwiZW1haWwiOiJcdWQ4MDAifQ==",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInvitationRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "invalid-utf8",
+    "raw": "eyJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInJvbGUiOiAiYWRtaW4iLCAibWVzc2FnZSI6ICJub3RlIiwiZW1haWwiOiL/In0=",
+    "schema": "CREATE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "empty",
+    "raw": "",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "spaces",
+    "raw": "ICAKCQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInviteLinkRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "null",
+    "raw": "bnVsbA==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go value of type handler.createInviteLinkRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "array",
+    "raw": "W10=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go value of type handler.createInviteLinkRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "bool",
+    "raw": "dHJ1ZQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go value of type handler.createInviteLinkRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "number",
+    "raw": "MTIz",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal string into Go value of type handler.createInviteLinkRequest",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "string",
+    "raw": "ImFiYyI=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInviteLinkRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "object",
+    "raw": "e30=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "unexpected EOF",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "truncated",
+    "raw": "ew==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "invalid character '}' looking for beginning of object key string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "syntax",
+    "raw": "eyJ0b2tlbiI6MSx9",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "valid",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "trailing",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9Z2FyYmFnZQ==",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "second-value",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9e30=",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "casefold",
+    "raw": "eyJST0xFIjogImFkbWluIiwgIk1FU1NBR0UiOiAibm90ZSJ9",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "unknown",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSIsICJ1bmtub3duIjogeyJpbnZhbGlkIjogW119fQ==",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInviteLinkRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-null",
+    "raw": "eyJyb2xlIjogbnVsbCwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInviteLinkRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-number",
+    "raw": "eyJyb2xlIjogMTIzLCAibWVzc2FnZSI6ICJub3RlIn0=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field createInviteLinkRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-object",
+    "raw": "eyJyb2xlIjoge30sICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field createInviteLinkRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-array",
+    "raw": "eyJyb2xlIjogW10sICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field createInviteLinkRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-false",
+    "raw": "eyJyb2xlIjogZmFsc2UsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'createInviteLinkRequest.Role' Error:Field validation for 'Role' failed on the 'required' tag",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-empty",
+    "raw": "eyJyb2xlIjogIiIsICJtZXNzYWdlIjogIm5vdGUifQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInviteLinkRequest.role of type types.TenantRole",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "role-duplicate-error",
+    "raw": "eyJyb2xlIjoxLCJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "role-duplicate-null",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSIsInJvbGUiOm51bGx9",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "message-null",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiBudWxsfQ==",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInviteLinkRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-number",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAxMjN9",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field createInviteLinkRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-object",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiB7fX0=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field createInviteLinkRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-array",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiBbXX0=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field createInviteLinkRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-false",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiBmYWxzZX0=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "message-empty",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAiIn0=",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field createInviteLinkRequest.message of type string",
+        "message": "invalid request body"
+      },
+      "success": false
+    },
+    "name": "message-duplicate-error",
+    "raw": "eyJtZXNzYWdlIjoxLCJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSJ9",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1007,
+        "details": "oracle business boundary",
+        "message": "failed to create share link"
+      },
+      "success": false
+    },
+    "name": "message-duplicate-null",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSIsIm1lc3NhZ2UiOm51bGx9",
+    "schema": "SHARE",
+    "status": 500
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": null,
+        "message": "role must be one of owner/admin/contributor/viewer"
+      },
+      "success": false
+    },
+    "name": "surrogate",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSIsInJvbGUiOiJcdWQ4MDAifQ==",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": null,
+        "message": "role must be one of owner/admin/contributor/viewer"
+      },
+      "success": false
+    },
+    "name": "invalid-utf8",
+    "raw": "eyJyb2xlIjogImFkbWluIiwgIm1lc3NhZ2UiOiAibm90ZSIsInJvbGUiOiL/In0=",
+    "schema": "SHARE",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "empty",
+    "raw": "",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "spaces",
+    "raw": "ICAKCQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'invitationLookupRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "null",
+    "raw": "bnVsbA==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go value of type handler.invitationLookupRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "array",
+    "raw": "W10=",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go value of type handler.invitationLookupRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "bool",
+    "raw": "dHJ1ZQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go value of type handler.invitationLookupRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "number",
+    "raw": "MTIz",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal string into Go value of type handler.invitationLookupRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "string",
+    "raw": "ImFiYyI=",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'invitationLookupRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "object",
+    "raw": "e30=",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "unexpected EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "truncated",
+    "raw": "ew==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "invalid character '}' looking for beginning of object key string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "syntax",
+    "raw": "eyJ0b2tlbiI6MSx9",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "valid",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn0=",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "trailing",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn1nYXJiYWdl",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "second-value",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn17fQ==",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "casefold",
+    "raw": "eyJUT0tFTiI6ICJzb21lLXRva2VuIn0=",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "unknown",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgInVua25vd24iOiB7ImludmFsaWQiOiBbXX19",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'invitationLookupRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-null",
+    "raw": "eyJ0b2tlbiI6IG51bGx9",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field invitationLookupRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-number",
+    "raw": "eyJ0b2tlbiI6IDEyM30=",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field invitationLookupRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-object",
+    "raw": "eyJ0b2tlbiI6IHt9fQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field invitationLookupRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-array",
+    "raw": "eyJ0b2tlbiI6IFtdfQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field invitationLookupRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-false",
+    "raw": "eyJ0b2tlbiI6IGZhbHNlfQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'invitationLookupRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-empty",
+    "raw": "eyJ0b2tlbiI6ICIifQ==",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field invitationLookupRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-error",
+    "raw": "eyJ0b2tlbiI6MSwidG9rZW4iOiAic29tZS10b2tlbiJ9",
+    "schema": "LOOKUP",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOm51bGx9",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "surrogate",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOiJcdWQ4MDAifQ==",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "invalid-utf8",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOiL/In0=",
+    "schema": "LOOKUP",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "empty",
+    "raw": "",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "spaces",
+    "raw": "ICAKCQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag\nKey: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag\nKey: 'registerByInviteRequest.Username' Error:Field validation for 'Username' failed on the 'required' tag\nKey: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "null",
+    "raw": "bnVsbA==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go value of type handler.registerByInviteRequest",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "array",
+    "raw": "W10=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go value of type handler.registerByInviteRequest",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "bool",
+    "raw": "dHJ1ZQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go value of type handler.registerByInviteRequest",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "number",
+    "raw": "MTIz",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal string into Go value of type handler.registerByInviteRequest",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "string",
+    "raw": "ImFiYyI=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag\nKey: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag\nKey: 'registerByInviteRequest.Username' Error:Field validation for 'Username' failed on the 'required' tag\nKey: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "object",
+    "raw": "e30=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "unexpected EOF",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "truncated",
+    "raw": "ew==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "invalid character '}' looking for beginning of object key string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "syntax",
+    "raw": "eyJ0b2tlbiI6MSx9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "valid",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "trailing",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In1nYXJiYWdl",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "second-value",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In17fQ==",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "casefold",
+    "raw": "eyJUT0tFTiI6ICJzb21lLXRva2VuIiwgIkVNQUlMIjogInhAZXhhbXBsZS5jb20iLCAiVVNFUk5BTUUiOiAidGVzdGVyIiwgIlBBU1NXT1JEIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "unknown",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwgInVua25vd24iOiB7ImludmFsaWQiOiBbXX19",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-null",
+    "raw": "eyJ0b2tlbiI6IG51bGwsICJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.token of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-number",
+    "raw": "eyJ0b2tlbiI6IDEyMywgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field registerByInviteRequest.token of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-object",
+    "raw": "eyJ0b2tlbiI6IHt9LCAiZW1haWwiOiAieEBleGFtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field registerByInviteRequest.token of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-array",
+    "raw": "eyJ0b2tlbiI6IFtdLCAiZW1haWwiOiAieEBleGFtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field registerByInviteRequest.token of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-false",
+    "raw": "eyJ0b2tlbiI6IGZhbHNlLCAiZW1haWwiOiAieEBleGFtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-empty",
+    "raw": "eyJ0b2tlbiI6ICIiLCAiZW1haWwiOiAieEBleGFtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.token of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-error",
+    "raw": "eyJ0b2tlbiI6MSwidG9rZW4iOiAic29tZS10b2tlbiIsICJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwidG9rZW4iOm51bGx9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogbnVsbCwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.email of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-number",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogMTIzLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field registerByInviteRequest.email of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-object",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjoge30sICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field registerByInviteRequest.email of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-array",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogW10sICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field registerByInviteRequest.email of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-false",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogZmFsc2UsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-empty",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIiIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.email of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-duplicate-error",
+    "raw": "eyJlbWFpbCI6MSwidG9rZW4iOiAic29tZS10b2tlbiIsICJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwiZW1haWwiOm51bGx9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Username' Error:Field validation for 'Username' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiBudWxsLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.username of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-number",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAxMjMsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field registerByInviteRequest.username of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-object",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiB7fSwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field registerByInviteRequest.username of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-array",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiBbXSwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field registerByInviteRequest.username of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-false",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiBmYWxzZSwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Username' Error:Field validation for 'Username' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-empty",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAiIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.username of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "username-duplicate-error",
+    "raw": "eyJ1c2VybmFtZSI6MSwidG9rZW4iOiAic29tZS10b2tlbiIsICJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "username-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwidXNlcm5hbWUiOm51bGx9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogbnVsbH0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.password of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-number",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogMTIzfQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field registerByInviteRequest.password of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-object",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjoge319",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field registerByInviteRequest.password of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-array",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogW119",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field registerByInviteRequest.password of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-false",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogZmFsc2V9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'required' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-empty",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogIiJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field registerByInviteRequest.password of type string",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-duplicate-error",
+    "raw": "eyJwYXNzd29yZCI6MSwidG9rZW4iOiAic29tZS10b2tlbiIsICJlbWFpbCI6ICJ4QGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "password-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwicGFzc3dvcmQiOm51bGx9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-170",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImEuLmJAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-171",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIi5hQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-172",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImEuQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-173",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZXhhbXBsZSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-174",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAeC5jIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-175",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAMS4yIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-176",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYSBiXCJAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-177",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYVxcYlwiQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-178",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYVx1MDAwMWJcIkBleGFtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-179",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYVxuYlwiQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-180",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYVx0YlwiQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-181",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlx1NzUyOFx1NjIzN1x1NTQwZEBcdTRmOGJcdTViNTAuXHU0ZTJkXHU1NmZkIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-182",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZm9vLi5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-183",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZm9vfmJhci5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-184",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFALWZvby5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-185",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZm9vLS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-186",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZm9vLmNvbS4iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-187",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAbG9jYWxob3N0IiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-188",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIiBhQGV4YW1wbGUuY29tIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-189",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZXhhbXBsZS5jb20gIiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-190",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZXhcdWQ4M2RcdWRlMDBtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-191",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogImFAZXhcdTAwYTBtcGxlLmNvbSIsICJ1c2VybmFtZSI6ICJ0ZXN0ZXIiLCAicGFzc3dvcmQiOiAiYWJjMTIzNDUifQ==",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "email-192",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIkEgPGFAZXhhbXBsZS5jb20+IiwgInVzZXJuYW1lIjogInRlc3RlciIsICJwYXNzd29yZCI6ICJhYmMxMjM0NSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "email-193",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogIlwiYVxcXCJiXCJAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'min' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-runes-194",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogIlx1MDBlOVx1MDBlOVx1MDBlOVx1MDBlOVx1MDBlOSJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "password-runes-195",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogIlx1MDBlOVx1MDBlOVx1MDBlOVx1MDBlOVx1MDBlOVx1MDBlOSJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'registerByInviteRequest.Password' Error:Field validation for 'Password' failed on the 'min' tag",
+        "message": "Invalid registration parameters"
+      },
+      "success": false
+    },
+    "name": "password-runes-196",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogIlx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMCJ9",
+    "schema": "REGISTER",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "password-runes-197",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogIlx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMFx1ZDgzZFx1ZGUwMCJ9",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "surrogate",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwidG9rZW4iOiJcdWQ4MDAifQ==",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "invalid-utf8",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgImVtYWlsIjogInhAZXhhbXBsZS5jb20iLCAidXNlcm5hbWUiOiAidGVzdGVyIiwgInBhc3N3b3JkIjogImFiYzEyMzQ1IiwidG9rZW4iOiL/In0=",
+    "schema": "REGISTER",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "empty",
+    "raw": "",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "spaces",
+    "raw": "ICAKCQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'acceptInvitationByTokenRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "null",
+    "raw": "bnVsbA==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go value of type handler.acceptInvitationByTokenRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "array",
+    "raw": "W10=",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go value of type handler.acceptInvitationByTokenRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "bool",
+    "raw": "dHJ1ZQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go value of type handler.acceptInvitationByTokenRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "number",
+    "raw": "MTIz",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal string into Go value of type handler.acceptInvitationByTokenRequest",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "string",
+    "raw": "ImFiYyI=",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'acceptInvitationByTokenRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "object",
+    "raw": "e30=",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "unexpected EOF",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "truncated",
+    "raw": "ew==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "invalid character '}' looking for beginning of object key string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "syntax",
+    "raw": "eyJ0b2tlbiI6MSx9",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "valid",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn0=",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "trailing",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn1nYXJiYWdl",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "second-value",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIn17fQ==",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "casefold",
+    "raw": "eyJUT0tFTiI6ICJzb21lLXRva2VuIn0=",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "unknown",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwgInVua25vd24iOiB7ImludmFsaWQiOiBbXX19",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'acceptInvitationByTokenRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-null",
+    "raw": "eyJ0b2tlbiI6IG51bGx9",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field acceptInvitationByTokenRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-number",
+    "raw": "eyJ0b2tlbiI6IDEyM30=",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal object into Go struct field acceptInvitationByTokenRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-object",
+    "raw": "eyJ0b2tlbiI6IHt9fQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal array into Go struct field acceptInvitationByTokenRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-array",
+    "raw": "eyJ0b2tlbiI6IFtdfQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal bool into Go struct field acceptInvitationByTokenRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-false",
+    "raw": "eyJ0b2tlbiI6IGZhbHNlfQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "Key: 'acceptInvitationByTokenRequest.Token' Error:Field validation for 'Token' failed on the 'required' tag",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-empty",
+    "raw": "eyJ0b2tlbiI6ICIifQ==",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1010,
+        "details": "json: cannot unmarshal number into Go struct field acceptInvitationByTokenRequest.token of type string",
+        "message": "token is required"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-error",
+    "raw": "eyJ0b2tlbiI6MSwidG9rZW4iOiAic29tZS10b2tlbiJ9",
+    "schema": "ACCEPT",
+    "status": 400
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "token-duplicate-null",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOm51bGx9",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "surrogate",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOiJcdWQ4MDAifQ==",
+    "schema": "ACCEPT",
+    "status": 410
+  },
+  {
+    "body": {
+      "error": {
+        "code": 1003,
+        "details": null,
+        "message": "invitation link is invalid or has been revoked"
+      },
+      "success": false
+    },
+    "name": "invalid-utf8",
+    "raw": "eyJ0b2tlbiI6ICJzb21lLXRva2VuIiwidG9rZW4iOiL/In0=",
+    "schema": "ACCEPT",
+    "status": 410
+  }
+]

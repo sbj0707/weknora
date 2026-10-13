@@ -77,3 +77,25 @@ through Go's configured `GOPROXY` and module cache, verifies their SHA-256 hashe
 and includes them in the destination bundle. Offline packaging requires those
 module archives to be present in the Go module cache beforehand. To verify a
 packaged source directory, run `scripts/check-license-bundle.sh PATH/TO/licenses/sources`.
+
+## Excelize algorithms in the Java Office source locator
+
+- Component: `github.com/xuri/excelize/v2`, version `v2.11.0`; selected numeric, date and fraction algorithms are ported to Java.
+- License: BSD 3-Clause, reproduced in [EXCELIZE-LICENSE.txt](backend-java/src/main/resources/META-INF/licenses/EXCELIZE-LICENSE.txt) and packaged in the Java jar at `META-INF/licenses/EXCELIZE-LICENSE.txt`.
+- Copyright (c) 2016–2026 The excelize Authors; Copyright (c) 2011–2017 Geoffrey J. Teale.
+- The native Go workbook formatter remains the compatibility oracle. The Java implementation documents unsupported formatting and archive capacity in [Office migration notes](backend-java/src/main/java/com/tencent/weknora/sourceloc/office-migration-notes.md).
+
+## cppjieba and limonp in the Java retrieval segmenter
+
+- Components: the C++ `cppjieba` and `limonp` sources and default dictionaries bundled with the locked `github.com/yanyiwu/gojieba v1.4.7` dependency.
+- License: MIT; exact notices are included in [cppjieba-LICENSE](backend-java/src/main/resources/licenses/cppjieba-LICENSE) and [limonp-LICENSE](backend-java/src/main/resources/licenses/limonp-LICENSE), packaged under `BOOT-INF/classes/licenses/` in the executable Java jar.
+- `backend-java/scripts/build-jieba.sh` compiles a Java JNI wrapper against those existing C++ sources and copies the notices beside the resulting native library and dictionaries. The deployed Java process executes no Go application code. Native binaries and dictionaries are explicit operator-provided assets.
+
+
+nfp `v0.0.2-0.20250530014748-2ddeb826f9a9` is ported to native Java Excel number-format tokenization. Copyright (c) 2022-2025 Ri Xu. BSD 3-Clause, complete notice at `src/main/resources/META-INF/licenses/NFP-LICENSE.txt`. Excelize v2.11.0 generic formatting and generated LCID/month/weekday/era data share its existing BSD3 notice. Go1.26 UTC64bit calendar conversion uses the existing Go BSD3 license `GO-HTML-UNICODE-LICENSE.txt`.
+
+## DuckDB in the Java data-table loader
+
+- `org.duckdb:duckdb_jdbc:1.5.2.0` includes native DuckDB v1.5.2, source ID `8a5851971f`, matching this repository's current Go DuckDB backend.
+- MIT, copyright 2018–2025 Stichting DuckDB Foundation. Original notices from the pinned upstream tags are included in [duckdb-jdbc-LICENSE](backend-java/src/main/resources/licenses/duckdb-jdbc-LICENSE) and [duckdb-LICENSE](backend-java/src/main/resources/licenses/duckdb-LICENSE).
+- Excel loading additionally requires the matching DuckDB `excel` and `spatial` extensions. Extension loading and full summary-task integration are tracked in [the migration audit](backend-java/migration/datatable-summary-audit.md).

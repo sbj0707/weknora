@@ -23,6 +23,7 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import DocumentPreview from '@/components/document-preview.vue';
 import DocumentIndexStatus from '@/components/document-index-status.vue';
+import ChunkDetailDrawer from '@/components/chunk-detail-drawer.vue';
 import DocumentFileIcon from '@/views/knowledge/components/DocumentFileIcon.vue';
 import KnowledgeProcessingTimeline from '@/components/knowledge-processing-timeline.vue';
 import { resolveKnowledgeDownloadFileName } from '@/views/knowledge/knowledgeDownloadFileName';
@@ -418,6 +419,9 @@ const MAIN_DRAWER_MIN_WIDTH = 480;
 const mainDrawerWidth = ref(MAIN_DRAWER_DEFAULT_WIDTH);
 const mainDrawerResizing = ref(false);
 const mainDrawerFullscreen = ref(false);
+const detailChunkId = ref('');
+const detailChunkRevision = computed(() => props.details?.md?.find((chunk: any) => chunk.id === detailChunkId.value)?.content_revision);
+watch(() => [props.visible, props.details?.id], () => { detailChunkId.value = ''; });
 const mainDrawerSize = computed(() => mainDrawerFullscreen.value ? '100vw' : `${mainDrawerWidth.value}px`);
 
 watch(() => [props.visible, props.details?.id], ([visible, id], [, previousId]) => {
@@ -1590,6 +1594,7 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
       </div>
     </teleport>
     <t-drawer :visible="visible" :zIndex="2000" :size="mainDrawerSize" attach="body" :closeBtn="true"
+      :close-on-esc-keydown="!detailChunkId"
       :footer="false" :class="['doc-main-drawer', { 'doc-main-drawer--resizing': mainDrawerResizing }]"
       @close="handleClose">
       <template #header>
@@ -1898,6 +1903,13 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
                     <span class="chunk-meta">{{ chunk.meta }}</span>
                   </div>
                   <div class="chunk-header-right">
+                    <t-tooltip :content="$t('knowledgeBase.chunkDetail.open')" placement="top">
+                      <t-button class="icon-action-btn" size="small" variant="text" shape="square"
+                        :title="$t('knowledgeBase.chunkDetail.open')" :aria-label="$t('knowledgeBase.chunkDetail.open')"
+                        @click="detailChunkId = chunk.original.id">
+                        <template #icon><t-icon name="view-module" size="15px" /></template>
+                      </t-button>
+                    </t-tooltip>
                     <t-tooltip v-if="chunk.original.index_status === 'failed' && canEditContent"
                       :content="$t('knowledgeBase.retryIndex')" placement="top">
                       <t-button class="icon-action-btn" size="small" theme="danger" variant="text" shape="square"
@@ -2161,6 +2173,9 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
       </div>
 
     </t-drawer>
+    <ChunkDetailDrawer :visible="!!visible && !!detailChunkId" :knowledge-id="details.id || ''"
+      :chunk-id="detailChunkId" :revision="detailChunkRevision" :render-markdown="processMarkdown"
+      @close="detailChunkId = ''" @navigate="detailChunkId = $event" />
   </div>
 </template>
 <style scoped lang="less">

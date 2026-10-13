@@ -1,0 +1,478 @@
+{
+  "access-token-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 1,
+      "audits": [
+        {
+          "action": "rbac.member_added",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        },
+        {
+          "action": "rbac.invitation_accepted",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        }
+      ],
+      "code": 1007,
+      "member_rows": [
+        {
+          "role": "contributor",
+          "status": "active",
+          "tenant_id": 7
+        }
+      ],
+      "message": "token generation failed",
+      "status": 500,
+      "token_rows": 0,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 7,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "create-user-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1000,
+      "member_rows": [],
+      "message": "failed to create user",
+      "status": 400,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "disabled": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1002,
+      "member_rows": [],
+      "message": "Registration is disabled",
+      "status": 403,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "duplicate-email": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1005,
+      "member_rows": [],
+      "message": "this email already has an account; please log in to join the workspace",
+      "status": 409,
+      "token_rows": 0,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 0,
+          "username": "existing"
+        }
+      ]
+    }
+  },
+  "duplicate-username": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1000,
+      "member_rows": [],
+      "message": "user with this username already exists",
+      "status": 400,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "expired": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1003,
+      "member_rows": [],
+      "message": "invitation link is invalid or has been revoked",
+      "status": 410,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "home-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1007,
+      "member_rows": [],
+      "message": "failed to finalise invited account",
+      "status": 500,
+      "token_rows": 0,
+      "users": [
+        {
+          "active": true,
+          "deleted": true,
+          "email": "new@example.com",
+          "tenant_id": 0,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "invalid-policy": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abcdefgh",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1010,
+      "member_rows": [],
+      "message": "password must be 8-32 characters and contain at least one letter and one number",
+      "status": 400,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "invalid-token": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "invalid",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1003,
+      "member_rows": [],
+      "message": "invitation link is invalid or has been revoked",
+      "status": 410,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "invite-only": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1002,
+      "member_rows": [],
+      "message": "Registration is disabled",
+      "status": 403,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "member-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1003,
+      "member_rows": [],
+      "message": "invitation link is no longer valid; please log in to your new account",
+      "status": 410,
+      "token_rows": 0,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 0,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "password-controls": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "Abc123\n45",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 1,
+      "audits": [
+        {
+          "action": "rbac.member_added",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        },
+        {
+          "action": "rbac.invitation_accepted",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        }
+      ],
+      "member_rows": [
+        {
+          "role": "contributor",
+          "status": "active",
+          "tenant_id": 7
+        }
+      ],
+      "memberships": [
+        {
+          "role": "contributor",
+          "tenant_id": 7,
+          "tenant_name": "Workspace"
+        }
+      ],
+      "message": "Registration successful",
+      "profile": {
+        "can_access_all_tenants": false,
+        "email": "new@example.com",
+        "is_active": true,
+        "is_system_admin": false,
+        "preferences": {},
+        "tenant_id": 7,
+        "username": "tester"
+      },
+      "status": 201,
+      "token_rows": 2,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 7,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "refresh-token-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 1,
+      "audits": [
+        {
+          "action": "rbac.member_added",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        },
+        {
+          "action": "rbac.invitation_accepted",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        }
+      ],
+      "code": 1007,
+      "member_rows": [
+        {
+          "role": "contributor",
+          "status": "active",
+          "tenant_id": 7
+        }
+      ],
+      "message": "token generation failed",
+      "status": 500,
+      "token_rows": 1,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 7,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "rollback-failure": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1003,
+      "member_rows": [],
+      "message": "invitation link is no longer valid; please log in to your new account",
+      "status": 410,
+      "token_rows": 0,
+      "users": [
+        {
+          "active": true,
+          "deleted": true,
+          "email": "new@example.com",
+          "tenant_id": 7,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "short-password": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1010,
+      "member_rows": [],
+      "message": "Invalid registration parameters",
+      "status": 400,
+      "token_rows": 0,
+      "users": []
+    }
+  },
+  "success": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": " tester "
+    },
+    "result": {
+      "accepted_count": 1,
+      "audits": [
+        {
+          "action": "rbac.member_added",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        },
+        {
+          "action": "rbac.invitation_accepted",
+          "actor_role": "viewer",
+          "actor_user_id": "",
+          "outcome": "success"
+        }
+      ],
+      "member_rows": [
+        {
+          "role": "contributor",
+          "status": "active",
+          "tenant_id": 7
+        }
+      ],
+      "memberships": [
+        {
+          "role": "contributor",
+          "tenant_id": 7,
+          "tenant_name": "Workspace"
+        }
+      ],
+      "message": "Registration successful",
+      "profile": {
+        "can_access_all_tenants": false,
+        "email": "new@example.com",
+        "is_active": true,
+        "is_system_admin": false,
+        "preferences": {},
+        "tenant_id": 7,
+        "username": "tester"
+      },
+      "status": 201,
+      "token_rows": 2,
+      "users": [
+        {
+          "active": true,
+          "deleted": false,
+          "email": "new@example.com",
+          "tenant_id": 7,
+          "username": "tester"
+        }
+      ]
+    }
+  },
+  "trimmed-username-empty": {
+    "request": {
+      "email": "NEW@example.com",
+      "password": "abc12345",
+      "token": "shared-link-token",
+      "username": "  "
+    },
+    "result": {
+      "accepted_count": 0,
+      "audits": [],
+      "code": 1010,
+      "member_rows": [],
+      "message": "token, email, username and password are required",
+      "status": 400,
+      "token_rows": 0,
+      "users": []
+    }
+  }
+}

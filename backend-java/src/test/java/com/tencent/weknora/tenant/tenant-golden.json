@@ -1,0 +1,159 @@
+{
+  "empty_description": {
+    "persisted": "Persisted",
+    "returned": ""
+  },
+  "memory": [
+    {
+      "normalized": {
+        "enabled": false,
+        "write_mode": "explicit_only",
+        "extract_model_id": "",
+        "max_items": 200,
+        "extract_delay_seconds": 90,
+        "extract_min_interval_seconds": 300,
+        "extract_instructions": "",
+        "interest_threshold": 3,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      },
+      "request": {},
+      "typed": {
+        "enabled": false,
+        "write_mode": "",
+        "extract_model_id": "",
+        "max_items": 0,
+        "extract_delay_seconds": 0,
+        "extract_min_interval_seconds": 0,
+        "extract_instructions": "",
+        "interest_threshold": 0,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      }
+    },
+    {
+      "normalized": {
+        "enabled": false,
+        "write_mode": "explicit_only",
+        "extract_model_id": "",
+        "max_items": 200,
+        "extract_delay_seconds": 90,
+        "extract_min_interval_seconds": 300,
+        "extract_instructions": "",
+        "interest_threshold": 3,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      },
+      "request": null,
+      "typed": {
+        "enabled": false,
+        "write_mode": "",
+        "extract_model_id": "",
+        "max_items": 0,
+        "extract_delay_seconds": 0,
+        "extract_min_interval_seconds": 0,
+        "extract_instructions": "",
+        "interest_threshold": 0,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      }
+    },
+    {
+      "normalized": {
+        "enabled": true,
+        "write_mode": "auto",
+        "extract_model_id": "model",
+        "max_items": 1,
+        "extract_delay_seconds": 5,
+        "extract_min_interval_seconds": 1,
+        "extract_instructions": "😀text",
+        "interest_threshold": 20,
+        "embedding_model_id": "embedding",
+        "vector_recall": false,
+        "retrieval_conditioning": true
+      },
+      "request": {
+        "enabled": true,
+        "write_mode": "auto",
+        "max_items": 1,
+        "extract_delay_seconds": 1,
+        "extract_min_interval_seconds": 1,
+        "interest_threshold": 20,
+        "extract_model_id": "\u0085model\u00a0",
+        "embedding_model_id": "  embedding  ",
+        "extract_instructions": "  😀text  ",
+        "vector_recall": false,
+        "retrieval_conditioning": true
+      },
+      "typed": {
+        "enabled": true,
+        "write_mode": "auto",
+        "extract_model_id": "model ",
+        "max_items": 1,
+        "extract_delay_seconds": 1,
+        "extract_min_interval_seconds": 1,
+        "extract_instructions": "  😀text  ",
+        "interest_threshold": 20,
+        "embedding_model_id": "  embedding  ",
+        "vector_recall": false,
+        "retrieval_conditioning": true
+      }
+    },
+    {
+      "normalized": {
+        "enabled": false,
+        "write_mode": "explicit_only",
+        "extract_model_id": "",
+        "max_items": 2000,
+        "extract_delay_seconds": 3600,
+        "extract_min_interval_seconds": 86400,
+        "extract_instructions": "",
+        "interest_threshold": 20,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      },
+      "request": {
+        "write_mode": "old",
+        "max_items": 9000,
+        "extract_delay_seconds": 99999,
+        "extract_min_interval_seconds": 99999,
+        "interest_threshold": 999
+      },
+      "typed": {
+        "enabled": false,
+        "write_mode": "old",
+        "extract_model_id": "",
+        "max_items": 9000,
+        "extract_delay_seconds": 99999,
+        "extract_min_interval_seconds": 99999,
+        "extract_instructions": "",
+        "interest_threshold": 999,
+        "embedding_model_id": "",
+        "vector_recall": null,
+        "retrieval_conditioning": null
+      }
+    }
+  ],
+  "retrieval": {
+    "embedding_top_k": 2,
+    "vector_threshold": 0.5,
+    "keyword_threshold": 0,
+    "rerank_top_k": 0,
+    "rerank_threshold": 0,
+    "rerank_model_id": "",
+    "rrf_k": 9223372036854775807
+  },
+  "retrieval_zero": {
+    "embedding_top_k": 0,
+    "vector_threshold": 0,
+    "keyword_threshold": 0,
+    "rerank_top_k": 0,
+    "rerank_threshold": 0,
+    "rerank_model_id": ""
+  }
+}

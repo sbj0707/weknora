@@ -1,0 +1,1178 @@
+{
+  "request": "CgMAAf8SCuaWh+ahoy5wZGYaA3BkZioG5rWL6K+VMhYKB2J1aWx0aW4SCwoDb2NyEgR0cnVlOgpyZXF1ZXN0LTQy",
+  "source_cases": [
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"bbox\":[0.1,0.2,0.9,1],\"quote\":\"😀中\"}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": 3,
+          "bbox": [
+            0.1,
+            0.2,
+            0.9,
+            1
+          ],
+          "quote": "😀中"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"bbox\":[0.1,0.2,0.9,1],\"quote\":\"😀中\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"bbox\":[0.1,0.2,0.9,1],\"quote\":\"😀中\"}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": 3,
+          "bbox": [
+            0.1,
+            0.2,
+            0.9,
+            1
+          ],
+          "quote": "😀中"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"docx\",\"block\":2,\"mapping\":\"verified\",\"partial\":true,\"source_id\":\"block-2\",\"source_hash\":\"test-hash\"}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "docx",
+          "mapping": "verified",
+          "partial": true,
+          "source_id": "block-2",
+          "source_hash": "test-hash",
+          "block": 2
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"docx\",\"block\":2,\"mapping\":\"verified\",\"partial\":true,\"source_id\":\"block-2\",\"source_hash\":\"test-hash\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"docx\",\"block\":2,\"mapping\":\"verified\",\"partial\":true,\"source_id\":\"block-2\",\"source_hash\":\"test-hash\"}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "docx",
+          "mapping": "verified",
+          "partial": true,
+          "source_id": "block-2",
+          "source_hash": "test-hash",
+          "block": 2
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"slide\",\"slide\":1,\"title\":\"演示\"}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "slide",
+          "slide": 1,
+          "title": "演示"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"slide\",\"slide\":1,\"title\":\"演示\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"slide\",\"slide\":1,\"title\":\"演示\"}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "slide",
+          "slide": 1,
+          "title": "演示"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"sheet\",\"sheet\":\"表一\",\"row_start\":2,\"row_end\":8}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "sheet",
+          "sheet": "表一",
+          "row_start": 2,
+          "row_end": 8
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"sheet\",\"sheet\":\"表一\",\"row_start\":2,\"row_end\":8}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"sheet\",\"sheet\":\"表一\",\"row_start\":2,\"row_end\":8}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "sheet",
+          "sheet": "表一",
+          "row_start": 2,
+          "row_end": 8
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"text\",\"start\":0,\"end\":2}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "text",
+          "end": 2
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"text\",\"start\":0,\"end\":2}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"text\",\"start\":0,\"end\":2}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "text",
+          "end": 2
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"time\",\"start_ms\":1200,\"end_ms\":3600}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "time",
+          "start_ms": 1200,
+          "end_ms": 3600
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"time\",\"start_ms\":1200,\"end_ms\":3600}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"time\",\"start_ms\":1200,\"end_ms\":3600}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "time",
+          "start_ms": 1200,
+          "end_ms": 3600
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"section\",\"section\":2,\"title\":\"第二章\"}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "section",
+          "section": 2,
+          "title": "第二章"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"section\",\"section\":2,\"title\":\"第二章\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"section\",\"section\":2,\"title\":\"第二章\"}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "section",
+          "section": 2,
+          "title": "第二章"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"future-engine\",\"unknown\":{\"nested\":true}}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "future-engine"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"future-engine\",\"unknown\":{\"nested\":true}}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"future-engine\",\"unknown\":{\"nested\":true}}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "future-engine"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"Type\":\"pdf\",\"Page\":4}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": 4
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"Type\":\"pdf\",\"Page\":4}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"Type\":\"pdf\",\"Page\":4}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": 4
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"TYPE\":\"pdf\",\"PAGE\":5}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": 5
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"TYPE\":\"pdf\",\"PAGE\":5}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"TYPE\":\"pdf\",\"PAGE\":5}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": 5
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":null,\"bbox\":[null,1]}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "bbox": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":null,\"bbox\":[null,1]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":null,\"bbox\":[null,1]}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "bbox": [
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[]}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[]}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":-3}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": -3
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":-3}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":-3}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": -3
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775807}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": 9223372036854775807
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775807}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775807}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": 9223372036854775807
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.0}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.0}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.0}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.5}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.5}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":1.5}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775808}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775808}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":9223372036854775808}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":\"true\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":\"true\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":\"true\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":1}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":1}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":1}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[\"0.1\"]}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[\"0.1\"]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[\"0.1\"]}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[true]}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[true]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[true]}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1e999]}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1e999]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1e999]}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":1}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":1}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":1}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":null}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":null}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "null",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "null",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "null",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "[]",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "[]",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "[]",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "\"pdf\"",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "\"pdf\"",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "\"pdf\"",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{bad JSON}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{bad JSON}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{bad JSON}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"type\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"type\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"type\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"type\":\"\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":1,\"type\":\"pdf\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":1,\"type\":\"pdf\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":1,\"type\":\"pdf\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\",\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\",\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":\"3\",\"page\":3}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":0}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":0}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":0}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf",
+          "page": 3
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"page\":3,\"page\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf",
+          "page": 3
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":true,\"partial\":false}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":true,\"partial\":false}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"partial\":true,\"partial\":false}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":[]}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":[]}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":[]}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"bbox\":[1],\"bbox\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\",\"unknown\":{\"nested\":true},\"unknown\":null}",
+      "expected": {
+        "Start": 0,
+        "End": 2,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\",\"unknown\":{\"nested\":true},\"unknown\":null}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\",\"unknown\":{\"nested\":true},\"unknown\":null}",
+      "expected": {
+        "Start": 4294967294,
+        "End": 4294967295,
+        "Locator": {
+          "type": "pdf"
+        }
+      }
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\"}{\"type\":\"docx\"}",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\"}{\"type\":\"docx\"}",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\"}{\"type\":\"docx\"}",
+      "expected": null
+    },
+    {
+      "start": 0,
+      "end": 2,
+      "locator_json": "{\"type\":\"pdf\"}junk",
+      "expected": null
+    },
+    {
+      "start": 1,
+      "end": 1,
+      "locator_json": "{\"type\":\"pdf\"}junk",
+      "expected": null
+    },
+    {
+      "start": 4294967294,
+      "end": 4294967295,
+      "locator_json": "{\"type\":\"pdf\"}junk",
+      "expected": null
+    }
+  ],
+  "stream_frames": [
+    "CngKDvCfmIDkuK0K5q2j5paHEgsvdG1wL2ltYWdlcxoRCgZwYXJzZXISB2J1aWx0aW4oAjJEEAIaQHsidHlwZSI6InBkZiIsInBhZ2UiOjMsImJib3giOlswLjEsMC4yLDAuOSwxXSwicXVvdGUiOiLwn5iA5LitIn0=",
+    "Ej4KB29uZS5wbmcSEm9yaWdpbmFsOi8vb25lLnBuZxoJaW1hZ2UvcG5nIg9zdG9yYWdlL29uZS5wbmcqAwABAg=="
+  ],
+  "unary": "Cg7wn5iA5LitCuato+aWhxI+CgdvbmUucG5nEhJvcmlnaW5hbDovL29uZS5wbmcaCWltYWdlL3BuZyIPc3RvcmFnZS9vbmUucG5nKgMAAQIaCy90bXAvaW1hZ2VzIhEKBnBhcnNlchIHYnVpbHRpbjJEEAIaQHsidHlwZSI6InBkZiIsInBhZ2UiOjMsImJib3giOlswLjEsMC4yLDAuOSwxXSwicXVvdGUiOiLwn5iA5LitIn0="
+}

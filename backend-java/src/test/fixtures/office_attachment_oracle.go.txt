@@ -1,0 +1,77 @@
+package service
+
+import (
+	"context"
+	"encoding/base64"
+	"encoding/json"
+	"github.com/Tencent/WeKnora/internal/sourceloc"
+	"github.com/Tencent/WeKnora/internal/types"
+	"os"
+	"strings"
+	"testing"
+)
+
+func TestJavaOfficeAttachmentOracle(t *testing.T) {
+	input, err := os.ReadFile(os.Getenv("WEKNORA_OFFICE_ORACLE_INPUT"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixtures []struct {
+		Name     string `json:"name"`
+		FileType string `json:"file_type"`
+		Data     string `json:"data"`
+		Markdown string `json:"markdown"`
+	}
+	if err = json.Unmarshal(input, &fixtures); err != nil {
+		t.Fatal(err)
+	}
+	choose := map[string]bool{"doc-invalid-zip": true, "doc-missing-part": true, "zip-crc-error": true, "doc-9-docx": true, "doc-0-docx": true, "ppt-invalid-pres": true, "epub-bad-container": true, "xlsx-invalid-sst-ns": true, "xlsx-custom-format":true}
+	var output []any
+	for _, f := range fixtures {
+		if !choose[f.Name] {
+			continue
+		}
+		original, _ := base64.StdEncoding.DecodeString(f.Data)
+		for _, provided := range []bool{false, true} {
+			parsed := f.Markdown
+			if parsed == "" {
+				parsed = "Parser returned text"
+			}
+			read := &types.ReadResult{MarkdownContent: parsed}
+			if provided {
+				read.SourceBlocks = []types.SourceBlock{{Start: 0, End: len([]rune(parsed)), Locator: types.SourceLocator{Type: "pdf", Page: 7}}}
+			}
+			attachStructureBlocks(context.Background(), f.FileType, original, read)
+			for i := range read.SourceBlocks {
+				read.SourceBlocks[i].Locator.SourceHash = "original-file-hash"
+			}
+			final := strings.ReplaceAll(parsed, "\r\n", "\n")
+			mapped := sourceloc.RemapBlocks(read.SourceBlocks, parsed, final)
+			index := sourceloc.NewIndex(final, mapped)
+			var locators []types.SourceLocator
+			if index != nil {
+				locators = index.Locators(0, len([]rune(final)))
+			}
+			output = append(output, map[string]any{"name": f.Name, "file_type": f.FileType, "data": f.Data, "parsed": parsed, "final": final, "provided": provided, "blocks": read.SourceBlocks, "locators": locators})
+		}
+	}
+	for _, empty := range []string{"original", "markdown"} {
+		data := []byte("invalid zip")
+		markdown := "Parser returned text"
+		if empty == "original" {
+			data = nil
+		} else {
+			markdown = ""
+		}
+		read := &types.ReadResult{MarkdownContent: markdown}
+		attachStructureBlocks(context.Background(), "docx", data, read)
+		output = append(output, map[string]any{"name": "empty-" + empty, "file_type": "docx", "data": base64.StdEncoding.EncodeToString(data), "parsed": markdown, "final": markdown, "provided": false, "blocks": read.SourceBlocks, "locators": nil})
+	}
+	bytes, err := json.Marshal(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = os.WriteFile(os.Getenv("WEKNORA_OFFICE_ORACLE_OUTPUT"), bytes, 0600); err != nil {
+		t.Fatal(err)
+	}
+}

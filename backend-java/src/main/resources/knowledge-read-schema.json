@@ -1,0 +1,123 @@
+{
+  "locators": {
+    "items": {
+      "fields": {
+        "bbox": {
+          "items": {
+            "kind": "float64"
+          },
+          "kind": "slice",
+          "omit_empty": true
+        },
+        "block": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "end": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "end_ms": {
+          "bits": 64,
+          "kind": "int64",
+          "omit_empty": true
+        },
+        "mapping": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "page": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "partial": {
+          "kind": "bool",
+          "omit_empty": true
+        },
+        "quote": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "row_end": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "row_start": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "section": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "sheet": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "slide": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "source_hash": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "source_id": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "start": {
+          "bits": 64,
+          "kind": "int",
+          "omit_empty": true
+        },
+        "start_ms": {
+          "bits": 64,
+          "kind": "int64",
+          "omit_empty": true
+        },
+        "title": {
+          "kind": "string",
+          "omit_empty": true
+        },
+        "type": {
+          "kind": "string",
+          "omit_empty": false
+        }
+      },
+      "kind": "struct"
+    },
+    "kind": "slice"
+  },
+  "profile": {
+    "fields": {
+      "doc_type": {
+        "kind": "string",
+        "omit_empty": true
+      },
+      "gist": {
+        "kind": "string",
+        "omit_empty": true
+      },
+      "topics": {
+        "items": {
+          "kind": "string"
+        },
+        "kind": "slice",
+        "omit_empty": true
+      },
+      "typical_question": {
+        "kind": "string",
+        "omit_empty": true
+      }
+    },
+    "kind": "struct"
+  }
+}
