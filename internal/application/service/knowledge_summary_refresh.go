@@ -39,6 +39,13 @@ func summarySourceChanged(
 	if err != nil {
 		return false, err
 	}
+	// Cancellation can land during the model call, after the worker's entry
+	// guard. Treat its result as stale before publishing a description, chunk
+	// or index; freshness of the unchanged source text alone is insufficient.
+	if latestKnowledge == nil || latestKnowledge.ParseStatus == types.ParseStatusCancelled ||
+		latestKnowledge.ParseStatus == types.ParseStatusDeleting {
+		return true, nil
+	}
 	if string(latestKnowledge.CustomMetadata) != metadataVersion {
 		return true, nil
 	}

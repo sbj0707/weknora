@@ -2,6 +2,7 @@ package chatpipeline
 
 import (
 	"context"
+	"sort"
 	"sync"
 
 	"github.com/Tencent/WeKnora/internal/logger"
@@ -15,6 +16,8 @@ type PluginSearchEntity struct {
 	graphRepo     interfaces.RetrieveGraphRepository
 	chunkRepo     interfaces.ChunkRepository
 	knowledgeRepo interfaces.KnowledgeRepository
+	bases         interfaces.KnowledgeBaseRepository
+	shares        interfaces.KBShareService
 }
 
 // NewPluginSearchEntity creates a new plugin search entity
@@ -33,6 +36,16 @@ func NewPluginSearchEntity(
 	return res
 }
 
+// NewPluginSearchEntityAuthorized wires the same caller-bound permission resolver as extraction.
+func NewPluginSearchEntityAuthorized(manager *EventManager, graph interfaces.RetrieveGraphRepository,
+	chunks interfaces.ChunkRepository, rows interfaces.KnowledgeRepository, bases interfaces.KnowledgeBaseRepository,
+	shares interfaces.KBShareService) *PluginSearchEntity {
+	p := NewPluginSearchEntity(manager, graph, chunks, rows)
+	p.bases = bases
+	p.shares = shares
+	return p
+}
+
 // ActivationEvents returns the list of event types this plugin responds to
 func (p *PluginSearchEntity) ActivationEvents() []types.EventType {
 	return []types.EventType{types.ENTITY_SEARCH}
@@ -48,85 +61,103 @@ func (p *PluginSearchEntity) OnEvent(ctx context.Context,
 		return next()
 	}
 
-	// Use EntityKBIDs (knowledge bases with ExtractConfig enabled)
-	knowledgeBaseIDs := chatManage.EntityKBIDs
-	// Use EntityKnowledge (KnowledgeID -> KnowledgeBaseID mapping for graph-enabled files)
-	entityKnowledge := chatManage.EntityKnowledge
-
+	if ctx.Err() != nil {
+		return next()
+	}
+	targets := graphQueryTargets(ctx, chatManage.SearchTargets, p.bases, p.knowledgeRepo, p.shares)
+	// Retain the authorized target union, not raw IDs or the extraction map alone.
+	enabled := make(map[string]bool)
+	for _, kb := range chatManage.EntityKBIDs {
+		enabled[kb] = true
+	}
+	for _, kb := range chatManage.EntityKnowledge {
+		enabled[kb] = true
+	}
+	knowledgeBaseIDs := []string{}
+	entityKnowledge := make(map[string]string)
+	full := make(map[string]bool)
+	for _, target := range targets {
+		if target == nil || target.TenantID == 0 || !enabled[target.KnowledgeBaseID] {
+			continue
+		}
+		if target.Type == types.SearchTargetTypeKnowledgeBase && !full[target.KnowledgeBaseID] {
+			full[target.KnowledgeBaseID] = true
+			knowledgeBaseIDs = append(knowledgeBaseIDs, target.KnowledgeBaseID)
+		}
+		if target.Type == types.SearchTargetTypeKnowledge {
+			for _, id := range target.KnowledgeIDs {
+				if id != "" {
+					entityKnowledge[id] = target.KnowledgeBaseID
+				}
+			}
+		}
+	}
+	for id, kb := range entityKnowledge {
+		if full[kb] {
+			delete(entityKnowledge, id)
+		}
+	}
 	if len(knowledgeBaseIDs) == 0 && len(entityKnowledge) == 0 {
-		logger.Warnf(ctx, "No knowledge base IDs or knowledge IDs with ExtractConfig enabled for entity search")
 		return next()
 	}
 
-	// Parallel search across multiple knowledge bases and individual files
+	// Canonical namespaces preserve a stable 30-chunk boundary across concurrent queries.
+	var namespaces []types.NameSpace
+	for _, kb := range knowledgeBaseIDs {
+		namespaces = append(namespaces, types.NameSpace{KnowledgeBase: kb})
+	}
+	for doc, kb := range entityKnowledge {
+		namespaces = append(namespaces, types.NameSpace{KnowledgeBase: kb, Knowledge: doc})
+	}
+	sort.Slice(namespaces, func(i, j int) bool {
+		a, b := namespaces[i], namespaces[j]
+		return a.KnowledgeBase < b.KnowledgeBase || a.KnowledgeBase == b.KnowledgeBase && a.Knowledge < b.Knowledge
+	})
+	graphs := make([]*types.GraphData, len(namespaces))
 	var wg sync.WaitGroup
-	var mu sync.Mutex
+	for i, ns := range namespaces {
+		wg.Add(1)
+		go func(i int, ns types.NameSpace) {
+			defer wg.Done()
+			g, err := p.graphRepo.SearchNode(ctx, ns, entity)
+			if err != nil {
+				logger.Errorf(ctx, "Failed to search graph namespace: %v", err)
+				return
+			}
+			graphs[i] = g
+		}(i, ns)
+	}
+	wg.Wait()
 	var allNodes []*types.GraphNode
 	var allRelations []*types.GraphRelation
-
-	// If specific KnowledgeIDs are provided, search by individual files
-	if len(entityKnowledge) > 0 {
-		logger.Infof(ctx, "Searching entities across %d knowledge file(s)", len(entityKnowledge))
-		for knowledgeID, kbID := range entityKnowledge {
-			wg.Add(1)
-			go func(knowledgeBaseID, knowledgeID string) {
-				defer wg.Done()
-
-				graph, err := p.graphRepo.SearchNode(ctx, types.NameSpace{
-					KnowledgeBase: knowledgeBaseID,
-					Knowledge:     knowledgeID,
-				}, entity)
-				if err != nil {
-					logger.Errorf(ctx, "Failed to search entity in Knowledge %s: %v", knowledgeID, err)
-					return
-				}
-
-				logger.Infof(
-					ctx,
-					"Knowledge %s entity search result count: %d nodes, %d relations",
-					knowledgeID,
-					len(graph.Node),
-					len(graph.Relation),
-				)
-
-				mu.Lock()
-				allNodes = append(allNodes, graph.Node...)
-				allRelations = append(allRelations, graph.Relation...)
-				mu.Unlock()
-			}(kbID, knowledgeID)
-		}
-	} else {
-		// Otherwise, search by knowledge base
-		logger.Infof(ctx, "Searching entities across %d knowledge base(s): %v", len(knowledgeBaseIDs), knowledgeBaseIDs)
-		for _, kbID := range knowledgeBaseIDs {
-			wg.Add(1)
-			go func(knowledgeBaseID string) {
-				defer wg.Done()
-
-				graph, err := p.graphRepo.SearchNode(ctx, types.NameSpace{KnowledgeBase: knowledgeBaseID}, entity)
-				if err != nil {
-					logger.Errorf(ctx, "Failed to search entity in KB %s: %v", knowledgeBaseID, err)
-					return
-				}
-
-				logger.Infof(
-					ctx,
-					"KB %s entity search result count: %d nodes, %d relations",
-					knowledgeBaseID,
-					len(graph.Node),
-					len(graph.Relation),
-				)
-
-				mu.Lock()
-				allNodes = append(allNodes, graph.Node...)
-				allRelations = append(allRelations, graph.Relation...)
-				mu.Unlock()
-			}(kbID)
+	for _, g := range graphs {
+		if g != nil {
+			allNodes = append(allNodes, g.Node...)
+			allRelations = append(allRelations, g.Relation...)
 		}
 	}
 
-	wg.Wait()
-
+	if ctx.Err() != nil {
+		return next()
+	}
+	targets = graphQueryTargets(ctx, targets, p.bases, p.knowledgeRepo, p.shares)
+	allowedFresh := map[string]bool{}
+	for _, t := range targets {
+		allowedFresh[t.KnowledgeBaseID] = true
+	}
+	for i, ns := range namespaces {
+		if !allowedFresh[ns.KnowledgeBase] {
+			graphs[i] = nil
+		}
+	}
+	allNodes = nil
+	allRelations = nil
+	for _, g := range graphs {
+		if g != nil {
+			allNodes = append(allNodes, g.Node...)
+			allRelations = append(allRelations, g.Relation...)
+		}
+	}
 	// Merge graph data
 	chatManage.GraphResult = &types.GraphData{
 		Node:     allNodes,
@@ -155,10 +186,11 @@ func (p *PluginSearchEntity) OnEvent(ctx context.Context,
 		logger.Errorf(ctx, "Failed to list chunks, session_id: %s, error: %v", chatManage.SessionID, err)
 		return next()
 	}
+	sort.SliceStable(listed, func(i, j int) bool { return listed[i] != nil && (listed[j] == nil || listed[i].ID < listed[j].ID) })
 	chunks := make([]*types.Chunk, 0, len(listed))
 	knowledgeIDs := []string{}
 	for _, chunk := range listed {
-		if chunk == nil || !allowedKBs[chunk.KnowledgeBaseID] {
+		if chunk == nil || !allowedKBs[chunk.KnowledgeBaseID] || !graphTargetAllowsChunk(targets, chunk) {
 			continue
 		}
 		chunks = append(chunks, chunk)
@@ -179,13 +211,27 @@ func (p *PluginSearchEntity) OnEvent(ctx context.Context,
 		// A chunk can outlive its soft-deleted document, and a disabled
 		// chunk must not come back through the graph either.
 		knowledge := knowledgeMap[chunk.KnowledgeID]
-		if knowledge == nil || !chunk.IsEnabled {
+		if knowledge == nil || !chunk.IsEnabled || knowledge.TenantID != chunk.TenantID || knowledge.KnowledgeBaseID != chunk.KnowledgeBaseID {
 			continue
 		}
 		entityResults = append(entityResults, chunk2SearchResult(chunk, knowledge))
 	}
-	searchutil.EnrichSearchResultsImageInfoOnly(ctx, p.chunkRepo, entityResults)
-	chatManage.SearchResult = append(chatManage.SearchResult, entityResults...)
+	searchutil.EnrichSearchResultsImageInfoOnly(ctx, graphBoundChunkRepository{ChunkRepository: p.chunkRepo}, entityResults)
+	if ctx.Err() != nil {
+		return next()
+	}
+	targets = graphQueryTargets(ctx, targets, p.bases, p.knowledgeRepo, p.shares)
+	safeResults := make([]*types.SearchResult, 0, len(entityResults))
+	chunkMap := map[string]*types.Chunk{}
+	for _, c := range chunks {
+		chunkMap[c.ID] = c
+	}
+	for _, r := range entityResults {
+		if graphTargetAllowsChunk(targets, chunkMap[r.ID]) {
+			safeResults = append(safeResults, r)
+		}
+	}
+	chatManage.SearchResult = append(chatManage.SearchResult, safeResults...)
 	// remove duplicate results
 	chatManage.SearchResult = removeDuplicateResults(chatManage.SearchResult)
 	if len(chatManage.SearchResult) == 0 {
@@ -263,4 +309,44 @@ func chunk2SearchResult(chunk *types.Chunk, knowledge *types.Knowledge) *types.S
 		KnowledgeBaseID:   knowledge.KnowledgeBaseID,
 		SourceLocators:    chunk.SourceLocators,
 	}
+}
+
+// Rows returned by globally addressed shared-KB queries still need exact target binding.
+func graphTargetAllowsChunk(targets types.SearchTargets, chunk *types.Chunk) bool {
+	if chunk == nil {
+		return false
+	}
+	for _, target := range targets {
+		if target == nil || target.TenantID == 0 || target.TenantID != chunk.TenantID || target.KnowledgeBaseID != chunk.KnowledgeBaseID {
+			continue
+		}
+		if target.Type == types.SearchTargetTypeKnowledge {
+			found := false
+			for _, id := range target.KnowledgeIDs {
+				if id == chunk.KnowledgeID {
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			}
+		} else if target.Type != types.SearchTargetTypeKnowledgeBase {
+			continue
+		}
+		if len(target.TagIDs) > 0 {
+			found := false
+			for _, tag := range target.TagIDs {
+				if tag == chunk.TagID {
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			}
+		}
+		return true
+	}
+	return false
 }

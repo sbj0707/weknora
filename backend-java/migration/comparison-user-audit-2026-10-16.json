@@ -1,0 +1,299 @@
+{
+  "date": "2026-10-16T15:50:09.544166+08:00",
+  "conclusion": "not_equivalent",
+  "method": "Fresh Go AST / explicit Spring annotations / concrete TaskHandler type declarations. Static presence is not functional parity; conditional configuration and runtime side effects require separate verification.",
+  "go_routes": 482,
+  "registration_sites": 480,
+  "visited_registration_sites": 480,
+  "java_explicit_method_paths": 125,
+  "go_routes_with_java_entry": 121,
+  "missing_native_entries": 361,
+  "entry_coverage_percent": 25.1,
+  "ledger_counts": {
+    "not_started": 361,
+    "in_progress": 120,
+    "implemented": 1
+  },
+  "ledger_disagreements": [],
+  "modules": {
+    "NewRouter": {
+      "go": 8,
+      "java_entry": 1
+    },
+    "RegisterAuthRoutes": {
+      "go": 17,
+      "java_entry": 16
+    },
+    "RegisterChatRoutes": {
+      "go": 3,
+      "java_entry": 0
+    },
+    "RegisterChunkRoutes": {
+      "go": 10,
+      "java_entry": 10
+    },
+    "RegisterChunkerDebugRoutes": {
+      "go": 1,
+      "java_entry": 1
+    },
+    "RegisterCustomAgentRoutes": {
+      "go": 9,
+      "java_entry": 0
+    },
+    "RegisterDataSourceRoutes": {
+      "go": 17,
+      "java_entry": 0
+    },
+    "RegisterEmbedChannelRoutes": {
+      "go": 9,
+      "java_entry": 0
+    },
+    "RegisterEmbedPublicRoutes": {
+      "go": 20,
+      "java_entry": 0
+    },
+    "RegisterEvaluationRoutes": {
+      "go": 2,
+      "java_entry": 0
+    },
+    "RegisterFAQRoutes": {
+      "go": 13,
+      "java_entry": 0
+    },
+    "RegisterIMChannelRoutes": {
+      "go": 8,
+      "java_entry": 0
+    },
+    "RegisterIMRoutes": {
+      "go": 2,
+      "java_entry": 0
+    },
+    "RegisterImageAttrRoutes": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "RegisterInitializationRoutes": {
+      "go": 17,
+      "java_entry": 0
+    },
+    "RegisterKnowledgeBaseActivityRoutes": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "RegisterKnowledgeBaseRoutes": {
+      "go": 13,
+      "java_entry": 11
+    },
+    "RegisterKnowledgeRoutes": {
+      "go": 32,
+      "java_entry": 32
+    },
+    "RegisterKnowledgeTagRoutes": {
+      "go": 4,
+      "java_entry": 4
+    },
+    "RegisterMCPEndpointRoutes": {
+      "go": 7,
+      "java_entry": 0
+    },
+    "RegisterMCPServerRoutes": {
+      "go": 3,
+      "java_entry": 0
+    },
+    "RegisterMCPServiceRoutes": {
+      "go": 22,
+      "java_entry": 0
+    },
+    "RegisterMemoryRoutes": {
+      "go": 16,
+      "java_entry": 0
+    },
+    "RegisterMessageRoutes": {
+      "go": 4,
+      "java_entry": 0
+    },
+    "RegisterModelRoutes": {
+      "go": 12,
+      "java_entry": 10
+    },
+    "RegisterMyEnvVarRoutes": {
+      "go": 5,
+      "java_entry": 0
+    },
+    "RegisterMyInvitationRoutes": {
+      "go": 5,
+      "java_entry": 5
+    },
+    "RegisterOrganizationRoutes": {
+      "go": 35,
+      "java_entry": 0
+    },
+    "RegisterSandboxConfigRoutes": {
+      "go": 21,
+      "java_entry": 0
+    },
+    "RegisterSandboxDesktopRoutes": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "RegisterSandboxTerminalRoutes": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "RegisterSessionRoutes": {
+      "go": 37,
+      "java_entry": 0
+    },
+    "RegisterSkillRoutes": {
+      "go": 7,
+      "java_entry": 0
+    },
+    "RegisterStorageBackendRoutes": {
+      "go": 9,
+      "java_entry": 0
+    },
+    "RegisterSystemAdminRoutes": {
+      "go": 21,
+      "java_entry": 0
+    },
+    "RegisterSystemRoutes": {
+      "go": 9,
+      "java_entry": 3
+    },
+    "RegisterTenantRoutes": {
+      "go": 26,
+      "java_entry": 20
+    },
+    "RegisterUserFavoriteRoutes": {
+      "go": 3,
+      "java_entry": 0
+    },
+    "RegisterVectorStoreRoutes": {
+      "go": 8,
+      "java_entry": 8
+    },
+    "RegisterWeKnoraCloudRoutes": {
+      "go": 2,
+      "java_entry": 0
+    },
+    "RegisterWebSearchProviderRoutes": {
+      "go": 10,
+      "java_entry": 0
+    },
+    "RegisterWebSearchRoutes": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "RegisterWikiPageRoutes": {
+      "go": 22,
+      "java_entry": 0
+    },
+    "serveFilesWithResources": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "serveKBScopedFiles": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "serveMessageScopedFiles": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "servePresignedFiles": {
+      "go": 2,
+      "java_entry": 0
+    },
+    "servePresignedPreview": {
+      "go": 1,
+      "java_entry": 0
+    },
+    "serveResourceGrants": {
+      "go": 2,
+      "java_entry": 0
+    }
+  },
+  "go_task_types": 22,
+  "java_partial_handler_types": 15,
+  "java_handler_sources": {
+    "datatable:summary": "backend-java/src/main/java/com/tencent/weknora/knowledge/DataTableSummaryHandler.java",
+    "document:process": "backend-java/src/main/java/com/tencent/weknora/knowledge/DocumentProcessingHandler.java",
+    "chunk:extract": "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphExtractionHandler.java",
+    "image:multimodal": "backend-java/src/main/java/com/tencent/weknora/knowledge/ImageMultimodalHandler.java",
+    "index:delete": "backend-java/src/main/java/com/tencent/weknora/knowledge/IndexDeleteHandler.java",
+    "knowledge:auto_tag": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeAutoTagHandler.java",
+    "kb:delete": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseDeleteHandler.java",
+    "kb:profile": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileHandler.java",
+    "knowledge:list_delete": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeListDeleteHandler.java",
+    "knowledge:list_reparse": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeListReparseHandler.java",
+    "knowledge:move": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeMoveHandler.java",
+    "knowledge:post_process": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgePostProcessHandler.java",
+    "manual:process": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualProcessingHandler.java",
+    "question:generation": "backend-java/src/main/java/com/tencent/weknora/knowledge/QuestionGenerationHandler.java",
+    "summary:generation": "backend-java/src/main/java/com/tencent/weknora/knowledge/SummaryGenerationHandler.java"
+  },
+  "missing_handlers": [
+    "datasource:sync",
+    "faq:import",
+    "kb:clone",
+    "memory:extract",
+    "temporary_document:process",
+    "wiki:finalize",
+    "wiki:ingest"
+  ],
+  "current_full_suite_rerun": true,
+  "operational_changes": {
+    "service_restarted": false,
+    "jar_deployed": false,
+    "frontend_switched": false
+  },
+  "current_full_suite_passed": false,
+  "audit": {
+    "date": "2026-10-16T15:53:02.728215+08:00",
+    "source_input_drift_since_previous_comparison": [],
+    "compiled_input_drift": {
+      "current": [],
+      "frozen": []
+    },
+    "focused_report_hashes_verified": true,
+    "postgres_http_report_hashes_verified": true,
+    "postgres_worker_report_hashes_verified": true,
+    "candidate_jar_hash_verified": true,
+    "scope": "Fresh static route/task scan and source review, existing differential evidence rechecked; inherited full build observed terminal exit 1. No application code changed, no service started or deployed."
+  },
+  "full_suite": {
+    "status": "failed",
+    "actual_exit_code": 1,
+    "exec_session": 3970,
+    "log": "/tmp/weknora-java-kb-delete-http-20261016-r1-full.log",
+    "build_directory": "/tmp/weknora-java-kb-delete-http-20261016-r1-full-build",
+    "scope": "Default Maven clean verify/Surefire; additional external ITs not selected.",
+    "source_proof": "/tmp/weknora-java-kb-delete-http-20261016-r1-full-source-proof.json",
+    "source_proof_sha256": "89c25b8a8d5d488e287e192b7eb84d5f25dd0fceab14a3e4524118c131ce1ec0",
+    "compiled_inputs": 1374,
+    "src_pom_inputs": 1042,
+    "classes": 195,
+    "tests": 10443,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "failures_detail": [
+      {
+        "classname": "com.tencent.weknora.vectorstore.Elasticsearch8MoveTransportGoParityTest",
+        "test": "actualGoTransport()[14]",
+        "kind": "failure",
+        "message": "Includes constructor HTTP connection reuse ==> expected: <2> but was: <3>"
+      }
+    ],
+    "report_directory": "/tmp/weknora-java-kb-delete-http-20261016-r1-full-build/surefire-reports",
+    "compiled_input_drift": {
+      "current": [],
+      "frozen": []
+    },
+    "observed_at": "2026-10-16T15:53:02.723321+08:00",
+    "failure_diagnosis": "Unresolved: Elasticsearch TCP connection reuse assertion expected 2 actual 3. No rerun or production fix performed in this comparison audit.",
+    "manifest": "/tmp/weknora-java-kb-delete-http-20261016-r1-full-manifest.json"
+  },
+  "comparison": "comparison-latest.json",
+  "comparison_sha256": "f6657ff16907772a3969bab21f82ac46213191bd3bc50662a8eef5ebecad08bc"
+}

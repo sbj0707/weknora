@@ -40,6 +40,29 @@ class TaskWorkerTest {
         TaskHandler handler=new TaskHandler(){public String type(){return "long";}public JsonNode execute(TaskRecord job,TaskCancellation cancel)throws Exception{started.countDown();Thread.sleep(10000);return json.createObjectNode().put("wrong",true);}};
         var job=enqueue("cancel","long");try(var worker=new TaskWorker(tasks,List.of(handler),1,Duration.ofMillis(600))){worker.poll();assertThat(started.await(2,TimeUnit.SECONDS)).isTrue();tasks.cancel(1,job.id());assertThat(await(job.id(),"canceled").result()).isNull();}
     }
+    @Test void deadlineStillInterruptsHandlerWhileLeaseRenewalIsBlocked() throws Exception {
+        var entered=new CountDownLatch(1);var release=new CountDownLatch(1);var started=new CountDownLatch(1);
+        var repository=org.mockito.Mockito.spy(tasks);
+        org.mockito.Mockito.doAnswer(call->{entered.countDown();release.await();return true;}).when(repository).renew(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.any());
+        TaskHandler handler=new TaskHandler(){public String type(){return "blocked-renewal";}public JsonNode execute(TaskRecord job,TaskCancellation token)throws Exception{started.countDown();Thread.sleep(10000);return json.createObjectNode();}};
+        var job=tasks.enqueue(1,handler.type(),null,json.createObjectNode(),3,Duration.ZERO,"default",Duration.ofMillis(450));
+        try(var worker=new TaskWorker(repository,List.of(handler),1,Duration.ofMillis(600))){
+            worker.poll();assertThat(started.await(1,TimeUnit.SECONDS)).isTrue();assertThat(entered.await(1,TimeUnit.SECONDS)).isTrue();
+            assertThat(await(job.id(),"retry").lastError()).isEqualTo("Java task deadline exceeded");
+        }finally{release.countDown();}
+    }
+    @Test void repeatedFailedRenewalsDoNotInterruptDetachedCleanupAgain() throws Exception {
+        var started=new CountDownLatch(1);var cleanup=new CountDownLatch(1);
+        TaskHandler handler=new TaskHandler(){public String type(){return "detached-cleanup";}public JsonNode execute(TaskRecord job,TaskCancellation token)throws Exception{
+            started.countDown();try{Thread.sleep(10000);}catch(InterruptedException canceled){Thread.interrupted();Thread.sleep(800);cleanup.countDown();}
+            token.check();return json.createObjectNode();
+        }};
+        var job=enqueue("detached-cleanup",handler.type());
+        try(var worker=new TaskWorker(tasks,List.of(handler),1,Duration.ofMillis(600))){
+            worker.poll();assertThat(started.await(1,TimeUnit.SECONDS)).isTrue();assertThat(tasks.cancel(1,job.id())).isTrue();
+            assertThat(cleanup.await(2,TimeUnit.SECONDS)).isTrue();
+        }
+    }
     @Test void deadlineStopsHandlerAndPersistsRetryRatherThanAFalseSuccess() throws Exception {
         TaskHandler handler=new TaskHandler(){public String type(){return "deadline";}public Duration timeout(){return Duration.ofMillis(100);}public JsonNode execute(TaskRecord job,TaskCancellation cancel)throws Exception{Thread.sleep(10000);return json.createObjectNode();}};
         var job=enqueue("timeout","deadline");try(var worker=new TaskWorker(tasks,List.of(handler),1,Duration.ofSeconds(2))){worker.poll();assertThat(await(job.id(),"retry").lastError()).isEqualTo("Java task deadline exceeded");}

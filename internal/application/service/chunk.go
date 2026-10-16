@@ -531,14 +531,17 @@ func (s *chunkService) UpdateDocumentChunk(
 				}
 			}
 			chunk.IndexStatus = "processing"
-			_ = s.chunkRepository.UpdateChunk(ctx, chunk)
+			_ = s.saveChunkEditIndexState(ctx, chunk)
 			if err := s.syncChunkIndex(ctx, chunk); err != nil {
+				if errors.Is(err, ErrChunkRevisionConflict) {
+					return nil, err
+				}
 				chunk.IndexStatus = "failed"
-				_ = s.chunkRepository.UpdateChunk(ctx, chunk)
+				_ = s.saveChunkEditIndexState(ctx, chunk)
 				return chunk, nil
 			}
 			chunk.IndexStatus = "ready"
-			if err := s.chunkRepository.UpdateChunk(ctx, chunk); err != nil {
+			if err := s.saveChunkEditIndexState(ctx, chunk); err != nil {
 				return nil, err
 			}
 		}
@@ -586,7 +589,7 @@ func (s *chunkService) UpdateDocumentChunk(
 		if err := s.rebuildParentContent(ctx, chunk); err != nil {
 			logger.Warnf(ctx, "Failed to rebuild parent chunk after edit: %v", err)
 			chunk.IndexStatus = "failed"
-			_ = s.chunkRepository.UpdateChunk(ctx, chunk)
+			_ = s.saveChunkEditIndexState(ctx, chunk)
 			return chunk, nil
 		}
 	}
@@ -594,7 +597,7 @@ func (s *chunkService) UpdateDocumentChunk(
 		if err := s.syncEditedChunkImages(ctx, chunk); err != nil {
 			logger.Warnf(ctx, "Failed to synchronize image children after chunk edit: %v", err)
 			chunk.IndexStatus = "failed"
-			_ = s.chunkRepository.UpdateChunk(ctx, chunk)
+			_ = s.saveChunkEditIndexState(ctx, chunk)
 			return chunk, nil
 		}
 	}
@@ -609,13 +612,16 @@ func (s *chunkService) UpdateDocumentChunk(
 		}
 	}
 	if err := s.syncChunkIndex(ctx, chunk); err != nil {
+		if errors.Is(err, ErrChunkRevisionConflict) {
+			return nil, err
+		}
 		chunk.IndexStatus = "failed"
-		_ = s.chunkRepository.UpdateChunk(ctx, chunk)
+		_ = s.saveChunkEditIndexState(ctx, chunk)
 		logger.Errorf(ctx, "Chunk %s saved but reindex failed: %v", chunk.ID, err)
 		return chunk, nil
 	}
 	chunk.IndexStatus = "ready"
-	if err := s.chunkRepository.UpdateChunk(ctx, chunk); err != nil {
+	if err := s.saveChunkEditIndexState(ctx, chunk); err != nil {
 		return nil, err
 	}
 	return chunk, nil
@@ -809,7 +815,11 @@ func (s *chunkService) syncChunkIndex(ctx context.Context, chunk *types.Chunk) e
 			})
 		}
 	}
-	return engine.BatchIndex(ctx, embedder, items)
+	bound := chunkBoundEmbedder{Embedder: embedder, check: func(call context.Context) error { return s.chunkIndexBinding(call, chunk, kb, knowledge.Title) }}
+	if err := bound.check(ctx); err != nil {
+		return err
+	}
+	return engine.BatchIndex(ctx, bound, items)
 }
 
 func (s *chunkService) UpsertGeneratedQuestion(

@@ -6,7 +6,7 @@
     "source": "internal/router/task.go",
     "line": 265,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -24,7 +24,7 @@
     "source": "internal/router/task.go",
     "line": 266,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -42,7 +42,7 @@
     "source": "internal/router/task.go",
     "line": 269,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -78,7 +78,7 @@
     "source": "internal/router/task.go",
     "line": 273,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -114,7 +114,7 @@
     "source": "internal/router/task.go",
     "line": 279,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -132,7 +132,7 @@
     "source": "internal/router/task.go",
     "line": 282,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -168,7 +168,7 @@
     "source": "internal/router/task.go",
     "line": 288,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -186,7 +186,7 @@
     "source": "internal/router/task.go",
     "line": 291,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -204,7 +204,7 @@
     "source": "internal/router/task.go",
     "line": 294,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -222,7 +222,7 @@
     "source": "internal/router/task.go",
     "line": 297,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -240,7 +240,7 @@
     "source": "internal/router/task.go",
     "line": 300,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -258,7 +258,7 @@
     "source": "internal/router/task.go",
     "line": 303,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -276,7 +276,7 @@
     "source": "internal/router/task.go",
     "line": 306,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -294,7 +294,7 @@
     "source": "internal/router/task.go",
     "line": 307,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",
@@ -312,7 +312,7 @@
     "source": "internal/router/task.go",
     "line": 308,
     "mode": "asynq",
-    "status": "not_started",
+    "status": "in_progress",
     "required_validation": [
       "retry",
       "timeout",

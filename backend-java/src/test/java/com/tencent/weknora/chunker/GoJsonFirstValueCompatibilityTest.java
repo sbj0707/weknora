@@ -10,6 +10,12 @@ import java.util.zip.GZIPInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GoJsonFirstValueCompatibilityTest {
+    @Test void streamingObjectStopsBeforeWaitingForTrailingBodyAndHonorsByteLimit() throws Exception {
+        byte[] body=" {\"ids\":[\"d1\"]}".getBytes(StandardCharsets.UTF_8);
+        var input=new java.io.ByteArrayInputStream(body){@Override public synchronized int read(){if(available()==0)throw new AssertionError("Decoder drained beyond complete JSON");return super.read();}};
+        org.junit.jupiter.api.Assertions.assertArrayEquals(body,GoJsonFirstValue.first(input,body.length));
+        org.junit.jupiter.api.Assertions.assertThrows(IOException.class,()->GoJsonFirstValue.first(new java.io.ByteArrayInputStream(body),body.length-1));
+    }
     @Test void actualGoDecoderByteInputs() throws Exception {
         int count=0;
         try (var reader=new BufferedReader(new InputStreamReader(new GZIPInputStream(

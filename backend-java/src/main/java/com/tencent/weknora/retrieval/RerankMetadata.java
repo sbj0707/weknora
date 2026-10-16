@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /** Go typed image/document metadata; any saved type error discards enrichment as Go does. */
-final class RerankMetadata {
+public final class RerankMetadata {
   private static final ObjectMapper JSON = new ObjectMapper();
   private boolean invalid;
 
@@ -33,7 +33,7 @@ final class RerankMetadata {
     return result;
   }
 
-  static JsonNode document(String source) throws IOException {
+  public static JsonNode document(String source) throws IOException {
     RerankMetadata decoder = new RerankMetadata();
     syntax(source);
     JsonNode result;

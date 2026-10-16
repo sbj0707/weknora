@@ -67,7 +67,7 @@ func createEngineServiceFromStore(
 	case types.PostgresRetrieverEngineType:
 		return createPostgresEngine(store, db)
 	case types.ElasticsearchRetrieverEngineType:
-		return createElasticsearchEngine(store, cfg)
+		return createElasticsearchEngineWithContext(ctx, store, cfg)
 	case types.QdrantRetrieverEngineType:
 		return createQdrantEngine(store)
 	case types.MilvusRetrieverEngineType:
@@ -172,6 +172,10 @@ func createSQLiteEngine(_ types.VectorStore, db *gorm.DB) (interfaces.RetrieveEn
 }
 
 func createElasticsearchEngine(store types.VectorStore, cfg *config.Config) (interfaces.RetrieveEngineService, error) {
+	return createElasticsearchEngineWithContext(context.Background(), store, cfg)
+}
+
+func createElasticsearchEngineWithContext(ctx context.Context, store types.VectorStore, cfg *config.Config) (interfaces.RetrieveEngineService, error) {
 	cc := store.ConnectionConfig
 	// Version-based v7/v8 SDK selection.
 	// Version is auto-detected by PR2's TestConnection and saved to connection_config.
@@ -179,7 +183,7 @@ func createElasticsearchEngine(store types.VectorStore, cfg *config.Config) (int
 	if isESv7(cc.Version) {
 		return createElasticsearchV7Engine(store, cfg)
 	}
-	return createElasticsearchV8Engine(store, cfg)
+	return createElasticsearchV8EngineWithContext(ctx, store, cfg)
 }
 
 // isESv7 checks if the detected ES version is 7.x.
@@ -188,6 +192,10 @@ func isESv7(version string) bool {
 }
 
 func createElasticsearchV8Engine(store types.VectorStore, cfg *config.Config) (interfaces.RetrieveEngineService, error) {
+	return createElasticsearchV8EngineWithContext(context.Background(), store, cfg)
+}
+
+func createElasticsearchV8EngineWithContext(ctx context.Context, store types.VectorStore, cfg *config.Config) (interfaces.RetrieveEngineService, error) {
 	cc := store.ConnectionConfig
 	if err := utils.ValidateURLForSSRF(cc.Addr); err != nil {
 		return nil, fmt.Errorf("elasticsearch address failed SSRF validation: %w", err)
@@ -203,7 +211,10 @@ func createElasticsearchV8Engine(store types.VectorStore, cfg *config.Config) (i
 	if err != nil {
 		return nil, fmt.Errorf("create elasticsearch v8 client: %w", err)
 	}
-	repo := elasticsearchRepoV8.NewElasticsearchEngineRepository(client, cfg, &store.IndexConfig)
+	repo, err := elasticsearchRepoV8.NewElasticsearchEngineRepositoryWithContext(ctx, client, cfg, &store.IndexConfig)
+	if err != nil {
+		return nil, fmt.Errorf("initialize elasticsearch v8 repository: %w", err)
+	}
 	return retriever.NewKVHybridRetrieveEngine(repo, types.ElasticsearchRetrieverEngineType), nil
 }
 

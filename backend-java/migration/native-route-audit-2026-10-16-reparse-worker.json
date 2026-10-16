@@ -1,0 +1,4340 @@
+{
+  "date": "2026-10-16",
+  "checkpoint": "bounded reparse worker differential and packaged flows accepted as in_progress; full migration not complete",
+  "method": "Current Go AST generation; 110 explicit Spring mappings from request scan, with all Java Controller sources unchanged in the frozen build. Matching a route does not prove full behavior parity or conditional bean registration.",
+  "spring_explicit_method_paths": 110,
+  "go_routes_matching_explicit_java_mappings": 106,
+  "go_routes_without_matching_explicit_java_mapping": 376,
+  "ledger_disagreements": [],
+  "ledger_note": "Both reparse routes are now in_progress after bounded acceptance, not verified.",
+  "route_status_counts": {
+    "not_started": 376,
+    "in_progress": 105,
+    "implemented": 1
+  },
+  "java_mappings": [
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/kv/parser-engine-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantParserConfigController.java",
+      "line": 14
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/kv/parser-engine-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantParserConfigController.java",
+      "line": 15
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 13
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/all",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 14
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/search",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 15
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 16
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 17
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/kv/retrieval-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 18
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/kv/memory-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 18
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/kv/retrieval-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 19
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/kv/memory-config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+      "line": 19
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/register-by-invite",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/InvitationRegistrationController.java",
+      "line": 11
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/oidc/config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+      "line": 46
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/oidc/url",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+      "line": 57
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/oidc/start",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+      "line": 76
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/oidc/callback",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+      "line": 92
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/{tenantId}/invitations",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 19
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tenants/{tenantId}/invitations",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 23
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tenants/{tenantId}/invite-links",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 28
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tenants/{tenantId}/invitations/{invId}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 30
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/invitations",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 32
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/invitations/pending-count",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 34
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/invitations/{invId}/accept",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 36
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/invitations/{invId}/decline",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 38
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/me/invitations/accept-by-token",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 40
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/invitations/lookup",
+      "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+      "line": 42
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/{tenantId}/members",
+      "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+      "line": 16
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tenants/{tenantId}/members",
+      "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+      "line": 17
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/{tenantId}/members/{userId}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+      "line": 18
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tenants/{tenantId}/members/{userId}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+      "line": 19
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tenants/{tenantId}/leave",
+      "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantLeaveController.java",
+      "line": 13
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/parser-engines",
+      "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+      "line": 12
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/system/parser-engines/check",
+      "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+      "line": 13
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/system/docreader/reconnect",
+      "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+      "line": 18
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants/{tenantId}/api-keys",
+      "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+      "line": 15
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tenants/{tenantId}/api-keys",
+      "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+      "line": 16
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tenants/{tenantId}/api-keys/{keyId}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+      "line": 17
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tenants/{tenantId}/api-keys/{keyId}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+      "line": 18
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases/{id}/profile/generate",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileController.java",
+      "line": 20
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge/file",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUploadController.java",
+      "line": 61
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "line": 26
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge/{id:(?!batch$|search$).+}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "line": 39
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/chunks/{knowledge_id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "line": 59
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/chunks/by-id/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "line": 80
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/{id}/reparse",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReparseController.java",
+      "line": 20
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/batch-reparse",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReparseController.java",
+      "line": 29
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/HybridSearchController.java",
+      "line": 17
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/HybridSearchController.java",
+      "line": 17
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+      "line": 15
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge-bases/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+      "line": 17
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+      "line": 18
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+      "line": 26
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge-bases/{id}/pin",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+      "line": 30
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge/{id}/spans",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanController.java",
+      "line": 14
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge/{id}/stages",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanController.java",
+      "line": 14
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+      "line": 16
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+      "line": 18
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/folder",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+      "line": 20
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge/{id}/index-status",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeIndexReadController.java",
+      "line": 16
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge/{id}/chunks/{chunk_id}/details",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeIndexReadController.java",
+      "line": 23
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/chunks/{knowledge_id}/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkEditController.java",
+      "line": 16
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/chunks/{knowledge_id}/{id}/revert",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkEditController.java",
+      "line": 18
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/knowledge/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+      "line": 16
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/batch-delete",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+      "line": 26
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+      "line": 34
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/{id}/regenerate-summary",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeSummaryRegenerationController.java",
+      "line": 15
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUpdateController.java",
+      "line": 16
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/chunks/by-id/{id}/questions",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionController.java",
+      "line": 16
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/chunks/by-id/{id}/questions",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionController.java",
+      "line": 18
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge/{id}/cancel-parse",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeParseCancelController.java",
+      "line": 17
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/chunks/by-id/{id}/questions/regenerate",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionRegenerationController.java",
+      "line": 14
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/knowledge-bases/{id}/tags",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+      "line": 16
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases/{id}/tags",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+      "line": 21
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+      "line": 22
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+      "line": 23
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/knowledge-bases/{id}/knowledge/manual",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualKnowledgeController.java",
+      "line": 30
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/knowledge/manual/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualKnowledgeController.java",
+      "line": 45
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/chunks/{knowledge_id}/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+      "line": 14
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/chunks/{knowledge_id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+      "line": 20
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/chunks/{knowledge_id}/{id}/revisions",
+      "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+      "line": 26
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelController.java",
+      "line": 17
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelController.java",
+      "line": 23
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models/providers",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+      "line": 19
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/models/catalog/resolve",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+      "line": 30
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/models/catalog/resolve",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+      "line": 34
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/models",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+      "line": 15
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/models/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+      "line": 16
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/models/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+      "line": 17
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/models/{id}/credentials",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+      "line": 18
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/models/{id}/credentials/{field}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+      "line": 19
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/HealthController.java",
+      "line": 7
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/config",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 11
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 12
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 14
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 15
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 16
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 17
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/validate",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 18
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/auth/me/preferences",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 19
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/switch-tenant",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 20
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/change-password",
+      "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+      "line": 21
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/chunker/preview",
+      "source": "backend-java/src/main/java/com/tencent/weknora/chunker/ChunkerPreviewController.java",
+      "line": 24
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vector-stores",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 35
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vector-stores/types",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 40
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vector-stores/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 45
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vector-stores",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 51
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/vector-stores/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 64
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/vector-stores/{id}",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 78
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vector-stores/test",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 87
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vector-stores/{id}/test",
+      "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+      "line": 99
+    }
+  ],
+  "matched": [
+    {
+      "id": "POST /api/v1/auth/change-password",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/change-password",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 21
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/config",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/invitations/lookup",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/invitations/lookup",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 42
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/login",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/login",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/logout",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/logout",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/me",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/auth/me/preferences",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/auth/me/preferences",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/oidc/callback",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/oidc/callback",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+          "line": 92
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/oidc/config",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/oidc/config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+          "line": 46
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/oidc/start",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/oidc/start",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+          "line": 76
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/oidc/url",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/oidc/url",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/OidcController.java",
+          "line": 57
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/refresh",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/refresh",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/register",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/register",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/register-by-invite",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/register-by-invite",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/InvitationRegistrationController.java",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/auth/switch-tenant",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/switch-tenant",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/auth/validate",
+      "status": "in_progress",
+      "function": "RegisterAuthRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/validate",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/AuthController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/chunker/preview",
+      "status": "in_progress",
+      "function": "RegisterChunkerDebugRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/chunker/preview",
+          "source": "backend-java/src/main/java/com/tencent/weknora/chunker/ChunkerPreviewController.java",
+          "line": 24
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/chunks/:knowledge_id",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/chunks/{knowledge_id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/chunks/:knowledge_id",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/chunks/{knowledge_id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+          "line": 59
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/chunks/:knowledge_id/:id",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/chunks/{knowledge_id}/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/chunks/:knowledge_id/:id",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/chunks/{knowledge_id}/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkEditController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/chunks/:knowledge_id/:id/revert",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/chunks/{knowledge_id}/{id}/revert",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkEditController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/chunks/:knowledge_id/:id/revisions",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/chunks/{knowledge_id}/{id}/revisions",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java",
+          "line": 26
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/chunks/by-id/:id",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/chunks/by-id/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+          "line": 80
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/chunks/by-id/:id/questions",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/chunks/by-id/{id}/questions",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/chunks/by-id/:id/questions",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/chunks/by-id/{id}/questions",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/chunks/by-id/:id/questions/regenerate",
+      "status": "in_progress",
+      "function": "RegisterChunkRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/chunks/by-id/{id}/questions/regenerate",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionRegenerationController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+          "line": 26
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge-bases/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/hybrid-search",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/HybridSearchController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/hybrid-search",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/HybridSearchController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/knowledge-bases/:id/knowledge",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/knowledge",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+          "line": 26
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/knowledge/file",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge/file",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUploadController.java",
+          "line": 61
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/knowledge/folders",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/knowledge/folders",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/knowledge/manual",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases/{id}/knowledge/manual",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualKnowledgeController.java",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/pin",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge-bases/{id}/pin",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseController.java",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/profile/generate",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases/{id}/profile/generate",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileController.java",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/tags",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeTagRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge-bases/{id}/tags",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/tags",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeTagRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge-bases/{id}/tags",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+          "line": 21
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/knowledge-bases/:id/tags/:tag_id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeTagRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/tags/:tag_id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeTagRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagController.java",
+          "line": 22
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/knowledge/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/knowledge/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge/{id:(?!batch$|search$).+}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUpdateController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/:id/cancel-parse",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/{id}/cancel-parse",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeParseCancelController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/chunks/:chunk_id/details",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge/{id}/chunks/{chunk_id}/details",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeIndexReadController.java",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/index-status",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge/{id}/index-status",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeIndexReadController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/:id/regenerate-summary",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/{id}/regenerate-summary",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeSummaryRegenerationController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/:id/reparse",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/{id}/reparse",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReparseController.java",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/spans",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge/{id}/spans",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/stages",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/knowledge/{id}/stages",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/batch-delete",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/batch-delete",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java",
+          "line": 26
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/batch-reparse",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/batch-reparse",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReparseController.java",
+          "line": 29
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/knowledge/folder",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/knowledge/folder",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderController.java",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/knowledge/manual/:id",
+      "status": "in_progress",
+      "function": "RegisterKnowledgeRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/knowledge/manual/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualKnowledgeController.java",
+          "line": 45
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/me/invitations",
+      "status": "in_progress",
+      "function": "RegisterMyInvitationRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/me/invitations",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 32
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/me/invitations/:inv_id/accept",
+      "status": "in_progress",
+      "function": "RegisterMyInvitationRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/me/invitations/{invId}/accept",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 36
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/me/invitations/:inv_id/decline",
+      "status": "in_progress",
+      "function": "RegisterMyInvitationRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/me/invitations/{invId}/decline",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 38
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/me/invitations/accept-by-token",
+      "status": "in_progress",
+      "function": "RegisterMyInvitationRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/me/invitations/accept-by-token",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/me/invitations/pending-count",
+      "status": "in_progress",
+      "function": "RegisterMyInvitationRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/me/invitations/pending-count",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/models",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/models",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/models",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/models",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/models/:id",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/models/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/models/:id",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/models/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelController.java",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/models/:id",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/models/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/models/:id/credentials",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/models/{id}/credentials",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/models/:id/credentials/:field",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/models/{id}/credentials/{field}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelMutationController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/models/catalog/resolve",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/models/catalog/resolve",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/models/catalog/resolve",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/models/catalog/resolve",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/models/providers",
+      "status": "in_progress",
+      "function": "RegisterModelRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/models/providers",
+          "source": "backend-java/src/main/java/com/tencent/weknora/model/ModelCatalogController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/system/docreader/reconnect",
+      "status": "in_progress",
+      "function": "RegisterSystemRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/system/docreader/reconnect",
+          "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/system/parser-engines",
+      "status": "in_progress",
+      "function": "RegisterSystemRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/system/parser-engines",
+          "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/system/parser-engines/check",
+      "status": "in_progress",
+      "function": "RegisterSystemRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/system/parser-engines/check",
+          "source": "backend-java/src/main/java/com/tencent/weknora/system/SystemParserController.java",
+          "line": 13
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 13
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/:id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/tenants/:id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/:id/api-keys",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/{tenantId}/api-keys",
+          "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/api-keys",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tenants/{tenantId}/api-keys",
+          "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/tenants/:id/api-keys/:key_id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/tenants/{tenantId}/api-keys/{keyId}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/tenants/:id/api-keys/:key_id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/{tenantId}/api-keys/{keyId}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/apikey/TenantApiKeyController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/:id/invitations",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/{tenantId}/invitations",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/invitations",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tenants/{tenantId}/invitations",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 23
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/tenants/:id/invitations/:inv_id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/tenants/{tenantId}/invitations/{invId}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 30
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/invite-links",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tenants/{tenantId}/invite-links",
+          "source": "backend-java/src/main/java/com/tencent/weknora/security/TenantInvitationController.java",
+          "line": 28
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/leave",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tenants/{tenantId}/leave",
+          "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantLeaveController.java",
+          "line": 13
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/:id/members",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/{tenantId}/members",
+          "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/members",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tenants/{tenantId}/members",
+          "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/tenants/:id/members/:user_id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/tenants/{tenantId}/members/{userId}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/tenants/:id/members/:user_id",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/{tenantId}/members/{userId}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/member/TenantMemberController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/all",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/all",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/kv/:key",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/kv/parser-engine-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantParserConfigController.java",
+          "line": 14
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/kv/retrieval-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 18
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/kv/memory-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 18
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/tenants/kv/:key",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/kv/parser-engine-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantParserConfigController.java",
+          "line": 15
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/kv/retrieval-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 19
+        },
+        {
+          "method": "PUT",
+          "path": "/api/v1/tenants/kv/memory-config",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/tenants/search",
+      "status": "in_progress",
+      "function": "RegisterTenantRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tenants/search",
+          "source": "backend-java/src/main/java/com/tencent/weknora/tenant/TenantController.java",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/vector-stores",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/vector-stores",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 35
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/vector-stores",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/vector-stores",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 51
+        }
+      ]
+    },
+    {
+      "id": "DELETE /api/v1/vector-stores/:id",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/vector-stores/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 78
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/vector-stores/:id",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/vector-stores/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 45
+        }
+      ]
+    },
+    {
+      "id": "PUT /api/v1/vector-stores/:id",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/vector-stores/{id}",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/vector-stores/:id/test",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/vector-stores/{id}/test",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 99
+        }
+      ]
+    },
+    {
+      "id": "POST /api/v1/vector-stores/test",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "POST",
+          "path": "/api/v1/vector-stores/test",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 87
+        }
+      ]
+    },
+    {
+      "id": "GET /api/v1/vector-stores/types",
+      "status": "in_progress",
+      "function": "RegisterVectorStoreRoutes",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/api/v1/vector-stores/types",
+          "source": "backend-java/src/main/java/com/tencent/weknora/vectorstore/VectorStorePublicController.java",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "id": "GET /health",
+      "status": "implemented",
+      "function": "NewRouter",
+      "java": [
+        {
+          "method": "GET",
+          "path": "/health",
+          "source": "backend-java/src/main/java/com/tencent/weknora/api/HealthController.java",
+          "line": 7
+        }
+      ]
+    }
+  ],
+  "without_match": [
+    {
+      "id": "POST /api/v1/agent-chat/:session_id",
+      "status": "not_started",
+      "function": "RegisterChatRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agent/mcp-oauth-resolutions/:pending_id",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agent/mcp-oauth-resolutions/:pending_id/cancel",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agent/tool-approvals/:pending_id",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agents",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/agents/:id",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/:id",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/agents/:id",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agents/:id/copy",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/:id/embed-channels",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agents/:id/embed-channels",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/:id/im-channels",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agents/:id/im-channels",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/:id/shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/agents/:id/shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/agents/:id/shares/:share_id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/:id/suggested-questions",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/placeholders",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/agents/type-presets",
+      "status": "not_started",
+      "function": "RegisterCustomAgentRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/artifacts",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/artifacts",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/auth/auto-setup",
+      "status": "not_started",
+      "function": "RegisterAuthRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/datasource/:id",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource/:id",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/datasource/:id",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/datasource/:id/credentials",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/datasource/:id/credentials/:field",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource/:id/logs",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/:id/pause",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/:id/resource-ancestors",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource/:id/resources",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/:id/resume",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/:id/sync",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/:id/validate",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource/logs/:log_id",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/datasource/types",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/datasource/validate-credentials",
+      "status": "not_started",
+      "function": "RegisterDataSourceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed-channels",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/embed-channels/:channel_id",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed-channels/:channel_id",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/embed-channels/:channel_id",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed-channels/:channel_id/preview-session",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed-channels/:channel_id/rotate-token",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed-channels/:channel_id/stats",
+      "status": "not_started",
+      "function": "RegisterEmbedChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed-frame-policy",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/agent-chat/:session_id",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/chunks/:chunk_id",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/config",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/exchange",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/files",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/knowledge-chat/:session_id",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/messages/:session_id/load",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/events",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/mcp-oauth-resolutions/:pending_id",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/mcp-oauth-resolutions/:pending_id/cancel",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/mcp-services/:id/oauth/authorize-url",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/sessions/:session_id/mcp-services/:id/oauth/status",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/sessions/:session_id/messages/:message_id/suggestions",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/messages/:message_id/suggestions",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/stop",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/suggestion-events",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/embed/:channel_id/sessions/:session_id/tool-approvals/:pending_id",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/embed/:channel_id/suggested-questions",
+      "status": "not_started",
+      "function": "RegisterEmbedPublicRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/evaluation",
+      "status": "not_started",
+      "function": "RegisterEvaluationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/evaluation",
+      "status": "not_started",
+      "function": "RegisterEvaluationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/faq/import/progress/:task_id",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/files/presigned",
+      "status": "not_started",
+      "function": "servePresignedFiles",
+      "java": []
+    },
+    {
+      "id": "HEAD /api/v1/files/presigned",
+      "status": "not_started",
+      "function": "servePresignedFiles",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/files/presigned-preview",
+      "status": "not_started",
+      "function": "servePresignedPreview",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/im-channels",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/im-channels/:id",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/im-channels/:id",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/im-channels/:id/toggle",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/im/callback/:channel_id",
+      "status": "not_started",
+      "function": "RegisterIMRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/im/callback/:channel_id",
+      "status": "not_started",
+      "function": "RegisterIMRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/image-attrs/schema",
+      "status": "not_started",
+      "function": "RegisterImageAttrRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/asr/check",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/initialization/config/:kbId",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/initialization/config/:kbId",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/embedding/test",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/extract/fabri-tag",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/extract/fabri-text",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/extract/text-relation",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/initialize/:kbId",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/multimodal/test",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/initialization/ollama/download/progress/:taskId",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/initialization/ollama/download/tasks",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/initialization/ollama/models",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/ollama/models/check",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/ollama/models/download",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/initialization/ollama/status",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/remote/check",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/initialization/rerank/check",
+      "status": "not_started",
+      "function": "RegisterInitializationRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/knowledge-bases/:id",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/activity",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseActivityRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/duplicate",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/knowledge-bases/:id/faq/entries",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/faq/entries",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/faq/entries",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/faq/entries/:entry_id",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/faq/entries/:entry_id",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/faq/entries/:entry_id/similar-questions",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/faq/entries/export",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/faq/entries/fields",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/faq/entries/tags",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/faq/entry",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/faq/import/last-result/display",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/faq/search",
+      "status": "not_started",
+      "function": "RegisterFAQRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/files",
+      "status": "not_started",
+      "function": "serveKBScopedFiles",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/gallery-config",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/images",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/knowledge/batch-download",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/knowledge/url",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/move-targets",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/:id/shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/:id/shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/knowledge-bases/:id/shares/:share_id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge-bases/:id/shares/:share_id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-bases/copy",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge-bases/copy/progress/:task_id",
+      "status": "not_started",
+      "function": "RegisterKnowledgeBaseRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-chat/:session_id",
+      "status": "not_started",
+      "function": "RegisterChatRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge-search",
+      "status": "not_started",
+      "function": "RegisterChatRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/download",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge/:id/preview",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge/batch",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge/image/:id/:chunk_id",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledge/move",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge/move/progress/:task_id",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledge/search",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledge/tags",
+      "status": "not_started",
+      "function": "RegisterKnowledgeRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledgebase/:kb_id/wiki/auto-fix",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/folders",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledgebase/:kb_id/wiki/folders",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/knowledgebase/:kb_id/wiki/folders/:folder_id",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledgebase/:kb_id/wiki/folders/:folder_id",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/graph",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/index",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/issues",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledgebase/:kb_id/wiki/issues/:issue_id/status",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/lint",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledgebase/:kb_id/wiki/move-page",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/pages",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledgebase/:kb_id/wiki/pages",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/knowledgebase/:kb_id/wiki/pages/*slug",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/pages/*slug",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/knowledgebase/:kb_id/wiki/pages/*slug",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledgebase/:kb_id/wiki/rebuild-links",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/knowledgebase/:kb_id/wiki/revert",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/revisions/*slug",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/search",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/knowledgebase/:kb_id/wiki/stats",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/local-browser/extension",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/local-browser/extension/authorize",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/local-browser/internal",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-endpoints",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-endpoints",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/mcp-endpoints/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-endpoints/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/mcp-endpoints/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-endpoints/:endpoint_id/rotate-token",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-endpoints/tools",
+      "status": "not_started",
+      "function": "RegisterMCPEndpointRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-oauth/callback",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-services",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/mcp-services/:id",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/mcp-services/:id",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/mcp-services/:id/credentials",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/mcp-services/:id/credentials/:field",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id/metadata",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-services/:id/metadata/refresh",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-services/:id/oauth/authorize-url",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id/oauth/status",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/mcp-services/:id/oauth/token",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id/resources",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-services/:id/test",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id/tool-approvals",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/mcp-services/:id/tool-approvals/:tool_name",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/mcp-services/:id/tools",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/mcp-services/:id/usage-instructions/generate",
+      "status": "not_started",
+      "function": "RegisterMCPServiceRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/me/browser",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/me/browser",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/me/browser/extension",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/me/env-vars",
+      "status": "not_started",
+      "function": "RegisterMyEnvVarRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/me/env-vars/sandbox",
+      "status": "not_started",
+      "function": "RegisterMyEnvVarRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/me/env-vars/sandbox",
+      "status": "not_started",
+      "function": "RegisterMyEnvVarRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/me/env-vars/skill",
+      "status": "not_started",
+      "function": "RegisterMyEnvVarRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/me/env-vars/skill",
+      "status": "not_started",
+      "function": "RegisterMyEnvVarRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/memory/consolidate",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/memory/documents",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/memory/documents/:id",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/memory/export",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/memory/items",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/memory/items",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/memory/items",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/memory/items/:id",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/memory/items/:id",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/memory/items/:id/confirm",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/memory/items/:id/reject",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/memory/settings",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/memory/settings",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/memory/topics",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/memory/topics/:id",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/memory/topics/:id/promote",
+      "status": "not_started",
+      "function": "RegisterMemoryRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/messages/:session_id/:id",
+      "status": "not_started",
+      "function": "RegisterMessageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/messages/:session_id/load",
+      "status": "not_started",
+      "function": "RegisterMessageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/messages/chat-history-stats",
+      "status": "not_started",
+      "function": "RegisterMessageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/messages/search",
+      "status": "not_started",
+      "function": "RegisterMessageRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/models/:id/copy",
+      "status": "not_started",
+      "function": "RegisterModelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/models/:id/debug",
+      "status": "not_started",
+      "function": "RegisterModelRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/models/weknoracloud/status",
+      "status": "not_started",
+      "function": "RegisterWeKnoraCloudRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/organizations/:id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/organizations/:id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/agent-shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/:id/invite",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/:id/invite-code",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/join-requests",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/organizations/:id/join-requests/:request_id/review",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/:id/leave",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/members",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/organizations/:id/members/:tenant_id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/organizations/:id/members/:tenant_id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/:id/request-upgrade",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/search-tenants",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/search-users",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/shared-agents",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/shared-knowledge-bases",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/:id/shares",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/join",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/join-by-id",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/organizations/join-request",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/preview/:code",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/organizations/search",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sandbox-configs/:id",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/sandbox-configs/:id",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/sandboxes",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs/:id/skills",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sandbox-configs/:id/skills/:skillId",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "PATCH /api/v1/sandbox-configs/:id/skills/:skillId",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId/files",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId/files/content",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId/guidance",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs/:id/skills/:skillId/guidance",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId/install-events",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs/:id/skills/:skillId/reinstall",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs/:id/skills/:skillId/stop",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sandbox-configs/:id/skills/:skillId/transcript",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sandbox-configs/templates/query",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/sandbox-configs/workspace-policy",
+      "status": "not_started",
+      "function": "RegisterSandboxConfigRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/sessions/:id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/artifacts",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/attachments",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id/attachments/:attachment_id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/attachments/:attachment_id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/attachments/:attachment_id/preview",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/local-browser",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id/messages",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/messages/:message_id/artifacts",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id/messages/:message_id/artifacts/:index",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/messages/:message_id/artifacts/:index/download",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/messages/:message_id/files",
+      "status": "not_started",
+      "function": "serveMessageScopedFiles",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/messages/:message_id/suggestions",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id/pin",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/sandbox/desktop",
+      "status": "not_started",
+      "function": "RegisterSandboxDesktopRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/sandbox/terminal",
+      "status": "not_started",
+      "function": "RegisterSandboxTerminalRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/:id/steer",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/:id/steer/:steer_id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/attachments",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/fork",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/generate_title",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/local-browser",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/messages/:message_id/suggestions",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/pin",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/rewind",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/sandbox/desktop-ticket",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/sandbox/desktop/activity",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/sandbox/terminal-ticket",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/steer",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/steer/:steer_id/inject",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/stop",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/sessions/:session_id/suggestion-events",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/sessions/batch",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/sessions/continue-stream/:session_id",
+      "status": "not_started",
+      "function": "RegisterSessionRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/shared-agents",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/shared-agents/disabled",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/shared-knowledge-bases",
+      "status": "not_started",
+      "function": "RegisterOrganizationRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/skills",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/skills/catalog",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/skills/catalog",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/skills/catalog/:id",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/skills/catalog/:id/files",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/skills/catalog/:id/files/content",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/skills/catalog/:id/install",
+      "status": "not_started",
+      "function": "RegisterSkillRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/storage-backends",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/storage-backends",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/storage-backends/:id",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/storage-backends/:id",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/storage-backends/:id",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/storage-backends/:id/default",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/storage-backends/:id/test",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/storage-backends/test",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/storage-backends/types",
+      "status": "not_started",
+      "function": "RegisterStorageBackendRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/api-keys",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/api-keys",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/system/admin/api-keys/:key_id",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/audit-log",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/list",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/model-catalog",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/system/admin/model-catalog",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/model-catalog/preview",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/promote",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/revoke",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/runtime/queues",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/system/admin/runtime/queues/:queue/archived",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/runtime/queues/:queue/tasks",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/runtime/queues/:queue/tasks/:task_id/actions/:action",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/settings",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/system/admin/settings/:key",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/admin/settings/:key",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/system/admin/settings/:key",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/tenants/apply-default-storage-quota",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/users/create",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/admin/users/reset-password",
+      "status": "not_started",
+      "function": "RegisterSystemAdminRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/capabilities",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/host-project-dir",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/info",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/sandbox-check",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/system/storage-engine-check",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/system/storage-engine-status",
+      "status": "not_started",
+      "function": "RegisterSystemRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/tenants",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/tenants/:id",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/tenants/:id/api-principal-config",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/tenants/:id/api-principal-config",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/tenants/:id/api-principal-test-token",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/tenants/:id/audit-log",
+      "status": "not_started",
+      "function": "RegisterTenantRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/user/favorites",
+      "status": "not_started",
+      "function": "RegisterUserFavoriteRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/user/favorites",
+      "status": "not_started",
+      "function": "RegisterUserFavoriteRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/user/favorites/:type/:id",
+      "status": "not_started",
+      "function": "RegisterUserFavoriteRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/web-search-providers",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/web-search-providers",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/web-search-providers/:id",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/web-search-providers/:id",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/web-search-providers/:id",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "PUT /api/v1/web-search-providers/:id/credentials",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "DELETE /api/v1/web-search-providers/:id/credentials/:field",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/web-search-providers/:id/test",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/web-search-providers/test",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/web-search-providers/types",
+      "status": "not_started",
+      "function": "RegisterWebSearchProviderRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /api/v1/web-search/providers",
+      "status": "not_started",
+      "function": "RegisterWebSearchRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/wechat/qrcode",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/wechat/qrcode/status",
+      "status": "not_started",
+      "function": "RegisterIMChannelRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/weknoracloud/credentials",
+      "status": "not_started",
+      "function": "RegisterWeKnoraCloudRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /api/v1/wiki-search",
+      "status": "not_started",
+      "function": "RegisterWikiPageRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /files",
+      "status": "not_started",
+      "function": "serveFilesWithResources",
+      "java": []
+    },
+    {
+      "id": "DELETE /mcp/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPServerRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /mcp/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPServerRoutes",
+      "java": []
+    },
+    {
+      "id": "POST /mcp/:endpoint_id",
+      "status": "not_started",
+      "function": "RegisterMCPServerRoutes",
+      "java": []
+    },
+    {
+      "id": "GET /r/:token",
+      "status": "not_started",
+      "function": "serveResourceGrants",
+      "java": []
+    },
+    {
+      "id": "HEAD /r/:token",
+      "status": "not_started",
+      "function": "serveResourceGrants",
+      "java": []
+    },
+    {
+      "id": "GET /swagger/*any",
+      "status": "not_started",
+      "function": "NewRouter",
+      "java": []
+    }
+  ],
+  "checkpoint_evidence": "reparse-worker-checkpoint-2026-10-16.json"
+}

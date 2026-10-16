@@ -179,7 +179,8 @@ public final class RerankStage {
   static double composite(ObjectNode row, double model, double base) {
     if (row.path("match_type").asInt() == 6) base = model;
     double weight = row.path("knowledge_source").asText().equalsIgnoreCase("web_search") ? .95 : 1;
-    return Math.min(Math.max(.6 * model + .3 * base + .1 * weight, 0), 1);
+    // Matches Go CompositeScore's explicit, architecture-independent fused operations.
+    return Math.min(Math.max(Math.fma(.1, weight, Math.fma(.3, base, .6 * model)), 0), 1);
   }
 
   private static ObjectNode scoredCopy(ObjectNode row, double model, double boost) {

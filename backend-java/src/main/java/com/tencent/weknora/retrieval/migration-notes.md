@@ -87,10 +87,14 @@ Postgres is not implemented or validated by this phase. Its production schema
 uses `halfvec`, dimension-specific HNSW casts and ParadeDB `pg_search` BM25
 `content |||`/`paradedb.score`; replacing it with ordinary tsvector would not be
 parity. No running Postgres instance or installed vector/pg_search extensions
-were found locally. Copy/move/index-status and additional retrieval stores,
+were found locally. Copy/move and additional retrieval stores,
 public retrieval/RAG wiring and the full asynchronous processing pipeline remain
 separate work. Passing these SPI fixtures does not establish end-to-end upload,
 embedding, indexing and public retrieval completion.
+
+Document index-status and chunk inspection now have native read-only routes;
+their actual storage evidence, access controls, validation and remaining graph/
+PostgreSQL limitations are documented in [index inspection notes](../knowledge/index-read-migration-notes.md).
 
 The isolated native-client plus SQLite-index `clean test` completed with
 28 methods across eight classes, zero failures/errors/skips. The existing

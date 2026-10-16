@@ -1,0 +1,4032 @@
+[
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "normal",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "duplicate-engines",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        },
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "keywords"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "empty-engines",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": null
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 1,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 2,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "b",
+          "source_id": "b-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 4,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-question"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        },
+        {
+          "id": 4
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 1
+        },
+        {
+          "embedding": "0000803F00000000",
+          "id": 2
+        },
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        },
+        {
+          "embedding": "000000000000803F",
+          "id": 4
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "empty-model",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')",
+      "UPDATE knowledges SET embedding_model_id='' WHERE tenant_id=1"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 1,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 2,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "b",
+          "source_id": "b-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 4,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-question"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        },
+        {
+          "id": 3
+        },
+        {
+          "id": 4
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 1
+        },
+        {
+          "embedding": "0000803F00000000",
+          "id": 2
+        },
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        },
+        {
+          "embedding": "000000000000803F",
+          "id": 4
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": true,
+      "1/b.txt": false,
+      "1/exclusive.png": true,
+      "1/legacy.png": false,
+      "1/shared.png": true,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "deleted-document",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')",
+      "UPDATE knowledges SET deleted_at=CURRENT_TIMESTAMP WHERE id='a'"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 0,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 1,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 4,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-question"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 1
+        },
+        {
+          "id": 3
+        },
+        {
+          "id": 4
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "exclusive"
+        },
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "shared"
+        },
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 0,
+          "id": "exclusive",
+          "state": "active"
+        },
+        {
+          "deleted": 0,
+          "id": "shared",
+          "state": "active"
+        },
+        {
+          "deleted": 0,
+          "id": "source",
+          "state": "active"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 400
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 1
+        },
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        },
+        {
+          "embedding": "000000000000803F",
+          "id": 4
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": true,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "shared-image",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('message','shared',1,'message','message','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "message",
+          "owner_type": "message",
+          "resource_id": "shared"
+        },
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 0,
+          "id": "shared",
+          "state": "active"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": true,
+      "1/legacy.png": false,
+      "1/shared.png": true,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [
+      "CREATE TRIGGER kb_physical_fault BEFORE DELETE ON resource_bindings BEGIN SELECT RAISE(ABORT,'controlled physical failure'); END"
+    ],
+    "name": "claim-error",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "exclusive"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "exclusive"
+        },
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "shared"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "shared"
+        },
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 0,
+          "id": "exclusive",
+          "state": "active"
+        },
+        {
+          "deleted": 0,
+          "id": "shared",
+          "state": "active"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": true,
+    "mutations": [],
+    "name": "missing-file",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 0,
+          "id": "source",
+          "state": "active"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [
+      "CREATE TRIGGER kb_physical_fault BEFORE DELETE ON lite_embeddings BEGIN SELECT RAISE(ABORT,'controlled physical failure'); END"
+    ],
+    "name": "index-metadata-error",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 1,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 2,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "b",
+          "source_id": "b-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        },
+        {
+          "dimension": 2,
+          "id": 4,
+          "knowledge_base_id": "kb",
+          "knowledge_id": "a",
+          "source_id": "a-question"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [
+      "CREATE TRIGGER kb_physical_fault BEFORE UPDATE ON knowledges BEGIN SELECT RAISE(ABORT,'controlled physical failure'); END"
+    ],
+    "name": "documents-error-retry",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "retry",
+      "retry"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 0,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 100
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": false,
+      "1/b.txt": false,
+      "1/exclusive.png": false,
+      "1/legacy.png": false,
+      "1/shared.png": false,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "scoped-original",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "local",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')",
+      "UPDATE knowledges SET file_path='storage://previous-backend/local://1/b.txt' WHERE id='b'"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  },
+  {
+    "engine": "sqlite",
+    "entries": [
+      {
+        "ID": "",
+        "Content": "body a",
+        "SourceID": "a-chunk",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body b",
+        "SourceID": "b-chunk",
+        "SourceType": 0,
+        "ChunkID": "b-chunk",
+        "KnowledgeID": "b",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "body other",
+        "SourceID": "other-chunk",
+        "SourceType": 0,
+        "ChunkID": "other-chunk",
+        "KnowledgeID": "other",
+        "KnowledgeBaseID": "other-kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      },
+      {
+        "ID": "",
+        "Content": "question a",
+        "SourceID": "a-question",
+        "SourceType": 0,
+        "ChunkID": "a-chunk",
+        "KnowledgeID": "a",
+        "KnowledgeBaseID": "kb",
+        "KnowledgeType": "",
+        "TagID": "",
+        "IsEnabled": true,
+        "IsRecommended": false
+      }
+    ],
+    "files": {
+      "1/a.txt": true,
+      "1/b.txt": true,
+      "1/exclusive.png": true,
+      "1/legacy.png": true,
+      "1/shared.png": true,
+      "2/other.txt": true
+    },
+    "initial_files": [
+      "1/a.txt",
+      "1/b.txt",
+      "1/exclusive.png",
+      "1/shared.png",
+      "1/legacy.png",
+      "2/other.txt"
+    ],
+    "missing_file": false,
+    "mutations": [],
+    "name": "dummy-provider",
+    "payload": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "provider": "dummy",
+    "results": [
+      "success"
+    ],
+    "seed_statements": [
+      "INSERT INTO tenants(id,name,business,storage_used,storage_engine_config) VALUES(1,'Owner','test',500,'{}'),(2,'Peer','test',700,'{}')",
+      "INSERT INTO knowledge_bases(id,tenant_id,name,type,embedding_model_id,summary_model_id,deleted_at) VALUES('kb',1,'Deleted','document','embed','',CURRENT_TIMESTAMP),('other-kb',2,'Other','document','embed','',NULL)",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('a',1,'kb','file','manual','Document','completed','embed','resource://AAAAAAAAAAAAAAAAAAAAAA',100,'2026-01-01 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('a-chunk',1,'kb','a',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('a',1,'kb','a')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('a',1,'kb','a','a',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('a',1,'kb','a','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('b',1,'kb','file','manual','Document','completed','embed','local://1/b.txt',100,'2026-01-02 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('b-chunk',1,'kb','b',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('b',1,'kb','b')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('b',1,'kb','b','b',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('b',1,'kb','b','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(1,'wiki:ingest','knowledge_base','kb','test')",
+      "INSERT INTO knowledges(id,tenant_id,knowledge_base_id,type,source,title,parse_status,embedding_model_id,file_path,storage_size,created_at) VALUES('other',2,'other-kb','file','manual','Document','completed','embed','local://2/other.txt',100,'2026-01-03 00:00:00+00:00')",
+      "INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,chunk_index,start_at,end_at,content,image_info) VALUES('other-chunk',2,'other-kb','other',0,0,4,'body','[{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"},{\"url\":\"resource://BBBBBBBBBBBBBBBBBBBBBB\"},{\"url\":\"local://1/legacy.png\"},{\"url\":\"resource://CCCCCCCCCCCCCCCCCCCCCC\"}]')",
+      "INSERT INTO wiki_pages(id,tenant_id,knowledge_base_id,slug) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_folders(id,tenant_id,knowledge_base_id,name) VALUES('other',2,'other-kb','other')",
+      "INSERT INTO wiki_page_revisions(id,tenant_id,knowledge_base_id,page_id,slug,version) VALUES('other',2,'other-kb','other','other',1)",
+      "INSERT INTO wiki_page_issues(id,tenant_id,knowledge_base_id,slug,issue_type,description,reported_by) VALUES('other',2,'other-kb','other','test','test','test')",
+      "INSERT INTO task_pending_ops(tenant_id,task_type,scope,scope_id,op) VALUES(2,'wiki:ingest','knowledge_base','other-kb','test')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('source','AAAAAAAAAAAAAAAAAAAAAA',1,'local','local://1/a.txt','252f01a67b86d9d1c648e1bca376bd1448d18f7bb2b1057862b608a3875f59e0')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-a','source',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('source-b','source',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('exclusive','CCCCCCCCCCCCCCCCCCCCCC',1,'local','local://1/exclusive.png','6e5f0bcf69c454e6f523a0f18f4125a494f0737250b9a2d1ac7602925c8503bb')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-a','exclusive',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('exclusive-b','exclusive',1,'knowledge','b','attachment')",
+      "INSERT INTO resources(id,handle,tenant_id,provider,physical_path,location_hash) VALUES('shared','BBBBBBBBBBBBBBBBBBBBBB',1,'local','local://1/shared.png','c1d3e45295030b2e7f8d37377950a2e629f5d84a549eab0c78be6ffbeb76f367')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-a','shared',1,'knowledge','a','attachment')",
+      "INSERT INTO resource_bindings(id,resource_id,tenant_id,owner_type,owner_id,relation) VALUES('shared-b','shared',1,'knowledge','b','attachment')"
+    ],
+    "state": {
+      "chunks": [
+        {
+          "deleted": 1,
+          "id": "a-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b-chunk",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other-chunk",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "indexes": [
+        {
+          "dimension": 2,
+          "id": 3,
+          "knowledge_base_id": "other-kb",
+          "knowledge_id": "other",
+          "source_id": "other-chunk"
+        }
+      ],
+      "keyword_hits": [
+        {
+          "id": 3
+        }
+      ],
+      "knowledges": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "resource_bindings": [
+        {
+          "owner_id": "a",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        },
+        {
+          "owner_id": "b",
+          "owner_type": "knowledge",
+          "resource_id": "source"
+        }
+      ],
+      "resources": [
+        {
+          "deleted": 1,
+          "id": "exclusive",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "shared",
+          "state": "deleted"
+        },
+        {
+          "deleted": 1,
+          "id": "source",
+          "state": "deleted"
+        }
+      ],
+      "task_pending_ops": [
+        {
+          "op": "test",
+          "scope": "knowledge_base",
+          "scope_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "tenants": [
+        {
+          "id": 1,
+          "storage_used": 300
+        },
+        {
+          "id": 2,
+          "storage_used": 700
+        }
+      ],
+      "vectors": [
+        {
+          "embedding": "0000803F00000000",
+          "id": 3
+        }
+      ],
+      "wiki_folders": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_issues": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_page_revisions": [
+        {
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ],
+      "wiki_pages": [
+        {
+          "deleted": 1,
+          "id": "a",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 1,
+          "id": "b",
+          "knowledge_base_id": "kb",
+          "tenant_id": 1
+        },
+        {
+          "deleted": 0,
+          "id": "other",
+          "knowledge_base_id": "other-kb",
+          "tenant_id": 2
+        }
+      ]
+    },
+    "vectors": {
+      "a-chunk": [
+        1,
+        0
+      ],
+      "a-question": [
+        0,
+        1
+      ],
+      "b-chunk": [
+        1,
+        0
+      ],
+      "other-chunk": [
+        1,
+        0
+      ]
+    }
+  }
+]

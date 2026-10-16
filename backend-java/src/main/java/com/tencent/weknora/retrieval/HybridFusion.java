@@ -106,7 +106,7 @@ public final class HybridFusion {
   }
 
   private static int compare(RetrievalHit a, RetrievalHit b) {
-    return a.score() > b.score() ? -1 : a.score() < b.score() ? 1 : 0;
+    return a.score() > b.score() ? -1 : a.score() < b.score() ? 1 : java.util.Arrays.compareUnsigned(a.chunkId().getBytes(java.nio.charset.StandardCharsets.UTF_8), b.chunkId().getBytes(java.nio.charset.StandardCharsets.UTF_8));
   }
 
   private static RetrievalHit scored(RetrievalHit r, double score) {

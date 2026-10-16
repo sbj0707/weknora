@@ -1,0 +1,6 @@
+//go:build ignore
+
+// Read-only actual production formatter audit: edge and deterministic binary64 numbers.
+package main
+import("context";"encoding/json";"os";"fmt";"math";"math/rand";"strconv"; chatpipeline "github.com/Tencent/WeKnora/internal/application/service/chat_pipeline";"github.com/Tencent/WeKnora/internal/logger")
+func main(){logger.SetOutput(os.Stderr);values:=[]string{"1e6","1e-5","9007199254740993","1e308","1e-300","-0","1.234567890123456789","1e309","-1e309","5e-324","2.2250738585072014e-308","1e-324","-1e-324","0.0001","0.00001","999999","1000000","1e23","2.225073858507201e-308","2.2250738585072012e-308","4.9406564584124654e-324"};rng:=rand.New(rand.NewSource(826091));for len(values)<521{f:=math.Float64frombits(rng.Uint64());if math.IsNaN(f)||math.IsInf(f,0){continue};values=append(values,strconv.FormatFloat(f,'e',-1,64))};out:=[]any{};for _,n:=range values{input:=fmt.Sprintf(`[{"entity":%s,"entity_attributes":[%s, {"number":%s}, [%s]]}]`,n,n,n,n);g,err:=chatpipeline.NewFormater().ParseGraph(context.Background(),input);r:=map[string]any{"input":input,"graph":g,"error":err!=nil};if err!=nil{r["message"]=err.Error()};out=append(out,r)};json.NewEncoder(os.Stdout).Encode(out)}

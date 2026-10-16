@@ -278,6 +278,9 @@ public class KnowledgeRepository {
       } else if (key.endsWith("_at")) {
         if (value == null) result.putNull(key);
         else result.put(key, KnowledgeBaseRepository.timestamp(value));
+      } else if (value == null && defaults.path(key).isNumber()) {
+        // SQL NULL scans as the Go numeric field's zero value, not an empty JSON string.
+        result.set(key, defaults.get(key));
       } else if (value instanceof Number number) result.put(key, number.longValue());
       else result.put(key, Objects.toString(value, ""));
     }
@@ -294,7 +297,7 @@ public class KnowledgeRepository {
   }
 
   private Object timestamp(Instant value) {
-    return isPostgres() ? Timestamp.from(value) : value.toString();
+    return isPostgres() ? Timestamp.from(value) : GoSqliteTimestamp.write(value);
   }
 
   private static ApiException bad(String text) {

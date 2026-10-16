@@ -495,9 +495,28 @@ func (r *wikiPageRepository) ListByTypeLight(
 	return entries, total, nil
 }
 
+// Source-reference readers execute in the KB owner's tenant after service authorization.
+// Keep administrative/internal callers without tenant context compatible with existing usage.
+func (r *wikiPageRepository) wikiSourceRead(ctx context.Context) *gorm.DB {
+	query := r.db.WithContext(ctx).Model(&types.WikiPage{})
+	if tenantID, ok := types.TenantIDFromContext(ctx); ok && tenantID != 0 {
+		query = query.Where("tenant_id = ?", tenantID)
+	}
+	return query
+}
+
 // ListBySourceRef retrieves all wiki pages that reference a given source knowledge ID.
 // Handles both old format ("knowledgeID") and new format ("knowledgeID|title") in source_refs JSON array.
 func (r *wikiPageRepository) ListBySourceRef(ctx context.Context, kbID string, sourceKnowledgeID string) ([]*types.WikiPage, error) {
+	if r.db.Dialector.Name() == "sqlite" {
+		var pages []*types.WikiPage
+		err := r.wikiSourceRead(ctx).Where("knowledge_base_id = ?", kbID).
+			Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)
+				WHERE type = 'text' AND (value = ? OR substr(value, 1, length(?)) = ?))`,
+				sourceKnowledgeID, sourceKnowledgeID+"|", sourceKnowledgeID+"|").Find(&pages).Error
+		return pages, err
+	}
+
 	// Build the JSON needle safely so arbitrary IDs cannot break out of the
 	// quoted string (e.g. ids containing quotes or backslashes).
 	needle, err := json.Marshal([]string{sourceKnowledgeID})
@@ -522,7 +541,7 @@ func (r *wikiPageRepository) ListBySourceRef(ctx context.Context, kbID string, s
 	likePattern := "%" + escapeLikePattern(prefixStr) + "%"
 
 	var pages []*types.WikiPage
-	if err := r.db.WithContext(ctx).
+	if err := r.wikiSourceRead(ctx).
 		Where("knowledge_base_id = ? AND (source_refs @> ?::jsonb OR source_refs::text LIKE ?)",
 			kbID,
 			string(needle),
@@ -544,6 +563,15 @@ func (r *wikiPageRepository) ListBySourceRef(ctx context.Context, kbID string, s
 // containment branch and idx_wiki_pages_source_refs_text for the legacy
 // text-LIKE branch — both added in migration 000041.
 func (r *wikiPageRepository) ListSlugsBySourceRef(ctx context.Context, kbID string, sourceKnowledgeID string) ([]string, error) {
+	if r.db.Dialector.Name() == "sqlite" {
+		var slugs []string
+		err := r.wikiSourceRead(ctx).Model(&types.WikiPage{}).Where("knowledge_base_id = ?", kbID).
+			Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)
+				WHERE type = 'text' AND (value = ? OR substr(value, 1, length(?)) = ?))`,
+				sourceKnowledgeID, sourceKnowledgeID+"|", sourceKnowledgeID+"|").Pluck("slug", &slugs).Error
+		return slugs, err
+	}
+
 	needle, err := json.Marshal([]string{sourceKnowledgeID})
 	if err != nil {
 		return nil, fmt.Errorf("marshal source ref needle: %w", err)
@@ -559,7 +587,7 @@ func (r *wikiPageRepository) ListSlugsBySourceRef(ctx context.Context, kbID stri
 	likePattern := "%" + escapeLikePattern(prefixStr) + "%"
 
 	var slugs []string
-	if err := r.db.WithContext(ctx).
+	if err := r.wikiSourceRead(ctx).
 		Model(&types.WikiPage{}).
 		Where("knowledge_base_id = ? AND (source_refs @> ?::jsonb OR source_refs::text LIKE ?)",
 			kbID,
@@ -589,7 +617,7 @@ func (r *wikiPageRepository) ListBySlugs(
 		return nil, nil
 	}
 	var rows []types.WikiPageLite
-	if err := r.db.WithContext(ctx).
+	if err := r.wikiSourceRead(ctx).
 		Model(&types.WikiPage{}).
 		Select("slug", "title", "page_type", "status", "aliases", "out_links").
 		Where("knowledge_base_id = ? AND slug IN ?", kbID, slugs).

@@ -28,6 +28,9 @@ type ChunkRepository interface {
 	GetChunkBySeqID(ctx context.Context, tenantID uint64, seqID int64) (*types.Chunk, error)
 	// ListChunksByID lists chunks by ids
 	ListChunksByID(ctx context.Context, tenantID uint64, ids []string) ([]*types.Chunk, error)
+	// ListChunkIDsForIndexCleanup includes soft-deleted rows, but only IDs
+	// bound to the supplied owner and KB (including a soft-deleted KB).
+	ListChunkIDsForIndexCleanup(ctx context.Context, tenantID uint64, kbID string, ids []string) ([]string, error)
 	// ListChunksByIDOnly lists chunks by ids without tenant filter (for shared KB resolution).
 	ListChunksByIDOnly(ctx context.Context, ids []string) ([]*types.Chunk, error)
 	// ListChunksBySeqID lists chunks by seq_ids

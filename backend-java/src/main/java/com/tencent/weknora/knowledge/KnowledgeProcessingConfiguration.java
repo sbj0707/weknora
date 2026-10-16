@@ -65,6 +65,11 @@ public class KnowledgeProcessingConfiguration {
   }
 
   @Bean
+  public RemoteDocumentDownloads remoteDocumentDownloads(ModelURLPolicy urls, ModelEgressPolicy egress) {
+    return new RemoteDocumentDownloads(urls, egress);
+  }
+
+  @Bean
   public DocumentProcessingHandler documentProcessingHandler(
       DocumentProcessingRepository repo,
       ObjectMapper json,
@@ -75,7 +80,10 @@ public class KnowledgeProcessingConfiguration {
       ModelClientFactory models,
       DataSource dataSource,
       Environment env,
-      KnowledgeFileUpload.Enqueuer tasks) {
+      KnowledgeFileUpload.Enqueuer tasks,
+      DocumentProcessingHandler.Indexes indexes,
+      KnowledgeProcessingSpanTracker tracker,Neo4jGraphRepository graph,KnowledgeBaseProfileHandler profiles,
+      RemoteDocumentDownloads downloads) {
     DocumentProcessingHandler.Readers readers =
         (engine, type) -> {
           DocumentReader selected;
@@ -91,48 +99,10 @@ public class KnowledgeProcessingConfiguration {
               .contains(engine))
             throw new TaskFailure("Native parser engine is not migrated: " + engine, false);
           else {
-            if (!remote.isConnected())
-              throw new TaskFailure(
-                  "Document parsing service is not configured. Please use text/paragraph import or"
-                      + " set DOCREADER_ADDR.",
-                  false);
+            if (!remote.isConnected()) return null;
             selected = remote;
           }
           return selected;
-        };
-    DocumentProcessingHandler.Indexes indexes =
-        new DocumentProcessingHandler.Indexes() {
-          private SQLiteIndexRepository sqlite;
-
-          @Override
-          public synchronized IndexWriter resolve(long owner, JsonNode kb) throws TaskFailure {
-            if (kb.hasNonNull("vector_store_id") && !kb.path("vector_store_id").asText().isEmpty())
-              throw new TaskFailure("Native bound vector store selection is not migrated", false);
-            if (sqlite != null) return sqlite;
-            try {
-              try (var connection = dataSource.getConnection()) {
-                if (!connection.getMetaData().getDatabaseProductName().equals("SQLite"))
-                  throw new TaskFailure(
-                      "Native document indexing is not migrated for this database", false);
-              }
-              String path =
-                  env.getProperty(
-                      "weknora.sqlite.vec.extension",
-                      env.getProperty("WEKNORA_SQLITE_VEC_EXTENSION", ""));
-              if (path.isEmpty())
-                throw new TaskFailure(
-                    "Native SQLite indexing requires WEKNORA_SQLITE_VEC_EXTENSION", false);
-              var candidate =
-                  new SQLiteIndexRepository(dataSource, new SQLiteVectorExtension(Path.of(path)));
-              candidate.initialize();
-              sqlite = candidate;
-              return sqlite;
-            } catch (TaskFailure error) {
-              throw error;
-            } catch (Exception error) {
-              throw new TaskFailure("Native document index initialization failed", true);
-            }
-          }
         };
     return new DocumentProcessingHandler(
         repo,
@@ -163,12 +133,102 @@ public class KnowledgeProcessingConfiguration {
                 throw new DocumentProcessingHandler.ParserEndpointRejected();
               }
           }
-        });
+        },tracker,true,true,true,true).withGraphCleanup(graph).withProfiles(profiles)
+        .withRemoteSources(downloads, (owner, kb, bytes, filename) ->
+            storage.forKnowledgeBase(owner, kb).files().saveBytes(bytes, owner, filename, true));
+  }
+
+  @Bean
+  public DocumentProcessingHandler.Indexes documentIndexes(DataSource dataSource, Environment env) {
+    return         new DocumentProcessingHandler.Indexes() {
+          private IndexWriter writer;
+
+          @Override
+          public synchronized IndexWriter resolve(long owner, JsonNode kb) throws TaskFailure {
+            if (kb.hasNonNull("vector_store_id") && !kb.path("vector_store_id").asText().isEmpty())
+              throw new TaskFailure("Native bound vector store selection is not migrated", false);
+            if (writer != null) return writer;
+            try {
+              String database;
+              try (var connection = dataSource.getConnection()) {
+                database=connection.getMetaData().getDatabaseProductName();
+              }
+              if(database.equals("PostgreSQL")) {
+                var candidate=new PostgresIndexRepository(dataSource);
+                candidate.initialize();writer=candidate;return writer;
+              }
+              if(!database.equals("SQLite")) throw new TaskFailure("Native document indexing is not migrated for this database",false);
+              String path =
+                  env.getProperty(
+                      "weknora.sqlite.vec.extension",
+                      env.getProperty("WEKNORA_SQLITE_VEC_EXTENSION", ""));
+              if (path.isEmpty())
+                throw new TaskFailure(
+                    "Native SQLite indexing requires WEKNORA_SQLITE_VEC_EXTENSION", false);
+              var candidate =
+                  new SQLiteIndexRepository(dataSource, new SQLiteVectorExtension(Path.of(path)));
+              candidate.initialize();
+              writer = candidate;
+              return writer;
+            } catch (TaskFailure error) {
+              throw error;
+            } catch (Exception error) {
+              throw new TaskFailure("Native document index initialization failed", true);
+            }
+          }
+        };
+  }
+
+  @Bean
+  public DataTableSummaryRepository dataTableSummaryRepository(JdbcTemplate jdbc, ObjectMapper json,
+      KnowledgeRepository knowledge, PlatformTransactionManager tx) throws IOException {
+    return new DataTableSummaryRepository(jdbc,json,knowledge,tx,Clock.systemUTC());
+  }
+
+  @Bean
+  public DataTableSummaryHandler dataTableSummaryHandler(DataTableSummaryRepository repository,
+      ObjectMapper json, ModelClientFactory models, StorageResolver storage,
+      DocumentProcessingHandler.Indexes indexes, Environment env) {
+    var nativeModels=new DataTableSummaryHandler.Models() {
+      private AuthContext context(long owner) {
+        return new AuthContext("system-task",owner,"viewer",false,null,false,Set.of(),Set.of());
+      }
+      public com.tencent.weknora.model.client.ChatModel chat(long owner,String id) {
+        return models.chat(context(owner),id);
+      }
+      public com.tencent.weknora.model.client.EmbeddingModel embedding(long owner,String id) {
+        return models.embedding(context(owner),id);
+      }
+    };
+    long limit=50L*1024*1024;
+    try {long mb=Long.parseLong(env.getProperty("MAX_FILE_SIZE_MB","50"));if(mb>0)limit=Math.multiplyExact(mb,1024*1024);}catch(NumberFormatException|ArithmeticException ignored){}
+    return new DataTableSummaryHandler(repository,json,nativeModels,
+        (owner,kb,path)->storage.forKnowledgeBase(owner,kb).files().open(path),indexes,
+        ()->openTableDatabase(env),limit);
+  }
+
+  static java.sql.Connection openTableDatabase(Environment env) throws java.sql.SQLException {
+    var connection=java.sql.DriverManager.getConnection("jdbc:duckdb:");
+    String skip=env.getProperty("DUCKDB_SKIP_EXTENSION_LOAD","");
+    if(!skip.equals("1")&&!skip.equalsIgnoreCase("true")) {
+      try(var statement=connection.createStatement()) {
+        for(String extension:List.of("spatial","excel")) {
+          try {statement.execute("LOAD "+extension);}
+          catch(java.sql.SQLException first) {
+            try {statement.execute("INSTALL "+extension);statement.execute("LOAD "+extension);}
+            catch(java.sql.SQLException unavailable) {
+              org.slf4j.LoggerFactory.getLogger(KnowledgeProcessingConfiguration.class).warn("DuckDB {} extension unavailable",extension);
+            }
+          }
+        }
+      } catch(java.sql.SQLException e) {connection.close();throw e;}
+    }
+    return connection;
   }
 
   @Bean
   public KnowledgePostProcessHandler knowledgePostProcessHandler(
-      DocumentProcessingRepository repo, ObjectMapper json) {
-    return new KnowledgePostProcessHandler(repo, json);
+      DocumentProcessingRepository repo, ObjectMapper json,KnowledgeProcessingSpanTracker tracker,SummaryGenerationHandler summary,QuestionGenerationFanout fanout,org.springframework.beans.factory.ObjectProvider<KnowledgeAutoTagHandler> autoTag,KnowledgeBaseProfileHandler profiles) {
+    return new KnowledgePostProcessHandler(repo, json,tracker,summary,fanout,autoTag.getIfAvailable()).withProfiles(profiles);
   }
 }

@@ -130,7 +130,7 @@ public final class KnowledgeContentReadController {
     return contentReads.lookupKnowledge(id);
   }
 
-  private static KnowledgeContentReadRepository.Page pagination(
+  static KnowledgeContentReadRepository.Page pagination(
       HttpServletRequest request, boolean chunk) {
     long page = number(request, "page"), size = number(request, "page_size");
     List<String> errors = new ArrayList<>();
@@ -153,7 +153,7 @@ public final class KnowledgeContentReadController {
   }
 
   private static long number(HttpServletRequest request, String key) {
-    String raw = param(request, key, "");
+    String raw = com.tencent.weknora.security.AuthPreferences.trimGoSpace(param(request, key, ""));
     if (raw.isEmpty()) return 0;
     if (!raw.matches("[+-]?[0-9]+"))
       throw bad("strconv.ParseInt: parsing " + quote(raw) + ": invalid syntax");

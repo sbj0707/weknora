@@ -9,6 +9,7 @@ import java.util.*;
 public final class DuckDbTableSession implements AutoCloseable {
  private final Connection db;private final String session;private final Runnable check;
  private final Set<String> created=new LinkedHashSet<>();private final ObjectMapper json=new ObjectMapper();
+ private final Set<Statement> statements=java.util.concurrent.ConcurrentHashMap.newKeySet();
  public DuckDbTableSession(Connection db,String session,Runnable check){this.db=db;this.session=session;this.check=check;}
  public ObjectNode load(String id,String type,Path filename)throws SQLException{
   String table="k_"+id.replace('-','_');type=type.toLowerCase(Locale.ROOT);
@@ -17,7 +18,7 @@ public final class DuckDbTableSession implements AutoCloseable {
    if(type.equals("csv"))sql="CREATE TABLE \""+table+"\" AS SELECT * FROM read_csv_auto('"+file+"', header=true, all_varchar=true)";
    else if(type.equals("xlsx")||type.equals("xls")){
     List<String> sheets=new ArrayList<>();
-    try(var s=db.createStatement();var r=s.executeQuery("SELECT UNNEST(layers).name FROM st_read_meta('"+file+"')")){
+    try(var s=statement();var r=s.executeQuery("SELECT UNNEST(layers).name FROM st_read_meta('"+file+"')")){
      while(r.next()){check.run();String name=r.getString(1);if(!com.tencent.weknora.security.AuthPreferences.trimGoSpace(name).isEmpty())sheets.add(name);}
     }catch(SQLException error){sheets.clear();}
     if(sheets.isEmpty())sql="CREATE TABLE \""+table+"\" AS SELECT * FROM read_xlsx('"+file+"', header=true, all_varchar=true)";
@@ -29,15 +30,15 @@ public final class DuckDbTableSession implements AutoCloseable {
    execute(sql);
   }
   ObjectNode schema=json.createObjectNode().put("table_name",table);ArrayNode columns=schema.putArray("columns");
-  try(var s=db.createStatement();var r=s.executeQuery("DESCRIBE \""+table+"\"")){
+  try(var s=statement();var r=s.executeQuery("DESCRIBE \""+table+"\"")){
    while(r.next()){check.run();columns.addObject().put("name",r.getString(1)).put("type",r.getString(2)).put("nullable",r.getString(3));}
   }
-  try(var s=db.createStatement();var r=s.executeQuery("SELECT COUNT(*) FROM \""+table+"\"")){check.run();r.next();schema.put("row_count",r.getLong(1));}
+  try(var s=statement();var r=s.executeQuery("SELECT COUNT(*) FROM \""+table+"\"")){check.run();r.next();schema.put("row_count",r.getLong(1));}
   schema.putObject("metadata").put("column_count",columns.size()).put("session_id",session);return schema;
  }
  public ArrayNode sample(String table)throws SQLException{
   execute("CREATE OR REPLACE TEMPORARY VIEW \"dataset\" AS SELECT * FROM \""+table+"\"");
-  try(var s=db.createStatement();var r=s.executeQuery("SELECT * FROM \"dataset\" LIMIT 10")){
+  try(var s=statement();var r=s.executeQuery("SELECT * FROM \"dataset\" LIMIT 10")){
    var rows=json.createArrayNode();var metadata=r.getMetaData();
    while(r.next()){check.run();ObjectNode row=rows.addObject();for(int i=1;i<=metadata.getColumnCount();i++){Object value=r.getObject(i);row.put(metadata.getColumnName(i),value==null?"<nil>":value instanceof byte[] b?new String(b,StandardCharsets.UTF_8):value.toString());}}
    return rows;
@@ -55,7 +56,9 @@ public final class DuckDbTableSession implements AutoCloseable {
    out.append(json.writeValueAsString(sorted).replace("&","\\u0026").replace("<","\\u003c").replace(">","\\u003e").replace("\u2028","\\u2028").replace("\u2029","\\u2029")).append('\n');
   }return out.toString();
  }
- private void execute(String sql)throws SQLException{check.run();try(var s=db.createStatement()){s.execute(sql);}check.run();}
+ private Statement statement()throws SQLException{check.run();Statement s=db.createStatement();statements.add(s);return s;}
+ public void cancel(){for(var s:statements)try{s.cancel();}catch(SQLException ignored){}}
+ private void execute(String sql)throws SQLException{check.run();try(var s=statement()){s.execute(sql);}check.run();}
  private static String literal(String value){return value.replace("'","''");}
- @Override public void close(){for(String table:created)try(var s=db.createStatement()){s.execute("DROP TABLE IF EXISTS \""+table+"\"");}catch(SQLException ignored){}created.clear();}
+ @Override public void close(){for(String table:created)try(var s=db.createStatement()){s.execute("DROP TABLE IF EXISTS \""+table+"\"");}catch(SQLException ignored){}created.clear();statements.clear();}
 }

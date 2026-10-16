@@ -30,8 +30,24 @@ type elasticsearchRepository struct {
 // NewElasticsearchEngineRepository creates and initializes a new Elasticsearch v8 repository.
 // indexCfg is optional — pass nil to use env var / default values (env path).
 func NewElasticsearchEngineRepository(client *elasticsearch.TypedClient,
-	config *config.Config,
-	indexCfg *typesLocal.IndexConfig,
+	config *config.Config, indexCfg *typesLocal.IndexConfig,
+) interfaces.RetrieveEngineRepository {
+	return newElasticsearchEngineRepository(context.Background(), client, config, indexCfg)
+}
+
+// NewElasticsearchEngineRepositoryWithContext preserves the cold-build budget for physical HTTP initialization.
+func NewElasticsearchEngineRepositoryWithContext(ctx context.Context, client *elasticsearch.TypedClient,
+	config *config.Config, indexCfg *typesLocal.IndexConfig,
+) (interfaces.RetrieveEngineRepository, error) {
+	res := newElasticsearchEngineRepository(ctx, client, config, indexCfg)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func newElasticsearchEngineRepository(ctx context.Context, client *elasticsearch.TypedClient,
+	config *config.Config, indexCfg *typesLocal.IndexConfig,
 ) interfaces.RetrieveEngineRepository {
 	log := logger.GetLogger(context.Background())
 	log.Info("[Elasticsearch] Initializing Elasticsearch v8 retriever engine repository")
@@ -45,12 +61,12 @@ func NewElasticsearchEngineRepository(client *elasticsearch.TypedClient,
 		numberOfShards:   indexCfg.GetNumberOfShards(0),
 		numberOfReplicas: indexCfg.GetNumberOfReplicas(-1),
 	}
-	if err := res.createIndexIfNotExists(context.Background()); err != nil {
+	if err := res.createIndexIfNotExists(ctx); err != nil {
 		log.Errorf("[Elasticsearch] Failed to create index: %v", err)
 	} else {
 		log.Info("[Elasticsearch] Successfully initialized repository")
 	}
-	res.detectFieldTypes(context.Background())
+	res.detectFieldTypes(ctx)
 	return res
 }
 

@@ -1,0 +1,552 @@
+[
+  {
+    "chunks": [
+      {
+        "content": "remote parsed body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "url_empty_title",
+      "mode": "url",
+      "title": "",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": "Extracted page title"
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "processing",
+      "title": "Extracted page title"
+    },
+    "saved": [],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [
+      {
+        "content": "remote parsed body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "url_source_title",
+      "mode": "url",
+      "title": "$ORIGIN/page",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": "Extracted page title"
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "$ORIGIN/page",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "processing",
+      "title": "Extracted page title"
+    },
+    "saved": [],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [
+      {
+        "content": "remote parsed body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "url_custom_title",
+      "mode": "url",
+      "title": "User chosen title",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": "Extracted page title"
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "User chosen title",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "processing",
+      "title": "User chosen title"
+    },
+    "saved": [],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [
+      {
+        "content": "remote parsed body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "url_missing_extracted_title",
+      "mode": "url",
+      "title": "$ORIGIN/page",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "$ORIGIN/page",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "processing",
+      "title": "$ORIGIN/page"
+    },
+    "saved": [],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [],
+    "error": "",
+    "input": {
+      "name": "url_parser_error",
+      "mode": "url",
+      "title": "$ORIGIN/page",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "controlled parser error",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "$ORIGIN/page",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "disabled",
+      "error": "controlled parser error",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "failed",
+      "title": "$ORIGIN/page"
+    },
+    "saved": [],
+    "tasks": []
+  },
+  {
+    "chunks": [],
+    "error": "Document parsing failed. Check the file format and the DocReader logs for this attempt.",
+    "input": {
+      "name": "url_transport_failure",
+      "mode": "url",
+      "title": "$ORIGIN/page",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": true,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [
+      {
+        "content": "",
+        "engine": "",
+        "file_type": "",
+        "filename": "",
+        "request_id": "remote-request",
+        "title": "$ORIGIN/page",
+        "url": "$ORIGIN/page"
+      }
+    ],
+    "row": {
+      "enable_status": "disabled",
+      "error": "Document parsing failed. Check the file format and the DocReader logs for this attempt.",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "failed",
+      "title": "$ORIGIN/page"
+    },
+    "saved": [],
+    "tasks": []
+  },
+  {
+    "chunks": [],
+    "error": "",
+    "input": {
+      "name": "url_no_reader",
+      "mode": "url",
+      "title": "$ORIGIN/page",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": true,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [],
+    "row": {
+      "enable_status": "disabled",
+      "error": "Document parsing service is not configured. Please use text/paragraph import or set DOCREADER_ADDR.",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "failed",
+      "title": "$ORIGIN/page"
+    },
+    "saved": [],
+    "tasks": []
+  },
+  {
+    "chunks": [
+      {
+        "content": "downloaded body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "file_url_discovered_metadata",
+      "mode": "file_url",
+      "title": "",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [
+      "downloaded"
+    ],
+    "requests": [],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "discovered.TXT",
+      "file_path": "",
+      "file_type": "TXT",
+      "parse_status": "processing",
+      "title": ""
+    },
+    "saved": [
+      {
+        "content": "downloaded body",
+        "filename": "discovered.TXT",
+        "temporary": true,
+        "tenant": 1
+      }
+    ],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [
+      {
+        "content": "downloaded body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "file_url_existing_metadata",
+      "mode": "file_url",
+      "title": "Existing title",
+      "filename": "task.TXT",
+      "file_type": "txt",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [
+      "downloaded"
+    ],
+    "requests": [],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "task.TXT",
+      "file_path": "",
+      "file_type": "txt",
+      "parse_status": "processing",
+      "title": "Existing title"
+    },
+    "saved": [
+      {
+        "content": "downloaded body",
+        "filename": "task.TXT",
+        "temporary": true,
+        "tenant": 1
+      }
+    ],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [
+      {
+        "content": "remote parsed body",
+        "index": 0,
+        "type": "text"
+      }
+    ],
+    "error": "",
+    "input": {
+      "name": "file_url_remote_reader",
+      "mode": "file_url",
+      "title": "",
+      "filename": "task.PDF",
+      "file_type": "pdf",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [
+      "downloaded"
+    ],
+    "requests": [
+      {
+        "content": "downloaded body",
+        "engine": "",
+        "file_type": "pdf",
+        "filename": "task.PDF",
+        "request_id": "remote-request",
+        "title": "",
+        "url": ""
+      }
+    ],
+    "row": {
+      "enable_status": "enabled",
+      "error": "",
+      "file_name": "task.PDF",
+      "file_path": "",
+      "file_type": "pdf",
+      "parse_status": "processing",
+      "title": ""
+    },
+    "saved": [
+      {
+        "content": "downloaded body",
+        "filename": "task.PDF",
+        "temporary": true,
+        "tenant": 1
+      }
+    ],
+    "tasks": [
+      "knowledge:post_process"
+    ]
+  },
+  {
+    "chunks": [],
+    "error": "",
+    "input": {
+      "name": "file_url_unsupported",
+      "mode": "file_url",
+      "title": "",
+      "filename": "task.exe",
+      "file_type": "exe",
+      "status": 0,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [],
+    "row": {
+      "enable_status": "disabled",
+      "error": "unsupported file type: exe",
+      "file_name": "task.exe",
+      "file_path": "",
+      "file_type": "exe",
+      "parse_status": "failed",
+      "title": ""
+    },
+    "saved": [],
+    "tasks": []
+  },
+  {
+    "chunks": [],
+    "error": "failed to download file from URL: remote server returned status 404",
+    "input": {
+      "name": "file_url_http_failure",
+      "mode": "file_url",
+      "title": "",
+      "filename": "",
+      "file_type": "",
+      "status": 404,
+      "save_failure": false,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [],
+    "row": {
+      "enable_status": "disabled",
+      "error": "remote server returned status 404",
+      "file_name": "",
+      "file_path": "",
+      "file_type": "",
+      "parse_status": "failed",
+      "title": ""
+    },
+    "saved": [],
+    "tasks": []
+  },
+  {
+    "chunks": [],
+    "error": "failed to save downloaded file: controlled storage failure",
+    "input": {
+      "name": "file_url_save_failure",
+      "mode": "file_url",
+      "title": "",
+      "filename": "",
+      "file_type": "",
+      "status": 0,
+      "save_failure": true,
+      "parser_error": "",
+      "reader_failure": false,
+      "no_reader": false,
+      "extracted_title": ""
+    },
+    "opened": [],
+    "requests": [],
+    "row": {
+      "enable_status": "disabled",
+      "error": "controlled storage failure",
+      "file_name": "discovered.TXT",
+      "file_path": "",
+      "file_type": "TXT",
+      "parse_status": "failed",
+      "title": ""
+    },
+    "saved": [
+      {
+        "content": "downloaded body",
+        "filename": "discovered.TXT",
+        "temporary": true,
+        "tenant": 1
+      }
+    ],
+    "tasks": []
+  }
+]

@@ -65,7 +65,62 @@
     "GET /api/v1/auth/oidc/config": "in_progress",
     "GET /api/v1/auth/oidc/url": "in_progress",
     "GET /api/v1/auth/oidc/start": "in_progress",
-    "GET /api/v1/auth/oidc/callback": "in_progress"
+    "GET /api/v1/auth/oidc/callback": "in_progress",
+    "GET /api/v1/knowledge/:id/index-status": "in_progress",
+    "GET /api/v1/knowledge/:id/chunks/:chunk_id/details": "in_progress",
+    "GET /api/v1/knowledge/:id/spans": "in_progress",
+    "GET /api/v1/knowledge/:id/stages": "in_progress",
+    "POST /api/v1/knowledge/:id/cancel-parse": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/profile/generate": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/tags": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/tags": "in_progress",
+    "PUT /api/v1/knowledge-bases/:id/tags/:tag_id": "in_progress",
+    "DELETE /api/v1/knowledge-bases/:id/tags/:tag_id": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/hybrid-search": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/hybrid-search": "in_progress",
+    "DELETE /api/v1/knowledge/:id": "in_progress",
+    "POST /api/v1/knowledge/batch-delete": "in_progress",
+    "DELETE /api/v1/knowledge-bases/:id/knowledge": "in_progress",
+    "DELETE /api/v1/chunks/:knowledge_id/:id": "in_progress",
+    "DELETE /api/v1/chunks/:knowledge_id": "in_progress",
+    "GET /api/v1/chunks/:knowledge_id/:id/revisions": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/knowledge/folders": "in_progress",
+    "PUT /api/v1/knowledge-bases/:id/knowledge/folders": "in_progress",
+    "POST /api/v1/knowledge/folder": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/knowledge/manual": "in_progress",
+    "PUT /api/v1/knowledge/manual/:id": "in_progress",
+    "PUT /api/v1/knowledge/:id": "in_progress",
+    "PUT /api/v1/chunks/:knowledge_id/:id": "in_progress",
+    "POST /api/v1/chunks/:knowledge_id/:id/revert": "in_progress",
+    "PUT /api/v1/chunks/by-id/:id/questions": "in_progress",
+    "DELETE /api/v1/chunks/by-id/:id/questions": "in_progress",
+    "POST /api/v1/chunks/by-id/:id/questions/regenerate": "in_progress",
+    "GET /api/v1/vector-stores": "in_progress",
+    "GET /api/v1/vector-stores/types": "in_progress",
+    "GET /api/v1/vector-stores/:id": "in_progress",
+    "POST /api/v1/vector-stores": "in_progress",
+    "PUT /api/v1/vector-stores/:id": "in_progress",
+    "DELETE /api/v1/vector-stores/:id": "in_progress",
+    "POST /api/v1/vector-stores/test": "in_progress",
+    "POST /api/v1/vector-stores/:id/test": "in_progress",
+    "POST /api/v1/knowledge/:id/regenerate-summary": "in_progress",
+    "POST /api/v1/knowledge/:id/reparse": "in_progress",
+    "POST /api/v1/knowledge/batch-reparse": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/knowledge/url": "in_progress",
+    "GET /api/v1/knowledge/:id/download": "in_progress",
+    "GET /api/v1/knowledge/:id/preview": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/knowledge/batch-download": "in_progress",
+    "GET /api/v1/knowledge/batch": "in_progress",
+    "GET /api/v1/knowledge/search": "in_progress",
+    "PUT /api/v1/knowledge/tags": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/gallery-config": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/images": "in_progress",
+    "PUT /api/v1/knowledge/image/:id/:chunk_id": "in_progress",
+    "POST /api/v1/knowledge/move": "in_progress",
+    "GET /api/v1/knowledge/move/progress/:task_id": "in_progress",
+    "GET /api/v1/knowledge-bases/:id/move-targets": "in_progress",
+    "POST /api/v1/knowledge-bases/:id/duplicate": "in_progress",
+    "DELETE /api/v1/knowledge-bases/:id": "in_progress"
   },
   "modules": {
     "NewRouter": "in_progress",
@@ -77,7 +132,9 @@
     "RegisterTenantRoutes": "in_progress",
     "RegisterMyInvitationRoutes": "in_progress",
     "RegisterSystemRoutes": "in_progress",
-    "RegisterChunkerDebugRoutes": "in_progress"
+    "RegisterChunkerDebugRoutes": "in_progress",
+    "RegisterKnowledgeTagRoutes": "in_progress",
+    "RegisterVectorStoreRoutes": "in_progress"
   },
   "files": {
     "internal/infrastructure/docparser/grpc_parser.go": "in_progress",
@@ -127,9 +184,49 @@
     "internal/infrastructure/docparser/engines.go": "in_progress",
     "internal/infrastructure/docparser/mineru_converter.go": "in_progress",
     "internal/infrastructure/docparser/mineru_cloud_converter.go": "in_progress",
-    "internal/infrastructure/docparser/paddleocr_vl_converter.go": "in_progress"
+    "internal/infrastructure/docparser/paddleocr_vl_converter.go": "in_progress",
+    "internal/application/repository/retriever/postgres/repository.go": "in_progress",
+    "internal/application/repository/retriever/postgres/move.go": "in_progress",
+    "internal/application/repository/knowledge_span_repo.go": "in_progress",
+    "internal/application/service/knowledge_span_tracker.go": "in_progress",
+    "internal/application/service/knowledge_process.go": "in_progress",
+    "internal/application/service/extract.go": "in_progress",
+    "internal/application/service/knowledge_auto_tag.go": "in_progress",
+    "internal/application/service/knowledge_post_process.go": "in_progress",
+    "internal/application/service/knowledgebase_profile.go": "in_progress",
+    "internal/application/repository/knowledgebase.go": "in_progress",
+    "internal/application/service/tag.go": "in_progress",
+    "internal/application/repository/chunk.go": "in_progress",
+    "internal/handler/tag.go": "in_progress",
+    "internal/application/repository/tag.go": "in_progress",
+    "internal/application/service/tag_access.go": "in_progress",
+    "internal/application/service/knowledge_delete.go": "in_progress",
+    "internal/application/service/knowledge_delete_plan.go": "in_progress",
+    "internal/handler/knowledgebase.go": "in_progress",
+    "internal/application/service/knowledgebase_search.go": "in_progress",
+    "internal/application/service/knowledgebase_search_fusion.go": "in_progress",
+    "internal/application/service/knowledgebase_search_results.go": "in_progress",
+    "internal/application/service/knowledgebase_search_shared.go": "in_progress",
+    "internal/application/service/knowledgebase_search_binding.go": "in_progress",
+    "internal/reranking/rerank.go": "in_progress"
   },
-  "tasks": {},
+  "tasks": {
+    "asynq:TypeDocumentProcess": "in_progress",
+    "asynq:TypeKnowledgePostProcess": "in_progress",
+    "asynq:TypeDataTableSummary": "in_progress",
+    "asynq:TypeSummaryGeneration": "in_progress",
+    "asynq:TypeQuestionGeneration": "in_progress",
+    "asynq:TypeChunkExtract": "in_progress",
+    "asynq:TypeKnowledgeAutoTag": "in_progress",
+    "asynq:TypeKnowledgeBaseProfile": "in_progress",
+    "asynq:TypeIndexDelete": "in_progress",
+    "asynq:TypeKnowledgeListDelete": "in_progress",
+    "asynq:TypeManualProcess": "in_progress",
+    "asynq:TypeImageMultimodal": "in_progress",
+    "asynq:TypeKnowledgeListReparse": "in_progress",
+    "asynq:TypeKnowledgeMove": "in_progress",
+    "asynq:TypeKBDelete": "in_progress"
+  },
   "note": "Human-maintained overrides. verified requires differential parity tests; bridge_only is not migrated.",
   "evidence": {
     "GET /health": "HealthController; KnowledgeBaseIntegrationTest publicHealthAndUnauthenticatedRejection matches Go literal response. Live Go comparison pending.",
@@ -174,9 +271,1071 @@
     "excel_full_checkpoint": "2026-10-13: completeisolatedcleanverify /tmp/weknora-java-excel-full-verify.log exit0,3088tests84classes/zeroFailErrorSkip. /tmp/weknora-java-excel-full-build/backend-java-0.1.0-SNAPSHOT.jar 62574215bytes;283Java packagepathvalid/noignored;licensesNFP/Excelize/Go/cppjieba/limonp/sqlitevec+locale table packaged.146actualbackendHTTP plusseparate10SystemprobeHTTP exit0. Currentjar defaultsingle/go each2uploads4jobs2EmbeddingHTTP withGoBLOB/Hikari1/vecFTS/sharedowner/actor passed retries0/0. Extra --office 3upload/7jobs integration FAILED: 6document+postprocesssucceeded,1datatable:summary dead No Java handler. IndependentrealDBcheck provescustomformat3.1400/sheetlocators/sourcehash/1embeddingrow/owner1foreignContributor audit;onlysourceprocessingproof,NOTfullOfficeuploadsuccess. Log /tmp/weknora-java-excel-packaged-source-inspection.log.61/420/1of482 noverified;fullGo replacement unfinished.",
     "oidc_checkpoint": "2026-10-13: 7 native sources + exact4publicGET AuthFilter/bridge; actualGo state94/config.LoadConfig52/productionSQLiteHTTP149 (151handler/232providerHTTP)/transport18 (42providerHTTP), plusSpringwiring2inclrealPGobjectadapter =315 JUnit;rootactualGo regenerated4fixtures thenfullverify3405/89/zeroFailErrorSkip. Productionjar OIDC26backendHTTP/8provider/1Go-bridge-probe passed withexisting/newpersonaluser,realBLOBprefs/storage/memberships/tokens/HMAC/cookie/plainreplayreject/manualcapturedGo-replayaccepted. Transport error suffixcategory,stateprivatetypederrcategory; Servletdisconnect/proxy/PG/fullguards/sharedTenantremaining. Fullscopeunchanged, routesin_progressonly.",
     "agent_config_blob_checkpoint": "2026-10-13: AuthRepository.string decodeGoUTF8 JDBCbyte[] minimalhelperfix;32 productionGoGORM-createdAgent BLOB grant/denial scenes1JUnitmethod rootRED old403vsGo200 thenGREEN. Includedfull3405; actualpackaged146HTTP sharedread fixture nowGoBLOBtypeofassert andgrant/revocation paths passed. PreserveString/null/other handling;Pgnotproven.",
-    "oidc_full_checkpoint": "2026-10-13: completeisolatedcleanverify /tmp/weknora-java-oidc-full-verify.log exit0,3405tests89classes zeroFailErrorSkip;jar62628026bytes /tmp/weknora-java-oidc-full-build/backend-java-0.1.0-SNAPSHOT.jar. Existing146 backendHTTP +26OIDC backendHTTP =172;8OIDCprovider/1Go-bridge-probe/10SystemreaderHTTP separate. Single/go6pool each2uploads4jobs2EmbeddingHTTP,Hikari1/BLOB/sharedowneractor passed readretry0/0. 65in_progress416not_started1healthof482;no verifiedroute/fullbackendclaim. DataTableSummary stillmissingformalhandler;root/tmpactualGo DuckDB v1.5.2 core8a5851971f/JavaJDBC1.5.2.0 matching10CSV/XLSXlocalfile/schema/sample/cleanupcases green stageonly,notJUnit/POM/main;models/image/sharedtenantstagesexcluded."
+    "oidc_full_checkpoint": "2026-10-13: completeisolatedcleanverify /tmp/weknora-java-oidc-full-verify.log exit0,3405tests89classes zeroFailErrorSkip;jar62628026bytes /tmp/weknora-java-oidc-full-build/backend-java-0.1.0-SNAPSHOT.jar. Existing146 backendHTTP +26OIDC backendHTTP =172;8OIDCprovider/1Go-bridge-probe/10SystemreaderHTTP separate. Single/go6pool each2uploads4jobs2EmbeddingHTTP,Hikari1/BLOB/sharedowneractor passed readretry0/0. 65in_progress416not_started1healthof482;no verifiedroute/fullbackendclaim. DataTableSummary stillmissingformalhandler;root/tmpactualGo DuckDB v1.5.2 core8a5851971f/JavaJDBC1.5.2.0 matching10CSV/XLSXlocalfile/schema/sample/cleanupcases green stageonly,notJUnit/POM/main;models/image/sharedtenantstagesexcluded.",
+    "postgres_index_native_checkpoint": "2026-10-14: Production PostgreSQL/ParadeDB index adapter wired to processing IndexWriter. Fresh owned PostgreSQL17/ParadeDB0.22.6 isolated Docker replay actual Go repository against Java Hikari pool1: 16 mutation checkpoints,2368 strict queries,metadata/halfvec/order/score/storage/error SQLSTATE all matched; /tmp/weknora-java-postgres-isolated-replay.log. Vector expression reuses one bound value and float4 score widens through getFloat as Go. Public RAG, PostgreSQL whole upload/HTTP,large HNSW actual plans,old GUC faults,external bound adapters remain pending; no full parity or cutover claim.",
+    "native_task_backend_boundary": "2026-10-15: immutable6511-test/135class jar includes10/22 native Asynq handler foundations;20 task-enabled samejar single/go process checks plus2 synchronousHybrid HTTP checks actualexit0. First kb-profile/go startup Hikari total0 timeout retained; sameparams standalone retry actual0, cause notestablished. Remaining12 task types, all22 complete synchronous/Redisbacklog/drain/cutover remain pending. No whole route verified.",
+    "native_processing_trace_checkpoint": "2026-10-14: Root/stage tracer wired to production document/postprocess handlers, preserving Go initial worker fallback attempt and local payload propagation (durable initial payload unchanged). 181 focused tests passed (11 real Spring upload/worker/failure/cancel/retry/ownership pipelines plus157 Go HTTP/write/tracker cases and13 prior document/upload tests); final11 rerun passed. Fresh packaged Java process bridge=false single/Hikari1 owner/shared2uploads4jobs2modelHTTP completed with native persisted spans/stages/index-status checks; /tmp/weknora-java-processing-span-pipeline-packaged.log. Chunk/embedding end after actual atomic publish commit differs from Go earlier chunk checkpoint. Enhanced handlers,stall/backlog/restarts/PostgreSQL trace writes still pending; routes in_progress only.",
+    "native_summary_generation_checkpoint": "2026-10-15: Summary business cancellation during Chat fixed in Go summarySourceChanged, actual Go44 oracle regenerated and all44 strict HTTP+SQL comparisons pass. Java business cancellation ACK preserves task/lease/interrupt fencing. Focused63 tests in4classes zero failure/error/skip; /tmp/weknora-java-summary-cancel-alignment.log. Original unsafe Go oracle retained /tmp/weknora-go-summary-generation-before-cancel-fix.json. Earlier103classes/4845 full and packaged artifact predate this fix; fresh whole-suite/package verification required. Summary atomic counter/enqueue and SQL drain receipts still differ from Go Asynq; KB profile/public refresh/other enrichments remain pending.",
+    "postgres_processing_checkpoint": "2026-10-14: Isolated disposable ParadeDB full115Go schema migrations plus explicit Java task schema, Hikari1,bridge=false:4native own/shared uploads,10durable jobs,6embedding HTTP,2chat HTTP, actualhalfvec/profileJSONB/summary/counters/auditactor/spans/stages/index-status HTTP passed; /tmp/weknora-java-postgres-isolated-processing.log. Java native acceptance,not full Go document-pipeline differential; table/otherformats/failure/cancellation/largeHNSW/productionrollout remain unverified. Final explicit-schema replay passed /tmp/weknora-java-postgres-final-processing.log;disposablecontainer stopped.",
+    "table_worker_cleanup_checkpoint": "2026-10-14: Go+Java table document cleanup now preserves same-attempt table_summary/table_column regardless of queue order; Go reparse already synchronously removes previous attempt before enqueue. Actual Go repository cleanup/reparse regression passed plus56Java table/doc/SQLite tests. Production main loads DuckDB JNI beforeSpring/SQLiteworkers;late native load caused reproduced NOMEM/nativecrash. Final packaged single Office acceptance passed3uploads7jobs4embedding2chat/no crash with preservedtablechunks andindices, /tmp/weknora-java-final-office-single.log;go-topology also passed /tmp/weknora-java-final-office-go.log;strict7jobs and actualtablechunks/index/source locators remained present.",
+    "native_cancel_parse_checkpoint": "2026-10-15: Native optin cancel-parse bridge=false, owner/shared Editor+creator/admin+API ingest/KB scope, transactional status/counter, retained chunks/indexes, flat latest-span close, owner-scoped SQL task cancel7types with500keysetpages, Wiki ingest scrub/retract preserved and originalactor audit.54actual Go service SQL/tracker/audit/pending cases plus8Spring HTTP/Hikari1 integration PASS62/no failures/errors/skips; /tmp/weknora-java-cancel-parse-final-test.log. PostgreSQL full115migrations8uploads24jobs14embed8chat passed, including2actualHTTPsummary cancellation; /tmp/weknora-java-postgres-enrichment-final.log. Stronger status-CAS/ownerfences and nativequeue differGo. Packaged restart/Redis/fullrouter differential pending; route in_progress.",
+    "native_auto_tag": "2026-10-15: 52 actualGo service SQL/HTTP+8 actualGo Post fanout+6 productionSpring PASS66; nativelease/cancel/newattempt/chunkbinding guards, typed payload preserves1.0; defaultfull5657/116 PASS andsameimmutablejar single/go each2uploads10jobs6embed6chat/tagrelations/ownerActor/counter PASS. PostgreSQL115migrations10uploads34jobs32success2cancel20embed14chat PASS. Public tag CRUD and full queue/sync modes pending.",
+    "native_graph_extraction": "2026-10-15:42 actualAsynq+HTTP+SQL+Neo4j/APOC Go worker,18 actualGo Post fanouts,521 numeric,10 Spring pipeline,8 Search/Delete/property and2schema+1disabledboot PASS. Graph scoped SearchNode/DelGraph/old graph reparse cleanup/custom percent prompt fixes included immutable5757/121 jar and2graph packaged runs. PG+Neo4j5uploads19jobs PASS. Public graph RAG/session, complete deletion/move/housekeeping and queue cutover pending.",
+    "native_graph": "2026-10-15:42 actualAsynq+HTTP+SQL+Neo4j/APOC Go worker,18 actualGo Post fanouts,521 numeric,10 Spring pipeline,8 Search/Delete/property and2schema+1disabledboot PASS. Graph scoped SearchNode/DelGraph/old graph reparse cleanup/custom percent prompt fixes included immutable5757/121 jar and2graph packaged runs. PG+Neo4j5uploads19jobs PASS. Public graph RAG/session, complete deletion/move/housekeeping and queue cutover pending.",
+    "native_kb_profile": "2026-10-15: actual production Go service SQL/model HTTP42 oracle, native aggregate andstrict HTTP/storedprofile/error decision PASS42. Actual midChat owner mutation leaked Go generated profile into newowner; SQL tenant predicate +deleted/missing guard corrected in Go andnative, unsafe original42 retained /tmp/weknora-go-kb-profile-before-fences.json; Go repository/service focused PASS. Native production bean registered, triggers/public force/durable debounce/live pipeline pending, not in immutable5657 jar.",
+    "native_knowledge_base_profile": "2026-10-15:52 actualGo service SQL/modelHTTP+23 actualGo public handler/security/language HTTP+13 producer+10 productionSpring+2Go promptconfig tests PASS100/5 classes. Native queued/public shared-owner generation,Post/Summary/KB transition after commit,real AuthFilter manage_kbs/allowlist/shared-viewer,aggregate/cache/force/failure retention/lease-owner-cancel fences. Go midChat owner-write bug corrected; original unsafe oracle retained. Included immutable5757/121 jar and2packaged combined-profile runs each2uploads11jobs6embed9chat; delayed queue and2forced own/shared sync calls verified. FinalPG115migrations10uploads35jobs33success2cancel20embed17chat exit0. No whole route verified.",
+    "profile_graph_checkpoint": "2026-10-15:/tmp/weknora-java-profile-graph-verified.log clean verify exit0,121classes5757tests0fail/error/skip;152473581bytejar /tmp/weknora-java-profile-graph-verified-build/. Samejar14single/go runs:office,summary,question,cancel,auto-tag,graph,kb-profile all actualexit0; Hikari1 bridgefalse fresh own/shared fixtures; PG /tmp/weknora-java-postgres-profile-graph-final.log exit0 10uploads35jobs20embed17chat andGraph PG /tmp/weknora-java-postgres-graph-search-cleanup-test.log exit0 5uploads19jobs9embed9chat. Original failed full test(dirty task fixture) andpackage(asserted available_at after settle) retained; corrected test/runner then fresh PASS. Docker/Linux/fullproduction notvalidated.",
+    "native_index_delete": "2026-10-15:next batch41focused/3classes actualexit0 (27actualGo SQLite metadata/vec0/FTS worker+1lease/cancel+3Spring Hikari1+9actualGo FAQ/tag->Asynq producer+1snapshot/freshID/owner). Original Go unsafe BLOB oracle retained; corrected Go owner+KB tombstone scope. PG115migrations10uploads38jobs36success2cancel20embed17chat actualexit0. Earlier31-test candidate clean package exit0 152516038bytes andsingle/go cleanup packaged runs each2uploads7successjobs2embed0chat actualexit0. PublicTag CRUD/lifecycle,bound/otherengines/fullcase/drain pending; stable5757 jar predates batch. New fullcheckpoint pending GraphQuery completion. Included latest immutable5798/124 jar with producer helper; samejar single/go packaged cleanup bothactualexit0, logs /tmp/weknora-java-index-rag-package-index-delete-{single,go}.log. Next Tag public lifecycle validation separate.",
+    "index_rag_checkpoint": "2026-10-15: /tmp/weknora-java-index-rag-verified.log fresh clean verify actual exit0; 124 classes / 5798 tests / zero failures/errors/skips. Immutable jar 152526858 bytes /tmp/weknora-java-index-rag-verified-build/backend-java-0.1.0-SNAPSHOT.jar SHA256 89108a0433cd30df3cae6cde1650e29cb89652cf35ad2355fde5a3b10ac5be96. Same jar all16 single/go isolated packaged flows actualexit0 (14manifest /tmp/weknora-java-index-rag-package-manifest.json plus2Graph /tmp/weknora-java-index-rag-graph-package-{single,go}.log), Hikari1 bridgefalse actual owner/shared SQL/index/model/Neo4j. Includes9 native handlers and GraphQuery production stage foundation; publicRAG/session/SSE/wholemigration notcomplete. Final fullGo actualexit0 /tmp/weknora-go-full-graph-query-parallel-final.log after authorized parallel ctor fix; 16 actualGo parallel oracle scenes PASS. Tag nextbatch excluded from this immutablejar.",
+    "native_tag_crud": "2026-10-15: next batch76 actual Go public handler/role+KB+API capability middleware, real SQL and admitted Asynq envelopes exported losslessly with UseNumber. Native MVC/SQL/low producer differential76 +10 prior producer +63 read authorization regression actualexit0 (149/3 classes), /tmp/weknora-java-tag-second-test.log. Five real AuthFilter JWT/API key/Hikari1/public mutation -> low queue -> actual worker physical cleanup cases also PASS; combined154/4 classes actualexit0 /tmp/weknora-java-tag-pipeline-test.log. Document tag forced/content-only knowledge-list deletion explicit unmigrated; PG/fullmalformed/races/bridge cutover pending. Not in immutable5798 jar, no routeverified. PostgreSQL actualGo76 + native76 over115realGo migrations/Hikari1 PASS actualexit0; /tmp/weknora-java-postgres-tag-second.log; artifact weknora-postgres-tag-9nflqnk2. First PG15 DTO failures were test seed UTC-vs-JDBC-session ambiguity; fixture now uses typed Timestamp UTC; production timestamp helper unchanged, original qsre7jw7 logs preserved. Final subsequent batch supersedes document-tag pending statement: native document-tag force/content_only producer and knowledge:list_delete foundation implemented. 167 tests/6 classes actualexit0 /tmp/weknora-java-knowledge-delete-audit-final.log, including8 real JWT/API/Hikari1 pipelines. Final PostgreSQL public76/document12 business-audit strict replays actualexit0 /tmp/weknora-java-postgres-tag-{public,documents}-audit-second.log; artifacts 1kxvoaw2/le7sxtb9. No whole-route verification/cutover.",
+    "knowledge_list_delete_checkpoint": "2026-10-15 next batch outside immutable5798 jar: native knowledge:list_delete + public document-tag force/content_only producer; actual Go36 worker SQL/vec/FTS/local/resources scenes +12 public Go tag/SQL/Asynq producer scenes. Focus actualexit0 167tests/6classes (37workerinclNativelease,12publicdocTag,76Tagregression,8productionJWT/Hikari1Tagpipeline,28IndexDelete,6storage); /tmp/weknora-java-knowledge-delete-audit-final.log. Production PG full115migrations/Hikari1 actualexit0 /tmp/weknora-java-postgres-document-delete.log,10uploads40jobs38success2cancel20embedding17chat; Python process loaded old38-job print before runner edit, current IT asserts40 and two public docTag cleanup jobs. Candidate immutablejar dd6e39ef3d0e43581c01c62ee6556ca1b3705946f717fd49b8320a233bbc4e4c (earlier164tests,excludes2resource additions and final audit/API fallback changes) actualpackaged bothsingle/go2uploads6jobs2embedding0chat /tmp/weknora-java-document-delete-candidate-{single,go}.log. Wholebatchfullverification notyet; fullWiki/cloud/boundexternal/mixedmodel/concurrentfail/restart/deleteAPI/cutover pending. Nativelease/statusfences strongerGo; errorretry/state/categories verified,workererrorbytewording notclaimed. Final PG76+12 public tag scenes include complete business audit fields and passed115Go migrations/Hikari1; logs /tmp/weknora-java-postgres-tag-{public,documents}-audit-second.log. Synthetic API actor preserved for synchronous Tag audit, omitted by async TaskInitiator while keyID/name retained; actual home-user API auth behavior unchanged. Included final6371-test jar/10nativehandlers after source freeze;18 task-enabled samejar runs include2publicdocumentTag cleanup pipelines, plus2synchronousHybrid runs. Prior164candidate limitation is historical; finaljar covers167batch and allcurrentaudit/resource fixtures. Complete publicDeleteAPI and transfer-operation metadata combinations remain next slice.",
+    "public_hybrid_search_checkpoint": "2026-10-15 subsequent batch: native GET/POST hybrid-search, full typed binder, real model/index/context/hydration/resource URL and owner-group fusion wiring. 143 actual Go public HTTP/SQL/model scenes plus288 exact rawbit FMA cases,6 actual Spring auth chains,2 real SQLite JDBC deadline/cancel cases: focused442/6classes0failure/error/skip actualexit0 /tmp/weknora-java-hybrid-final143.log. Base428/12 and metadata80 regressions included separate suites. Actual PG143 public scenes over115Go migrations/Hikari1 passed /tmp/weknora-java-postgres-hybrid-final143.log, artifact weknora-postgres-hybrid-o9rj1b2g. Actual Go full suite -tags sqlite_fts5 exit0 /tmp/weknora-go-full-public-hybrid-final.log. Authorized Go scope binding/tie ordering and explicit two-layer FMA fixes replayed from real source; before evidence retained. Fresh full build and final samejar packaged checks pending; outside immutable5798 jar. Full session/chat/SSE/RAG, external engines, bridge/cutover remain pending. Included immutable6371-test jar and2 real synchronousHTTP process runs; multiowner/store scheduling serial vs Go concurrent remains an explicit next migration slice. Subsequent bounded-concurrent slice supersedes serial gap:509tests/8classesactual0, ordinaryPG143actual0, actualGo blocked6 xNativepool4/2/1=18strictcasesactual0 max4groups/siblingcancel/poolborrowbudget/samebackendPIDreuse. Singlecaller deadline/cancel Go500 vs multi retrieval400code2201 preserved; originalsingle503/1044ms mismatch retained. Included final6511immutablejar +2 synchronoussamejar HTTP actual0; Servletdisconnect/fullboundexternal/sessionSSE remainpending.",
+    "public_search_delete_full_checkpoint": "2026-10-15: fresh clean verify actualexit0 /tmp/weknora-java-public-search-delete-verified.log;132classes6371tests zeroFailuresErrorsSkips, independently checked XML. Frozen673 main/test/pom files unchanged through packaging. Immutablejar /tmp/weknora-java-public-search-delete-verified-build/backend-java-0.1.0-SNAPSHOT.jar152634621bytes SHA2560c4f3f8a84ee6a7b014898ef54a6c3d98597a3f8260f00797de23566095fd00a. Root16 task pipeline runs actualexit0 manifest /tmp/weknora-java-public-search-delete-package-manifest.json plusGraph2 actualexit0 /tmp/weknora-java-public-search-delete-graph-package-{single,go}.log:18 task-enabled runs of9modes single/go. Hybrid synchronous(tasksfalse) HTTP runs2 actualexit0 /tmp/weknora-java-public-search-delete-hybrid-package-{single,go}.log each11HTTP/5model/4physicalentries. Total20 samejar process acceptances, Hikari1 bridgefalse fresh owned SQL/sourcefiles/actualsharedpermissions/modelHTTP/Neo4j. Includes10 nativehandlers,Tag/knowledge:list_delete/publichybrid foundation. PG143hybrid and88publicTag strict actualGo comparisons; PG40task processing acceptance. Go full -tags sqlite_fts5 exit0 /tmp/weknora-go-full-public-hybrid-final.log. Known publicHybrid multiowner/store sequential scheduling vs Go concurrent remains pending alongside fullDeleteAPI/Wiki/cloud/boundengines/session/chat/SSE/Agent/Redisbacklog/fullcutover;482routes77in_progress404not_started1health0verified. Whole Go migration notcomplete.",
+    "public_document_delete_checkpoint": "2026-10-15 next batch outside6371jar: native single/batch/clear admission and shared typed transfer guard. ActualGo123SQLite public handler/middleware/SQL/Redis-Asynq scenes +46worker scene oracles actualexit0. Native focused378/9classeszeroFailErrorSkip actualexit0 /tmp/weknora-java-public-delete-scope.log (123public,47worker,3realSpringJWT/API/Hikari1 actualbytes/index/quota/audit,Tag and write/role/read regressions). EarlierPG114 actualexit0 all115migrations/Hikari1 /tmp/weknora-java-postgres-public-delete.log. NewPG123 first realSQLSTATE22021 NULkbID Go500/Native503 difference corrected specifically at batch SQLlookup, corrected123 replay PASS actualexit0 /tmp/weknora-java-postgres-public-delete-scope-second.log, artifact fs66j_v8, independently XML123zeroFailErrorSkip. ExpandedPG42jobs40success2cancel10uploads20embedding17chat PASS actualexit0 /tmp/weknora-java-postgres-public-delete-pipeline.log, artifact w0ije67t independently XML1zeroFailErrorSkip. Newpublicsingle/batch prove actualbytes/quota/audit, their physicalindexes previouslycleaned; existingDocTagPGjob independentlyproves halfvec deletion. PGemptyclear only; positiveclear physicalproof SQLiteSpring. Finalfull/packagepending. Transfer requiresoperationmove+phasemoving; copy/phaseonly/null/duplicate/folded/error cases match actualGo. Source IDs preserved; API key fullAccess stillKBscope restricted, allowlist lookup GoTrim butSQL originalbytes. Wiki/cloud/bound/fullrace/restart/sync/backlog/cutover pending; no verifiedroute. Included final6511/135 immutablejar andpublic-deletion samejar single/go actual0 each2uploads6jobs2embedding0chat; all22 finalprocesschecks actual0 afterone retained startup retry. FullWiki/cloud/bound/cutover stillnotverified.",
+    "public_delete_concurrency_full_checkpoint": "2026-10-15: fresh clean verify actualexit0 /tmp/weknora-java-public-delete-concurrency-verified-second.log; independently XML135classes6511tests zeroFailuresErrorsSkips. Immutablejar /tmp/weknora-java-public-delete-concurrency-verified-build/backend-java-0.1.0-SNAPSHOT.jar 152658608bytes SHA256 e30e96ea33105cf4492aafe5aa3bc42c919fdc80d7e6579958999b168af83cdd. Frozen686main/test/pom files unchanged through package. Final22samejar process checks actualexit0:20task-enabled single/go of10modes, plus2synchronousHybrid(tasksfalse), finalmanifest /tmp/weknora-java-public-delete-concurrency-package-final-manifest.json. Root18firstbatch17pass1startupfailure; kb-profile/go first Hikari total0 2s borrow timedout, samejar/sameparams standalone rerun actual0 /tmp/weknora-java-public-delete-concurrency-package-kb-profile-go-second.log, failure retained and root cause notestablished. Graph2 actual0 each2uploads10jobs6embedding6chat; Hybrid2 actual0 each11HTTP5model4physicalentries. Newpublicsingle/sharedbatch delete2sourceuploads via low durable jobs, actualphysicalvecFTS/quota/audit/taskID; positiveclearSpringproof, packagedemptyclear noextraTask. PG123 publicDelete andPG42jobpipeline actual0, PG143ordinaryHybrid andactualGo6blocked xHikari4/2/1=18 strict HTTP/provider/SQL comparisons actual0; samebackendPID reusedaftercancel andmax4realblockedgroups. Go production source unchanged sincepreviousfullGo -tags sqlite_fts5 actual0. Includes10/22nativehandler foundations;482routes80in_progress401not_started1health0verified. FullWiki/cloud/boundexternalengine,remaining12tasks/fullsync/Redisbacklog/sessionchatSSEAgent/allotherGo routes andcutover pending; wholemigrationnotcomplete.",
+    "chunk_lifecycle_checkpoint": "2026-10-15 outsideimmutable6511jar: native single/all chunk tombstones and revision reads; formal actualGo117 SQLite export actualexit0 matches staged oracle byte-independent JSON; native117HTTP+3realSpring JWT/API/Hikari1 uploadedsource/quota/physicalsqlitevecFTS retention PASS. PG actualGo117+native117 actualexit0 all115migrations/Hikari1 /tmp/weknora-java-postgres-chunk-third.log artifact hzpdt9qh independentlyXML117zeroFailuresErrorsSkips. FirstPG114pass3diagnosticfail artifact qoopgz7k preserved, corrected via real PSQLException severity/message/SQLSTATE; second uzw3u7hg compilefail runtime dependency corrected tocompile withoutversionchange. Deletes retain revisions/childsingle/index/source/quota andenqueue no cleanup, bulk exactownerDocumentpredicate; injectedidentity notGoauthproof,PG physicalGIN sentinel notfullParadeDB/graph proof. SharedAgent grant reused existingReadAuth, no wholeGoauth/relocationrace/cloud/bound/backlog/cutover claim. Focused current clean/full/package pending, bridgewhitelist unchanged,3routesin_progress0newverified. Currentfresh focused402/8zeroFailuresErrorsSkips actualexit0 /tmp/weknora-java-chunk-lifecycle-focused-second.log; prior396pass6Springstartup errors duecompilebeforeManualConfigland preserved. Candidatefixed702source snapshot builtseparately; full/package pending. Fixed702source+actualproto candidate packageactual0, samejar SHA2564e3597cdab5dcd0ba7d1842f86249b2f88ae2ccefdd225ff7f43debc586f1ead size152691156; --chunk-lifecycle single/go eachactual0/2uploads4jobs2embedding0chat/noCleanupJob, originalactor/owner/resources/quota/realphysicalvecFTS/revisions retained. proof /tmp/weknora-java-chunk-candidate-source-proof.json. Isolated firstcopy protoomission compilefail retained thenunchangedactualprotoadded. Candidatepackage usedskipTests, focused402 workspacepreviouspassed; notfreshwholeverification. FullnewsharedbatchbuildstillpendingManualworker.",
+    "chunk_lifecycle_production_postgres": {
+      "previous": "2026-10-15 outsideimmutable6511jar: native single/all chunk tombstones and revision reads; formal actualGo117 SQLite export actualexit0 matches staged oracle byte-independent JSON; native117HTTP+3realSpring JWT/API/Hikari1 uploadedsource/quota/physicalsqlitevecFTS retention PASS. PG actualGo117+native117 actualexit0 all115migrations/Hikari1 /tmp/weknora-java-postgres-chunk-third.log artifact hzpdt9qh independentlyXML117zeroFailuresErrorsSkips. FirstPG114pass3diagnosticfail artifact qoopgz7k preserved, corrected via real PSQLException severity/message/SQLSTATE; second uzw3u7hg compilefail runtime dependency corrected tocompile withoutversionchange. Deletes retain revisions/childsingle/index/source/quota andenqueue no cleanup, bulk exactownerDocumentpredicate; injectedidentity notGoauthproof,PG physicalGIN sentinel notfullParadeDB/graph proof. SharedAgent grant reused existingReadAuth, no wholeGoauth/relocationrace/cloud/bound/backlog/cutover claim. Focused current clean/full/package pending, bridgewhitelist unchanged,3routesin_progress0newverified. Currentfresh focused402/8zeroFailuresErrorsSkips actualexit0 /tmp/weknora-java-chunk-lifecycle-focused-second.log; prior396pass6Springstartup errors duecompilebeforeManualConfigland preserved. Candidatefixed702source snapshot builtseparately; full/package pending. Fixed702source+actualproto candidate packageactual0, samejar SHA2564e3597cdab5dcd0ba7d1842f86249b2f88ae2ccefdd225ff7f43debc586f1ead size152691156; --chunk-lifecycle single/go eachactual0/2uploads4jobs2embedding0chat/noCleanupJob, originalactor/owner/resources/quota/realphysicalvecFTS/revisions retained. proof /tmp/weknora-java-chunk-candidate-source-proof.json. Isolated firstcopy protoomission compilefail retained thenunchangedactualprotoadded. Candidatepackage usedskipTests, focused402 workspacepreviouspassed; notfreshwholeverification. FullnewsharedbatchbuildstillpendingManualworker.",
+      "production_postgres_pipeline": {
+        "exit_code": 0,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-processing-z8y09pz3",
+        "log": "/tmp/weknora-java-postgres-chunk-pipeline.log",
+        "uploads": 10,
+        "jobs": 42,
+        "successful_jobs": 40,
+        "canceled_jobs": 2,
+        "embedding_http": 20,
+        "chat_http": 17,
+        "scope": "public own/shared revision/delete HTTP retain production ParadeDB BM25 and halfvec rows/query results, source bytes/quota/revisions/task counts; subsequent scoped index cleanup; full cutover/concurrency pending"
+      }
+    },
+    "native_folder_checkpoint": {
+      "routes": 3,
+      "status": "in_progress",
+      "actual_go_sqlite_export": 151,
+      "focused": {
+        "tests": 263,
+        "classes": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "exit_code": 0,
+        "build": "/tmp/weknora-java-folder-focused-fourth-build",
+        "log": "/tmp/weknora-java-folder-focused-fourth.log"
+      },
+      "postgres": {
+        "cases": 151,
+        "go_migrations": 115,
+        "pool_size": 1,
+        "exit_code": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-folder-yo0e4toz",
+        "log": "/tmp/weknora-java-postgres-folder-second.log"
+      },
+      "postgres_pipeline": {
+        "tests": 1,
+        "exit_code": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-processing-m1b5up13",
+        "log": "/tmp/weknora-java-postgres-folder-pipeline.log",
+        "uploads": 10,
+        "jobs": 42,
+        "successful_jobs": 40,
+        "canceled_jobs": 2,
+        "embedding_http": 20,
+        "chat_http": 17,
+        "scope": "public own/shared tree, creator-Viewer subtree rename, batch refile preserve actual source bytes, production halfvec/BM25 rows and query results, chunks/quota/no new tasks; chunk tombstone and index cleanup afterward"
+      },
+      "failures_retained": [
+        "/tmp/weknora-java-folder-focused.log (test compilation generic assertThat overload)",
+        "/tmp/weknora-java-folder-focused-second.log (144 Go nil audit export vs Java empty collection projections)",
+        "/tmp/weknora-java-folder-focused-third.log (handler ownership extra audit + Go nil empty-document projection)",
+        "/tmp/weknora-java-postgres-folder.log (same two findings)"
+      ],
+      "full_shared_verify": "pending manual/image work; outside immutable 6511-test checkpoint",
+      "packaged": {
+        "source_files_frozen": 1060,
+        "jar": {
+          "path": "/tmp/weknora-java-folder-candidate-build/backend-java-0.1.0-SNAPSHOT.jar",
+          "size": 152729140,
+          "sha256": "3e3e4b4f1c34f520744b0802db129e2e335396ddd4d9a613194ac62e254ff133",
+          "package_exit_code": 0,
+          "full_verify": false
+        },
+        "proof": "/tmp/weknora-java-folder-candidate-source-proof.json",
+        "topologies": {
+          "single": {
+            "exit_code": 0,
+            "log": "/tmp/weknora-java-folder-candidate-single.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "single",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 4,
+              "embedding_calls": 2,
+              "chat_calls": 0,
+              "office_custom_format": false,
+              "summary_generation": false,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-43kym8rs/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-43kym8rs/test.db"
+            }
+          },
+          "go": {
+            "exit_code": 0,
+            "log": "/tmp/weknora-java-folder-candidate-go.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "go",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 4,
+              "embedding_calls": 2,
+              "chat_calls": 0,
+              "office_custom_format": false,
+              "summary_generation": false,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-ers6rsjj/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-ers6rsjj/test.db"
+            }
+          }
+        },
+        "full_shared_verify": false
+      }
+    },
+    "native_manual_incremental_checkpoint": {
+      "routes": 2,
+      "task": "manual:process",
+      "status": "in_progress",
+      "focused": {
+        "tests": 143,
+        "classes": 2,
+        "public_http_sql_asynq_cases": 98,
+        "worker_cases": 45,
+        "exit_code": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "build": "/tmp/weknora-java-manual-first143-final-build",
+        "log": "/tmp/weknora-java-manual-first143-final.log",
+        "independent_root_xml_read": true
+      },
+      "public_postgres": {
+        "cases": 98,
+        "go_migrations": 115,
+        "pool_size": 1,
+        "exit_code": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-manual-oqvx3w9c",
+        "log": "/tmp/weknora-java-postgres-manual-public-second.log",
+        "independent_root_xml_read": true
+      },
+      "limits": "Worker image/VLM/resource handling, production Spring and PG worker, full fresh verify, process/restart/cutover pending. Raw unsafe Go worker and nondeterministic batch order retained; manual-only source/owner guards and ordered batches repaired with Go fixtures. Native tasks do not consume Redis/Asynq backlog.",
+      "root_independent_additional": {
+        "focused": {
+          "tests": 204,
+          "classes": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "agent_actual_exit_code": 0,
+          "build": "/tmp/weknora-java-manual-images-worker-second-build"
+        },
+        "spring": {
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "agent_actual_exit_code": 0,
+          "build": "/tmp/weknora-java-manual-production-third-build"
+        },
+        "postgres_worker": {
+          "cases": 45,
+          "go_migrations": 115,
+          "pool_size": 1,
+          "agent_actual_exit_code": 0,
+          "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-manual-i1g8t66y"
+        },
+        "limits": "default pool5 concurrency, multimodal/VLM, full source/build/package acceptance still pending",
+        "current_manual_monitor": {
+          "log": "/tmp/weknora-java-manual-monitor.log",
+          "reports": "/tmp/weknora-java-manual-monitor-build/surefire-reports",
+          "tests": 217,
+          "suites": 6,
+          "failures": 0,
+          "errors": 0,
+          "checks": "98 public+45 worker+57 parser+4 raw task+4 actual Go pool/concurrency+9 production Spring; VLM still gated"
+        }
+      }
+    },
+    "native_knowledge_update_checkpoint": {
+      "routes": 1,
+      "status": "in_progress",
+      "actual_go_sqlite_export": 112,
+      "actual_go_export_log": "/tmp/weknora-go-update-expanded112-third.log",
+      "focused": {
+        "tests": 115,
+        "classes": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "exit_code": 0,
+        "build": "/tmp/weknora-java-update-pipeline-third-build",
+        "log": "/tmp/weknora-java-update-pipeline-third.log"
+      },
+      "foundation_regressions": {
+        "tests": 623,
+        "classes": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-update-pipeline-second.log",
+        "aggregate_exit_code": 1,
+        "reason": "585 content reads + 38 write auth passed; same run has one new unpaired RawMessage test failure retained and corrected before latest 115"
+      },
+      "postgres": {
+        "cases": 112,
+        "go_migrations": 115,
+        "pool_size": 1,
+        "exit_code": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-update-bvn5khmc",
+        "log": "/tmp/weknora-java-postgres-update-third.log"
+      },
+      "postgres_pipeline": {
+        "tests": 1,
+        "exit_code": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-processing-silefky_",
+        "log": "/tmp/weknora-java-postgres-update-pipeline-third.log",
+        "uploads": 10,
+        "jobs": 44,
+        "successful_jobs": 42,
+        "canceled_jobs": 2,
+        "embedding_http": 22,
+        "chat_http": 19
+      },
+      "packaged": {
+        "proof": "/tmp/weknora-java-update-candidate-source-proof.json",
+        "source_files_frozen": 1075,
+        "jar": {
+          "path": "/tmp/weknora-java-update-candidate-build/backend-java-0.1.0-SNAPSHOT.jar",
+          "sha256": "7708363c7d9c4eef2448637cb307cbb5d46d9f27a1889ddbdd1df2fb26300a30",
+          "size": 152772323,
+          "package_exit_code": 0,
+          "full_verify": false
+        },
+        "topologies": {
+          "single": {
+            "exit_code": 0,
+            "log": "/tmp/weknora-java-update-candidate-single.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "single",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 8,
+              "embedding_calls": 6,
+              "chat_calls": 4,
+              "office_custom_format": false,
+              "summary_generation": true,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": false,
+              "update_knowledge": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-ax63qpb4/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-ax63qpb4/test.db"
+            }
+          },
+          "go": {
+            "exit_code": 0,
+            "log": "/tmp/weknora-java-update-candidate-go.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "go",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 8,
+              "embedding_calls": 6,
+              "chat_calls": 4,
+              "office_custom_format": false,
+              "summary_generation": true,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": false,
+              "update_knowledge": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-qh2_6g1_/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-qh2_6g1_/test.db"
+            }
+          }
+        }
+      },
+      "failures_retained": [
+        "/tmp/weknora-java-update-first.log (45 reloaded DTO numeric SQL NULL file_size errors; actual Go requires zero)",
+        "/tmp/weknora-java-update-pipeline-first.log (fixture duplicate source; overly broad summary index retention predicate)",
+        "/tmp/weknora-java-update-pipeline-second.log (one escaped unpaired raw surrogate; all 623 foundation cases passed)",
+        "/tmp/weknora-go-update-expanded112-second.log (fixture seeded forbidden SQL NULL custom_metadata; no production/source expectation changed)",
+        "/tmp/weknora-java-postgres-update-pipeline-first.log and second.log (intermediate task totals omitted two newly added real refresh jobs)"
+      ],
+      "limits": [
+        "outside immutable 6511 full checkpoint; shared clean verify pending",
+        "no public regenerate-summary implementation claimed",
+        "bound/external stores, lifecycle relocation, revocation/racing writes, live Redis/Lite cutover and Langfuse tracing still pending",
+        "Go unordered invalid metadata map first-error order is not proven deterministic",
+        "metadata raw JSON numerical precision and SQL bytes retained; only valid dynamic updated_at and Go encoding/json surrogate decoding normalized in differential"
+      ]
+    },
+    "native_chunk_edit_checkpoint": {
+      "scope": "Native versioned chunk edit/revert implementation in progress; no full replacement or verified route claim",
+      "sqlite_original_124": {
+        "actual_go_export": "/tmp/weknora-go-chunk-edit-vector124-third.json",
+        "go_log": "/tmp/weknora-go-chunk-edit-vector124-third.log",
+        "actual_go_exit": 0,
+        "java_log": "/tmp/weknora-java-chunk-edit-fifth.log",
+        "java_reports": "/tmp/weknora-java-chunk-edit-fifth-build/surefire-reports",
+        "java_exit": 0,
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "checks": [
+          "complete HTTP binding/status/DTO",
+          "current chunk rows and immutable revision snapshots",
+          "real SQLite vec/FTS source metadata and raw float32 bits bound to each source/type",
+          "actual model HTTP requests including count/options and per-batch input multiset",
+          "document summary state and independent FTS retention"
+        ],
+        "normalization": "Only valid dynamic timestamps and revision UUIDs; SQL numeric bool/JSON representation; model input order is an unordered multiset because independently repeated actual Go Composite map output changes order. Physical vectors/source identity remain exact."
+      },
+      "expanded_go_166": {
+        "export": "/tmp/weknora-go-chunk-edit-expanded166-first.json",
+        "log": "/tmp/weknora-go-chunk-edit-expanded166-first.log",
+        "actual_exit": 0,
+        "native_result": "Not passed; first expanded build blocked by parallel VLM source TextNode ambiguity, subsequently corrected by owning agent."
+      },
+      "pending": [
+        "packaged same jar single/go checkpoint running",
+        "fresh full Java clean verify after active Manual/Image changes stabilize",
+        "real PG production upload/edit/revert/BM25 public query",
+        "bound/external retriever stores",
+        "cross-transaction cancellation/revocation/relocation/parent-child races and complete Go parity"
+      ],
+      "expanded184_sqlite": {
+        "go_export": "/tmp/weknora-go-chunk-edit-expanded184-first.json",
+        "go_log": "/tmp/weknora-go-chunk-edit-expanded184-first.log",
+        "actual_go_exit": 0,
+        "native_log": "/tmp/weknora-java-chunk-edit-summary-first.log",
+        "reports": "/tmp/weknora-java-chunk-edit-summary-first-build/surefire-reports",
+        "native_exit": 0,
+        "root_independent_xml": {
+          "cases": 184,
+          "spring": 6,
+          "write_authorization": 38,
+          "total": 228,
+          "failures": 0,
+          "errors": 0
+        },
+        "checks": "Unicode parent source overlays/conflicts/invalid ranges, locator clearing and retention, HTML/Markdown/original image URLs and restore, typed metadata/casefold/duplicate first questions/long hashed IDs, title/context whitespace, actual TEXT/BLOB Go strategy scanner behavior, captured real Asynq refresh success/failure/no-model/shared-owner options"
+      },
+      "expanded293_regression": {
+        "log": "/tmp/weknora-java-chunk-edit-expanded-third.log",
+        "tests": 293,
+        "suites": 2,
+        "failures": 0,
+        "errors": 0,
+        "note": "176 chunk edit +117 chunk lifecycle; incorrectly named write-auth test matched no class in this run, it was actually included in the later228 run."
+      },
+      "postgres": {
+        "cases": 196,
+        "go_migrations": 115,
+        "pool_size": 1,
+        "actual_exit": 0,
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-chunk-edit-gfy1vn9h",
+        "log": "/tmp/weknora-java-postgres-chunk-edit-binding-first.log",
+        "root_independent_xml": {
+          "tests": 196,
+          "suites": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "limits": "halfvec/source metadata/model/HTTP/SQL/revisions/Asynq exact; GIN sentinel is retention only, no public BM25 acceptance"
+      },
+      "concurrency196": {
+        "actual_go_exit": 0,
+        "actual_go_export": "/tmp/weknora-go-chunk-edit-concurrency-safe196-first.json",
+        "actual_go_log": "/tmp/weknora-go-chunk-edit-concurrency-safe196-first.log",
+        "unsafe_go_reproduction": "/tmp/weknora-go-chunk-edit-concurrency-unsafe196-first.json",
+        "prior184_semantics_unchanged": true,
+        "native_actual_exit": 0,
+        "native_log": "/tmp/weknora-java-chunk-edit-binding-first.log",
+        "root_independent_xml": {
+          "tests": 202,
+          "suites": 2,
+          "differential": 196,
+          "spring": 6,
+          "write_authorization": 0,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "note": "Requested write-auth class name did not exist and was not included; separately rerunning correct CompatibilityTest class. Provider-window source binding and narrow conditional status writes added in Go and Java."
+      },
+      "go_full": {
+        "command": "go test -tags sqlite_fts5 ./...",
+        "actual_exit": 0,
+        "log": "/tmp/weknora-go-chunk-image-full-first.log",
+        "scope": "source at run; later concurrent agent changes need new verification"
+      },
+      "write_authorization": {
+        "actual_exit": 0,
+        "tests": 38,
+        "suites": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-chunk-edit-write-auth-first.log",
+        "reports": "/tmp/weknora-java-chunk-edit-write-auth-first-build/surefire-reports",
+        "independently_checked": true
+      },
+      "packaged": {
+        "proof": "/tmp/weknora-java-chunk-edit-candidate-source-proof.json",
+        "full_verify": false,
+        "frozen_files": 1122,
+        "jar": {
+          "path": "/tmp/weknora-java-chunk-edit-candidate-build/backend-java-0.1.0-SNAPSHOT.jar",
+          "size": 152851186,
+          "sha256": "4fcd10c6e992cee68bb19ef175d056e9da3c7e1fcd3349d0b78cc12f8e3c3383",
+          "package_exit": 0,
+          "log": "/tmp/weknora-java-chunk-edit-candidate-package-second.log"
+        },
+        "topologies": {
+          "single": {
+            "actual_exit": 0,
+            "log": "/tmp/weknora-java-chunk-edit-candidate-single-second.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "single",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 10,
+              "embedding_calls": 12,
+              "chat_calls": 6,
+              "office_custom_format": false,
+              "summary_generation": true,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": false,
+              "update_knowledge": false,
+              "chunk_edit": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-tf36ngde/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-tf36ngde/test.db"
+            }
+          },
+          "go": {
+            "actual_exit": 0,
+            "log": "/tmp/weknora-java-chunk-edit-candidate-go-second.log",
+            "result": {
+              "checks": "production multipart → local resource → worker → actual model HTTP → vec/FTS → durable postprocess completion; real shared write + owner tenant/original actor audit; public tag document force/content_only cleanup when enabled; table summary/column task when Office enabled; Hikari pool1",
+              "topology": "go",
+              "readiness_retries": 0,
+              "uploads": 2,
+              "jobs": 10,
+              "embedding_calls": 12,
+              "chat_calls": 6,
+              "office_custom_format": false,
+              "summary_generation": true,
+              "question_generation": false,
+              "auto_tag": false,
+              "kb_profile": false,
+              "kb_profile_jobs": 0,
+              "index_delete": false,
+              "document_delete": false,
+              "public_delete": false,
+              "chunk_lifecycle": false,
+              "folders": false,
+              "update_knowledge": false,
+              "chunk_edit": true,
+              "public_delete_jobs": 0,
+              "index_delete_jobs": 0,
+              "document_delete_jobs": 0,
+              "cleanup_jobs": 0,
+              "cancellation": false,
+              "reader_calls": 0,
+              "log": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-6ui_rya0/server.log",
+              "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-6ui_rya0/test.db"
+            }
+          }
+        },
+        "limits": "Candidate predates production PG NULL metadata fix and active image fanout changes; fresh frozen full verify running; two modes do not prove later workspace."
+      },
+      "postgres_public_pipeline": {
+        "actual_exit": 0,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-postgres-chunk-edit-pipeline-fifth.log",
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-processing-c8yx0ll3",
+        "uploads": 10,
+        "jobs": 48,
+        "succeeded": 46,
+        "canceled": 2,
+        "embedding_calls": 30,
+        "chat_calls": 23,
+        "checks": "real own/shared edit/revert + immutable revision/actor/source retention + actual BM25 MATCH and halfvec + durable summary refresh; SQL NULL metadata preserved"
+      }
+    },
+    "native_chunk_question_checkpoint": {
+      "routes": 2,
+      "status": "in_progress",
+      "actual_go_sqlite_export": 130,
+      "go_log": "/tmp/weknora-go-chunk-question-safe-second.log",
+      "actual_go_exit": 0,
+      "native_log": "/tmp/weknora-java-chunk-question-safe.log",
+      "native_exit": 0,
+      "root_independent_xml_pending": false,
+      "pending": [
+        "synchronous regenerate fresh full candidate and packaged modes",
+        "broader concurrent metadata/authorization/relocation checks"
+      ],
+      "combined_xml": {
+        "tests": 337,
+        "classes": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "includes": "question130 + question production JWT/API5 + edit196 + edit production6"
+      },
+      "postgres": {
+        "actual_exit": 0,
+        "tests": 130,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-postgres-chunk-question-safe-second.log",
+        "artifact": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-chunk-edit-7wxebxpe",
+        "valid_upsert_status": 200,
+        "valid_upsert_embedding_calls": 1
+      },
+      "same_jar_mutations": {
+        "actual_exit": 0,
+        "topologies": [
+          "single",
+          "go"
+        ],
+        "uploads_each": 2,
+        "jobs_each": 4,
+        "embedding_calls_each": 6,
+        "chat_calls_each": 0,
+        "jar_sha256": "ecf1ba248fb20bd19195720502b9d9ede78d185aa90d6f8e6c8a304abc5b4a9a",
+        "logs": [
+          "/tmp/weknora-java-alignment-question-image-package-chunk-questions-single.log",
+          "/tmp/weknora-java-alignment-question-image-package-chunk-questions-go.log"
+        ]
+      }
+    },
+    "alignment_candidate_question_image": {
+      "status": "full_and_packaged_baseline_passed",
+      "frozen_files": 1194,
+      "proof": "/tmp/weknora-java-alignment-question-image-proof.json",
+      "log": "/tmp/weknora-java-alignment-question-image-full.log",
+      "previous_candidate_failed": {
+        "tests": 7376,
+        "classes": 151,
+        "failures": 7,
+        "errors": 0,
+        "skipped": 0,
+        "actual_exit": 1,
+        "log": "/tmp/weknora-java-chunk-edit-candidate-full-first.log",
+        "cause": "6 snapshot missing config failures; 1 independently reproduced SQLite deferred read-to-write lock upgrade in TaskRepository.settle"
+      },
+      "sqlite_task_fix": {
+        "actual_exit": 0,
+        "tests": 22,
+        "classes": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-task-topology-fixed.log",
+        "reproducer_log": "/tmp/weknora-java-task-topology-diagnostic.log",
+        "behavior": "reserve SQLite writer before claim/settle/commitResult read snapshot; PostgreSQL row locks unchanged"
+      },
+      "full_verify": {
+        "actual_exit": 0,
+        "tests": 7538,
+        "classes": 154,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "log": "/tmp/weknora-java-alignment-question-image-full.log"
+      },
+      "jar": {
+        "path": "/tmp/weknora-java-alignment-question-image-build/backend-java-0.1.0-SNAPSHOT.jar",
+        "bytes": 152868176,
+        "sha256": "ecf1ba248fb20bd19195720502b9d9ede78d185aa90d6f8e6c8a304abc5b4a9a"
+      },
+      "packaged_acceptance": {
+        "final_manifest": "/tmp/weknora-java-alignment-question-image-package-final-manifest.json",
+        "final_modes": 36,
+        "all_final_actual_exit": 0,
+        "initial_failures_retained": 2,
+        "runner_addition": {
+          "path": "/tmp/weknora-java-alignment-question-image-question-runner.py",
+          "sha256": "3e4e5bee2e0d157ea6147e64c9e6d8c413063f3f9902eb3e504a6f7dfd089120"
+        },
+        "unchanged_frozen_sources_and_jar": true
+      },
+      "limits": "This immutable 1194-file full candidate contains question PUT/DELETE and image66; it predates later synchronous regeneration and new external-store workspace edits."
+    },
+    "native_chunk_regenerate_checkpoint": {
+      "status": "in_progress",
+      "actual_go_sqlite_export": 81,
+      "go_exit": 0,
+      "go_log": "/tmp/weknora-go-chunk-regenerate-safe81-first.log",
+      "unsafe_original_oracle": "/tmp/weknora-go-chunk-regenerate-unsafe-first.json",
+      "prior_native66_exit": 0,
+      "prior_native66_log": "/tmp/weknora-java-chunk-regenerate-second.log",
+      "production_spring9_exit": 0,
+      "production_spring_log": "/tmp/weknora-java-chunk-regenerate-pipeline-first.log",
+      "postgres81_exit": 0,
+      "postgres_log": "/tmp/weknora-java-postgres-chunk-regenerate-safe81-first.log",
+      "pending": [
+        "broader concurrent revoke/move/disconnect windows",
+        "all bound external storage engines",
+        "cutover/restart"
+      ],
+      "native_fresh_tests": 421,
+      "native_fresh_classes": 5,
+      "native_fresh_exit": 0,
+      "native_fresh_log": "/tmp/weknora-java-chunk-regenerate-safe81-first.log",
+      "write_authorization_tests": 38,
+      "write_authorization_exit": 0,
+      "postgres_xml": {
+        "tests": 81,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "postgres_public_pipeline": {
+        "exit": 0,
+        "log": "/tmp/weknora-java-postgres-chunk-question-regenerate-pipeline-fourth.log",
+        "uploads": 10,
+        "jobs": 48,
+        "succeeded": 46,
+        "canceled": 2,
+        "embedding_http": 38,
+        "chat_http": 27
+      },
+      "frozen_candidate": "alignment_candidate_regenerate_vector",
+      "same_jar_regeneration": {
+        "modes": 2,
+        "exit": 0,
+        "uploads_per_mode": 2,
+        "jobs_per_mode": 6,
+        "embedding_http_per_mode": 8,
+        "chat_http_per_mode": 6
+      }
+    },
+    "native_image_multimodal_checkpoint": {
+      "status": "in_progress",
+      "go_worker_scenarios": 66,
+      "sqlite_combined_tests": 301,
+      "sqlite_combined_classes": 9,
+      "sqlite_combined_exit": 0,
+      "postgres_tests": 76,
+      "postgres_classes": 3,
+      "postgres_exit": 0,
+      "postgres_log": "/tmp/weknora-java-image-final-postgres.log",
+      "sqlite_report_directory": "/tmp/weknora-java-image-final-candidate-build/surefire-reports",
+      "frozen_candidate": "alignment_candidate_question_image",
+      "note": "Included in 7538/154 full frozen candidate and 36 final packaged modes. SQL task topology is not Go Lite/Redis compatibility. See image-multimodal-migration-notes.md for bounded coverage and remaining ordinary-file/Ollama/cloud/bound-index gaps."
+    },
+    "native_vector_store_checkpoint": {
+      "status": "in_progress",
+      "combined_tests": 300,
+      "combined_classes": 10,
+      "combined_exit": 0,
+      "combined_log": "/tmp/weknora-java-vector-store-combined-second.log",
+      "metadata_go_cases": 69,
+      "registry_go_cases": 13,
+      "constructor_go_cases": 2,
+      "es_repository_go_cases": 2,
+      "public_es_go_sqlite_cases": 52,
+      "public_es_go_postgres_cases": 52,
+      "postgres_exit": 0,
+      "postgres_log": "/tmp/weknora-java-vector-hybrid-postgres-final.log",
+      "go_full_exit": 0,
+      "go_full_log": "/tmp/weknora-go-vector-store-full-final.log",
+      "go_full_evidence_source": "actual process exit reported by authorized java_document_indexes agent; root inspected log",
+      "pending": [
+        "public vector store CRUD",
+        "remaining external engines",
+        "bound document background writes",
+        "cutover/restart"
+      ],
+      "frozen_candidate": "alignment_candidate_regenerate_vector",
+      "same_jar_public_configs": 2,
+      "same_jar_exit": 0,
+      "same_jar_tasks_enabled": false
+    },
+    "alignment_candidate_regenerate_vector": {
+      "status": "full_and_packaged_baseline_passed",
+      "frozen_root": "/tmp/weknora-java-regenerate-vector-layout",
+      "source_proof": "/tmp/weknora-java-regenerate-vector-proof.json",
+      "project_input_files": 1313,
+      "extra_venv_dependency_files": 10721,
+      "full_actual_exit": 0,
+      "full_log": "/tmp/weknora-java-regenerate-vector-full.log",
+      "test_classes": 159,
+      "tests": 7712,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "jar": "/tmp/weknora-java-regenerate-vector-build/backend-java-0.1.0-SNAPSHOT.jar",
+      "jar_bytes": 152904047,
+      "jar_sha256": "bbb2f24feab41cf278a8751ad9a917edaf10e2102e3ce2aec4ed997388c1bde0",
+      "packaged_manifest": "/tmp/weknora-java-regenerate-vector-package-final-manifest.json",
+      "packaged_planned": 38,
+      "es_packaged_planned": 2,
+      "note": "Immutable full candidate includes synchronous chunk regeneration and ES8 retrieval; 38 workflow modes plus 2 synchronous ES configs (tasks=false). Original ES runner failure preserved. This is not all-route/all-task migration or cutover acceptance.",
+      "packaged_final_modes": 40,
+      "packaged_all_final_exit": 0,
+      "packaged_original_attempts_preserved": true,
+      "packaged_es_tasks_enabled": false,
+      "source_and_jar_hashes_rechecked": true
+    },
+    "public_vector_store_checkpoint": {
+      "status": "in_progress",
+      "go_http_cases": 133,
+      "focused_tests": 242,
+      "postgres_cases": 133,
+      "full_tests": 7851,
+      "full_classes": 161,
+      "full_failures": 0,
+      "full_errors": 0,
+      "full_skipped": 0,
+      "full_log": "/tmp/weknora-java-vector-public-final133-full.log",
+      "source_proof": "/tmp/weknora-java-vector-public-final133-source-proof.json",
+      "root_source_hash_recheck_files": 1133,
+      "root_source_hash_differences": 0,
+      "jar": "/tmp/weknora-java-vector-public-final133-full-build/backend-java-0.1.0-SNAPSHOT.jar",
+      "jar_sha256": "c7b5e454c6d6fcb421e16ed6332383a5640f3c1444f0db0e5535b94c1d17d792",
+      "same_jar_configurations": 6,
+      "package_manifest": "/tmp/weknora-java-vector-public-final-package-manifest.json",
+      "notes": "src/main/java/com/tencent/weknora/vectorstore/public-api-migration-notes.md",
+      "pending": [
+        "six other remote engine adapters and connection probes",
+        "standalone PostgreSQL connection management",
+        "bound background document publication",
+        "broader concurrency and driver-error diagnostics",
+        "cutover"
+      ]
+    },
+    "public_summary_checkpoint": {
+      "status": "in_progress",
+      "go_sqlite_http_cases": 56,
+      "postgres_cases": 56,
+      "focused_tests": 257,
+      "full_tests": 7914,
+      "full_classes": 163,
+      "full_failures": 0,
+      "full_errors": 0,
+      "full_skipped": 0,
+      "full_actual_exit_code": 0,
+      "frozen_input_files": 1154,
+      "jar_sha256": "4b4d3e39ba3304243198bae9d8a9a970ffbd7166daaeb05ab24e5819e8bc85bd",
+      "same_jar_process_modes": [
+        "regenerate-summary/single",
+        "regenerate-summary/go"
+      ],
+      "each_uploads_jobs_embedding_chat": [
+        2,
+        8,
+        8,
+        6
+      ],
+      "original_full_failure_preserved": true,
+      "source_and_jar_hashes_rechecked": true,
+      "checkpoint": "migration/summary-public-checkpoint-2026-10-16.json",
+      "notes": "src/main/java/com/tencent/weknora/knowledge/summary-public-migration-notes.md",
+      "pending": [
+        "all bound/external index engines",
+        "full model protocols and concurrency windows",
+        "Redis/Asynq and Lite parity",
+        "full queue cutover and deployment"
+      ]
+    },
+    "reparse_worker_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/reparse-worker-checkpoint-2026-10-16.json",
+      "go_sqlite_worker_cases": 67,
+      "go_postgres_worker_cases": 67,
+      "focused_tests": 289,
+      "full_tests": 8139,
+      "full_classes": 168,
+      "same_jar_modes": [
+        "reparse/single",
+        "reparse/go"
+      ],
+      "remaining": [
+        "All other unmigrated routes/modules and nine task handlers",
+        "Enabled Langfuse worker middleware and tracing",
+        "Complete parser/store/bound index/model variants",
+        "All source, binding, lease, cancellation, failure, concurrency and restart windows",
+        "Go partial publication and quota semantics",
+        "Redis/Asynq backlog and full Lite execution",
+        "Full cutover, rollback, deployment and remaining same-jar process modes"
+      ]
+    },
+    "public_url_import_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/url-import-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 94,
+      "go_postgres_http_cases": 94,
+      "focused_tests": 107,
+      "full_tests": 8237,
+      "full_classes": 169,
+      "same_jar_modes": [
+        "url-import/single",
+        "url-import/go"
+      ],
+      "remaining": [
+        "All other unmigrated routes/modules and nine missing task handlers",
+        "Remaining Go net/url versus URI raw-query/userinfo/host/escape and SSRF/DNS/settings variants",
+        "All duplicate, quota/identity snapshot, binding, database/storage failure and concurrency windows",
+        "Enabled Langfuse tracing injection and complete model/parser/storage/index variants",
+        "Go partial publication and quota accounting semantics; bound external index document writes",
+        "Redis/Asynq backlog, complete Lite executor, cutover, rollback and deployment",
+        "Remaining same-jar process modes; prior jars cannot be combined into this jar acceptance"
+      ]
+    },
+    "public_file_response_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/file-response-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 209,
+      "go_postgres_http_cases": 207,
+      "postgres_nonpersistable_json_scenes": 2,
+      "focused_tests": 227,
+      "full_tests": 8451,
+      "full_classes": 171,
+      "same_jar_modes": [
+        "file-response/single",
+        "file-response/go"
+      ],
+      "remaining": [
+        "All other unmigrated routes/modules and nine missing task handlers",
+        "Complete legacy storage/provider fallback, cloud backends, resource scope/configuration races and database/storage failures",
+        "All authenticated protocol/routing, tracing, concurrency, restart, deployment and resource-serving variants",
+        "Go partial publication and quota accounting semantics; bound external index document writes",
+        "Redis/Asynq backlog, complete Lite executor, cutover, rollback and deployment",
+        "Other packaged modes on this exact jar; older jar acceptance cannot be combined"
+      ]
+    },
+    "public_batch_download_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/batch-download-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 127,
+      "go_postgres_http_cases": 125,
+      "postgres_nonpersistable_nul_text_scenes": 2,
+      "go_archive_cases": 20,
+      "focused_tests": 429,
+      "full_tests": 8605,
+      "full_classes": 174,
+      "same_jar_modes": [
+        "file-response-with-batch/single",
+        "file-response-with-batch/go"
+      ],
+      "remaining": [
+        "Automatic Servlet client-disconnect cancellation before response begins is not Go request-context cancellation; thread interruption checks cover only the explicitly tested cancellation inputs",
+        "All legacy/multicloud storage/provider fallback, resource/config/ownership races and complete database/filesystem/temp/read/write/response fault handling",
+        "All remaining 372 routes and nine missing task handlers, complete public chat/RAG/Agent and other modules",
+        "Go phased document publication and additive quota accounting vs current Java transaction/delta; bound external vector document writes",
+        "Redis/Asynq backlog consumption, complete Lite sync execution, restart, deployment, cutover and rollback",
+        "Other packaged modes on this exact jar cannot be inferred from historical jar acceptance"
+      ]
+    },
+    "public_collection_read_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/collection-read-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 203,
+      "go_postgres_http_cases_per_planner_state": 203,
+      "planner_states": [
+        "unanalysed",
+        "analysed"
+      ],
+      "full_tests": 8810,
+      "full_classes": 175,
+      "same_jar_modes": [
+        "file-response-with-collection/single",
+        "file-response-with-collection/go"
+      ],
+      "remaining": [
+        "Configured Go Redis/Wiki housekeeping stall_state probe is absent in Java; activity timestamps alone do not implement it",
+        "Batch has no ORDER BY in Go or Java; no stable order guarantee across different database statistics/plans can be inferred",
+        "Full stored-data/JSON/protocol errors, resource/share/config changes during operations, every DB collation/clock/fault/restart/cutover combination",
+        "All other 370 routes, nine missing task handlers, public chat/RAG/Agent and other unmigrated modules",
+        "Existing document publication transaction/additive-vs-delta quota/external vector document write/Redis-Asynq backlog/Lite sync differences",
+        "Packaged modes on older jars do not prove this jar; no development runtime restarted or deployed"
+      ]
+    },
+    "public_batch_tags_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/batch-tags-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 96,
+      "go_postgres_http_cases": 95,
+      "pg_nonpersistable_invalid_json": 1,
+      "full_tests": 8908,
+      "full_classes": 176,
+      "same_jar_modes": [
+        "file-response-with-collection-and-batch-tags/single",
+        "file-response-with-collection-and-batch-tags/go"
+      ],
+      "remaining": [
+        "Mixed invalid inputs without explicit KB inherit unspecified Go map entry selection; selection distribution is not a specified API contract",
+        "Full stored-data typed decoding/error precedence, share/KB/config changes during admission and per-document writes, concurrent mutation/delete, all drivers/collations/clocks/cancellation/restart/cutover",
+        "All other 369 routes and nine missing task handlers, public chat/RAG/Agent and remaining modules",
+        "Existing publication transaction/additive-vs-delta quota/external vector document writes/Redis-Asynq backlog/full Lite and deployment lifecycle differences",
+        "No development runtime restarted or jar deployed; older jar mode results do not prove this jar"
+      ]
+    },
+    "public_gallery_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/gallery-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 152,
+      "go_postgres_http_cases": 150,
+      "pg_nonpersistable_invalid_json": 2,
+      "full_tests": 9064,
+      "full_classes": 178,
+      "same_jar_modes": [
+        "file-response-with-gallery/single",
+        "file-response-with-gallery/go"
+      ],
+      "remaining": [
+        "Image update PUT knowledge/image/:id/:chunk_id still needs native child chunk and index side effects; document move/progress missing",
+        "Full stored-data JSON size/Unicode/type/error boundaries, changes to authorization/resources during multi-query reads, concurrent projection updates and full lifecycle/cutover not completely verified",
+        "All other 367 Go route templates and nine missing task handlers; public chat/RAG/Agent and other modules",
+        "Existing document publication transaction, additive-vs-delta quota, external bound vector document writes, Redis/Asynq backlog and full Lite differences",
+        "No development instance restarted or jar deployed; historical jar modes are not cumulative evidence"
+      ]
+    },
+    "public_image_update_checkpoint": {
+      "status": "in_progress",
+      "checkpoint": "migration/image-update-checkpoint-2026-10-16.json",
+      "go_sqlite_http_cases": 92,
+      "go_postgres_http_cases": 92,
+      "full_tests": 9160,
+      "full_classes": 180,
+      "same_jar_modes": [
+        "file-response-with-image-update/single",
+        "file-response-with-image-update/go"
+      ],
+      "remaining": [
+        "Full Go native migration remains incomplete: 366 other route templates lack Java native mappings and nine business task handlers remain missing",
+        "Bound external vector store writes and all environment-selected composite retrieval engines are not connected to this route; current Indexes resolver supports SQLite/PostgreSQL and explicitly rejects bound stores",
+        "All stored-data JSON size/type/Unicode/invalid DB values, per-save concurrent resource/authorization changes, duplicate delivery and full lifecycle/cutover are not completely verified",
+        "Existing document publication transaction, additive-vs-delta quota, Redis/Asynq backlog, full Lite, public chat/RAG/Agent and remaining module differences",
+        "No development process restarted and no jar deployed; different historical jar acceptance modes cannot be accumulated"
+      ]
+    },
+    "knowledge_move_foundation": "2026-10-16: native pair compatibility, full durable transfer metadata, read-only whole-batch preflight and CAS/quota/stored timestamp checkpoints. Actual Go SQLite252/PostgreSQL252 and targeted444 passed; full frozen build running. Public move/progress and knowledge:move handler remain NOT STARTED. See move-plan-checkpoint-2026-10-16.json.",
+    "knowledge_move_execution": "Per-document state machine in both modes; actual Go SQLite64/PG64 and focused316 passed. No public move/progress/handler registered; native runtime effects remain.",
+    "knowledge_index_move": "Actual Go SQLite13/PG13 physical SQL index move parity and focused336 passed. No new HTTP entry/handler. index-move-checkpoint-2026-10-16.json",
+    "elasticsearch_index_move": "Actual production Go HTTP252/context2 and owned ES22 move cases (66 snapshots/396 retrieval samples) plus existing physical retrieval/deletion2 passed; final full9768/187 exit0. No new route/worker; see elasticsearch-index-move-checkpoint-2026-10-16.json.",
+    "knowledge_base_duplicate": "Native settings-only duplicate: actual Go SQLite/PostgreSQL 45 cases each, 55 parity tests each, 206 related regressions, same jar duplicate HTTP single/go exit0. See knowledge-base-duplicate-checkpoint-2026-10-16.json. Full scope still incomplete; not verified.",
+    "knowledge_base_delete_foundation": "Unregistered KB teardown processor + scoped SQL: actual Go SQLite/PG40 cases each, focused134/3 classes and PG42/1 class actual0. No public delete route or new task handler. See knowledge-base-delete-worker-checkpoint-2026-10-16.json.",
+    "knowledge_base_delete_runtime": "Registered native kb:delete handler; actual Go physical SQLite/PG12 cases each, 342 scope decisions and 88 typed payload cases; focused624/11 classes and PG61/2 classes actual0. Public DELETE/admission and all external engine/provider/tracing/cutover coverage remain incomplete. knowledge-base-delete-runtime-checkpoint-2026-10-16.json.",
+    "knowledge_base_delete_public": "Native DELETE with Go staged soft delete/audit/shares/datasource/sync-log/pending/queue cancellation and captured payload/options. Actual Go HTTP50 SQLite+50 PostgreSQL; Java focused318/8, independent PG HTTP60/1 and worker62/2 passed. Tracing/full storage/index/graph/scheduler/cutover remain incomplete. knowledge-base-delete-http-checkpoint-2026-10-16.json",
+    "knowledge_base_index_copy": "Native SQLite/Postgres index copy foundation and exact per-engine partial commits; no route/handler added. index-copy-checkpoint-2026-10-16.json",
+    "knowledge_base_clone_plan": "Read-only helper foundation and bounded differential verification; no production bean/worker/public copy wiring. See clone-plan-checkpoint-2026-10-16.json. All public entries remain in_progress;kb:clone remains not_started.",
+    "knowledge_base_clone_chunks": "Native chunk/tag/image copying and failed-clone cleanup foundation:actual Go68 SQLite scenes;current670/6 actual0. PostgreSQL earlier63 failed,subsequent Docker I/O blocked rerun;not verified. No production Effects/public routes/kb:clone wiring. clone-chunks-checkpoint-2026-10-16.json",
+    "knowledge_base_clone_document": "Native staged document clone foundation: actual Go75 SQLite scenes and related745/7 tests actual0; file ownership, SQL stages, CAS/quota and failure bookkeeping. Production adapters/public copy/progress/kb:clone remain unwired. PostgreSQL not verified. See clone-document-checkpoint-2026-10-16.json."
   },
   "validation": {
-    "datatable_foundation_checkpoint": "2026-10-13: isolated full cleanverify3444/90 zeroFailErrorSkip, jar146449729bytes /tmp/weknora-java-datatable-foundation-full-build;172 backendHTTP+8OIDCprovider+1bridgeprobe separate;single/go6pool each2uploads4jobs2EmbeddingHTTP,Hikari1/GoBLOB/sharedOwnerActor/readretry0. 301Java(207main94test) paths/ignore verified. Native table loader+prompt38JUnit and document publication schedule1 added. Full table handler/repo37 standalone deep productionGo comparisons green stageonly;not formal task/wiring/deadline/strictOffice7job completion. 65in_progress416not_started1health of482;no full-backend claim. Logs VALIDATION.md/datatable-summary-audit.md."
+    "datatable_foundation_checkpoint": "2026-10-13: isolated full cleanverify3444/90 zeroFailErrorSkip, jar146449729bytes /tmp/weknora-java-datatable-foundation-full-build;172 backendHTTP+8OIDCprovider+1bridgeprobe separate;single/go6pool each2uploads4jobs2EmbeddingHTTP,Hikari1/GoBLOB/sharedOwnerActor/readretry0. 301Java(207main94test) paths/ignore verified. Native table loader+prompt38JUnit and document publication schedule1 added. Full table handler/repo37 standalone deep productionGo comparisons green stageonly;not formal task/wiring/deadline/strictOffice7job completion. 65in_progress416not_started1health of482;no full-backend claim. Logs VALIDATION.md/datatable-summary-audit.md.",
+    "document_index_read_checkpoint": "2026-10-14: Native document index-status and chunk details controllers/service/read-only SQL wired with shared/Agent/API retrieve+KB allow-list, owner-scoped engine/model/Wiki/chunk reads and actual SQLite FTS/vec0 records. Final isolated clean test 2248 tests / 11 classes / zero failures/errors/skips, log /tmp/weknora-java-document-index-final-test.log. Includes 964 production Go document/chunk state fixtures, 10 real SQLite MVC methods, original 585+640 content-read HTTP goldens, 5 SQLite index methods, upload/processing/security/bridge/metadata regressions. Go fixture generator separately passed. PostgreSQL halfvec reader code only; Neo4j/external bound readers, native processing-span publication, request-wide cancellation and packaged rollout pending. Routes in_progress; 67 in_progress/414 not_started/1 health implemented of 482, no verified/full-backend claim. Details knowledge/index-read-migration-notes.md.",
+    "full_alignment_baseline": "2026-10-14: Before new PostgreSQL/spans production wiring, isolated full clean verify passed 4621 tests/95 classes/zero failures/errors/skips; /tmp/weknora-java-full-alignment-verify.log. Included 160 actual Go index HTTP/965 state/10 MVC/2 deadline cases and39 full native summary tests. Current workspace requires a new full verification; reproduced SQLite/vec/DuckDB constrained queue-write failure is under investigation and strict single-worker Office upload is not yet green.",
+    "current_full_migration_verification": "121/482 native entries,361 absent;15/22 partial handlers,7 absent;0 verified. Current1063src/pom hashes stable before/after focused745/7 actual0. Last frozen default10464/196 passed index-copy snapshot only;current3changed+16added inputs not in that jar. Document/chunk clone PG verification pending. Full migration incomplete.",
+    "latest_native_checkpoint": "Native staged document clone foundation: actual Go75 SQLite scenes and related745/7 tests actual0; file ownership, SQL stages, CAS/quota and failure bookkeeping. Production adapters/public copy/progress/kb:clone remain unwired. PostgreSQL not verified. See clone-document-checkpoint-2026-10-16.json.",
+    "historical_full_migration_verification_before_summary": "2026-10-15: fresh clean verify actualexit0 /tmp/weknora-java-public-delete-concurrency-verified-second.log; independently XML135classes6511tests zeroFailuresErrorsSkips. Immutablejar /tmp/weknora-java-public-delete-concurrency-verified-build/backend-java-0.1.0-SNAPSHOT.jar 152658608bytes SHA256 e30e96ea33105cf4492aafe5aa3bc42c919fdc80d7e6579958999b168af83cdd. Frozen686main/test/pom files unchanged through package. Final22samejar process checks actualexit0:20task-enabled single/go of10modes, plus2synchronousHybrid(tasksfalse), finalmanifest /tmp/weknora-java-public-delete-concurrency-package-final-manifest.json. Root18firstbatch17pass1startupfailure; kb-profile/go first Hikari total0 2s borrow timedout, samejar/sameparams standalone rerun actual0 /tmp/weknora-java-public-delete-concurrency-package-kb-profile-go-second.log, failure retained and root cause notestablished. Graph2 actual0 each2uploads10jobs6embedding6chat; Hybrid2 actual0 each11HTTP5model4physicalentries. Newpublicsingle/sharedbatch delete2sourceuploads via low durable jobs, actualphysicalvecFTS/quota/audit/taskID; positiveclearSpringproof, packagedemptyclear noextraTask. PG123 publicDelete andPG42jobpipeline actual0, PG143ordinaryHybrid andactualGo6blocked xHikari4/2/1=18 strict HTTP/provider/SQL comparisons actual0; samebackendPID reusedaftercancel andmax4realblockedgroups. Go production source unchanged sincepreviousfullGo -tags sqlite_fts5 actual0. Includes10/22nativehandler foundations;482routes80in_progress401not_started1health0verified. FullWiki/cloud/boundexternalengine,remaining12tasks/fullsync/Redisbacklog/sessionchatSSEAgent/allotherGo routes andcutover pending; wholemigrationnotcomplete.",
+    "historical_full_migration_verification_before_file_response": "2026-10-16: public URL/file_url admission, SQLite/PG94 actual Go cases each, 107 focused SQLite/Spring tests, full clean verify8237/169 zero failures/errors/skips actual0; same jar single/go each2uploads2URLimports8jobs4embedding1reader0chat, physical vec/FTS/source/quota/audit rechecked. Full Go migration remains active. See migration/url-import-checkpoint-2026-10-16.json.",
+    "historical_full_migration_verification_before_batch_download": "2026-10-16: native original download/preview, SQLite209/PG207 actual Go cases (two malformed JSON scenes cannot persist in PG), 227 focused SQLite/Spring/Tomcat tests, eight old-controller counterexamples fixed; full clean verify8451/171 zero failures/errors/skips actual0; same jar single/go file HTTP flows each2uploads4successfuljobs2embedding, native byte/range/conditional/role/API-key/encoded-ID checks and independent SQL recheck. Full Go migration remains active. See migration/file-response-checkpoint-2026-10-16.json.",
+    "historical_full_migration_verification_before_collection_read": "2026-10-16: native batch original ZIP download, actual Go SQLite127/PG125 HTTP cases plus20 archive cases including real512MiB/512MiB+1; 429 focused tests; final frozen clean verify8605/174 zero failures/errors/skips actual0, same jar single/go file+batch HTTP flows each2uploads4successfuljobs2embedding plus independent vec/FTS/source/quota/job/audit check. Client-disconnect propagation and other scope remain incomplete; full goal active. See migration/batch-download-checkpoint-2026-10-16.json.",
+    "historical_full_verification_before_batch_tags": "2026-10-16 native document batch/search: actual Go SQLite203 and PG203 in each unanalysed/analysed state, full DTO/array/audits/unchanged DB comparison. Full frozen8810/175 actual0 zero failures/errors/skips; same jar single/go file+ZIP+collection reads actual0; no deployment. Full migration remains active; see collection-read-checkpoint-2026-10-16.json.",
+    "historical_full_verification_before_gallery": "2026-10-16 native document batch tags: actual Go SQLite96 / PostgreSQL95 (one invalid JSON seed nonpersistable), full error/body/relation/partial-commit/rollback/audit/unchanged-state comparison; 309 focused tests. Frozen full8908/176 actual0 all failure/error/skip counts zero; same jar single/go file+ZIP+collection+batch-tag real HTTP actual0 and independent SQL recheck. No deployment; full migration remains active; batch-tags-checkpoint-2026-10-16.json.",
+    "historical_full_verification_before_image_update": "2026-10-16 native gallery config/images: actual Go SQLite152 / PostgreSQL150 (two invalid preference JSON seeds cannot persist), full policy/list/error DTO and read-only SQL; 952 focused tests. Frozen full9064/178 actual0, zero failures/errors/skips. Same jar single/go file+ZIP+collection+batch-tags+gallery real HTTP actual0, physical vec/FTS/files/quota/jobs/audit and gallery state independently checked. No deployment; complete Go migration remains active; gallery-checkpoint-2026-10-16.json.",
+    "move_foundation_checkpoint": "SQLite252 + independent PG252 (115 migrations/Hikari1), focused444/3 all zero failure/error/skip, actual exit0. New frozen current-source full running; no new routes/tasks/verified entries or dev deployment.",
+    "move_execution_checkpoint": "move-execution-checkpoint-2026-10-16.json",
+    "index_move_checkpoint": "index-move-checkpoint-2026-10-16.json",
+    "elasticsearch_index_move_checkpoint": "elasticsearch-index-move-checkpoint-2026-10-16.json",
+    "knowledge_base_duplicate_checkpoint": "knowledge-base-duplicate-checkpoint-2026-10-16.json",
+    "knowledge_base_delete_foundation_checkpoint": "knowledge-base-delete-worker-checkpoint-2026-10-16.json",
+    "knowledge_base_delete_runtime_checkpoint": "knowledge-base-delete-runtime-checkpoint-2026-10-16.json",
+    "historical_current_full_migration_verification_before_kb_delete_runtime": "Incomplete full Go migration. Current frozen full9768/187 zero failures/errors/skips, actual exit0;975 src/pom inputs match. Includes SQL/ES index increments, not complete public move or all Go modules. Counts116/482 entries,13 partial handlers,0 verified. elasticsearch-index-move-checkpoint-2026-10-16.json",
+    "historical_latest_native_checkpoint_before_kb_delete_runtime": "Actual production Go HTTP252/context2 and owned ES22 move cases (66 snapshots/396 retrieval samples) plus existing physical retrieval/deletion2 passed; final full9768/187 exit0. No new route/worker; see elasticsearch-index-move-checkpoint-2026-10-16.json.",
+    "knowledge_base_delete_public_checkpoint": "knowledge-base-delete-http-checkpoint-2026-10-16.json"
   }
 }

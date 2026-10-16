@@ -121,3 +121,19 @@ func TestSummarySourceChangedAcceptsCurrentSnapshot(t *testing.T) {
 		t.Fatal("expected current snapshot to be accepted")
 	}
 }
+
+func TestSummarySourceChangedDiscardsResultAfterBusinessCancellation(t *testing.T) {
+	for _, state := range []string{types.ParseStatusCancelled, types.ParseStatusDeleting} {
+		t.Run(state, func(t *testing.T) {
+			stale, err := summarySourceChanged(context.Background(),
+				&summaryStaleKnowledgeRepo{knowledge: &types.Knowledge{ParseStatus: state, CustomMetadata: types.JSON(`{}`)}},
+				// Unchanged chunks must not make the post-cancel result publishable.
+				&summaryStaleChunkRepo{chunks: map[string]*types.Chunk{
+					"chunk": {ID: "chunk", ContentRevision: 0, IsEnabled: true},
+				}}, 1, "knowledge", `{}`, []*types.Chunk{{ID: "chunk", IsEnabled: true}})
+			if err != nil || !stale {
+				t.Fatalf("cancelled summary must be stale: stale=%v error=%v", stale, err)
+			}
+		})
+	}
+}

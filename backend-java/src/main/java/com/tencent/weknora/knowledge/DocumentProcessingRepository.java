@@ -16,7 +16,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 /** Chunk/index/state writes share one owner-, source- and lease-fenced transaction. */
 public final class DocumentProcessingRepository {
   public record Snapshot(
-      ObjectNode knowledge, ObjectNode knowledgeBase, Map<String, Object> tenant) {}
+      ObjectNode knowledge, ObjectNode knowledgeBase, Map<String, Object> tenant,
+      ObjectNode source) {
+    public Snapshot(ObjectNode knowledge, ObjectNode knowledgeBase, Map<String, Object> tenant) {
+      this(knowledge, knowledgeBase, tenant, knowledge.deepCopy());
+    }
+  }
 
   public record Replacement(List<String> chunkIds, List<String> indexSources) {}
 
@@ -79,19 +84,55 @@ public final class DocumentProcessingRepository {
             }));
   }
 
-  /** Go clears the old document before embedding; later table tasks must survive the commit. */
+  /** Rechecked inside external graph transactions; hold no SQL connection while waiting on Neo4j. */
+  public void checkCurrent(TaskRecord job,Snapshot snapshot){transactions.executeWithoutResult(status->{fenceJob(job);if(!liveSource(job,snapshot))throw new CancellationException("processing source changed during graph cleanup");});}
+
+  /** Go persists discovered file metadata/page titles before parsing/indexing, best effort. */
+  public void updateRemoteMetadata(TaskRecord job, Snapshot snapshot) {
+    try {
+      transactions.executeWithoutResult(status -> {
+        fenceJob(job);
+        if (!liveSource(job, snapshot)) throw new CancellationException("processing URL source changed");
+        writeRemoteMetadata(job, snapshot);
+      });
+      for (String field : List.of("file_name", "file_type", "title"))
+        snapshot.source.set(field, snapshot.knowledge.path(field));
+    } catch (org.springframework.dao.DataAccessException error) {
+      // Like Go, retain the discovered values in memory even if this checkpoint fails.
+      checkCurrent(job, snapshot);
+      org.slf4j.LoggerFactory.getLogger(getClass()).warn("Could not persist discovered document metadata: {}", error.getClass().getSimpleName());
+    }
+  }
+
+  private void writeRemoteMetadata(TaskRecord job, Snapshot snapshot) {
+    boolean changed = List.of("file_name", "file_type", "title").stream()
+        .anyMatch(field -> !snapshot.knowledge.path(field).equals(snapshot.source.path(field)));
+    if (changed) jdbc.update("UPDATE knowledges SET file_name=?,file_type=?,title=?,updated_at=? WHERE tenant_id=? AND id=? AND deleted_at IS NULL",
+        snapshot.knowledge.path("file_name").asText(), snapshot.knowledge.path("file_type").asText(),
+        snapshot.knowledge.path("title").asText(), timestamp(clock.instant()), job.tenantId(), snapshot.knowledge.path("id").asText());
+  }
+
+  /** Reparse cleans the old attempt before enqueue; preserve this attempt's parallel table work. */
   public Replacement captureReplacement(TaskRecord job, Snapshot snapshot, IndexWriter writer) {
     return transactions.execute(status -> {
       fenceJob(job);
       if (!liveSource(job, snapshot))
         throw new CancellationException("processing source changed before embedding");
       String id = snapshot.knowledge.path("id").asText();
+      boolean table = snapshot.knowledge.path("type").asText().equals("file")
+          && Set.of("csv", "xls", "xlsx").contains(
+              snapshot.knowledge.path("file_type").asText().toLowerCase(Locale.ROOT));
+      Set<String> preserved = table ? new HashSet<>(jdbc.queryForList(
+          "SELECT id FROM chunks WHERE tenant_id=? AND knowledge_id=?"
+              + " AND chunk_type IN ('table_summary','table_column') AND deleted_at IS NULL",
+          String.class, job.tenantId(), id)) : Set.of();
       List<String> chunks = jdbc.queryForList(
           "SELECT id FROM chunks WHERE tenant_id=? AND knowledge_id=?", String.class,
-          job.tenantId(), id);
+          job.tenantId(), id).stream().filter(chunk -> !preserved.contains(chunk)).toList();
       List<String> sources = jdbc.execute((ConnectionCallback<List<String>>) connection ->
           writer.sourceIdsByKnowledge(connection, List.of(id)));
-      return new Replacement(List.copyOf(chunks), List.copyOf(sources));
+      return new Replacement(List.copyOf(chunks),
+          sources.stream().filter(source -> !preserved.contains(source)).toList());
     });
   }
 
@@ -140,6 +181,7 @@ public final class DocumentProcessingRepository {
                 if (!liveSource(job, snapshot))
                   throw new CancellationException("processing source changed during index write");
                 Instant now = clock.instant();
+                writeRemoteMetadata(job, snapshot);
                 long oldSize =
                     knowledge
                         .get(job.tenantId(), snapshot.knowledge.path("id").asText())
@@ -213,6 +255,7 @@ public final class DocumentProcessingRepository {
               fenceJob(job);
               if (!liveSource(job, snapshot)) return false;
               Instant now = clock.instant();
+              writeRemoteMetadata(job, snapshot);
               return jdbc.update(
                       "UPDATE knowledges SET"
                           + " parse_status='completed',summary_status='none',pending_subtasks_count=0,error_message='',processed_at=?,updated_at=?"
@@ -236,10 +279,10 @@ public final class DocumentProcessingRepository {
     }
     jdbc.update(
         "INSERT INTO"
-            + " chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,context_header,chunk_index,is_enabled,start_at,end_at,pre_chunk_id,next_chunk_id,chunk_type,parent_chunk_id,source_locators,status,created_at,updated_at)"
+            + " chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,context_header,chunk_index,is_enabled,start_at,end_at,pre_chunk_id,next_chunk_id,chunk_type,parent_chunk_id,source_locators,status,created_at,updated_at,tag_id)"
             + " VALUES(?,?,?,?,?,?,?,true,?,?,?,?,?,?,"
             + (isPostgres() ? "?::jsonb" : "?")
-            + ",0,?,?)",
+            + ",0,?,?,'')",
         chunk.id(),
         job.tenantId(),
         snapshot.knowledge.path("knowledge_base_id").asText(),
@@ -269,8 +312,8 @@ public final class DocumentProcessingRepository {
     if (Set.of("cancelled", "deleting", "completed").contains(row.path("parse_status").asText()))
       return false;
     for (String field :
-        List.of("knowledge_base_id", "file_path", "file_hash", "file_name", "file_type"))
-      if (!row.path(field).equals(snapshot.knowledge.path(field))) return false;
+        List.of("knowledge_base_id", "file_path", "file_hash", "file_name", "file_type", "type", "source"))
+      if (!row.path(field).equals(snapshot.source.path(field))) return false;
     String path = job.payload().path("file_path").asText();
     if (!path.isEmpty()
         && !row.path("file_path").asText().isEmpty()
@@ -308,6 +351,7 @@ public final class DocumentProcessingRepository {
   }
 
   private void failCurrent(TaskRecord job, Snapshot snapshot, String message) {
+    writeRemoteMetadata(job, snapshot);
     jdbc.update(
         "UPDATE knowledges SET parse_status='failed',error_message=?,updated_at=? WHERE tenant_id=?"
             + " AND id=? AND deleted_at IS NULL AND parse_status='processing'",
@@ -327,7 +371,7 @@ public final class DocumentProcessingRepository {
   }
 
   private Object timestamp(Instant time) {
-    return isPostgres() ? Timestamp.from(time) : time.toString();
+    return isPostgres() ? Timestamp.from(time) : GoSqliteTimestamp.write(time);
   }
 
   private static long number(Object value) {

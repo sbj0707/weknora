@@ -152,7 +152,7 @@ func (n *Neo4jRepository) DelGraph(ctx context.Context, namespaces []types.NameS
 			deleteNodesQuery := `
 				CALL apoc.periodic.iterate(
 					"MATCH (n:` + labelExpr + ` {kg: $knowledge_id}) RETURN n",
-					"DELETE n",
+					"DETACH DELETE n",
 					{batchSize: 1000, parallel: true, params: {knowledge_id: $knowledge_id}}
 				) YIELD batches, total
 				RETURN total
@@ -188,7 +188,7 @@ func (n *Neo4jRepository) SearchNode(
 	defer session.Close(ctx)
 
 	result, err := session.ExecuteRead(ctx, func(tx neo4j.ManagedTransaction) (interface{}, error) {
-		query, params := graphSearchCypher(n.Label(namespace), nodes)
+		query, params := graphSearchCypherForNamespace(n.Label(namespace), namespace.Knowledge, nodes)
 		result, err := tx.Run(ctx, query, params)
 		if err != nil {
 			return nil, fmt.Errorf("failed to run query: %v", err)
@@ -212,8 +212,8 @@ func (n *Neo4jRepository) SearchNode(
 					nodeSeen[nameStr] = true
 					graphData.Node = append(graphData.Node, &types.GraphNode{
 						Name:       nameStr,
-						Chunks:     listI2listS(n.Props["chunks"].([]interface{})),
-						Attributes: listI2listS(n.Props["attributes"].([]interface{})),
+						Chunks:     listI2listS(n.Props["chunks"]),
+						Attributes: listI2listS(n.Props["attributes"]),
 					})
 				}
 			}
@@ -277,11 +277,11 @@ func graphSearchCypher(labelExpr string, nodes []string) (string, map[string]int
 		     CASE WHEN n.name IN $nodes THEN 0 ELSE 1 END AS seed_rank,
 		     size(n.name) AS name_len,
 		     n.name AS name
-		ORDER BY seed_rank, name_len, name
+		ORDER BY seed_rank, name_len, name, n.kg
 		LIMIT $maxSeedNodes
 		MATCH (n)-[r]-(m:` + labelExpr + `)
 		WITH n, r, m, seed_rank, name_len, name
-		ORDER BY seed_rank, name_len, name
+		ORDER BY seed_rank, name_len, name, n.kg, m.name, m.kg, type(r)
 		LIMIT $maxRows
 		RETURN n, r, m
 	`
@@ -293,7 +293,22 @@ func graphSearchCypher(labelExpr string, nodes []string) (string, map[string]int
 	return query, params
 }
 
-func listI2listS(list []any) []string {
+// Document labels normalize hyphens, so a label alone is not an exact document binding.
+// Keep KB-wide expansion unchanged while enforcing kg on both endpoints for document searches.
+func graphSearchCypherForNamespace(labelExpr, knowledgeID string, nodes []string) (string, map[string]interface{}) {
+	query, params := graphSearchCypher(labelExpr, nodes)
+	query = strings.Replace(query, "WHERE ANY(nodeText", "WHERE ($knowledgeID = '' OR n.kg = $knowledgeID) AND ANY(nodeText", 1)
+	query = strings.Replace(query, "WITH n, r, m, seed_rank", "WHERE ($knowledgeID = '' OR m.kg = $knowledgeID)\n\t\tWITH n, r, m, seed_rank", 1)
+	params["knowledgeID"] = knowledgeID
+	return query, params
+}
+
+func listI2listS(value any) []string {
+	// Relations may legitimately create endpoints without node properties.
+	if value == nil {
+		return []string{}
+	}
+	list := value.([]any)
 	result := make([]string, len(list))
 	for i, v := range list {
 		result[i] = fmt.Sprintf("%v", v)

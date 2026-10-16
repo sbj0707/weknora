@@ -4739,7 +4739,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/chunks/:knowledge_id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/chunks/{knowledge_id}",
@@ -5028,7 +5028,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/chunks/:knowledge_id/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/chunks/{knowledge_id}/{id}",
@@ -5180,7 +5180,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/chunks/:knowledge_id/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/chunks/{knowledge_id}/{id}",
@@ -5359,7 +5359,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/chunks/:knowledge_id/:id/revert",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -5418,7 +5418,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/chunks/:knowledge_id/:id/revisions",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -5624,7 +5624,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/chunks/by-id/:id/questions",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/chunks/by-id/{id}/questions",
@@ -5799,7 +5799,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/chunks/by-id/:id/questions",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -5858,7 +5858,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/chunks/by-id/:id/questions/regenerate",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -13361,7 +13361,7 @@
     "api_key_policy": "apiKeyManageKnowledgeBases(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/knowledge-bases/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}",
@@ -14037,7 +14037,7 @@
     "api_key_policy": "apiKeyManageKnowledgeBases(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/duplicate",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/duplicate",
@@ -16363,7 +16363,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge-bases/:id/gallery-config",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -16422,7 +16422,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge-bases/:id/hybrid-search",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
@@ -16588,7 +16588,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/hybrid-search",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/hybrid-search",
@@ -16754,7 +16754,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge-bases/:id/images",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -16813,7 +16813,7 @@
     "api_key_policy": "apiKeyFullAccess()",
     "conditions": [],
     "id": "DELETE /api/v1/knowledge-bases/:id/knowledge",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge",
@@ -17218,7 +17218,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/knowledge/batch-download",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge/batch-download",
@@ -17652,7 +17652,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge-bases/:id/knowledge/folders",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
@@ -17787,7 +17787,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/knowledge-bases/:id/knowledge/folders",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge/folders",
@@ -17952,7 +17952,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/knowledge/manual",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge/manual",
@@ -18105,7 +18105,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/knowledge/url",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/knowledge/url",
@@ -18318,7 +18318,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge-bases/:id/move-targets",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/move-targets",
@@ -18600,7 +18600,7 @@
     "api_key_policy": "apiKeyManageKnowledgeBases(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge-bases/:id/profile/generate",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -19219,7 +19219,7 @@
       "!(tagHandler == nil)"
     ],
     "id": "GET /api/v1/knowledge-bases/:id/tags",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/tags",
@@ -19392,7 +19392,7 @@
       "!(tagHandler == nil)"
     ],
     "id": "POST /api/v1/knowledge-bases/:id/tags",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/tags",
@@ -19569,7 +19569,7 @@
       "!(tagHandler == nil)"
     ],
     "id": "DELETE /api/v1/knowledge-bases/:id/tags/:tag_id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
@@ -19760,7 +19760,7 @@
       "!(tagHandler == nil)"
     ],
     "id": "PUT /api/v1/knowledge-bases/:id/tags/:tag_id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge-bases/{id}/tags/{tag_id}",
@@ -20521,7 +20521,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/knowledge/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}",
@@ -20967,7 +20967,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/knowledge/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/tags",
@@ -21192,7 +21192,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/:id/cancel-parse",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/cancel-parse",
@@ -21351,7 +21351,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/chunks/:chunk_id/details",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/chunks/{chunk_id}/details",
@@ -21488,7 +21488,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/download",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/download",
@@ -21621,7 +21621,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/index-status",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/index-status",
@@ -21744,7 +21744,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/preview",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/preview",
@@ -21877,7 +21877,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/:id/regenerate-summary",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -21936,7 +21936,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/:id/reparse",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/{id}/reparse",
@@ -22099,7 +22099,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/spans",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [
@@ -22158,7 +22158,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/:id/stages",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [],
     "swagger": null,
     "frontend_refs": [],
@@ -22207,7 +22207,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/batch",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/batch",
@@ -22372,7 +22372,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/batch-delete",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/batch-delete",
@@ -22521,7 +22521,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/batch-reparse",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/batch-reparse",
@@ -22670,7 +22670,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/folder",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/folder",
@@ -22820,7 +22820,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/knowledge/image/:id/:chunk_id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/image/{id}/{chunk_id}",
@@ -22988,7 +22988,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/knowledge/manual/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/manual/{id}",
@@ -23140,7 +23140,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/knowledge/move",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/move",
@@ -23275,7 +23275,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/move/progress/:task_id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/move/progress/{task_id}",
@@ -23406,7 +23406,7 @@
     "api_key_policy": "apiKeyRetrieve(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/knowledge/search",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/search",
@@ -23603,7 +23603,7 @@
     "api_key_policy": "apiKeyIngest(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/knowledge/tags",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/knowledge/tags",
@@ -55676,7 +55676,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/vector-stores",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores",
@@ -55795,7 +55795,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/vector-stores",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores",
@@ -55958,7 +55958,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "DELETE /api/v1/vector-stores/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/{id}",
@@ -56121,7 +56121,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/vector-stores/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/types",
@@ -56287,7 +56287,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "PUT /api/v1/vector-stores/:id",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/{id}",
@@ -56468,7 +56468,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/vector-stores/:id/test",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/{id}/test",
@@ -56617,7 +56617,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "POST /api/v1/vector-stores/test",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/test",
@@ -56768,7 +56768,7 @@
     "api_key_policy": "apiKeyManageVectorStores(apiKeyFullAccess())",
     "conditions": [],
     "id": "GET /api/v1/vector-stores/types",
-    "status": "not_started",
+    "status": "in_progress",
     "swagger_matches": [
       {
         "path": "/api/v1/vector-stores/types",

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"slices"
+	"sort"
 
 	"github.com/Tencent/WeKnora/internal/logger"
 	"github.com/Tencent/WeKnora/internal/searchutil"
@@ -42,6 +43,10 @@ func (s *knowledgeBaseService) processSearchResults(ctx context.Context,
 		return nil, err
 	}
 	logger.Infof(ctx, "Chunk data fetched successfully, count: %d", len(allChunks))
+	allChunks, err = s.bindPrimarySearchChunks(ctx, chunks, knowledgeMap, allChunks)
+	if err != nil {
+		return nil, err
+	}
 
 	// Build chunk map and collect enrichment IDs (parent, related, nearby)
 	chunkMap := make(map[string]*types.Chunk, len(allChunks))
@@ -57,6 +62,7 @@ func (s *knowledgeBaseService) processSearchResults(ctx context.Context,
 			if err != nil {
 				logger.Warnf(ctx, "Failed to fetch some additional chunks: %v", err)
 			} else {
+				additionalChunks = bindSearchContext(allChunks, additionalChunks, false)
 				for _, chunk := range additionalChunks {
 					chunkMap[chunk.ID] = chunk
 				}
@@ -71,6 +77,7 @@ func (s *knowledgeBaseService) processSearchResults(ctx context.Context,
 						if err != nil {
 							logger.Warnf(ctx, "Failed to fetch second-level parent chunks: %v", err)
 						} else {
+							parentChunks = bindSearchContext(additionalChunks, parentChunks, true)
 							for _, chunk := range parentChunks {
 								chunkMap[chunk.ID] = chunk
 							}
@@ -87,7 +94,11 @@ func (s *knowledgeBaseService) processSearchResults(ctx context.Context,
 	// Results can come from org-shared KBs owned by another workspace; the
 	// chunks above were already permission checked, so look up their image
 	// children without the caller-tenant filter (#3342).
-	searchutil.EnrichSearchResultsImageInfoOnly(ctx, s.chunkRepo, searchResults)
+	imageBindings := map[hybridSearchBinding]bool{}
+	for _, chunk := range chunkMap {
+		imageBindings[hybridBinding(chunk)] = true
+	}
+	searchutil.EnrichSearchResultsImageInfoOnly(ctx, hybridBoundImageRepository{s.chunkRepo, imageBindings}, searchResults)
 
 	logger.Infof(ctx, "Search results processed, total: %d", len(searchResults))
 	return searchResults, nil
@@ -258,7 +269,14 @@ func (s *knowledgeBaseService) assembleSearchResults(
 
 	// Second pass: Add enrichment chunks (parent, nearby, relation)
 	if !skipEnrichment {
-		for chunkID, chunk := range chunkMap {
+		// Primary matches retain fused/rerank order; context is deterministic.
+		contextIDs := make([]string, 0, len(chunkMap))
+		for id := range chunkMap {
+			contextIDs = append(contextIDs, id)
+		}
+		sort.Strings(contextIDs)
+		for _, chunkID := range contextIDs {
+			chunk := chunkMap[chunkID]
 			if addedChunkIDs[chunkID] || !s.isSearchableChunk(chunk) {
 				continue
 			}

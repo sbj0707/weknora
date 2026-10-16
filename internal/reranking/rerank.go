@@ -346,7 +346,9 @@ func CompositeScore(r *types.SearchResult, modelScore, baseScore float64) float6
 	if r.MatchType == types.MatchTypeGraph {
 		baseScore = modelScore
 	}
-	composite := 0.6*modelScore + 0.3*baseScore + 0.1*sourceWeight
+	// Specify the fused operations explicitly: compiler/CPU-dependent fusion
+	// otherwise changes public retrieval scores by one float64 ULP.
+	composite := math.FMA(0.1, sourceWeight, math.FMA(0.3, baseScore, 0.6*modelScore))
 	return math.Min(math.Max(composite, 0), 1)
 }
 

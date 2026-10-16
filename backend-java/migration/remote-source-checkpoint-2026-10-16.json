@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-16",
+  "status": "in_progress_bounded_remote_source_processing",
+  "full_goal": "All Go functionality migrated and strictly aligned; objective unchanged and active.",
+  "scope": "Native URL/file_url document worker, local temporary resources, parser selection, discovered metadata, bounded SQL/queue behavior. No public URL-import endpoint or complete replacement acceptance.",
+  "java_regression": {
+    "tests": 265,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "classes": 12,
+    "actual_exit_code": 0,
+    "session_id": 42655,
+    "log": "/tmp/weknora-java-remote-source-20261016-regression-second.log",
+    "log_sha256": "6ac4e830c4babe10620ef1efef70d25f78592be06a764e9e85b3c6fe4fb3c090",
+    "reports": "/tmp/weknora-java-remote-source-20261016-regression-second-reports",
+    "report_hashes": {
+      "TEST-com.tencent.weknora.knowledge.DocumentProcessingCompatibilityTest.xml": "6afdf1ebe0dceea41097bf51825d7e1785fbde55e72ea163142d59c3d10ab113",
+      "TEST-com.tencent.weknora.knowledge.ImageMultimodalFanoutGoParityTest.xml": "7ea0455c42f304d7e64704720d6dc574553cdbb1fbe608eeb6c87247285f2b2a",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanPipelineHttpIntegrationTest.xml": "090348fd2b32c5143669e4d84e5aa856bca2cf22d9f826d74c58d3190d6e4e6e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeReparseGoHttpParityTest.xml": "6ce34cdb2cd372f56650b297a9cd5fd8d4a76f7fabb4a7b6c886d1734f716207",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeReparsePipelineHttpIntegrationTest.xml": "60a0fff9d8dcc54a10b0c2bd6f9198a97c598274635ed10f49782dc8bf927d1d",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUploadCompatibilityTest.xml": "d0e749cdbd135583e8cf7413cd2fb8b7106a8e4211027e099d3fbfe834b6d281",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUploadHttpCompatibilityTest.xml": "a96e713a08ab8c6788704685f9c6d1520d11b5e8f7e92c3f5cc257c70d3e03c6",
+      "TEST-com.tencent.weknora.knowledge.ManualKnowledgePipelineHttpIntegrationTest.xml": "22a5f9283e7eaa447f891f49294d25ff72eb203954a48c467073e07cea50d699",
+      "TEST-com.tencent.weknora.knowledge.ManualProcessingGoParityTest.xml": "4d458812a3c465c71379b5a56a38f5acc652ca0930c609660d2652686fdf3286",
+      "TEST-com.tencent.weknora.knowledge.RemoteDocumentDownloadsGoParityTest.xml": "623c83234a73988a14367ce653021229e32731d03e99473b2263a45ec5cb91c9",
+      "TEST-com.tencent.weknora.knowledge.RemoteDocumentWorkerGoParityTest.xml": "4b3321b361362723ed8b7cad52013534c6115861ffaf61612ca2f08bc51360b5",
+      "TEST-com.tencent.weknora.security.NativeRoleGuardHttpIntegrationTest.xml": "96ddc96a7f4585e5766f8c608e93e45304e154acb33f234b76bd1404ff334218"
+    },
+    "new_actual_go_cases": 44,
+    "native_download_safety_tests": 5,
+    "production_reparse_http_flows": 9,
+    "new_remote_source_http_flows": 2
+  },
+  "actual_go_oracles": {
+    "download_and_filename_observations": 31,
+    "worker_scenarios": 13,
+    "actual_exit_code": 0,
+    "session_id": 58263,
+    "log": "/tmp/weknora-go-remote-source-20261016-final.log",
+    "log_sha256": "bc6c28704c8f643769e798d5e66398cc0425f1ecee497eefc62ee7567fb75bd0",
+    "download_output": "/tmp/weknora-go-fileurl-20261016-final.json",
+    "worker_output": "/tmp/weknora-go-remote-worker-20261016-final.json",
+    "corpora_equal_final_outputs": true
+  },
+  "input_hashes": {
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/DocumentProcessingHandler.java": "664faa01695f3a1f69d8b807f5876404ac7d0370474cb5ed14aa6a967a21f289",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/DocumentProcessingRepository.java": "d189e10dbc43c5aad4c5076be7b2e492a271e4aba4c4f60daa458ef48a6cd320",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingConfiguration.java": "4dba014262512624164552b16b7462e465ea00819688eb5d70567b7c6ac28e43",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/RemoteDocumentDownloads.java": "a7f480bae03fef02fdf28c73bb6d45ea9099fbb20a6b1d8e426d8fddf5436ca6",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/DocumentProcessingCompatibilityTest.java": "b166c210f3133126e20a0d6b2673ce71489d9635fd722903ccce543893660cb6",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/ImageMultimodalFanoutGoParityTest.java": "c07281a1750d17b5daecda8d1b6714b82d5ccc16a95dd7d0f1ff05a11c1e0d85",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanPipelineHttpIntegrationTest.java": "37b929131946190460c6841b4233388a1f9a7c2427325ebd93c49f89dcc8b6aa",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeReparseGoHttpParityTest.java": "753f540001f639753f0eef98c1c1da05cbc87028b99dba432efefb82c2c909c5",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeReparsePipelineHttpIntegrationTest.java": "81a5c3e659f241730f5017cc9ffe8b3727fc0ac7f5e74ffeb8fd898b79de5c58",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeUploadCompatibilityTest.java": "65088c57eb4a8af3536281093fd77eb802f5d54f460249f2961f92b19ff9f458",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeUploadHttpCompatibilityTest.java": "fc1d6a4bf1ddc32dd9221e04d24def9658b7a31bc2db9e8e7c15b516f761bbff",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/ManualKnowledgePipelineHttpIntegrationTest.java": "0bb8ffc39614357caf372cb3300c5b83c2cb71a1fcbb231d83da295d6d35c5d3",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/ManualProcessingGoParityTest.java": "7735440cf88f58478465f82b76d502f0780516e11561c53134a9182de7401892",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/RemoteDocumentDownloadsGoParityTest.java": "388413dc2badcb72c6bd9f4c8b50131eb3041efb37d41aa931d88575bbf22e39",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/RemoteDocumentWorkerGoParityTest.java": "32a42f0570711a6d6afd2a1828fb74bc0061003da9ddbc5842d1e1b906382082",
+    "backend-java/src/test/java/com/tencent/weknora/security/NativeRoleGuardHttpIntegrationTest.java": "6f50b1752c99d0744eb9a40e50b2918b0e9381dff900644e6c1133db48f43a77",
+    "internal/application/service/knowledge_fileurl_java_parity_test.go": "1ed2bcfe86ac3d496922304d64b06d4562261c778dc6005417d227c25f431bea",
+    "backend-java/src/test/resources/go-fileurl-download.json": "c7f92cbe23889e361941e74a5c99566fd7757a177a069060b507ade1a594e104",
+    "backend-java/src/test/resources/go-remote-document-worker.json": "41cc6a259f6ef304b5286a4943cabdabd94f643320d58453b1815bdd3a204449"
+  },
+  "input_hash_scope": "Only listed production files, selected test classes and Go oracle/corpora; not a complete frozen build manifest.",
+  "history": [
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-first.log",
+      "actual_exit_code": 1,
+      "tests": 42,
+      "failures": 2,
+      "reports": "/tmp/weknora-java-remote-source-20261016-first-reports",
+      "reason": "Go path.Base does not collapse dot segments; fixed production filename resolution."
+    },
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-second.log",
+      "actual_exit_code": 1,
+      "tests": 62,
+      "failures": 1,
+      "reports": "/tmp/weknora-java-remote-source-20261016-second-reports",
+      "reason": "Unconfigured Go reader marks failed and ACKs; fixed native reader selection/handling."
+    },
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-third.log",
+      "actual_exit_code": 1,
+      "reason": "Test cleanup needed checked reconnect exception declaration; compilation failed, no test result inferred."
+    },
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-fourth.log",
+      "actual_exit_code": 1,
+      "tests": 64,
+      "failures": 2,
+      "reports": "/tmp/weknora-java-remote-source-20261016-fourth-reports",
+      "reason": "New test sources inherited enabled summary generation. Tests now explicitly disable summary through the public process_config; completion/index assertions retained."
+    },
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-fifth.log",
+      "actual_exit_code": 0,
+      "tests": 67,
+      "classes": 4,
+      "reports": "/tmp/weknora-java-remote-source-20261016-fifth-reports"
+    },
+    {
+      "log": "/tmp/weknora-java-remote-source-20261016-regression-first.log",
+      "actual_exit_code": 0,
+      "tests": 265,
+      "classes": 12,
+      "reports": "/tmp/weknora-java-remote-source-20261016-regression-first-reports",
+      "note": "Before the final DocReader stage/title checkpoint ordering adjustment."
+    }
+  ],
+  "remaining": [
+    "Public URL/file_url import and temporary-document API/worker lifecycle",
+    "Direct Go batch-reparse worker full payload/initiator/language/trace differential",
+    "Full URL parser/store/model/index variants, proxy and transport-error/header/deadline parity, malformed URL/userinfo and reader cancellation",
+    "Go partial publication/quota semantics and all metadata-write failure checkpoints",
+    "Complete PostgreSQL remote-source processing and complete trace differential",
+    "All source/concurrent version/lease/cancel/restart/cutover windows; Java source/lease fences remain stronger than Go file_path-only guards",
+    "Fresh frozen full clean verify and same-jar single/go worker flows",
+    "Redis/Asynq and Lite takeover; all other route/task/module gaps"
+  ],
+  "ledger_advanced": false,
+  "verified_routes_added": 0,
+  "full_current_build_verified": false,
+  "current_jar_deployed": false,
+  "runtime_restarted": false,
+  "current_go_inventory": {
+    "files": 2482,
+    "all_hashes_match": true,
+    "routes": 482,
+    "registration_sites": 480,
+    "visited_registration_sites": 480,
+    "unresolved": 0,
+    "source_files_manifest_sha256": "7567be9240d329e457ad13fc383a7820015819df8420216cb4640a0418ed6b9d",
+    "coverage_report_sha256": "c444f966ac97ae75ff47030c09d0786b2e6065e4dcbc2efd2bb414dcd89451a6",
+    "generation_log": "/tmp/weknora-remote-source-inventory-20261016.log",
+    "actual_exit_code": 0,
+    "session_id": 99306
+  }
+}

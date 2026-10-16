@@ -15,6 +15,20 @@ public final class GoJsonFirstValue {
     private boolean completedContainer;
     private GoJsonFirstValue() { }
 
+    /** Decode one value without waiting for EOF or draining a possibly unfinished request body. */
+    public static byte[] first(java.io.InputStream input,int limit) throws IOException {
+        GoJsonFirstValue scan=new GoJsonFirstValue();var bytes=new java.io.ByteArrayOutputStream();
+        for(int count=0;count<limit;count++) {
+            int c=input.read();
+            if(c<0){byte[] result=bytes.toByteArray();length(result);return result;}
+            if(scan.step(c)){if(scan.completedContainer)bytes.write(c);return bytes.toByteArray();}
+            bytes.write(c);
+        }
+        // A scalar can finish exactly at EOF; a container would already have returned above.
+        int next=input.read();if(next<0){byte[] result=bytes.toByteArray();length(result);return result;}
+        throw new IOException("http: request body too large");
+    }
+
     public static int length(byte[] bytes) throws IOException {
         GoJsonFirstValue scan=new GoJsonFirstValue();
         boolean nonSpace=false;

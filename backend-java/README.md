@@ -1,6 +1,36 @@
 # WeKnora Java 后端迁移
 
+2026-10-16 当前复核：**121/482 条 Go 接口有 Java 原生入口，361 条缺失；15/22 种任务有部分 handler，7 种缺失，0 verified，功能仍不一致。** 本批补齐分阶段文档复制核心，与已有 chunk/图片复制及真实 SQL CAS/配额接合；实际 Go75 场景及相关回归 **745项/7类全部通过、实际退出0**。1063个src/pom输入构建前后哈希一致。生产适配器、公开复制/进度和 kb:clone 尚未接通，PostgreSQL 执行未验收。最近默认完整10464项通过只覆盖旧索引复制1047输入快照，当前3个修改、16个新增，本批未重跑完整构建。未部署或重启服务。 见 [最新对比](migration/comparison-latest.md)、[文档复制范围](migration/clone-document-notes.md) 和 [本批证据](migration/clone-document-checkpoint-2026-10-16.json)。
+
+## 历史批次（以下结果仅对应当时快照）
+
+前一配置复制批次：2026-10-16 当前复核：**120/482 条 Go 接口有 Java 原生入口，362 条缺失；14/22 种部分任务 handler，0 条 verified。** 新增原生知识库配置复制；206 项相关回归、独立 PostgreSQL 55 项对照全部通过，同一候选 jar 的 duplicate HTTP 在 single/go 两种 Java SQL worker 拓扑均实际退出 0。前一 r6 全量 10,012 项通过属于历史快照，本批未重新跑当前完整测试集。清单 119 in_progress/362 not_started/1 health implemented，无入口状态漂移；全量迁移未完成。详见 [最新对比](migration/comparison-latest.md) 和 [本批证据](migration/knowledge-base-duplicate-checkpoint-2026-10-16.json)。
+
+2026-10-16 Elasticsearch 8 索引移动增量：已补原生 update-by-query、完整更新判定、默认重试、Go typed JSON/错误解码及取消/超时传播、不跟随重定向和首次产品标识校验。实际 Go HTTP252场景＋2个上下文场景、真实ES22个移动场景通过，核对66次完整物理快照和396次检索；同引擎物理ID、内容和向量保留。997项专项通过；当前975个src/pom输入冻结完整 clean verify **9,768项/187类，failures/errors/skips全0、actual exit0**，包含SQL移动、ES移动/检索及两个公开向量存储IT。公开移动/进度入口、绑定和 knowledge:move worker 尚未接通；仍116/482条入口、13种部分任务handler、0 verified，完整迁移未完成。没有部署、重启开发实例或切换前端。 见[本批checkpoint](migration/elasticsearch-index-move-checkpoint-2026-10-16.json)。以下保留历史批次证据，不将旧jar验收累加到本批。
+
+此前SQL索引移动证据（2026-10-16）：SQLite 按源KB/文档原位迁移索引归属并清空标签，保留物理ID、向量和FTS；PostgreSQL移动时间改用Go对应的应用时间。实际Go SQLite13/PostgreSQL13对照及336项专项全部通过；PG使用完整115个迁移、Hikari1。覆盖完整选定元数据、源/目标/其他KB检索集合、回滚和重试。当时967个src/pom输入已记录，本批未另跑完整构建或打包验收；此前执行批次9,476项只证明其冻结快照。公开移动/进度入口、worker及其余运行时效果未接通，接口仍116/482、任务13种部分迁移、0 verified。见[SQL批次checkpoint](migration/index-move-checkpoint-2026-10-16.json)及[范围说明](src/main/java/com/tencent/weknora/retrieval/index-move-migration-notes.md)。没有部署、重启开发实例或切换前端。
+
+此前移动执行证据（2026-10-16）：新增逐文档保留向量/重解析状态机、独立 Chunk/标签/归属提交、清理与配额事务顺序、确定性下游任务 ID/7天保留参数、重读确认及最终失败恢复。实际 Go SQLite64/PostgreSQL64 对照和316项专项全部通过；PG使用全部115个迁移、Hikari1。含并发解析不覆盖和6个Wiki边界场景。原生外部效果适配器、公开移动/进度入口和 knowledge:move worker 尚未接通，接口仍116/482、任务13种部分迁移，未新增 verified。该批962个 src/pom 输入冻结完整构建已确认9,476项/182类、failures/errors/skips全0、actual exit0；不包含后续SQL索引移动修改。见[当前 checkpoint](migration/move-execution-checkpoint-2026-10-16.json)和[范围说明](src/main/java/com/tencent/weknora/knowledge/move-migration-notes.md)。没有部署、重启开发实例或切换前端。
+
+此前移动基础层证据（2026-10-16）：新增原生资源对兼容检查、完整持久化 transfer metadata、整批只读预检和独立 CAS/配额事务。实际 Go 对照 SQLite252/PostgreSQL252 均通过，PG 使用全部115个迁移及 Hikari1；专项444项/3类全部通过。保留 SQLite 旧时间格式导致的 Go CAS 冲突、数据库时间回读和并发非移动字段不覆盖。**公开移动/进度接口、Redis进度和 knowledge:move worker 尚未接通，路由和任务覆盖数未增加**。该批957个 src/pom 输入被冻结；完整 clean verify 已确认9,412项/181类、failures/errors/skips全0、actual exit0。此快照不包含后续移动执行逻辑，不能作为后续源码的全量证明。见[本批 checkpoint](migration/move-plan-checkpoint-2026-10-16.json)和[范围说明](src/main/java/com/tencent/weknora/knowledge/move-migration-notes.md)。没有部署、重启开发实例或切换前端。以下保留历史批次证据。
+
+本批图片更新证据（2026-10-16）：新增原生 `PUT /api/v1/knowledge/image/:id/:chunk_id`。实际 Go HTTP SQLite92/PostgreSQL92 场景通过，PG 应用全部115个迁移、Hikari连接池1；对照原调用方权限、内外层JSON绑定、父子片段归属、OCR/描述新增与更新、逐阶段部分提交、索引调用和链式MD5。专项412项/5类通过。冻结完整 clean verify **9,160项/180类，failures/errors/skips全0、actual exit0**；同一jar的single/go原文+ZIP+批量读取/标签+图库+图片更新真实HTTP流程均actual0，各2上传/4成功任务/6embedding/0chat，独立核对6条物理vec/FTS、4个图片子片段、源文件、配额、任务、审计和零版本记录。当前116/482条Go接口有Java入口（120个方法/路径组合），文档30/32；清单115 in_progress/366 not_started/1 health implemented/0 verified，任务仍13种部分迁移、9种缺失。图片接口仍in_progress，绑定外部向量库/完整组合引擎、全部存储数据与并发/生命周期/切换仍待对齐。没有部署或重启开发实例。详见[本批checkpoint](migration/image-update-checkpoint-2026-10-16.json)、[实现范围](src/main/java/com/tencent/weknora/knowledge/image-update-migration-notes.md)和[当前对比](migration/comparison-latest.md)。以下为历史证据，不同jar的验收模式不能累加。
+
+此前图库证据（2026-10-16）：新增原生图库配置和图片列表 GET 两个接口，实际Go HTTP SQLite152场景、完整115个迁移的PostgreSQL150场景通过（2个非法偏好JSON种子不可持久化，明确排除）。保留系统策略/原用户偏好、Viewer/retrieve/KB scope、SQL投影去重、属性规则、排序分页和只读副作用；共享数字分页绑定已按Gin 1.12先去空白。专项952项/5类通过；最终冻结 clean verify **9,064项/178类，failures/errors/skips全0、actual exit0**。同一jar的single/go原文+ZIP+批量读取/标签+图库真实HTTP流程均actual0，各2上传/4成功任务/2embedding；独立复核vec/FTS、源文件、配额、任务、审计、图库投影/策略清理及状态还原。当前115/482条Go接口有Java入口（119个方法/路径组合），文档29/32；清单114 in_progress/367 not_started/1 health implemented/0 verified，任务13种部分迁移、9种缺失。图库两个接口仍in_progress，完整存储数据/并发/生命周期/切换及其余模块仍缺。详见[本批checkpoint](migration/gallery-checkpoint-2026-10-16.json)和[当前对比](migration/comparison-latest.md)。没有部署或重启开发实例；下方保留历史证据，不同jar的验收模式不能累加。
+
+此前批量标签证据（2026-10-16）：新增原生 `PUT /api/v1/knowledge/tags`，实际Go HTTP SQLite96场景、完整115个迁移的PostgreSQL95场景通过（1个非法JSON种子不可持久化，未计通过或skip）。保留Contributor/ingest/KB allow-list/共享Editor/后续所有者校验、重复map/null绑定、全量预校验和按文档ID逐个事务提交；中途失败保留此前提交。专项309项/3类通过；最终冻结 clean verify **8,908项/176类，failures/errors/skips全0、actual exit0**。同一jar的single/go原文+ZIP+批量读取/搜索+批量标签真实HTTP流程均actual0，各2上传/4成功任务/2embedding；独立复核vec/FTS、源文件、配额、任务、审计及临时标签/关系清理。当前113/482条Go接口有Java入口（117个方法/路径组合），文档27/32；清单112 in_progress/369 not_started/1 health implemented/0 verified，任务13种部分迁移、9种缺失。该接口仍in_progress，完整存储数据解码、并发权限变化、故障/取消/重启/切换及其余模块仍缺。详见[本批checkpoint](migration/batch-tags-checkpoint-2026-10-16.json)和[当前对比](migration/comparison-latest.md)。没有部署或重启开发实例；以下为历史证据，不同jar的验收模式不能累加。
+
+此前文档读取证据（2026-10-16）：新增原生文档批量读取/搜索，实际 Go HTTP SQLite203场景、PostgreSQL在无统计信息/显式ANALYZE两种受控状态下各203场景通过，完整数组/DTO/错误/审计和无写入副作用逐项比较。最终冻结 clean verify **8,810项/175类，failures/errors/skips全0、actual exit0**；同一jar的single/go原文+ZIP+批量读取/搜索真实HTTP流程均actual0，各2上传/4成功任务/2embedding，独立复核物理vec/FTS、源文件、配额、任务和审计。首轮旧404路由断言失败及中止退出143记录保留；新快照完整重跑通过。两个新接口仍为in_progress：缺Go配置的Redis/Wiki stall_state探测；batch无ORDER BY，跨不同统计信息/计划不能保证稳定顺序。当前 **112/482条Go接口有Java入口（116个方法/路径组合）**，文档26/32；清单111 in_progress/370 not_started/1 health implemented/0 verified，任务13种部分迁移、9种缺失。详见[本批checkpoint](migration/collection-read-checkpoint-2026-10-16.json)和[当前对比](migration/comparison-latest.md)。完整迁移尚未完成，没有部署或重启开发实例。以下保留历史证据，不同jar的验收模式不能累加。
+
+此前批量 ZIP 证据（2026-10-16）：原生批量原文 ZIP 下载完成 SQLite127/PG125 实际 Go HTTP 对照（另2个NUL文本种子不可在PG持久化）及20个实际Go archive对照，含200个不同文档、真实512MiB/512MiB+1流和完整成功ZIP摘要；相关429项通过。最终冻结 clean verify **8,605项/174类，全0、actual exit0**；同一jar的single/go文件+批量ZIP HTTP流程均actual0，各2上传/4成功任务/2embedding，独立复核vec/FTS、源文件、配额、任务和审计。四并发名额、失败清理/复用及POST条件已验证；全量暴露的旧HTTP接收队列溢出已有真实socket反例和64MiB慢消费者回归，并修正反压。Servlet断连传播与Go context取消仍有差距，接口保持in_progress；清单109 in_progress/372 not_started/1 health implemented/0 verified，110/482条Go接口有Java入口。详见[本批checkpoint](migration/batch-download-checkpoint-2026-10-16.json)和[当前对比](migration/comparison-latest.md)。完整迁移仍在执行，没有部署或重启开发实例。以下为历史证据，不同jar的验收模式不能累加。
+
+此前原文批次证据（2026-10-16）：原文下载/预览新增 SQLite 209 个、PostgreSQL 207 个实际 Go 对照（另 2 个损坏 JSON 场景不能写入 jsonb），SQLite/Spring/真实 Tomcat 227 项通过。最终冻结完整 clean verify **8,451 项/171 类，failures/errors/skips 全 0、actual exit 0**；同一 jar 的 single/go 两种文件 HTTP 流程均 actual 0，各 2 上传/4 成功任务/2 embedding，并独立复核 vec/FTS、源文件、配额、任务和审计。已修正清洗后 ID 的 API key 范围及真实 Tomcat 的响应头删除差异，早期失败记录保留。清单为 108 in_progress/373 not_started/1 health implemented/0 verified；109/482 条 Go 接口有 Java 显式入口。完整迁移尚未完成。详见 [原文 checkpoint](migration/file-response-checkpoint-2026-10-16.json)和 [当前功能对比](migration/comparison-latest.md)。没有部署或重启开发实例。以下批次为历史证据，不能累加不同 jar 的验收模式。
+
+此前 URL 批次证据（2026-10-16）：公开 URL/file_url 导入 SQLite/PostgreSQL 各94实际Go场景、107项SQLite/Spring、冻结完整 clean verify **8,237项/169类，failures/errors/skips全0、actual exit0**。同一jar的single/go两种URL流程均actual0，每种2上传/2导入/8成功任务/4embedding/1reader/0chat，独立核对物理vec/FTS、下载原文、配额和原调用方审计，并覆盖入队失败201/failed。全范围迁移尚未完成；新URL路由仅标in_progress，清单106in_progress/375not_started/1health/0verified。详见[URL checkpoint](migration/url-import-checkpoint-2026-10-16.json)和[当前功能对比](migration/comparison-latest.md)。没有部署或重启开发实例。以下旧批次数据保留为历史，不覆盖新改动，也不能将不同jar的模式数相加。
+
 这是正在实施的 Go → Java 迁移工程，**尚未完成整个主后端替换**。现有 Go、前端和数据库迁移均保留。实际接口清单与逐项状态见 [migration/README.md](migration/README.md)；当前扫描得到 482 个路由，不能把启动成功或 Go 桥接当作全部迁移完成。
+
+最新批量重解析增量已有67个SQLite和67个PostgreSQL真实Go worker对照、289项相关回归通过。冻结源码完整构建 **8,139项/168类，failures/errors/skips全0、actual exit0**；同jar单文档及共享批量重解析在single/go两种SQL worker布局通过，每种2上传/11任务/5embedding HTTP，实际vec/FTS、源文件、配额、attempt及原始actor审计已核对。见[本批checkpoint](migration/reparse-worker-checkpoint-2026-10-16.json)和[worker说明](src/main/java/com/tencent/weknora/knowledge/reparse-worker-migration-notes.md)。URL/file_url worker增量也包含在该冻结构建中；公开URL导入、启用Langfuse、完整存储/并发/队列接管及其他Go模块仍待完成。迁移清单为105条进行中、376条未开始、1条health已实现、0条verified。
 
 ## 当前可以运行的 Java 原生能力
 
@@ -12,6 +42,7 @@
 - 解析引擎管理：原生 GET `/api/v1/system/parser-engines`、POST `/parser-engines/check` 和 POST `/docreader/reconnect`（后两条同属 `/api/v1/system`）。保留 Go 引擎元数据、未保存配置探测、secret 合并、共享 reader 重连，以及 Viewer/Admin 和 API key 能力校验。新增租户KV配置GET/PUT、密钥保留/脱敏、显式false与Go请求绑定对照；共享tenant service存储校验依赖仍待完成。Office 转换与完整 cloud parser 仍待迁移。
 - PostgreSQL JDBC 与 SQLite JDBC 连接、事务、现有表读取；自动建表/改表关闭。SQLite 时间写入兼容 Go DATETIME 文本。
 - 临时 Go HTTP 桥接：认证头/租户头/query/body/状态透传、原始上传与文件字节、SSE 逐块 flush。**业务仍在 Go 中执行。**
+- 文档索引查看：原生 `GET /api/v1/knowledge/:id/index-status` 和 `GET /api/v1/knowledge/:id/chunks/:chunk_id/details`，复用共享 KB/Agent/API key 授权，读取实际 SQLite FTS/vec0、问题与 Wiki 引用。PostgreSQL 读取已有代码但仍待真实库验证；图谱和未适配外部存储显示未知。详见 [索引详情范围](src/main/java/com/tencent/weknora/knowledge/index-read-migration-notes.md)，两路由保持 `in_progress`。
 
 模型 list/detail 已实现本租户/内置与 remote chat 范围、Go DTO 脱敏、AES-GCM 凭据配置状态和 runtime catalog；providers 与 catalog resolve GET/POST 已实现部署配置及 console DB overlay、last-good 同步。专项覆盖 131 个 Go DTO、740 个 runtime resolve 和 82 个实际 Go handler 金样本。远程模型创建/更新、凭据修改/清除及完整引用保护删除已通过 18 项专项；本地模型下载、probe/推理/copy/cloud仍未迁移；Go bridge 暂不接管 models 路由。详见 [模型范围说明](src/main/java/com/tencent/weknora/model/migration-notes.md)。
 
@@ -61,98 +92,12 @@ VITE_DEV_PROXY_TARGET=http://127.0.0.1:8081 npm run dev
 
 所有运行使用现有 schema，Java 不启动 Flyway/GORM migrations。空数据库只适合健康检查；认证和业务接口需要 Go 已初始化的数据库。
 
-当前最新独立 `clean verify` 完整通过 **3,444 项测试**（90个测试类，失败/错误/跳过均0），可执行jar为146,449,729字节，位于 `/tmp/weknora-java-datatable-foundation-full-build/`。结果来自同一次完整运行。新jar通过 **172项实际后端HTTP检查**（原有146项加OIDC26项）；8次OIDC provider、1次Go bridge归属探测和10次解析探测HTTP单独记录。单池、六池基础上传链各2上传、4个持久化任务、2次Embedding HTTP，Hikari单连接、Go BLOB模型参数、真实vec0/FTS、共享owner/原actor审计、最终postprocess完成均通过，readiness重试0。301个Java主/测试源码路径正确且未被Git忽略。新增DuckDB表格加载、原始摘要prompt和文档并发替换回归已计入；完整表格summary handler仍在隔离stage，尚未注册生产worker，严格Office全任务验收仍待完成。证据和限制见 [VALIDATION.md](VALIDATION.md) 与 [表格任务审计](migration/datatable-summary-audit.md)。482路由为65项in_progress、416项not_started、1项health implemented，完整Go替换尚未完成。
+当前全量迁移尚未完成：482条Go HTTP路由的清单仍为103条in_progress、378条not_started、1条health implemented、0条verified。2026-10-16最新扫描确认106条Go路径有Java显式入口，其中2条是尚未验收的重解析草稿；376条没有显式入口。路径存在不代表功能对齐。公开摘要稳定批次的257项专项和56项PostgreSQL对照通过；**最近完整冻结构建7,914项/163类、失败/错误/跳过均0**，显式包含公开向量存储IT133+6项。首轮漏传ES地址造成139项失败；补齐独立ES配置后，同份源码完整重跑通过，原失败保留。当前已比该1,154输入快照新增6输入并修改2个权限类，旧全量结果不覆盖这些改动；本次当前源码编译通过，未重跑完整测试。详见[当前核对记录](migration/comparison-review-2026-10-16-current.json)。
 
-```sh
-python3 backend-java/scripts/smoke.py /tmp/weknora-java-oidc-full-build/backend-java-0.1.0-SNAPSHOT.jar
-python3 backend-java/scripts/oidc_smoke.py /tmp/weknora-java-oidc-full-build/backend-java-0.1.0-SNAPSHOT.jar
-python3 backend-java/scripts/processing_smoke.py /tmp/weknora-java-oidc-full-build/backend-java-0.1.0-SNAPSHOT.jar "$weknora_vec_library" --topology go
-# 同一基础处理链的默认单池回归：--topology single
-```
+摘要稳定jar SHA256为 `4b4d3e39ba3304243198bae9d8a9a970ffbd7166daaeb05ab24e5819e8bc85bd`。同jar的摘要公开入口single/go两种SQL worker布局通过，每种2上传/8任务/8embedding/6chat，实际检查同步/异步生成、共享授权、入队失败和vec/FTS/源文件/配额保留。冻结源码与jar证据保留，但该jar不包含当前重解析草稿。这是本jar的2种流程验收，不能替代所有历史流程、完整任务或全路由切换验收。
 
-处理smoke仅使用临时数据库、文件目录、随机端口和测试凭据；三个开关均显式启用，bridge关闭，增强处理禁用。smoke先通过只读认证请求确认数据库就绪，再发送一次上传；并行启动时曾观察到一次短暂503，未通过重试上传掩盖。真实PostgreSQL/云存储/外部模型、Docker、完整增强任务与生产切流未验证。
+上一个通过的完整构建为 **7,851项/161类、失败/错误/跳过均0**，其jar的6种同步配置均actual exit0、tasks=false；该旧jar不覆盖后续摘要入口，1,133个旧输入哈希不能用于证明当前全部改动。再上一批7,712项/40种流程属于另一个jar，不能相加称同jar46种。原生SQL业务任务已有12种部分迁移、1种批量重解析草稿，Go的其余9种任务没有handler；Lite/Redis消费和完整切换尚未完成。源码、jar哈希、原始失败与证据见 [VALIDATION.md](VALIDATION.md)。
 
-## 逐步替换时的 Go 桥接
+同步chunk重新生成另有81 SQLite/81 PostgreSQL实际Go对照、9 Spring流程；绑定ES8另有300项组合、52 PostgreSQL公开对照，以及真实ES写入/检索/删除专项。公开PG联合流程通过10上传48任务（46成功/2取消）、38embedding/27chat HTTP。公开向量存储8个管理接口已有原生实现和133实际Go对照，但其余引擎、绑定后台文档写入仍待迁移；完整RAG、会话/Agent、其余任务与生产切换也未完成。详见 [功能对齐矩阵](migration/go-java-feature-comparison.md)。
 
-桥接默认关闭。启用后默认只有健康检查由 Java 处理，其余 HTTP 请求交给 Go，保持未迁移业务原有认证与行为：
-
-```sh
-export JAVA_GO_BRIDGE_ENABLED=true
-export JAVA_GO_BRIDGE_URL='http://127.0.0.1:8080'
-```
-
-`JAVA_NATIVE_ROUTES_ENABLED=true` 将当前 login/me/refresh/logout/validate/preferences/switch-tenant/change-password/config/register、tenant API key 管理 4 条、成员管理 4 条及精确 `POST /api/v1/tenants/:id/leave`、上述租户9个具体接口、邀请10条与精确 `POST /api/v1/auth/register-by-invite`、精确 `POST /api/v1/chunker/preview`、四个知识/分块读取 GET、三个解析引擎管理接口及精确GET/PUT parser-engine-config KV、OIDC四个精确公开GET、KB list/detail/pin 小范围链路切到 Java；其他路径仍进 Go。KB create/update 仍默认归 Go，以保留未迁移的引擎初始化/异步副作用。含 `agent_id` 的 KB 列表留在 Go。此开关只用于隔离验证，尚未通过全量兼容验收。
-
-桥接以固定 HTTP(S) origin 转发，禁重定向/自动重试；每次只有一个业务请求，不做 Go/Java 双写。响应头 `X-WeKnora-Implementation: go-compatibility-bridge` 表明实际实现归属。
-
-WebSocket/终端/桌面连接未实现桥接，返回 501；这些路径应暂时由前置代理直接转 Go。Java bridge 会替换未经验证的 forwarded/client-IP 头，以 servlet 连接源为基准；经前置代理时需要后续明确可信代理与客户端 IP 策略，当前不能声称公共 embed/IP 限流完全等价。Java servlet 线程按流占用，容量和连接中断需压测；本地 SSE 测试覆盖事件字节与首事件及时 flush，尚未证明所有停止/重连/任务取消行为。
-
-## 已知原生迁移差异
-
-- 始终要求 active user/tenant/member；孤立 home tenant 自动修复 Owner 已有原生事务实现及 12 项专项验证；仅有效 JWT 用户自己的有效 home tenant、没有任何活跃成员时恢复，并锁租户行防并发抢占。RBAC 开关与跨租户超级用户需按 Java 配置显式启用，并同时校验用户属性，避免只凭属性绕过权限。历史重复 token 行只要有撤销行即拒绝；这些防护比 Go 原始校验严格，尚未宣称所有身份路径字节级一致。
-- API key 原生只支持 tenant scope/tenant principal。platform、direct/signed external principal、hash 缺失回填尚未迁移；last_used_at 已按 Go 异步一分钟限频写入。API key 路由默认拒绝，只放行显式 KB 能力；restricted key 可创建 KB，但新 KB 不自动加入旧 allow-list，保持 Go 行为。
-- `/auth/me` 已实现角色安全的配置、实际 capabilities、偏好默认值与 runtime DB→ENV→YAML 配置优先级。新增 validate/preferences/switch/change-password；config/register 的完整个人租户、环境存储快照、Owner 与用户事务已通过专项验证。邀请 HTTP10条与邀请注册已原生落盘；225组Go请求绑定/校验、15组实际Gin代理IP规则、共享限流和真实SQLite状态/失败副作用通过专项。17组实际Go邀请注册业务、18组拒绝审计与guard对照已落盘并通过专项。OIDC四个公开GET和provider/本地身份链已原生接线，Servlet断开取消、代理与PG仍待验证；全域拒绝审计、租户/系统管理仍未完成；成员管理、工作区退出和孤儿恢复已有原生实现。内部邀请 DTO/TTL/URL codec 的57个实际Go对照已整合，全部路线仍保留in_progress。Tenant API key Owner 管理已有原生实现。Go List/PUT 会返回解密后的 api_key，POST 的 api_key 在启用 AES 时为密文并另返回 token；Java 已按真实 Go GORM fixtures 保持这一响应语义。
-- KB create/update 已有原生实现及 12 项真实 SQLite 生命周期测试。绑定展示按 Go DB/env 元数据解析，不是连接探测。仅 default-connection PostgreSQL 绑定可以完成无副作用 preflight；原生SQLite索引SPI已移植FTS/vector初始化和image index修复，但KB生命周期尚未连接该SPI、外部向量引擎构建仍未移植，因此绑定preflight仍显式返回2201。现有绑定读取仍可展示其 Go 元数据；不能计完整索引迁移。画像 false→true 所需 Asynq 任务明确返回 501 并回滚；临时 KB 无该任务副作用。共享KB读取授权（含Agent）、更新写授权已有原生对照；共享向量绑定隐藏具体ID/name/engine并使用owner计数。复制、删除文件/索引清理、完整上传与搜索仍待迁移。
-- Java 登录/KB 的全部错误消息、配置响应、分页/排序边界还需逐个 Go 运行结果对照，清单保留 `in_progress`。数据库/外部故障使用 typed 503；桥接保留 Go 原始响应。
-
-## 后续必须完成的业务链路
-
-1. 完成所有认证模式、租户/RBAC/共享/API key 管理与安全 DTO 行为对照。
-2. 完成 KB CRUD 的 tenant 默认存储与具体实例验证、vector store ownership、事务、审计和清理任务；不能只删数据库行而遗留索引/文件。
-3. 模型提供商和 runtime catalog、已有加密密钥格式、存储/向量适配器、资源 URL/预签名与权限。
-4. 上传 → docreader/Anydoc → 分块 → Embedding → 索引 → 状态、任务的取消/重试/幂等/死信。
-5. 检索 → rerank → RAG → 会话/消息 → SSE 的事件、停止/继续生成与落库；用固定模型响应做编排对照。
-6. Agent 工具/MCP/沙盒/数据源同步/IM/embed/wiki/memory 和全部实际路由。
-7. Docker/监控/压测、任务归属与排空、可回滚切流；全量 verified 后才能移除 Go。
-
-### Asynq 切换约束
-
-现有 Redis/Asynq 任务由 Go Worker 消费。Java Redis client 不兼容 Asynq 协议，当前没有让 Java 消费这些任务。迁移阶段相关请求交给 Go，由 Go 创建/消费任务；任务检查/重试/取消同样留在 Go。后续要么增加明确的内部 enqueue/inspect/cancel Go adapter，要么实现新的 Java task backend，并在停止新任务→排空/迁移 pending→切换消费者后移除 Go。任何 bridge/adapter 都标记 `bridge_only`，不能标记 Java 已实现。
-
-### 文档解析切换约束
-
-Python docreader 可以保留，但不覆盖 `internal/infrastructure/docparser/anydoc_reader.go` 的进程内 Go 解析。需要迁移为 Java parser 或独立 Go 解析 adapter。Java remote reader 根据 `DOCREADER_TRANSPORT` 选择原生 HTTP/JSON 或 gRPC；HTTP 已通过136个实际Go请求/响应对照与6项配置/DNS/取消安全专项，包含图片与source locator。Java gRPC client 已从 canonical `docreader/proto/docreader.proto` 生成，TLS/mTLS/token/deadline、取消、消息上限、stream-first/UNIMPLEMENTED-only unary fallback 和 ListEngines 已移植。25 常规测试和 2 项实际 Go gRPC 明文/mTLS 互操作已通过；这不代表上传/解析/分块/索引整条链路完成。详见 [解析适配范围](src/main/java/com/tencent/weknora/docreader/migration-notes.md)。
-
-### 原生分块基础
-
-`chunker/` 的 legacy254+adaptive175 共429个实际 Go oracle 已计入完整3,405验证；21个超宽表格边界促使使用 RE2/J 修复 Java regex 实际 StackOverflow。Unicode rune offsets、原文边界、context header、embedding text、保护区与图片引用位置均独立保留。HTML normalizer70项、原生 preview91项与 scanner1项专项通过（scanner 内含7039个实际Go字节输入），preview保持Go64k字符限制、配置默认、stats截断及鉴权且不写知识/分块表；基础上传链另有显式开关，增强处理仍待完成。这些组件已全部计入3,405完整verify；详见 [分块范围](src/main/java/com/tencent/weknora/chunker/migration-notes.md)。
-
-### 文件存储基础
-
-`storage/` 已落盘原生 local provider、具体 backend scope、Go HMAC预签名、旧 resources/bindings/grants 表、tenant-bound resource FileStore 和 KB/default/legacy 解析。73项测试已通过并纳入完整3,405验证，包含原68项路径/签名/资源grant/文件系统/SQLite/安全行为以及新增Unix MIME注册表：1117个真实Go注册、24个参数案例和10个实际资源持久化检查；基础TXT上传已显式接线，桥接仍归Go；cloud providers 明确拒绝执行，不能将 local 基础计为对象存储全迁移。
-
-### SQLite 索引与原文位置
-
-`retrieval/SQLiteIndexRepository` 已通过原生 JDBC vec0/FTS5 对照，复用 Go 的 metadata、FTS 和维度向量表，保存 float32 原始字节并加入调用方事务。11次真实Go写操作、704次真实检索和8组模型输入清理已验证；旧24项model clients与新增4项index测试的专项28项通过。开发验证需上述显式vec库参数，Java运行需operator提供匹配平台v0.1.6库；扩展不自动下载。Postgres halfvec/ParadeDB 和公开RAG接线仍待完成。详见 [索引范围](src/main/java/com/tencent/weknora/retrieval/migration-notes.md)。
-
-`sourceloc/` 已实现原文rune引用、段落/BOM、相邻折叠、partial和完整引用、验证式rewrite/remap/alignment以及CSV行结构。7个测试方法内含235index、1880point、4464HTML quote、39rewrite、88Align、30CSV结构和12merge；相关240项专项clean通过。TXT/MD/CSV已连接处理链并绑定知识source hash；Office ZIP 原文定位已接入处理链（DOCX/DOCM/PPTX/PPTM/EPUB 与 XLSX 自定义/本地化数字展示格式；4,520 个解析与59,982个格式Go样本已对照）。实际jar中的custom XLSX原文定位也已对照，但单独的datatable:summary缺少handler，额外完整XLSX上传smoke失败；Office内容转换、表格摘要、ASR及其他处理仍待完成；[原文位置范围](src/main/java/com/tencent/weknora/sourceloc/migration-notes.md)。
-
-### Java 任务后端
-
-`task/` 是独立 SQL durable queue，默认 worker 关闭，**不会消费 Redis/Asynq**。显式 schema 在 `migration/sql/java-tasks.sql`，只在隔离副本验证后按任务归属切换；不会自动建表。29 项真实 SQLite/worker 测试覆盖 tenant-scoped 幂等、业务事务 enqueue、lease 续租与 attempt fencing、取消、重试预算、死信与人工重试、最终 SQL 副作用与 completion 原子提交、超时和停机。
-
-生产 `KnowledgeFileTaskEnqueuer` 已保留 Go upload 的 queue、MaxRetry 和 timeout：MaxRetry(3) 为初次加三次重试，共四次执行；每次 enqueue 生成新 ID，并加入调用方 SQL 事务。Worker 使用持久化的每任务 deadline、队列成员过滤及 Asynq 加权随机顺序；重试延迟按锁定 Asynq 版本的 n⁴+15+jitter 公式计算。旧版 Java queue 的隔离副本需显式执行 `migration/sql/java-tasks-options-upgrade.sql`；新建副本只执行完整 schema，两者不一起运行。默认仍为single单池；显式 `weknora.tasks.topology=go` 启用六个独立pool和DB→ENV→默认值启动配额（8/2/12/4/6/8）。294个实际Go配置、队列registry/权重和真实SQLite饱和时的解析/后处理保留容量已对照。Java每池显式上限64；runtime配置API/Redis任务仍待完成。详见 [任务范围](src/main/java/com/tencent/weknora/task/migration-notes.md)。
-
-基础document:process与knowledge:post_process已原生接线；profile及其他增强handler和旧task API仍待迁移，不能把queue基础设施计为22个任务完成。delivery 是 at-least-once，业务 handler 必须按 task ID 做幂等；外部存储/索引副作用还需自己的幂等和补偿。接线后才可在隔离环境启用 `WEKNORA_TASKS_ENABLED=true` 或 `weknora.tasks.enabled=true`，按任务类型停止 Go 新建→排空旧任务→单一消费者切换，保留回滚路径。
-
-## Docker 构建
-
-构建上下文使用仓库根，以生成 canonical proto：
-
-```sh
-docker build -f backend-java/Dockerfile .
-```
-
-镜像尚未实际构建和部署。
-
-## 继续执行
-
-逐路由读取 `migration/routes.json` 的 handler、guards、API-key policy、Swagger/前端证据；从 handler 沿 service/repository 审计事务和外部副作用。修改 `migration/status.json` 后重生成，生成器保留人工状态；保留旧 Go 实现与用户改动。完整 Go→Java 运行对照通过之前，不将 `in_progress` 改为 `verified`。
-
-### 上传与模型的新基础组件
-
-原生 `KnowledgeProcessConfig`、输入 overrides 验证和命名规则通过72/212/29组实际Go对照。`KnowledgeRepository` 和 `KnowledgeFileUpload` 的6项测试包含81个实际Go上传生命周期、5个真实SQLite/文件/资源/SQL任务场景，保持原始存储名与展示名分离、MD5去重scope、quota、tag best-effort、入队失败保留failed记录、数据库事务失败清理文件，以及文档/表格摘要任务的queue/retry/timeout契约。另有11项正式处理/HTTP测试，含24个实际Go处理结果、76个真实Go multipart绑定/大小/JSON响应以及真正的multipart→本地资源→durable worker→Embedding HTTP→SQLite vec0/FTS→postprocess链，保留source hash/owner租户/audit与源文件或lease改变时整事务回滚。三开关 `weknora.tasks.enabled=true`、`weknora.knowledge.processing.enabled=true`、`weknora.knowledge.upload.enabled=true` 默认关闭，桥接上传归属仍Go；只有禁用增强处理的受控基础链可用，不能计完整上传路由。
-
-模型客户端新增单次图片拒绝重试、session/cache affinity与UTF-8请求头（32个Go案例、52次请求），以及原生Anthropic Messages HTTP/SSE（558个Go构造、82个实际HTTP/SSE场景、thinking签名逐块回放及raw工具参数）。原生Ollama chat/NDJSON、embedding和availability/pull也已落盘，78个Go场景/355个实际HTTP与3项新增测试通过；Float32原始位精确对照。signed auth明确拒绝；Ollama typed SDK binder已按1,498个实际Go解码场景和236个实际HTTP场景/987请求验证，包含原78场景，不累加重复数量。其他厂商SDK binder仍需对照。公开推理/RAG编排、其它模型协议、本地管理/代理/storage-image仍待迁移。源文件路径与声明包名已一致，`backend-java/.gitignore`覆盖根目录二进制同名规则，新增Java源码可以被Git纳入。
-
-知识与分块原生读取已接入四条GET：知识库知识列表、知识详情、分块列表和分块by-id。584个实际Go HTTP完整DTO案例通过，含共享owner范围、组织/Agent权限、撤销、API Key retrieve范围、标签/文件夹/分页、profile/source_locators类型解码和隐藏内部字段。公开写入/下载/search/batch/分块detail仍按现有归属处理。SQL驱动错误文本及其他时间/存储JSON边界仍待审计，四条读取路由保持in_progress，未宣告完整知识模块替换。
+当前8081开发试用实例仍运行先前7,851项构建的jar，未自动重启到本次摘要入口改动。health已返回200，但按启动参数及默认配置，上传开关 `weknora.knowledge.upload.enabled` 未开启，Neo4j关闭；processing和SQL worker开启不能替代这两个功能开关。该实例使用隔离数据库、bridge关闭，未切换现有前端代理。

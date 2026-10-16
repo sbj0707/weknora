@@ -44,3 +44,51 @@ CREATE TABLE java_task_dead_letters (
     failed_at BIGINT NOT NULL,
     FOREIGN KEY(task_id) REFERENCES java_task_jobs(id)
 );
+
+-- Terminal summary deliveries release their parent slot at most once.
+CREATE TABLE java_summary_task_drains (
+    task_id VARCHAR(36) PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    knowledge_id VARCHAR(36) NOT NULL,
+    attempt BIGINT NOT NULL
+);
+-- Explicit upgrade for existing Java task databases. Never executed by a repository constructor.
+CREATE TABLE IF NOT EXISTS java_question_task_drains (
+    task_id VARCHAR(36) PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    knowledge_id VARCHAR(36) NOT NULL,
+    attempt BIGINT NOT NULL
+);
+-- Explicit, idempotent upgrade; never executed by repository constructors.
+CREATE TABLE IF NOT EXISTS java_graph_task_drains (
+    task_id VARCHAR(36) PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    knowledge_id VARCHAR(36) NOT NULL,
+    attempt BIGINT NOT NULL
+);
+-- Explicit native image fan-in upgrade. Application constructors never execute DDL.
+CREATE TABLE IF NOT EXISTS java_image_task_pending (
+    tenant_id BIGINT NOT NULL,
+    knowledge_id VARCHAR(36) NOT NULL,
+    attempt BIGINT NOT NULL,
+    pending_count BIGINT NOT NULL,
+    handoff_done BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY(tenant_id,knowledge_id)
+);
+CREATE TABLE IF NOT EXISTS java_image_task_drains (
+    task_id VARCHAR(36) PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    knowledge_id VARCHAR(36) NOT NULL,
+    attempt BIGINT NOT NULL
+);
+
+-- Explicit upgrade for named, queue-scoped task admission and completed-task retention.
+-- No application constructor runs this DDL. Existing UUID queue keys are unchanged.
+CREATE TABLE IF NOT EXISTS java_task_named_keys (
+    queue VARCHAR(128) NOT NULL,
+    business_id TEXT NOT NULL,
+    task_id VARCHAR(36) NOT NULL,
+    retention_millis BIGINT NOT NULL CHECK(retention_millis>=0),
+    PRIMARY KEY(queue,business_id),
+    FOREIGN KEY(task_id) REFERENCES java_task_jobs(id) ON DELETE CASCADE
+);

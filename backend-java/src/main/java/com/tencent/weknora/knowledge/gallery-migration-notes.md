@@ -1,0 +1,13 @@
+# Native image gallery reads
+
+Go is the behavior reference. The new native routes are `GET /api/v1/knowledge-bases/:id/gallery-config` and `GET /api/v1/knowledge-bases/:id/images`. Neither requires a document worker to be enabled. Viewer floor, retrieve capability, API key KB allow-list, organization/agent reads and the original caller identity use the existing native authorization chain. Mixed bridge mode selects these GET operations only.
+
+`gallery-contract.json` is exported from the production Go gallery registry and reflected types by `src/test/fixtures/knowledge_gallery_http_fixture.go`. It contains attribute declarations and typed JSON schemas, not a snapshot of runtime settings. Each request reads global `gallery.policy` (JSON-encoded string plus `value_type=string`) and the original user's stored preferences. Invalid/unavailable tiers are ignored in full. Only the user's mode/status participate; Go does not wire a KB policy tier or user usage/source overrides.
+
+The list queries the production `chunk_images` projection (SQLite migration 000032 / PostgreSQL migration 000113). It retains the anti-join winner rule, SQL backend collation, keyword wildcard escaping, literal dotted JSON keys, missing-attribute filter behavior, on-over-off verdicts, usage eligibility, count optimization, tie direction, Go int64 offset overflow and fallback source titles. No gallery read mutates chunks, indexes, documents, quota or task state. Projection updates remain the existing SQL triggers' responsibility.
+
+The shared pagination binder now trims numeric fields before conversion, matching Gin 1.12's `setWithProperType`; no independent gallery pagination implementation was introduced. Query fixture replay performs form decoding explicitly to match the real servlet and Go URL query behavior (`+` means a space).
+
+Actual Go SQLite HTTP corpus: 152 cases. PostgreSQL corpus has the same 152 rows; two invalid stored preference JSON seeds cannot persist to JSONB and are explicitly excluded, rather than passed or skipped. The PostgreSQL harness applies all versioned migrations and runs with a single pooled connection. Production Spring tests use real JWTs/API keys, original shared-user preferences, runtime policy changes, revocation, and projection update/delete triggers.
+
+These routes remain `in_progress`. Whole-system cutover, all stored JSON boundary sizes/Unicode variants, authorization/resource changes during operations, and concurrent projection updates across queries are not fully validated. Updating image info (and its child chunk/index side effects) is a separate Go write route and is not implemented by these reads. Existing publication/queue/quota/external-vector-write differences remain.

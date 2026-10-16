@@ -1,0 +1,223 @@
+{
+  "after_late_initial_bytes": "{\"task_id\":\"task\",\"source_kb_id\":\"kb\",\"target_kb_id\":\"other\",\"status\":\"completed\",\"progress\":100,\"total\":2,\"processed\":2,\"failed\":0,\"message\":\"Task \\u003c\\u003e\\u0026\\u2028\\u2029😀\",\"error\":\"\",\"created_at\":41,\"updated_at\":44}",
+  "after_late_initial_ttl_seconds": 75600,
+  "completed": {
+    "task_id": "task",
+    "source_kb_id": "kb",
+    "target_kb_id": "other",
+    "status": "completed",
+    "progress": 100,
+    "total": 2,
+    "processed": 2,
+    "failed": 0,
+    "message": "Task \u003c\u003e\u0026\u2028\u2029😀",
+    "error": "",
+    "created_at": 41,
+    "updated_at": 44
+  },
+  "completed_bytes": "{\"task_id\":\"task\",\"source_kb_id\":\"kb\",\"target_kb_id\":\"other\",\"status\":\"completed\",\"progress\":100,\"total\":2,\"processed\":2,\"failed\":0,\"message\":\"Task \\u003c\\u003e\\u0026\\u2028\\u2029😀\",\"error\":\"\",\"created_at\":41,\"updated_at\":44}",
+  "decode": [
+    {
+      "error": "",
+      "raw": "null",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 0,
+        "total": 0,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "",
+      "raw": "{}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 0,
+        "total": 0,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal array into Go value of type types.KnowledgeMoveProgress",
+      "raw": "[]",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal bool into Go value of type types.KnowledgeMoveProgress",
+      "raw": "true",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal number into Go value of type types.KnowledgeMoveProgress",
+      "raw": "1",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal string into Go value of type types.KnowledgeMoveProgress",
+      "raw": "\"x\"",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal number into Go struct field KnowledgeMoveProgress.task_id of type string",
+      "raw": "{\"task_id\":4}",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal number 1.5 into Go struct field KnowledgeMoveProgress.total of type int",
+      "raw": "{\"total\":1.5}",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal number 9223372036854775808 into Go struct field KnowledgeMoveProgress.total of type int",
+      "raw": "{\"total\":9223372036854775808}",
+      "value": null
+    },
+    {
+      "error": "",
+      "raw": "{\"created_at\":-1}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 0,
+        "total": 0,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": -1,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "",
+      "raw": "{\"total\":3,\"TOTAL\":null}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 0,
+        "total": 3,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "",
+      "raw": "{\"total\":1,\"total\":4}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 0,
+        "total": 4,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal string into Go struct field KnowledgeMoveProgress.total of type int",
+      "raw": "{\"total\":\"bad\",\"total\":4}",
+      "value": null
+    },
+    {
+      "error": "",
+      "raw": "{\"Status\":\"completed\",\"message\":\"\u003c\u003e\u0026\\u2028\\u2029😀\"}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "completed",
+        "progress": 0,
+        "total": 0,
+        "processed": 0,
+        "failed": 0,
+        "message": "\u003c\u003e\u0026\u2028\u2029😀",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "",
+      "raw": "{\"unknown\":{\"x\":1},\"progress\":100}",
+      "value": {
+        "task_id": "",
+        "source_kb_id": "",
+        "target_kb_id": "",
+        "status": "",
+        "progress": 100,
+        "total": 0,
+        "processed": 0,
+        "failed": 0,
+        "message": "",
+        "error": "",
+        "created_at": 0,
+        "updated_at": 0
+      }
+    },
+    {
+      "error": "failed to unmarshal move progress: json: cannot unmarshal bool into Go struct field KnowledgeMoveProgress.error of type string",
+      "raw": "{\"error\":false,\"task_id\":2}",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: invalid character 't' after top-level value",
+      "raw": "{} true",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: unexpected end of JSON input",
+      "raw": "{\"task_id\":",
+      "value": null
+    },
+    {
+      "error": "failed to unmarshal move progress: unexpected end of JSON input",
+      "raw": "",
+      "value": null
+    }
+  ],
+  "initial": {
+    "task_id": "task",
+    "source_kb_id": "kb",
+    "target_kb_id": "other",
+    "status": "pending",
+    "progress": 0,
+    "total": 2,
+    "processed": 0,
+    "failed": 0,
+    "message": "Task \u003c\u003e\u0026\u2028\u2029😀",
+    "error": "",
+    "created_at": 41,
+    "updated_at": 42
+  },
+  "initial_bytes": "{\"task_id\":\"task\",\"source_kb_id\":\"kb\",\"target_kb_id\":\"other\",\"status\":\"pending\",\"progress\":0,\"total\":2,\"processed\":0,\"failed\":0,\"message\":\"Task \\u003c\\u003e\\u0026\\u2028\\u2029😀\",\"error\":\"\",\"created_at\":41,\"updated_at\":42}",
+  "missing_error": "error code: 1003, error message: Knowledge move task not found"
+}

@@ -7,12 +7,20 @@ import com.fasterxml.jackson.databind.*;import com.fasterxml.jackson.databind.no
  @org.springframework.beans.factory.annotation.Autowired public KnowledgeBaseReadAuthorization(JdbcTemplate jdbc,KnowledgeBaseCodec codec,ObjectMapper json,BuiltinAgentRegistry registry){this(jdbc,codec,json,registry.ids());}
  public KnowledgeBaseReadAuthorization(JdbcTemplate jdbc,KnowledgeBaseCodec codec,ObjectMapper json,Set<String> builtinIds){this.builtinIds=Set.copyOf(builtinIds);this.configs=new GoAgentConfigDecoder(json);this.jdbc=jdbc;this.codec=codec;this.json=json;}
  /** KB detail's route capability; callers of other routes must authorize their own route policy separately. */
- public ReadAccess authorizeRead(AuthContext caller,String id,String agentId,String sourceSelector){
-  if(caller.isApiKey()&&!caller.fullAccess()&&!caller.capabilities().contains("retrieve"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+ public ReadAccess authorizeRead(AuthContext caller,String id,String agentId,String sourceSelector){return authorize(caller,id,agentId,sourceSelector,"retrieve");}
+ /** Chat stages retain the original caller and KB allowlist, with the chat route capability. */
+ public ReadAccess authorizeChatRead(AuthContext caller,String id,String agentId,String sourceSelector){return authorize(caller,id,agentId,sourceSelector,"chat");}
+ public ReadAccess authorizeManagementRead(AuthContext caller,String id,String agentId,String sourceSelector){return authorize(caller,id,agentId,sourceSelector,"manage_kbs",true);}
+ private ReadAccess authorize(AuthContext caller,String id,String agentId,String sourceSelector,String capability){return authorize(caller,id,agentId,sourceSelector,capability,false);}
+ private ReadAccess authorize(AuthContext caller,String id,String agentId,String sourceSelector,String capability,boolean databaseTypes){
+  if(caller.isApiKey()&&!caller.fullAccess()&&!caller.capabilities().contains(capability))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
   if(!caller.allowsKnowledgeBase(id))throw forbidden("API key scope does not allow one or more knowledge bases");
   if(caller.tenantId()==0)throw new ApiException(401,"UNAUTHORIZED","Unauthorized").withAppCode(1001);
   Map<String,Object> row;try{var rows=jdbc.queryForList("SELECT * FROM knowledge_bases WHERE id=? AND deleted_at IS NULL",id);if(rows.isEmpty())throw new ApiException(404,"NOT_FOUND","knowledge base not found").withAppCode(1003);row=rows.getFirst();}catch(DataAccessException ex){throw new ApiException(503,"SERVICE_UNAVAILABLE","cannot verify KB access right now").withAppCode(1008);}
-  ObjectNode kb=codec.fromRow(row);long owner=AuthRepository.number(row,"tenant_id");boolean own=owner==caller.tenantId();if(own)return new ReadAccess(kb,id,owner,"admin",true);
+  ObjectNode kb;
+  try{boolean sqlite=databaseTypes&&Boolean.TRUE.equals(jdbc.execute((org.springframework.jdbc.core.ConnectionCallback<Boolean>)c->c.getMetaData().getDatabaseProductName().equals("SQLite")));kb=databaseTypes?codec.fromDatabaseRow(row,sqlite):codec.fromRow(row);}
+  catch(DataAccessException|ApiException failure){if(!databaseTypes&&failure instanceof ApiException original)throw original;throw new ApiException(503,"SERVICE_UNAVAILABLE","cannot verify KB access right now").withAppCode(1008);}
+  long owner=AuthRepository.number(row,"tenant_id");boolean own=owner==caller.tenantId();if(own)return new ReadAccess(kb,id,owner,"admin",true);
   String permission=sharedPermission(id,caller);if(level(permission)>=level("viewer"))return new ReadAccess(kb,id,owner,permission,false);
   boolean permitted;if(agentId!=null&&!agentId.isEmpty()){String source=trimGoSpace(sourceSelector==null?"":sourceSelector);BigInteger parsed=BigInteger.ZERO;if(!source.isEmpty()){try{if(!source.matches("[0-9]+"))throw new NumberFormatException();parsed=new BigInteger(source);if(parsed.bitLength()>64)throw new NumberFormatException();}catch(NumberFormatException ex){throw new ApiException(400,"BAD_REQUEST","invalid agent_source_tenant_id").withAppCode(1000);}}permitted=explicitAgent(caller,id,owner,agentId,parsed);}else permitted=anyAgent(caller,id,owner);
   if(!permitted)throw forbidden("Permission denied to access this knowledge base");return new ReadAccess(kb,id,owner,"viewer",false);

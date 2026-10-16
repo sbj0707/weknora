@@ -28,7 +28,7 @@ class GoCompatibilityBridgeTest {
         }
     }
     @Test void contentReadSelectorOwnsOnlyPortedGetRoutes() {
-        for(String path:java.util.List.of("/api/v1/knowledge-bases/kb/knowledge", "/api/v1/knowledge/doc", "/api/v1/chunks/doc", "/api/v1/chunks/by-id/chunk")) {
+        for(String path:java.util.List.of("/api/v1/knowledge-bases/kb/knowledge", "/api/v1/knowledge-bases/kb/images", "/api/v1/knowledge-bases/kb/gallery-config", "/api/v1/knowledge/doc", "/api/v1/chunks/doc", "/api/v1/chunks/by-id/chunk", "/api/v1/knowledge/doc/index-status", "/api/v1/knowledge/doc/chunks/chunk/details")) {
             assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("GET",path))).as(path).isTrue();
             for(String method:java.util.List.of("POST","PUT","DELETE","PATCH","HEAD"))
                 assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest(method,path))).as(method+" "+path).isFalse();
@@ -103,6 +103,9 @@ class GoCompatibilityBridgeTest {
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("DELETE","/api/v1/tenants/1/api-keys/2"))).isTrue();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("POST","/api/v1/admin/api-keys"))).isFalse();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("POST","/api/v1/chunker/preview"))).isTrue();
+        assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/knowledge/image/doc/chunk"))).isTrue();
+        assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("GET","/api/v1/knowledge/image/doc/chunk"))).isFalse();
+        assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/knowledge/image/doc/chunk/extra"))).isFalse();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("GET","/api/v1/chunker/preview"))).isFalse();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/tenants/1/members/user"))).isTrue();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("POST","/api/v1/tenants/1/leave"))).isTrue();
@@ -118,7 +121,7 @@ class GoCompatibilityBridgeTest {
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/tenants/kv/memory-config"))).isTrue();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/tenants/kv/storage-config"))).isFalse();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("DELETE","/api/v1/tenants/1"))).isFalse();
-        for(String path:java.util.List.of("/api/v1/auth/register/invite","/api/v1/auth/oidc/callback","/api/v1/knowledge-bases"))assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("POST",path))).isFalse();
+        for(String path:java.util.List.of("/api/v1/auth/register/invite","/api/v1/auth/oidc/callback","/api/v1/knowledge-bases","/api/v1/knowledge/doc/cancel-parse"))assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("POST",path))).isFalse();
         assertThat(GoCompatibilityBridge.ownsNative(new MockHttpServletRequest("PUT","/api/v1/knowledge-bases/kb"))).isFalse();
     }
 }

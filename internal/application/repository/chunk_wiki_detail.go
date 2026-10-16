@@ -15,7 +15,7 @@ func (r *wikiPageRepository) ListChunkWikiPages(ctx context.Context, tenantID ui
 	if r.db.Dialector.Name() == "sqlite" {
 		query = query.Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.chunk_refs) WHERE value = ?)
    OR (coalesce(json_array_length(wiki_pages.chunk_refs), 0) = 0 AND EXISTS
-    (SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, ?) = ?))`, chunkID, docID, len(prefix), prefix)
+    (SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, length(?)) = ?))`, chunkID, docID, prefix, prefix)
 	} else {
 		chunkNeedle, _ := json.Marshal([]string{chunkID})
 		docNeedle, _ := json.Marshal([]string{docID})

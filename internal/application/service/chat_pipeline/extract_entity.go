@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/Tencent/WeKnora/internal/config"
@@ -24,6 +25,7 @@ type PluginExtractEntity struct {
 	knowledgeBaseRepo interfaces.KnowledgeBaseRepository
 	knowledgeService  interfaces.KnowledgeService // For shared KB document resolution
 	knowledgeRepo     interfaces.KnowledgeRepository
+	shares            interfaces.KBShareService
 }
 
 // NewPluginExtractEntity creates a new extract-entity plugin instance
@@ -45,6 +47,15 @@ func NewPluginExtractEntity(
 	}
 	eventManager.Register(res)
 	return res
+}
+
+// NewPluginExtractEntityAuthorized is the production constructor with fresh share checks.
+func NewPluginExtractEntityAuthorized(eventManager *EventManager, modelService interfaces.ModelService,
+	bases interfaces.KnowledgeBaseRepository, knowledge interfaces.KnowledgeService,
+	rows interfaces.KnowledgeRepository, config *config.Config, shares interfaces.KBShareService) *PluginExtractEntity {
+	p := NewPluginExtractEntity(eventManager, modelService, bases, knowledge, rows, config)
+	p.shares = shares
+	return p
 }
 
 // ActivationEvents returns the list of event types this plugin responds to.
@@ -82,25 +93,30 @@ func (p *PluginExtractEntity) OnEvent(ctx context.Context,
 		return next()
 	}
 
-	// Collect all knowledge base IDs to query
+	// SearchTargets is the server-authorized scope; raw requested IDs cannot expand it.
+	targets := graphQueryTargets(ctx, chatManage.SearchTargets, p.knowledgeBaseRepo, p.knowledgeRepo, p.shares)
 	kbIDSet := make(map[string]struct{})
-	for _, id := range chatManage.KnowledgeBaseIDs {
-		kbIDSet[id] = struct{}{}
-	}
-
-	// If KnowledgeIDs is specified, retrieve them and collect their knowledge base IDs (include shared KB docs)
-	// Also build a mapping from KnowledgeID to KnowledgeBaseID
+	owners := make(map[string]uint64)
 	knowledgeToKBMap := make(map[string]string)
-	if len(chatManage.KnowledgeIDs) > 0 {
-		knowledges, err := p.knowledgeService.GetKnowledgeBatchWithSharedAccess(ctx, chatManage.TenantID, chatManage.KnowledgeIDs)
-		if err != nil {
-			logger.Errorf(ctx, "failed to get knowledges: %v", err)
-			return next()
+	for _, target := range targets {
+		if target == nil || target.TenantID == 0 || target.KnowledgeBaseID == "" {
+			continue
 		}
-		for _, k := range knowledges {
-			kbIDSet[k.KnowledgeBaseID] = struct{}{}
-			knowledgeToKBMap[k.ID] = k.KnowledgeBaseID
+		if target.Type != types.SearchTargetTypeKnowledgeBase && target.Type != types.SearchTargetTypeKnowledge {
+			continue
 		}
+		kbIDSet[target.KnowledgeBaseID] = struct{}{}
+		owners[target.KnowledgeBaseID] = target.TenantID
+		if target.Type == types.SearchTargetTypeKnowledge {
+			for _, id := range target.KnowledgeIDs {
+				if id != "" {
+					knowledgeToKBMap[id] = target.KnowledgeBaseID
+				}
+			}
+		}
+	}
+	if len(kbIDSet) == 0 {
+		return next()
 	}
 
 	// Convert set to slice
@@ -109,6 +125,7 @@ func (p *PluginExtractEntity) OnEvent(ctx context.Context,
 		allKBIDs = append(allKBIDs, id)
 	}
 
+	sort.Strings(allKBIDs)
 	// Batch retrieve all knowledge bases
 	kbs, err := p.knowledgeBaseRepo.GetKnowledgeBaseByIDs(ctx, allKBIDs)
 	if err != nil {
@@ -119,7 +136,7 @@ func (p *PluginExtractEntity) OnEvent(ctx context.Context,
 	// Check if any knowledge base has ExtractConfig enabled and collect their IDs
 	enabledKBSet := make(map[string]struct{})
 	for _, kb := range kbs {
-		if kb.ExtractConfig != nil && kb.ExtractConfig.Enabled {
+		if kb != nil && kb.TenantID == owners[kb.ID] && kb.ExtractConfig != nil && kb.ExtractConfig.Enabled {
 			enabledKBSet[kb.ID] = struct{}{}
 		}
 	}
@@ -133,6 +150,7 @@ func (p *PluginExtractEntity) OnEvent(ctx context.Context,
 	for id := range enabledKBSet {
 		enabledKBIDs = append(enabledKBIDs, id)
 	}
+	sort.Strings(enabledKBIDs)
 	chatManage.EntityKBIDs = enabledKBIDs
 
 	// Filter knowledgeToKBMap to only include files from enabled knowledge bases
@@ -152,6 +170,29 @@ func (p *PluginExtractEntity) OnEvent(ctx context.Context,
 	graph, err := extractor.Extract(ctx, query)
 	if err != nil {
 		logger.Errorf(ctx, "Failed to extract entities, session_id: %s, error: %v", chatManage.SessionID, err)
+		return next()
+	}
+	if ctx.Err() != nil {
+		return next()
+	}
+	fresh := graphQueryTargets(ctx, targets, p.knowledgeBaseRepo, p.knowledgeRepo, p.shares)
+	freshKBs := map[string]bool{}
+	for _, t := range fresh {
+		freshKBs[t.KnowledgeBaseID] = true
+	}
+	var stillEnabled []string
+	for _, id := range enabledKBIDs {
+		if freshKBs[id] {
+			stillEnabled = append(stillEnabled, id)
+		}
+	}
+	chatManage.EntityKBIDs = stillEnabled
+	for id, kb := range chatManage.EntityKnowledge {
+		if !freshKBs[kb] {
+			delete(chatManage.EntityKnowledge, id)
+		}
+	}
+	if len(stillEnabled) == 0 {
 		return next()
 	}
 	nodes := []string{}

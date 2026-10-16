@@ -187,7 +187,10 @@ func (s *KnowledgePostProcessService) Handle(ctx context.Context, task *asynq.Ta
 	for _, chunk := range chunks {
 		if chunk == nil || chunk.TenantID != payload.TenantID || chunk.KnowledgeID != payload.KnowledgeID ||
 			chunk.KnowledgeBaseID != payload.KnowledgeBaseID {
-			return fmt.Errorf("postprocess chunk binding changed: %w", asynq.SkipRetry)
+			bindingErr := fmt.Errorf("postprocess chunk binding changed: %w", asynq.SkipRetry)
+			s.tracker().FailSpan(ctx, postSpan, "POSTPROCESS_FAILED", "postprocess chunk binding changed", bindingErr)
+			s.tracker().FinalizeAttempt(ctx, payload.KnowledgeID, attempt, types.SpanStatusFailed, nil, "POSTPROCESS_FAILED", "postprocess chunk binding changed")
+			return bindingErr
 		}
 	}
 

@@ -93,51 +93,50 @@ export function resolveCitationChunkId(
   const list = (refs || []).filter((r) => r && r.chunk_type !== 'web_search')
   if (!list.length) return raw
 
+  // IDs need not be UUIDs. In particular, never resolve an already resolved
+  // citation again by title when the click handler reads its rendered tag.
+  if (list.some((r) => r.id === raw)) return raw
+
   const doc = (attrs.doc || '').trim()
   const kbId = (attrs.kbId || '').trim()
+  const matchesScope = (ref: CitationKnowledgeRef) =>
+    (!kbId || ref.knowledge_base_id === kbId) &&
+    (!doc || docTitlesMatch(doc, ref.knowledge_title || '') || docTitlesMatch(doc, ref.knowledge_filename || ''))
 
-  if (doc) {
-    const byDoc = list.find(
-      (r) =>
-        docTitlesMatch(doc, r.knowledge_title || '') ||
-        docTitlesMatch(doc, r.knowledge_filename || ''),
-    )
-    if (byDoc?.id) return byDoc.id
-  }
-
-  const faqMatch = raw.match(/^FAQ-(\d+)$/i)
+  const faqMatch = raw.match(/^FAQ-([1-9]\d*)$/i)
   if (faqMatch) {
     const faqRefs = list.filter((r) => r.chunk_type === 'faq')
     const hit = faqRefs[parseInt(faqMatch[1], 10) - 1]
-    if (hit?.id) return hit.id
+    if (hit?.id && matchesScope(hit)) return hit.id
   }
 
-  const docMatch = raw.match(/^DOC-(\d+)$/i)
+  const docMatch = raw.match(/^DOC-([1-9]\d*)$/i)
   if (docMatch) {
     const docRefs = list.filter((r) => r.chunk_type !== 'faq')
     const hit = docRefs[parseInt(docMatch[1], 10) - 1]
-    if (hit?.id) return hit.id
+    if (hit?.id && matchesScope(hit)) return hit.id
   }
 
   const num = parseInt(raw, 10)
-  if (!Number.isNaN(num) && String(num) === raw) {
+  if (num > 0 && String(num) === raw) {
+    // Context numbers are global; filtering by document/KB before indexing
+    // would shift the number to a different chunk.
     const byPos = list[num - 1]
-    if (byPos?.id) return byPos.id
-    const byChunkIndex = list.find((r) => r.chunk_index === num || r.chunk_index === num - 1)
-    if (byChunkIndex?.id) return byChunkIndex.id
+    if (byPos?.id && matchesScope(byPos)) return byPos.id
   }
 
-  if (kbId) {
-    const scoped = list.filter((r) => r.knowledge_base_id === kbId)
-    if (doc) {
-      const byDoc = scoped.find(
-        (r) =>
-          docTitlesMatch(doc, r.knowledge_title || '') ||
-          docTitlesMatch(doc, r.knowledge_filename || ''),
-      )
-      if (byDoc?.id) return byDoc.id
-    }
-    if (scoped.length === 1 && scoped[0].id) return scoped[0].id
+  // A document can contribute many chunks. Its name alone identifies a chunk
+  // only when there is a unique candidate; choosing the first loses the cited
+  // passage and its page. Prefer exact names before legacy partial names.
+  let candidates = list.filter(matchesScope)
+  if (doc) {
+    const exactTitle = candidates.filter((r) =>
+      [r.knowledge_title, r.knowledge_filename].some((title) => title && normalizeDocTitle(title) === normalizeDocTitle(doc)))
+    if (exactTitle.length) candidates = exactTitle
+  }
+  if (doc || kbId) {
+    const ids = new Set(candidates.map((r) => r.id).filter(Boolean))
+    if (ids.size === 1) return ids.values().next().value!
   }
 
   return raw

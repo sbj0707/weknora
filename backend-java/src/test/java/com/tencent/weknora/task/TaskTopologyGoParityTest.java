@@ -15,9 +15,11 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import static org.assertj.core.api.Assertions.*;
 
 class TaskTopologyGoParityTest {
-    Path database;JdbcTemplate jdbc;TaskRepository tasks;ObjectMapper json=new ObjectMapper();
+    Path database;JdbcTemplate jdbc;TaskRepository tasks;ObjectMapper json=new ObjectMapper();volatile RuntimeException settlementFailure;
     @BeforeEach void initialize()throws Exception{
-        database=Files.createTempFile("weknora-native-pools-",".db");var source=new DriverManagerDataSource("jdbc:sqlite:"+database);source.setDriverClassName("org.sqlite.JDBC");jdbc=new JdbcTemplate(source);tasks=new TaskRepository(jdbc,json,new DataSourceTransactionManager(source));
+        database=Files.createTempFile("weknora-native-pools-",".db");var source=new DriverManagerDataSource("jdbc:sqlite:"+database);source.setDriverClassName("org.sqlite.JDBC");jdbc=new JdbcTemplate(source);tasks=new TaskRepository(jdbc,json,new DataSourceTransactionManager(source)){
+            @Override public boolean complete(TaskRecord lease,JsonNode result){try{return super.complete(lease,result);}catch(RuntimeException failure){settlementFailure=failure;throw failure;}}
+        };
         try(var c=source.getConnection()){ScriptUtils.executeSqlScript(c,new FileSystemResource("migration/sql/java-tasks.sql"));}
         jdbc.execute("CREATE TABLE system_settings(key TEXT PRIMARY KEY,value TEXT,last_modified_by TEXT)");
     }
@@ -68,5 +70,5 @@ class TaskTopologyGoParityTest {
         assertThatThrownBy(()->new TaskPoolGroup(tasks,List.of(),TaskTopology.concurrency(setting->65),Duration.ofSeconds(3))).isInstanceOf(IllegalArgumentException.class);
         assertThat(tasks.list(1,200)).isEmpty();
     }
-    void await(String id,String status)throws Exception{long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);while(System.nanoTime()<end){if(tasks.get(1,id).orElseThrow().status().equals(status))return;Thread.sleep(10);}throw new AssertionError(tasks.get(1,id));}
+    void await(String id,String status)throws Exception{long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);while(System.nanoTime()<end){if(tasks.get(1,id).orElseThrow().status().equals(status))return;Thread.sleep(10);}throw new AssertionError(tasks.get(1,id).toString(),settlementFailure);}
 }

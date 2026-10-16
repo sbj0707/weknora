@@ -1,0 +1,245 @@
+{
+  "filters_schema": {
+    "items": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "slice"
+    },
+    "kind": "map"
+  },
+  "policy_schema": {
+    "fields": {
+      "mode": {
+        "kind": "string",
+        "omit_empty": true
+      },
+      "overrides": {
+        "items": {
+          "fields": {
+            "in_filter": {
+              "items": {
+                "kind": "bool"
+              },
+              "kind": "pointer",
+              "omit_empty": true
+            },
+            "in_searchfield": {
+              "items": {
+                "kind": "bool"
+              },
+              "kind": "pointer",
+              "omit_empty": true
+            },
+            "in_sortfield": {
+              "items": {
+                "kind": "bool"
+              },
+              "kind": "pointer",
+              "omit_empty": true
+            }
+          },
+          "kind": "struct"
+        },
+        "kind": "map",
+        "omit_empty": true
+      },
+      "sources": {
+        "items": {
+          "kind": "bool"
+        },
+        "kind": "map",
+        "omit_empty": true
+      },
+      "status": {
+        "items": {
+          "kind": "string"
+        },
+        "kind": "map",
+        "omit_empty": true
+      }
+    },
+    "kind": "struct"
+  },
+  "preferences_schema": {
+    "fields": {
+      "browser_search_instructions": {
+        "items": {
+          "kind": "string"
+        },
+        "kind": "pointer",
+        "omit_empty": true
+      },
+      "gallery": {
+        "items": {
+          "fields": {
+            "mode": {
+              "kind": "string",
+              "omit_empty": true
+            },
+            "status": {
+              "items": {
+                "kind": "string"
+              },
+              "kind": "map",
+              "omit_empty": true
+            }
+          },
+          "kind": "struct"
+        },
+        "kind": "pointer",
+        "omit_empty": true
+      },
+      "last_active_tenant_id": {
+        "items": {
+          "bits": 64,
+          "kind": "uint64"
+        },
+        "kind": "pointer",
+        "omit_empty": true
+      },
+      "oidc_only_login": {
+        "items": {
+          "kind": "bool"
+        },
+        "kind": "pointer",
+        "omit_empty": true
+      }
+    },
+    "kind": "struct"
+  },
+  "rules_schema": {
+    "items": {
+      "items": {
+        "kind": "string"
+      },
+      "kind": "map"
+    },
+    "kind": "map"
+  },
+  "sources": [
+    {
+      "id": "builtin",
+      "attrs": [
+        {
+          "name": "caption",
+          "type": "text",
+          "label": "Caption",
+          "description": "The model-generated description of the image.",
+          "usage": {
+            "in_filter": false,
+            "in_searchfield": true,
+            "in_sortfield": true
+          }
+        },
+        {
+          "name": "ocr_text",
+          "type": "text",
+          "label": "OCR text",
+          "description": "Text extracted from the image by OCR.",
+          "usage": {
+            "in_filter": false,
+            "in_searchfield": true,
+            "in_sortfield": false
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "date",
+          "label": "Created at",
+          "usage": {
+            "in_filter": false,
+            "in_searchfield": false,
+            "in_sortfield": true
+          }
+        },
+        {
+          "name": "updated_at",
+          "type": "date",
+          "label": "Updated at",
+          "usage": {
+            "in_filter": false,
+            "in_searchfield": false,
+            "in_sortfield": true
+          }
+        },
+        {
+          "name": "is_enabled",
+          "type": "presence",
+          "values": [
+            {
+              "value": "true",
+              "label": "Enabled"
+            },
+            {
+              "value": "false",
+              "label": "Disabled"
+            }
+          ],
+          "label": "Enabled",
+          "usage": {
+            "in_filter": true,
+            "in_searchfield": false,
+            "in_sortfield": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "system",
+      "attrs": [
+        {
+          "name": "contain.text",
+          "type": "extent",
+          "values": [
+            {
+              "value": "none",
+              "label": "None",
+              "description": "no text at all"
+            },
+            {
+              "value": "sparse",
+              "label": "Sparse",
+              "description": "a few words — a logo, a road sign, a single label"
+            },
+            {
+              "value": "block",
+              "label": "Block",
+              "description": "a block of body text: screenshot, table, document page"
+            }
+          ],
+          "label": "Text in the image",
+          "description": "How much body text the picture itself carries. Decides whether reading its text is worth a separate OCR pass.",
+          "usage": {
+            "in_filter": true,
+            "in_searchfield": false,
+            "in_sortfield": false
+          }
+        },
+        {
+          "name": "contain.data_visual",
+          "type": "presence",
+          "values": [
+            {
+              "value": "true",
+              "label": "Yes",
+              "description": "a chart, graph or diagram with plotted values"
+            },
+            {
+              "value": "false",
+              "label": "No",
+              "description": "a photo, drawing, icon or decoration"
+            }
+          ],
+          "label": "Data visual",
+          "description": "Whether the picture conveys data as a chart, graph, diagram or infographic. Such images keep their labels on the OCR path even when the text looks sparse.",
+          "usage": {
+            "in_filter": true,
+            "in_searchfield": false,
+            "in_sortfield": false
+          }
+        }
+      ]
+    }
+  ]
+}

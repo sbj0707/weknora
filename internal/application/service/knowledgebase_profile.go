@@ -255,6 +255,9 @@ func (s *KnowledgeBaseProfileService) GenerateKnowledgeBaseProfile(
 	if !knowledgeBaseProfileEligible(kb) {
 		return nil, ErrKnowledgeBaseProfileUnsupported
 	}
+	// The entry point resolves and authorizes the KB. Keep its owner in the
+	// SQL write predicate as well: ownership may change during the model call.
+	ctx = types.WithExecutionTenant(ctx, kb.TenantID)
 	agg, err := s.BuildAggregate(ctx, kb)
 	if err != nil {
 		return nil, err

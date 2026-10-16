@@ -15,6 +15,12 @@ public final class StorageResolver {
     public StorageResolver(JdbcTemplate jdbc,ObjectMapper json,Environment env){this.jdbc=jdbc;this.json=json;this.env=env;signer=new FileUrlSigner(env.getProperty("SYSTEM_SIGNING_KEY",""),env.getProperty("SYSTEM_AES_KEY",""));catalog=new ResourceCatalog(jdbc,signer);}
     public record Resolved(FileStore files,String provider,String backendId){}
     public ResourceCatalog catalog(){return catalog;}
+    /** A persisted resource/backend path retains its own backend even after the KB binding changes. */
+    public Resolved forStoredFile(long ownerTenant,String kbId,String path)throws IOException {
+        if(StoragePaths.resourceHandle(path)!=null){var resource=catalog.resolve(ownerTenant,path);return resolve(ownerTenant,resource.storageBackendId(),resource.provider());}
+        var scope=StoragePaths.scope(path);if(scope.isPresent())return resolve(ownerTenant,scope.get().backendId(),StoragePaths.provider(scope.get().path()));
+        return forKnowledgeBase(ownerTenant,kbId);
+    }
     /** Caller supplies a tenant authorized by the domain service, not a request-body tenant. */
     public Resolved resolve(long ownerTenant,String backendId,String requestedProvider)throws IOException{
         var tenants=jdbc.queryForList("SELECT storage_engine_config,default_storage_backend_id FROM tenants WHERE id=? AND deleted_at IS NULL",ownerTenant);if(tenants.isEmpty())throw new IOException("workspace context missing");var tenant=tenants.getFirst();String id=StoragePaths.trim(backendId),provider=StoragePaths.trim(requestedProvider).toLowerCase(Locale.ROOT);JsonNode legacy=decode(tenant.get("storage_engine_config"));Map<String,Object> backend=null;
@@ -30,5 +36,5 @@ public final class StorageResolver {
     }
     /** Existing KB must belong to the already-authorized owner tenant; it supplies immutable storage binding. */
     public Resolved forKnowledgeBase(long ownerTenant,String kbId)throws IOException{var rows=jdbc.queryForList("SELECT storage_backend_id,storage_provider_config,cos_config FROM knowledge_bases WHERE tenant_id=? AND id=? AND deleted_at IS NULL",ownerTenant,kbId);if(rows.isEmpty())throw new IOException("knowledge base not found");var kb=rows.getFirst();String provider=decode(kb.get("storage_provider_config")).path("provider").asText();if(provider.isEmpty()&&!decode(kb.get("cos_config")).path("bucket_name").asText().isEmpty())provider="cos";return resolve(ownerTenant,Objects.toString(kb.get("storage_backend_id"),""),provider);}
-    private JsonNode decode(Object value)throws IOException{if(value==null||value.toString().isEmpty())return json.createObjectNode();try{return json.readTree(value.toString());}catch(Exception ex){throw new IOException("invalid storage configuration",ex);}}
+    private JsonNode decode(Object value)throws IOException{if(value==null||value.toString().isEmpty())return json.createObjectNode();try{return value instanceof byte[] bytes?json.readTree(bytes):json.readTree(value.toString());}catch(Exception ex){throw new IOException("invalid storage configuration",ex);}}
 }

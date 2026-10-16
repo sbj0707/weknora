@@ -88,7 +88,14 @@ class KnowledgeContentReadHttpIntegrationTest {
                   .header("Authorization", "Bearer " + token))
           .andExpect(
               org.springframework.test.web.servlet.result.MockMvcResultMatchers.status()
-                  .isNotFound());
+                  .isBadRequest())
+          .andExpect(
+              org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                  .string(
+                      org.hamcrest.Matchers.containsString(
+                          id.equals("batch")
+                              ? "Invalid request parameters"
+                              : "missing search keyword")));
     }
   }
 

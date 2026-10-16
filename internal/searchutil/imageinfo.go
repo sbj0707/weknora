@@ -206,8 +206,13 @@ func collectChildEvidence(
 			continue
 		}
 		merged := make([]types.ImageInfo, 0, len(agg.byURL))
-		for _, info := range agg.byURL {
-			merged = append(merged, info)
+		keys := make([]string, 0, len(agg.byURL))
+		for key := range agg.byURL {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			merged = append(merged, agg.byURL[key])
 		}
 		data, err := json.Marshal(merged)
 		if err != nil {

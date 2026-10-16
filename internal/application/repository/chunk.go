@@ -134,6 +134,19 @@ func (r *chunkRepository) ListChunksByID(
 	return chunks, nil
 }
 
+// ListChunkIDsForIndexCleanup keeps tombstones available for owner-scoped cleanup.
+func (r *chunkRepository) ListChunkIDsForIndexCleanup(ctx context.Context, tenantID uint64, kbID string, ids []string) ([]string, error) {
+	if tenantID == 0 || kbID == "" || len(ids) == 0 {
+		return nil, nil
+	}
+	var allowed []string
+	err := r.db.WithContext(ctx).Unscoped().Model(&types.Chunk{}).
+		Where("tenant_id = ? AND knowledge_base_id = ? AND id IN ?", tenantID, kbID, ids).
+		Where("EXISTS (SELECT 1 FROM knowledge_bases kb WHERE kb.id = chunks.knowledge_base_id AND kb.tenant_id = ?)", tenantID).
+		Pluck("id", &allowed).Error
+	return allowed, err
+}
+
 // ListChunksByIDOnly retrieves multiple chunks by their IDs without tenant filter (for shared KB resolution).
 func (r *chunkRepository) ListChunksByIDOnly(ctx context.Context, ids []string) ([]*types.Chunk, error) {
 	if len(ids) == 0 {

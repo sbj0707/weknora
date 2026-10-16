@@ -15,4 +15,8 @@ public interface IndexWriter {
     void deleteByChunk(Connection transaction,List<String> chunkIds) throws SQLException;
     void deleteBySource(Connection transaction,List<String> sourceIds) throws SQLException;
     long estimateStorageSize(List<IndexEntry> entries,Map<String,float[]> embeddings);
+    /** Retain physical vectors/FTS/IDs while changing only KB and tag metadata. */
+    default void move(Connection transaction,String sourceKb,String targetKb,String knowledgeId) throws SQLException {
+        throw new UnsupportedOperationException("Native index metadata move is not migrated for this engine");
+    }
 }

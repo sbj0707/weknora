@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/Tencent/WeKnora/internal/application/access"
 	"github.com/Tencent/WeKnora/internal/types"
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
 )
@@ -45,15 +46,16 @@ func TestSearchEntityResolvesSharedChunksWithinScope(t *testing.T) {
 			"orphan":  entityChunk("orphan", 2, "kb-shared", "gone"),
 		}},
 		knowledgeRepo: &entityKnowledgeRepo{knowledge: map[string]*types.Knowledge{
-			"doc":   {ID: "doc", KnowledgeBaseID: "kb-shared", Title: "Shared doc"},
+			"doc":   {ID: "doc", TenantID: 2, KnowledgeBaseID: "kb-shared", Title: "Shared doc"},
 			"doc-x": {ID: "doc-x", KnowledgeBaseID: "kb-other", Title: "Other"},
 		}},
 	}
-	cm := &types.ChatManage{PipelineState: types.PipelineState{
+	cm := &types.ChatManage{PipelineRequest: types.PipelineRequest{SearchTargets: types.SearchTargets{&types.SearchTarget{Type: types.SearchTargetTypeKnowledgeBase, KnowledgeBaseID: "kb-shared", TenantID: 2}}}, PipelineState: types.PipelineState{
 		Entity: []string{"Docker"}, EntityKBIDs: []string{"kb-shared"},
 	}}
 	ctx := context.WithValue(context.Background(), types.TenantIDContextKey, uint64(1))
 
+	ctx = types.WithExecutionTenant(access.WithSharedAgent(ctx, &types.CustomAgent{ID: "shared-agent", TenantID: 2, Config: types.CustomAgentConfig{KBSelectionMode: "selected", KnowledgeBases: []string{"kb-shared"}}}), 1)
 	if err := plugin.OnEvent(ctx, types.ENTITY_SEARCH, cm, func() *PluginError { return nil }); err != nil {
 		t.Fatalf("OnEvent: %v", err)
 	}

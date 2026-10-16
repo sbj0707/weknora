@@ -15,6 +15,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class KnowledgeBaseLifecycle {
     private final JdbcTemplate jdbc;private final ObjectMapper json;private final KnowledgeBaseCodec codec;private final KnowledgeBaseBindings bindings;private final KnowledgeBaseRepository repository;private final TransactionTemplate transaction;
+    private KnowledgeBaseProfileHandler profiles;
+    @org.springframework.beans.factory.annotation.Autowired(required=false) void enableProfiles(KnowledgeBaseProfileHandler profiles){this.profiles=profiles;}
     private Boolean postgres;private final KnowledgeBaseWriteAuthorization writes;
     private static final List<String> JSON_FIELDS=List.of("chunking_config","image_processing_config","vlm_config","asr_config","storage_provider_config","extract_config","faq_config","question_generation_config","auto_tag_config","profile_config","wiki_config","indexing_strategy","generated_profile");
     private static final List<String> CREATE_FIELDS=List.of("id","name","description","tenant_id","type","is_temporary","creator_id","embedding_model_id","summary_model_id","storage_backend_id","vector_store_id","created_at","updated_at","deleted_at");
@@ -30,9 +32,10 @@ public class KnowledgeBaseLifecycle {
         audit(auth,kb,"kb.created",Map.of("name",kb.path("name").asText(),"type",kb.path("type").asText()));
         return repository.decorateStore(codec.render(kb));
     }
-    public ObjectNode update(AuthContext auth,String id,ObjectNode request) {
+    public ObjectNode update(AuthContext auth,String id,ObjectNode request) {return update(auth,id,request,"");}
+    public ObjectNode update(AuthContext auth,String id,ObjectNode request,String language) {
         var grant=writes.authorizeUpdate(auth,id);
-        ObjectNode[] changed={null};var fields=new ArrayList<String>();
+        ObjectNode[] changed={null};boolean[] refresh={false};var fields=new ArrayList<String>();
         transaction.executeWithoutResult(status -> {
             var rows=jdbc.queryForList("SELECT * FROM knowledge_bases WHERE tenant_id=? AND id=? AND deleted_at IS NULL"+(isPostgres()?" FOR UPDATE":""),grant.effectiveTenantId(),id);
             if(rows.isEmpty())throw new ApiException(404,"NOT_FOUND","knowledge base not found");
@@ -61,10 +64,11 @@ public class KnowledgeBaseLifecycle {
                 }
             }
             codec.ensureDefaults(kb);
-            if(!profileWasEnabled&&kb.path("profile_config").path("enabled").asBoolean()&&kb.path("type").asText().equals("document")&&!kb.path("is_temporary").asBoolean())throw new ApiException(501,"PROFILE_TASK_NOT_MIGRATED","Automatic profile refresh task is not migrated");
-            kb.put("updated_at",Instant.now().toString());saveUpdate(kb);changed[0]=kb;
+            if(profiles==null&&!profileWasEnabled&&kb.path("profile_config").path("enabled").asBoolean()&&kb.path("type").asText().equals("document")&&!kb.path("is_temporary").asBoolean())throw new ApiException(501,"PROFILE_TASK_NOT_MIGRATED","Automatic profile refresh task is not migrated");
+            refresh[0]=!profileWasEnabled&&kb.path("profile_config").path("enabled").asBoolean();kb.put("updated_at",Instant.now().toString());saveUpdate(kb);changed[0]=kb;
         });
         ObjectNode kb=Objects.requireNonNull(changed[0]);audit(auth,kb,"kb.updated",Map.of("name",kb.path("name").asText(),"changed_fields",fields));
+        if(refresh[0]&&profiles!=null)profiles.enqueue(kb.path("tenant_id").asLong(),kb,false,json.createObjectNode().put("language",language));
         return repository.decorateStore(codec.render(kb));
     }
     private void insert(ObjectNode kb) {

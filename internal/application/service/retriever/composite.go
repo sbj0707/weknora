@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"sort"
 	"sync"
 	"sync/atomic"
 
@@ -214,6 +215,14 @@ func (c *CompositeRetrieveEngine) BatchIndex(ctx context.Context,
 ) error {
 	// Deduplicate sourceIDs
 	indexInfoList = common.Deduplicate(func(info *types.IndexInfo) string { return info.SourceID }, indexInfoList...)
+	if ordered, _ := ctx.Value(manualBatchOrderKey{}).(bool); ordered {
+		sort.Slice(indexInfoList, func(i, j int) bool {
+			if indexInfoList[i].Content != indexInfoList[j].Content {
+				return indexInfoList[i].Content < indexInfoList[j].Content
+			}
+			return indexInfoList[i].SourceID < indexInfoList[j].SourceID
+		})
+	}
 	err := c.concurrentExecWithError(ctx, func(ctx context.Context, engineInfo *engineInfo) error {
 		if err := engineInfo.retrieveEngine.BatchIndex(
 			ctx,

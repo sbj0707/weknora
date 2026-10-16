@@ -3580,8 +3580,8 @@
     "source": "internal/application/repository/chunk.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
-    "lines": 1422,
-    "sha256": "386cc98046f449db53d4846bee4ceede221b20e9a208e1e62473203b88eba833",
+    "lines": 1435,
+    "sha256": "96794939991cf5a1544a598c4cf529041546e6ce7047b5a55e4c143a03d6be6a",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -3609,128 +3609,159 @@
         "code": "if err := r.db.WithContext(ctx).Where(\"tenant_id = ? AND seq_id = ?\", tenantID, seqID).First(&chunk).Error; err != nil {"
       },
       {
-        "line": 143,
+        "line": 145,
+        "code": "Where(\"EXISTS (SELECT 1 FROM knowledge_bases kb WHERE kb.id = chunks.knowledge_base_id AND kb.tenant_id = ?)\", tenantID)."
+      },
+      {
+        "line": 156,
         "code": "if err := r.db.WithContext(ctx).Where(\"id IN ?\", ids).Find(&chunks).Error; err != nil {"
       },
       {
-        "line": 348,
+        "line": 361,
         "code": "Order(\"chunk_index DESC\").Limit(before).Find(&preceding).Error; err != nil {"
       },
       {
-        "line": 354,
+        "line": 367,
         "code": "Order(\"chunk_index ASC\").Limit(after).Find(&following).Error; err != nil {"
       },
       {
-        "line": 404,
+        "line": 417,
         "code": "return r.db.WithContext(ctx).Omit(\"SeqID\").Save(chunk).Error"
       },
       {
-        "line": 408,
+        "line": 421,
         "code": "return r.db.WithContext(ctx).Create(revision).Error"
       },
       {
-        "line": 414,
+        "line": 427,
         "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
       },
       {
-        "line": 434,
+        "line": 447,
         "code": "return tx.Create(revision).Error"
       },
       {
-        "line": 444,
+        "line": 457,
         "code": "Order(\"revision DESC\").Find(&revisions).Error"
       },
       {
-        "line": 458,
+        "line": 471,
         "code": "// SaveChunks persists full chunk objects in a single transaction using GORM Save (UPDATE)."
       },
       {
-        "line": 463,
+        "line": 476,
         "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
       },
       {
-        "line": 465,
+        "line": 478,
         "code": "if err := tx.Omit(\"SeqID\").Save(chunk).Error; err != nil {"
       },
       {
-        "line": 494,
+        "line": 507,
         "code": "// run one small UPDATE per row inside a single transaction, which is also"
       },
       {
-        "line": 501,
+        "line": 514,
         "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
       },
       {
-        "line": 523,
+        "line": 536,
         "code": "// updateChunksPostgres issues a single UPDATE ... FROM (VALUES ...) statement."
       },
       {
-        "line": 542,
+        "line": 555,
         "code": "UPDATE chunks AS c SET"
       },
       {
-        "line": 553,
+        "line": 566,
         "code": "return tx.Exec(sql, args...).Error"
       },
       {
-        "line": 578,
+        "line": 591,
         "code": "// with one UPDATE per batch of IDs. Use it for uniform state transitions"
       },
       {
-        "line": 597,
+        "line": 610,
         "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
       },
       {
-        "line": 616,
+        "line": 629,
         "code": "return r.db.WithContext(ctx).Where(\"tenant_id = ? AND id = ?\", tenantID, id).Delete(&types.Chunk{}).Error"
       },
       {
-        "line": 631,
+        "line": 644,
         "code": "if err := r.db.WithContext(ctx).Where(\"tenant_id = ? AND id IN ?\", tenantID, ids[i:end]).Delete(&types.Chunk{}).Error; err != nil {"
       },
       {
-        "line": 642,
+        "line": 655,
         "code": ").Delete(&types.Chunk{}).Error"
       },
       {
-        "line": 663,
+        "line": 676,
         "code": ").Delete(&types.Chunk{}).Error"
       },
       {
-        "line": 711,
+        "line": 724,
         "code": "if err := r.db.WithContext(ctx).Where(\"id IN ?\", batch).Delete(&types.Chunk{}).Error; err != nil {"
       },
       {
-        "line": 883,
+        "line": 896,
         "code": "\"SELECT 1 FROM jsonb_array_elements_text(\"+"
       },
       {
-        "line": 890,
+        "line": 903,
         "code": "\"SELECT 1 FROM json_each(\"+"
       },
       {
-        "line": 898,
+        "line": 911,
         "code": "if err := db.Limit(1).Find(&chunk).Error; err != nil {"
       },
       {
-        "line": 1018,
+        "line": 1031,
         "code": "UPDATE chunks"
       },
       {
-        "line": 1031,
+        "line": 1044,
         "code": "return r.db.WithContext(ctx).Exec(sql, args...).Error"
       },
       {
-        "line": 1101,
+        "line": 1114,
         "code": "updates[\"flags\"] = r.db.Raw(flagsExpr)"
       },
       {
-        "line": 1104,
+        "line": 1117,
         "code": "if err := query.Updates(updates).Error; err != nil {"
       },
       {
-        "line": 1138,
+        "line": 1151,
         "code": "if err := query.Find(&batch).Error; err != nil {"
+      }
+    ],
+    "status": "in_progress"
+  },
+  {
+    "source": "internal/application/repository/chunk_edit_state.go",
+    "layer": "internal/application/repository",
+    "kind": "implementation",
+    "lines": 48,
+    "sha256": "e5db5eaa0d754e4d8f3b405ebb307328421772ba8adf5000dc363c50adb2c884",
+    "test_names": [],
+    "database_and_task_call_evidence": [
+      {
+        "line": 12,
+        "code": "result := r.db.WithContext(ctx).Exec(`UPDATE chunks SET metadata=?,source_content=?,parent_chunk_id=?,updated_at=?"
+      },
+      {
+        "line": 16,
+        "code": "AND EXISTS(SELECT 1 FROM knowledges k JOIN knowledge_bases b ON b.id=k.knowledge_base_id"
+      },
+      {
+        "line": 34,
+        "code": "result := r.db.WithContext(ctx).Exec(`UPDATE chunks SET index_status=?,updated_at=?"
+      },
+      {
+        "line": 37,
+        "code": "AND EXISTS(SELECT 1 FROM knowledges k JOIN knowledge_bases b ON b.id=k.knowledge_base_id"
       }
     ],
     "status": "not_started"
@@ -4026,7 +4057,7 @@
     "layer": "internal/application/repository",
     "kind": "implementation",
     "lines": 30,
-    "sha256": "45d66d728485e164a99f793fb05a8823eb32319a8364e62c411bd72f4af25a58",
+    "sha256": "a79f8a1cfeef8f96c86afc4c22723155ab0edd05d0d179afd0b9b224aaca61eb",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -4035,7 +4066,7 @@
       },
       {
         "line": 18,
-        "code": "(SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, ?) = ?))`, chunkID, docID, len(prefix), prefix)"
+        "code": "(SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, length(?)) = ?))`, chunkID, docID, prefix, prefix)"
       },
       {
         "line": 28,
@@ -4775,7 +4806,7 @@
         "code": "err := q.Order(\"id ASC\").Find(&rows).Error"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/repository/knowledge_span_repo_test.go",
@@ -4963,8 +4994,8 @@
     "source": "internal/application/repository/knowledgebase.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
-    "lines": 274,
-    "sha256": "5edaf3d8b43e9b2422243d1aa0b4f5c293841b0e4695378b8f9d5ae3dab6dead",
+    "lines": 285,
+    "sha256": "9cda97a3599f98fbaa7ea58d741122485cbf57229665eb0d4eed527f9877a50e",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -5004,12 +5035,33 @@
         "code": "return r.db.WithContext(ctx).Save(kb).Error"
       },
       {
-        "line": 198,
+        "line": 209,
         "code": "return r.db.WithContext(ctx).Where(\"id = ?\", id).Delete(&types.KnowledgeBase{}).Error"
       },
       {
-        "line": 257,
+        "line": 268,
         "code": "if err := query.Order(\"name ASC, id ASC\").Limit(types.ModelUsageListLimit).Find(&rows).Error; err != nil {"
+      }
+    ],
+    "status": "in_progress"
+  },
+  {
+    "source": "internal/application/repository/knowledgebase_profile_owner_test.go",
+    "layer": "internal/application/repository",
+    "kind": "test",
+    "lines": 38,
+    "sha256": "b6a2ba70d74bb4db432e981820235a979793c686bb41e867f8298c10c2704333",
+    "test_names": [
+      "TestKnowledgeBaseProfilePersistRequiresCurrentOwner"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 27,
+        "code": "require.NoError(t, db.Model(&types.KnowledgeBase{}).Where(\"id=?\", \"kb\").Updates(map[string]any{\"tenant_id\": 8, \"name\": \"Concurrent settings\"}).Error)"
+      },
+      {
+        "line": 36,
+        "code": "require.NoError(t, db.Model(&types.KnowledgeBase{}).Where(\"id=?\", \"kb\").Update(\"deleted_at\", time.Now()).Error)"
       }
     ],
     "status": "not_started"
@@ -6663,12 +6715,12 @@
     "source": "internal/application/repository/retriever/elasticsearch/v8/repository.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
-    "lines": 847,
-    "sha256": "a1ca1addb6136fcada768e497a946dedb68ff4aeb17083c950f33bf9c0c70eed",
+    "lines": 863,
+    "sha256": "ee7e783c3d4b7d016d1b5c55529f938aaed742173e21091a9f45d5ab3aef37f1",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
-        "line": 362,
+        "line": 378,
         "code": "createReq := e.client.Indices.Create(e.index)"
       }
     ],
@@ -6851,6 +6903,19 @@
     "status": "not_started"
   },
   {
+    "source": "internal/application/repository/retriever/neo4j/graph_search_scope_test.go",
+    "layer": "internal/application/repository",
+    "kind": "test",
+    "lines": 33,
+    "sha256": "5d4e8ca661b8fdee13b6d4c94d9ca4d6456974ee22f895a48a26706df5f425ce",
+    "test_names": [
+      "TestGraphSearchPropertyListsHandleRelationOnlyEndpoints",
+      "TestGraphSearchBindsExactDocumentOnSeedsAndNeighbors"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
     "source": "internal/application/repository/retriever/neo4j/index_status.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
@@ -6864,8 +6929,8 @@
     "source": "internal/application/repository/retriever/neo4j/repository.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
-    "lines": 302,
-    "sha256": "4e3e8e2aabbf3a1c4c6e798d42b30712c15d5d5ee55b0b59bfbf8a36f377f019",
+    "lines": 317,
+    "sha256": "c63099a278558ab69abd1b684cf12a0c26304d2e6d191fbd15507c7fc05ae30c",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -7308,7 +7373,7 @@
     "sha256": "067309a671cf65753e82ce6e99033d623af4664c881fbc6706445df3b1ac3e0d",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/repository/retriever/postgres/repository.go",
@@ -7375,7 +7440,7 @@
         "code": "Clauses(clause.OnConflict{DoNothing: true}).Create(targetVectors).Error; err != nil {"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/repository/retriever/postgres/structs.go",
@@ -8174,7 +8239,7 @@
         "code": "Where(\"id NOT IN (SELECT DISTINCT tag_id FROM chunks WHERE tenant_id = ? AND knowledge_base_id = ? AND tag_id IS NOT NULL AND tag_id != '' AND deleted_at IS NULL)\", tenantID, kbID)."
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/repository/task_queue.go",
@@ -9247,8 +9312,8 @@
     "source": "internal/application/repository/wiki_page.go",
     "layer": "internal/application/repository",
     "kind": "implementation",
-    "lines": 1489,
-    "sha256": "c4952e33cb18907747c1861c24dc604cf2036040292a4f2b55a579eb313d179a",
+    "lines": 1517,
+    "sha256": "f573c685d4ace331a704bdd3a52169ab9c2808600400d03270c1cbb7e410172d",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -9272,47 +9337,59 @@
         "code": "if err := query.Find(&pages).Error; err != nil {"
       },
       {
-        "line": 652,
+        "line": 514,
+        "code": "Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)"
+      },
+      {
+        "line": 516,
+        "code": "sourceKnowledgeID, sourceKnowledgeID+\"|\", sourceKnowledgeID+\"|\").Find(&pages).Error"
+      },
+      {
+        "line": 569,
+        "code": "Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)"
+      },
+      {
+        "line": 680,
         "code": "return r.db.WithContext(ctx).Create(folder).Error"
       },
       {
-        "line": 734,
+        "line": 762,
         "code": "result := r.db.WithContext(ctx).Exec(`"
       },
       {
-        "line": 735,
+        "line": 763,
         "code": "UPDATE wiki_folders"
       },
       {
-        "line": 739,
+        "line": 767,
         "code": "SELECT 1 FROM wiki_pages"
       },
       {
-        "line": 743,
+        "line": 771,
         "code": "SELECT 1 FROM wiki_folders AS child"
       },
       {
-        "line": 790,
+        "line": 818,
         "code": "if err := q.Group(\"folder_id\").Scan(&rows).Error; err != nil {"
       },
       {
-        "line": 885,
+        "line": 913,
         "code": "if err := q.Scan(&rows).Error; err != nil {"
       },
       {
-        "line": 992,
+        "line": 1020,
         "code": "if err := q.Find(&pages).Error; err != nil {"
       },
       {
-        "line": 1270,
+        "line": 1298,
         "code": "// queries auto-filter deleted_at IS NULL, so this is a one-shot UPDATE."
       },
       {
-        "line": 1457,
+        "line": 1485,
         "code": "return r.db.WithContext(ctx).Create(issue).Error"
       },
       {
-        "line": 1470,
+        "line": 1498,
         "code": "if err := query.Order(\"created_at DESC\").Find(&issues).Error; err != nil {"
       }
     ],
@@ -9486,6 +9563,27 @@
       {
         "line": 872,
         "code": "require.NoError(t, repo.Create(ctx, p))"
+      }
+    ],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/repository/wiki_source_ref_sqlite_test.go",
+    "layer": "internal/application/repository",
+    "kind": "test",
+    "lines": 49,
+    "sha256": "7f6fa529fd2708d93d5207875134fc1e40ecfc413bc2edbcf5b879795934aa0c",
+    "test_names": [
+      "TestWikiSourceReferencesSQLiteExactAndLegacy"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 26,
+        "code": "require.NoError(t, db.Create(&types.WikiPage{ID: row.id, Slug: row.id, TenantID: tenantID,"
+      },
+      {
+        "line": 29,
+        "code": "require.NoError(t, db.Delete(&types.WikiPage{ID: \"deleted\"}).Error)"
       }
     ],
     "status": "not_started"
@@ -10261,8 +10359,8 @@
     "source": "internal/application/service/chat_pipeline/extract_entity.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 727,
-    "sha256": "0b4ab9650bdf680ba46a05207d4b057a2793bd9dd09e9ff860db4ebe681698ad",
+    "lines": 768,
+    "sha256": "0d5ed6f2280ff7690e9bc14ab478ce8c25befe6ba95594e8fa139919e5f5a13b",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -10315,6 +10413,16 @@
       "TestPluginFilterTopKSortsMergeResultsBeforeTruncation",
       "TestPluginFilterTopKUsesDeterministicTieBreakers"
     ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/chat_pipeline/graph_query_scope.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 112,
+    "sha256": "47ff83b5fd1f4dd8e90ce93e08b0a036660f72de57f5b6f98f65574d9c617f24",
+    "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
   },
@@ -10773,8 +10881,8 @@
     "source": "internal/application/service/chat_pipeline/search_entity.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 266,
-    "sha256": "ad4c6f08c25c62d35c615b8663a62909c3219717d04512abc8ea679f4f5f1155",
+    "lines": 352,
+    "sha256": "3e314c5352b65b445d1569c05f781d00a381e7f518070e7bfd9cc4c3c48153e2",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -10783,8 +10891,8 @@
     "source": "internal/application/service/chat_pipeline/search_entity_scope_test.go",
     "layer": "internal/application/service",
     "kind": "test",
-    "lines": 70,
-    "sha256": "0b76ec488b2a64486b1bdc2c0bf4ddf27855b312b1ad2f24dd88ac4b0e7abc50",
+    "lines": 72,
+    "sha256": "dd1ca277df20d7c362abb712d0d8eaddbc2caad768ef22852da8320e34ac68c8",
     "test_names": [
       "TestSearchEntityResolvesSharedChunksWithinScope"
     ],
@@ -10812,9 +10920,21 @@
     "source": "internal/application/service/chat_pipeline/search_parallel.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 179,
-    "sha256": "bf3e13e66e80a11a007a3115cf89e07c64b12ebc429bda8424aa8e36e610ef9d",
+    "lines": 206,
+    "sha256": "267d82b2cb49a3e8fdeeb98c9d06a726979fffe1a2de57f3ed9de045fd3e0835",
     "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/chat_pipeline/search_parallel_scope_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 32,
+    "sha256": "7427e94bb9072daacf1f3d0695f3723effd0cfb283a92db65cf10f943d310b67",
+    "test_names": [
+      "TestParallelProductionConstructorBindsInnerEntityScope"
+    ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
   },
@@ -10842,8 +10962,8 @@
     "source": "internal/application/service/chunk.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 972,
-    "sha256": "26068e879c1a6f52b1b4a3713eb6d83418410cf6ca2cb98dfafca08833d37cb7",
+    "lines": 982,
+    "sha256": "cd8a62f788e00b5eef0c356053095889b51d9de51743337d89e45d70ace02ea6",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "in_progress"
@@ -10872,6 +10992,16 @@
     "status": "not_started"
   },
   {
+    "source": "internal/application/service/chunk_edit_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 119,
+    "sha256": "0f7235647c29fb1c9f2aee94f827900e2f002f38107f7640b431d262ec909a09",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
     "source": "internal/application/service/chunk_edit_parent_test.go",
     "layer": "internal/application/service",
     "kind": "test",
@@ -10884,6 +11014,16 @@
       "TestUpdateDocumentChunkPreservesGeneratedQuestionsAcrossRevision",
       "TestRebuildParentContentPreservesConflictingEdits"
     ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/chunk_question_regenerate_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 41,
+    "sha256": "ffccb5acdce8b1f6f7e40bed1986bf22f3b744c8ce9f2fcf8f47200884d54ce3",
+    "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
   },
@@ -11447,8 +11587,8 @@
     "source": "internal/application/service/extract.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 936,
-    "sha256": "90854ab8cf992591a4f3f1f391251eb3028ebc8d446996094513076ebcaba8dc",
+    "lines": 1005,
+    "sha256": "fe25262d868f30e0c7ef3d17b30ea3b473cc9222d5abcf9b906004e1ffb4e13d",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -11460,11 +11600,11 @@
         "code": "info, err := client.Enqueue(task)"
       },
       {
-        "line": 656,
+        "line": 725,
         "code": "SQL:         fmt.Sprintf(\"SELECT * FROM \\\"%s\\\" LIMIT 10\", tools.DataAnalysisTableName),"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/extract_data_table_orphan_test.go",
@@ -12126,8 +12266,8 @@
     "source": "internal/application/service/image_multimodal.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 905,
-    "sha256": "78cc7304781d54e2a7925a13992c856b943f4d718face9bd3396f37227216529",
+    "lines": 950,
+    "sha256": "feea8e38860a6027856f8138171717e6c07a25424f7823474e00da1ad2d84999",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -12151,6 +12291,46 @@
       "TestProcessImageReturnsUnreadableImageError"
     ],
     "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/image_multimodal_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 133,
+    "sha256": "05d8b152db7f1b3ba50754653639e2e58dd0e752101481edd413568c37dbc220",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/image_multimodal_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 118,
+    "sha256": "5336d28762f103fbdb9706f6187b8285e62f02c41035b016362d56a008fac854",
+    "test_names": [
+      "TestImageTaskSourceBindingAndProviderFence",
+      "TestImageTaskFinalBindingRejectionPreservesForeignCounter"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/image_multimodal_fanout_oracle_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 100,
+    "sha256": "fcc42f4eae3181f298b27a14af2537cccf910d084202e11a74479bdca61d9904",
+    "test_names": [
+      "TestImageMultimodalActualFanoutOracle"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 36,
+        "code": "info, err := q.client.Enqueue(task, options...)"
+      }
+    ],
     "status": "not_started"
   },
   {
@@ -12289,18 +12469,18 @@
     "source": "internal/application/service/knowledge_auto_tag.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 380,
-    "sha256": "d2a497ac382f144548a659243fd509d6bbb25b5d2e69db32e444e522c41eb418",
+    "lines": 438,
+    "sha256": "f076cdc5ac02c2265ea993317c92edf822c3dca3f4f10ce5ab1ef8a994e5dd9a",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_auto_tag_test.go",
     "layer": "internal/application/service",
     "kind": "test",
-    "lines": 374,
-    "sha256": "49afebeb52ebde98635ac5730e274e2dccaf7a0728a47339e73dcb114cc0b29b",
+    "lines": 398,
+    "sha256": "554ee78a0994a5fd29855d264557bf31847afdd86ca7f51c3ea98a75bd639820",
     "test_names": [
       "TestAutoTagHandleAttachesMatchedTags",
       "TestAutoTagHandleKeepsMatchesWithoutConfidence",
@@ -12320,7 +12500,9 @@
       "TestValidateAutoTagMatchesNormalizesConfidenceScale",
       "TestValidateAutoTagMatchesClampsMaxTagsToConfigBounds",
       "TestBuildAutoTagDocumentContentSamplesAndFilters",
-      "TestEnqueueAutoTagTaskCarriesScopeWithoutOwningFinalizingSlot"
+      "TestEnqueueAutoTagTaskCarriesScopeWithoutOwningFinalizingSlot",
+      "TestAutoTagRejectsForeignChunkBeforeModel",
+      "TestAutoTagRejectsSupersededTask"
     ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -12531,7 +12713,7 @@
     "sha256": "6aafa282b0d98e7a8fa849eb6022242410e292ae400daff3ef31a79cccf25785",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_delete_plan.go",
@@ -12541,7 +12723,7 @@
     "sha256": "0c8057e50c6a108f7276ec7b611a2501e8d6b8610318ee9b6d37902e03196ee7",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_delete_test.go",
@@ -12648,6 +12830,24 @@
     "status": "not_started"
   },
   {
+    "source": "internal/application/service/knowledge_fileurl_java_parity_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 314,
+    "sha256": "1ed2bcfe86ac3d496922304d64b06d4562261c778dc6005417d227c25f431bea",
+    "test_names": [
+      "TestFileURLJavaDownloadOracle",
+      "TestRemoteDocumentJavaWorkerOracle"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 292,
+        "code": "require.NoError(t, db.Where(\"knowledge_id=?\", k.ID).Find(&cs).Error)"
+      }
+    ],
+    "status": "not_started"
+  },
+  {
     "source": "internal/application/service/knowledge_folder_move_test.go",
     "layer": "internal/application/service",
     "kind": "test",
@@ -12658,6 +12858,50 @@
       "TestMoveKnowledgeToFolderAcceptsRootAndRejectsEmptyBatch",
       "TestMoveKnowledgeToFolderRejectsTraversalAndUnsafeInput",
       "TestRenameKnowledgeFolderValidatesPaths"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_graph_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 8,
+    "sha256": "e775dbcfeb187f1ab945c815c31391af2cc381085d808a9d917c13531fed8ef5",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_graph_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 21,
+    "sha256": "9bc65e97cedda689c43fc947126e7851c5e89d62cb44feb93807ef05ccbded38",
+    "test_names": [
+      "TestGraphChunkBinding"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_graph_prompt.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 19,
+    "sha256": "bc7ce91dabacf7982ad7507968435a80904e7c3d9bf9cefdf1519361db0a76b1",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_graph_prompt_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 24,
+    "sha256": "b28acc8777e1a015003effc7644cc2160811e23932c580321e4c4b1de46f2006",
+    "test_names": [
+      "TestGraphPromptCustomPercentSignsRemainLiteral"
     ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -13011,6 +13255,23 @@
     "status": "not_started"
   },
   {
+    "source": "internal/application/service/knowledge_index_java_parity_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 107,
+    "sha256": "fe84fbb48027403bab92568f0c7eeaf5964e0b7bbbd9e3a03a0acc7d4a75be67",
+    "test_names": [
+      "TestExportJavaIndexStateFixtures"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 100,
+        "code": "f, err := os.Create(path)"
+      }
+    ],
+    "status": "not_started"
+  },
+  {
     "source": "internal/application/service/knowledge_index_status.go",
     "layer": "internal/application/service",
     "kind": "implementation",
@@ -13031,6 +13292,29 @@
       "TestDocumentIndexStateDetectsMissingRecordsAndConfigChanges",
       "TestDocumentIndexStateIgnoresSupersededRetry",
       "TestKnowledgeIndexStatusUsesOwnerScopeAndQuestionRevisions"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_manual_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 81,
+    "sha256": "8bdf353c3800396f4ca855433d1d164005ae4a1551d0de00671608cb245d9b43",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_manual_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 93,
+    "sha256": "d8079353c5b5b2cc9a8924efa4696063abe4581c35e99109b7a9603d71519620",
+    "test_names": [
+      "TestManualSourceFenceRejectsMutatedBodyOwnerAndCancelAfterProvider",
+      "TestManualSourceFenceKeepsReadFailureRetryableAndAllowsUnchangedBody"
     ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -13117,24 +13401,24 @@
     "source": "internal/application/service/knowledge_post_process.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 746,
-    "sha256": "eeb65ae3f3953667a27984b4f5e1fce75bccf5844fb347ef8a421cea058a29d1",
+    "lines": 749,
+    "sha256": "21f2b13a9684b001675d6e1102d0bec0e0de233dcd0355fcb3f215a476c40755",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
-        "line": 564,
+        "line": 567,
         "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
       },
       {
-        "line": 596,
+        "line": 599,
         "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
       },
       {
-        "line": 692,
+        "line": 695,
         "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_post_process_graph_chunks_test.go",
@@ -13194,28 +13478,28 @@
     "source": "internal/application/service/knowledge_process.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 4581,
-    "sha256": "5fe1caf0bc879b7010332382e83cb30ceda80b0e73a5fe7d8ed5cb16d5db4ab9",
+    "lines": 4706,
+    "sha256": "9637090bb4e38156bde24221ad3a68c16b1660292bdb723d955bfe1733b51bcb",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
-        "line": 2848,
+        "line": 2940,
         "code": "info, err := s.task.Enqueue(task)"
       },
       {
-        "line": 2902,
+        "line": 2994,
         "code": "info, err := s.task.Enqueue(task)"
       },
       {
-        "line": 2953,
+        "line": 3045,
         "code": "info, err := s.task.Enqueue(task)"
       },
       {
-        "line": 4326,
+        "line": 4451,
         "code": "if _, err := s.task.Enqueue(task); err != nil {"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_process_config.go",
@@ -13310,6 +13594,80 @@
       "TestMarkKnowledgeProcessingClearsPreviousAttemptError"
     ],
     "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_process_table_cleanup.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 42,
+    "sha256": "ea01a54ceff3e1882c4ef2cd51ce76cc75a71af477aecb90c20a50473f9211b7",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_process_table_cleanup_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 47,
+    "sha256": "37a4e2f409c77fa87220e5e8e65d2fcee056fb481bf444a726da26bad51802f4",
+    "test_names": [
+      "TestDocumentCleanupPreservesParallelTableMetadataAndReparseRemovesOldAttempt"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 29,
+        "code": "require.NoError(t, f.db.Create(&types.Chunk{ID: typ, TenantID: 7, KnowledgeID: \"doc\", KnowledgeBaseID: \"kb\", ChunkType: typ}).Error)"
+      }
+    ],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_question_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 18,
+    "sha256": "8f410c8e26aa3bd296afa23cdf87ca16153e2d026d2068f037ef61c448d598d7",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_question_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 28,
+    "sha256": "2a78beb8b050f510e2f865622f6310575725ee997efe5a941df3f252aaaf4788",
+    "test_names": [
+      "TestQuestionChunkBindingIncludesOwnerKnowledgeAndBase"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/knowledge_question_post_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 91,
+    "sha256": "4de0d7def17df8db91d851c3208ab7d5029f98dd7c3f8a0b246131951789207a",
+    "test_names": [
+      "TestQuestionFanoutRejectsWrongBaseAndClosesActualAttempt"
+    ],
+    "database_and_task_call_evidence": [
+      {
+        "line": 34,
+        "code": "if e = db.Exec(string(body)).Error; e != nil {"
+      },
+      {
+        "line": 69,
+        "code": "if e = db.Where(\"knowledge_id=? AND attempt=?\", \"doc\", attempt).Find(&spans).Error; e != nil {"
+      },
+      {
+        "line": 85,
+        "code": "if e = db.Where(\"id='doc'\").First(&knowledge).Error; e != nil {"
+      }
+    ],
     "status": "not_started"
   },
   {
@@ -13479,7 +13837,7 @@
         "code": "// table directly; skip the parent-row UPDATE to avoid write"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledge_span_tracker_test.go",
@@ -13595,12 +13953,12 @@
     "source": "internal/application/service/knowledge_summary_refresh.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 151,
-    "sha256": "f1e314363196de9354604040afc2511d93a2fe2e1b257c42a8221df09fd113a6",
+    "lines": 158,
+    "sha256": "80a84c6620ca2ad02f434b0b3f9e43b359f92af9b1edc52991242cf439dc0b74",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
-        "line": 133,
+        "line": 140,
         "code": "if _, err = taskEnqueuer.Enqueue(task); err != nil {"
       }
     ],
@@ -13637,13 +13995,14 @@
     "source": "internal/application/service/knowledge_summary_stale_test.go",
     "layer": "internal/application/service",
     "kind": "test",
-    "lines": 123,
-    "sha256": "35b131a754e71fac607e0e25f83bcc7df858e3b58b964c72871c85f36acdf603",
+    "lines": 139,
+    "sha256": "8963e6c2a8790507ba4e385ecb8b486dcb0d14caef236707d2ac8ac82ef869b8",
     "test_names": [
       "TestSummarySourceChangedDetectsMetadataDrift",
       "TestSummarySourceChangedDetectsChunkRevisionDrift",
       "TestSummarySourceChangedReturnsLookupErrors",
-      "TestSummarySourceChangedAcceptsCurrentSnapshot"
+      "TestSummarySourceChangedAcceptsCurrentSnapshot",
+      "TestSummarySourceChangedDiscardsResultAfterBusinessCancellation"
     ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -14037,8 +14396,8 @@
     "source": "internal/application/service/knowledgebase_profile.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 455,
-    "sha256": "e3fd2994549b9f323de0bc8c1cd3f11d6a50b0ebb61069b423f2031b5db9dfe3",
+    "lines": 458,
+    "sha256": "f4ded1c48be5c5390e55dd62216de004a0b4d1242a3ecff9ffd8970333a0aa25",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -14046,7 +14405,7 @@
         "code": "if _, err := enqueuer.Enqueue(task, opts...); err != nil {"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledgebase_profile_test.go",
@@ -14079,6 +14438,29 @@
     "lines": 559,
     "sha256": "577a7959ce4ad3b2c288ad13ee058b264f5d227371f20c24e4d7cc5deb0674a0",
     "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "in_progress"
+  },
+  {
+    "source": "internal/application/service/knowledgebase_search_binding.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 122,
+    "sha256": "714a7c187390f5f8061473d535aa7e7166f8810095a0534faaa16414672a0a49",
+    "test_names": [],
+    "database_and_task_call_evidence": [],
+    "status": "in_progress"
+  },
+  {
+    "source": "internal/application/service/knowledgebase_search_binding_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 78,
+    "sha256": "9aeca67fb8b5f70c1cd125c95189f3947fbc13c54ed325fef99df72ce68ed22d",
+    "test_names": [
+      "TestHybridPrimaryPersistenceBinding",
+      "TestHybridContextLinksCannotWidenOriginDocument"
+    ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
   },
@@ -14205,11 +14587,11 @@
     "source": "internal/application/service/knowledgebase_search_fusion.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 234,
-    "sha256": "1ea5345c28a00ede6954030ed2edf0b1c614a7314b591a286366bbe4f7afcff4",
+    "lines": 236,
+    "sha256": "c67d4960dfd3bb4c6c92d9ce3f4530feb7a48e659519c564a7667bd2b0f070eb",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledgebase_search_fusion_test.go",
@@ -14272,11 +14654,11 @@
     "source": "internal/application/service/knowledgebase_search_results.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 383,
-    "sha256": "c409a654d442c238f559939736a8f46c9fb66fdb22e1afc2cf07adead57d162d",
+    "lines": 401,
+    "sha256": "f1df00b9cfaca89f145c9db0af3921f5d239632091a3cbc8a590a35ee4013ded",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledgebase_search_results_edit_test.go",
@@ -14299,7 +14681,7 @@
     "sha256": "ef1da287af1a190256dfe49d1243c778dcb74c6c3552177ad9bb4af3ffe37cba",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/knowledgebase_search_storegroup.go",
@@ -16101,8 +16483,8 @@
     "source": "internal/application/service/retriever/composite.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 353,
-    "sha256": "ee6e90387f3937b78aa05912199aee17fcf37bbb1c716cc2b9461677aeb482e7",
+    "lines": 362,
+    "sha256": "c617490af1d0f99773936ec2713beaaa5fc19622420ae8a94cfa46c796de9a63",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -16175,6 +16557,16 @@
       "TestBatchIndexRemovesInlineImagePayloadBeforeEmbedding",
       "TestBatchIndexTruncatesOversizedEmbeddingInput"
     ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/retriever/manual_batch_order.go",
+    "layer": "internal/application/service",
+    "kind": "implementation",
+    "lines": 11,
+    "sha256": "bcfa6cc9fe7522e8581b6bd6a685e7d0b25b6c812dcf66d33372d95a880b063f",
+    "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
   },
@@ -16282,6 +16674,18 @@
       "TestRegistry_DualMapIsolation",
       "TestRegistry_ConcurrentAccess",
       "TestRegistry_ImplementsStoreRegistry"
+    ],
+    "database_and_task_call_evidence": [],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/application/service/retriever/vector_store_lifecycle_oracle_test.go",
+    "layer": "internal/application/service",
+    "kind": "test",
+    "lines": 125,
+    "sha256": "5907878d6218e231343bf30cbd415d9829afbfda4f81accb145cb607d271c9e6",
+    "test_names": [
+      "TestVectorStoreLifecycleActualOracle"
     ],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -17386,8 +17790,8 @@
     "source": "internal/application/service/tag.go",
     "layer": "internal/application/service",
     "kind": "implementation",
-    "lines": 506,
-    "sha256": "3f5360dc301da3b90c743a0190271074f455cdd8308150d58ac6299289899ed8",
+    "lines": 527,
+    "sha256": "95a94f25bd3d017891b9626683c78fce56af0168507e30d2eab7cfb30cba7f23",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -17411,7 +17815,7 @@
         "code": "info, err := s.task.Enqueue(task)"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/tag_access.go",
@@ -17421,7 +17825,7 @@
     "sha256": "ff3bc650cf6ba736298dcffeb7cfcc45620c025652b5bf6e5f5b5d0df1f7c8e5",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/application/service/temporary_document.go",
@@ -20526,7 +20930,7 @@
     "layer": "internal/container",
     "kind": "implementation",
     "lines": 2035,
-    "sha256": "c965642809b5990dbe16f8e6b2167e014671947e71cc56cd5379e31d53259c3b",
+    "sha256": "1d5d9c9033f819c7de23362ce0e5068872c4455c303b29a990460bdc4bb57915",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
@@ -20600,8 +21004,8 @@
     "source": "internal/container/engine_factory.go",
     "layer": "internal/container",
     "kind": "implementation",
-    "lines": 391,
-    "sha256": "78f3e1a04bfec2bba00505423ebcf00bfb63f7213a5a13e6e15f0f34a60562ae",
+    "lines": 402,
+    "sha256": "f5a0b98b715adcf17e9e14788ab321efaecce153347f0b2dcc36494f8ffb96ba",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -21160,6 +21564,18 @@
         "code": "require.NoError(t, db.Raw(\"SELECT storage_backend_id FROM knowledge_bases WHERE id = 'kb-a'\").Scan(&kbBackend).Error)"
       }
     ],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/container/vector_store_es_context_oracle_test.go",
+    "layer": "internal/container",
+    "kind": "test",
+    "lines": 83,
+    "sha256": "05d3a535f9593ae0e03f5603edc5a0cd6274f9533084275261c60d615073d03a",
+    "test_names": [
+      "TestVectorStoreES8FactoryContextActualOracle"
+    ],
+    "database_and_task_call_evidence": [],
     "status": "not_started"
   },
   {
@@ -24792,7 +25208,7 @@
         "code": "info, err := h.asynqClient.Enqueue(task)"
       }
     ],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/handler/knowledgebase_copy_preflight_test.go",
@@ -26758,7 +27174,7 @@
     "sha256": "b0150efae78f8880aea5dad4b5ce3642c126f53dff5c7aedb0778dd822375bb1",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/handler/tag_delete_test.go",
@@ -34688,11 +35104,11 @@
     "source": "internal/reranking/rerank.go",
     "layer": "internal/reranking",
     "kind": "implementation",
-    "lines": 366,
-    "sha256": "c2d14f002d7798b63bb7381e6b57d714231cb98ee39deabac39a9cf0423ac29c",
+    "lines": 368,
+    "sha256": "97bacd17c241cc233f47da709a69444f3c64702931e674388dce16603242b515",
     "test_names": [],
     "database_and_task_call_evidence": [],
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "source": "internal/reranking/rerank_test.go",
@@ -35441,6 +35857,18 @@
         "code": "if _, err := client.Enqueue("
       }
     ],
+    "status": "not_started"
+  },
+  {
+    "source": "internal/router/task_inspector_kb_scope_oracle_test.go",
+    "layer": "internal/router",
+    "kind": "test",
+    "lines": 97,
+    "sha256": "b6a40156eb81c696a0c0694665a76784afa6ebcf5640f2767a5739576244aaf5",
+    "test_names": [
+      "TestKnowledgeBaseTaskScopeActualOracle"
+    ],
+    "database_and_task_call_evidence": [],
     "status": "not_started"
   },
   {
@@ -38085,8 +38513,8 @@
     "source": "internal/searchutil/imageinfo.go",
     "layer": "internal/searchutil",
     "kind": "implementation",
-    "lines": 750,
-    "sha256": "3c030dccbfaa1a052792303c11c376c7c7518202eee38e43466dcb263d9a5549",
+    "lines": 755,
+    "sha256": "f7a4889dca60f87f9111be3882cbf6ecec1792270da544588c088158f0479fa2",
     "test_names": [],
     "database_and_task_call_evidence": [],
     "status": "not_started"
@@ -39598,16 +40026,16 @@
     "source": "internal/types/interfaces/chunk.go",
     "layer": "internal/types",
     "kind": "implementation",
-    "lines": 220,
-    "sha256": "66a5a3e8e989819eaf5c641865c58e39e1438bfbed3afa6f0c63b9f089e119ae",
+    "lines": 223,
+    "sha256": "06b7b122874bb501e54248930264f28251122e559fb82d8adde44549df09017f",
     "test_names": [],
     "database_and_task_call_evidence": [
       {
-        "line": 99,
+        "line": 102,
         "code": "// SaveChunks persists full chunk objects in a single transaction using GORM Save (UPDATE)."
       },
       {
-        "line": 102,
+        "line": 105,
         "code": "// on every listed chunk of the tenant with one UPDATE per batch of IDs."
       }
     ],

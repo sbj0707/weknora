@@ -17,7 +17,7 @@ public record AuthContext(String userId, long tenantId, String role, boolean sys
     }
     public boolean isApiKey() { return apiKeyId != null; }
     public boolean allowsKnowledgeBase(String id) {
-        return !isApiKey() || knowledgeBaseIds.isEmpty() || knowledgeBaseIds.contains(id);
+        return !isApiKey() || knowledgeBaseIds.isEmpty() || knowledgeBaseIds.contains(AuthPreferences.trimGoSpace(id));
     }
     public void requireKnowledgeBase(String id) {
         if (!allowsKnowledgeBase(id)) throw new ApiException(403, "FORBIDDEN", "Forbidden: API key knowledge base scope");

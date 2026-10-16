@@ -119,6 +119,15 @@ func (s *KnowledgeAutoTagService) Handle(ctx context.Context, task *asynq.Task) 
 		ctx = context.WithValue(ctx, types.LanguageContextKey, payload.Language)
 	}
 
+	// An invalid task must not attach spans to another owner's document or an orphan.
+	knowledge, err := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, payload.KnowledgeID)
+	if err != nil {
+		return fmt.Errorf("get knowledge for auto tag: %w", err)
+	}
+	if knowledge == nil || knowledge.TenantID != payload.TenantID || knowledge.KnowledgeBaseID != payload.KnowledgeBaseID {
+		return nil
+	}
+
 	parent := s.tracker().LookupStage(ctx, payload.KnowledgeID, payload.Attempt, types.StagePostProcess)
 	span := s.tracker().BeginSubSpan(ctx, parent, autoTagSpanName, types.SpanKindSubSpan, types.JSONMap{
 		"knowledge_base_id": payload.KnowledgeBaseID,
@@ -132,14 +141,10 @@ func (s *KnowledgeAutoTagService) Handle(ctx context.Context, task *asynq.Task) 
 		return nil
 	}
 
-	knowledge, err := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, payload.KnowledgeID)
-	if err != nil {
-		s.tracker().FailSpan(ctx, span, "AUTO_TAG_KNOWLEDGE_LOAD_FAILED", err.Error(), err)
-		return fmt.Errorf("get knowledge for auto tag: %w", err)
+	if payload.Attempt > 0 && s.tracker().LatestAttempt(ctx, payload.KnowledgeID) > payload.Attempt {
+		return skip("attempt_superseded", nil)
 	}
-	if knowledge == nil || knowledge.TenantID != payload.TenantID || knowledge.KnowledgeBaseID != payload.KnowledgeBaseID {
-		return skip("knowledge_not_in_scope", nil)
-	}
+
 	if knowledge.ParseStatus == types.ParseStatusCancelled ||
 		knowledge.ParseStatus == types.ParseStatusDeleting ||
 		knowledge.ParseStatus == types.ParseStatusFailed {
@@ -222,6 +227,12 @@ func (s *KnowledgeAutoTagService) Handle(ctx context.Context, task *asynq.Task) 
 		s.tracker().FailSpan(ctx, span, "AUTO_TAG_LIST_CHUNKS_FAILED", err.Error(), err)
 		return fmt.Errorf("list chunks for auto tag: %w", err)
 	}
+	for _, chunk := range chunks {
+		if !autoTagChunkBound(chunk, payload) {
+			return skip("chunk_binding_changed", nil)
+		}
+	}
+
 	content := buildAutoTagDocumentContent(knowledge, chunks)
 	if strings.TrimSpace(content) == "" {
 		return skip("no_text_chunks", nil)
@@ -236,6 +247,29 @@ func (s *KnowledgeAutoTagService) Handle(ctx context.Context, task *asynq.Task) 
 	if err != nil {
 		s.tracker().FailSpan(ctx, span, "AUTO_TAG_MODEL_CALL_FAILED", err.Error(), err)
 		return err
+	}
+
+	if payload.Attempt > 0 && s.tracker().LatestAttempt(ctx, payload.KnowledgeID) > payload.Attempt {
+		return skip("attempt_superseded", nil)
+	}
+	current, err := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, payload.KnowledgeID)
+	if err != nil {
+		s.tracker().FailSpan(ctx, span, "AUTO_TAG_KNOWLEDGE_LOAD_FAILED", err.Error(), err)
+		return fmt.Errorf("reload knowledge for auto tag: %w", err)
+	}
+	if current == nil || current.TenantID != payload.TenantID || current.KnowledgeBaseID != payload.KnowledgeBaseID {
+		return skip("knowledge_not_in_scope", nil)
+	}
+	if current.FileName != knowledge.FileName {
+		return skip("content_revision_changed", nil)
+	}
+	fresh, err := s.chunkService.ListChunksByKnowledgeID(ctx, payload.KnowledgeID)
+	if err != nil {
+		s.tracker().FailSpan(ctx, span, "AUTO_TAG_LIST_CHUNKS_FAILED", err.Error(), err)
+		return fmt.Errorf("reload chunks for auto tag: %w", err)
+	}
+	if !autoTagChunksCurrent(chunks, fresh, payload) {
+		return skip("content_revision_changed", nil)
 	}
 
 	validIDs := validateAutoTagMatches(tags, response.Matches, config.MaxTags)
@@ -377,4 +411,28 @@ func validateAutoTagMatches(tags []*types.KnowledgeTag, matches []autoTagModelMa
 		}
 	}
 	return result
+}
+
+// Reject unrelated chunk inputs and obsolete provider results before attaching tags.
+func autoTagChunkBound(chunk *types.Chunk, payload types.KnowledgeAutoTagPayload) bool {
+	return chunk != nil && chunk.TenantID == payload.TenantID && chunk.KnowledgeID == payload.KnowledgeID && chunk.KnowledgeBaseID == payload.KnowledgeBaseID
+}
+func autoTagChunksCurrent(original, current []*types.Chunk, payload types.KnowledgeAutoTagPayload) bool {
+	if len(original) != len(current) {
+		return false
+	}
+	rows := make(map[string]*types.Chunk, len(current))
+	for _, c := range current {
+		if !autoTagChunkBound(c, payload) {
+			return false
+		}
+		rows[c.ID] = c
+	}
+	for _, c := range original {
+		n := rows[c.ID]
+		if n == nil || n.ContentRevision != c.ContentRevision || n.Content != c.Content || n.IsEnabled != c.IsEnabled || n.ChunkType != c.ChunkType || n.StartAt != c.StartAt {
+			return false
+		}
+	}
+	return true
 }

@@ -31,6 +31,10 @@ public class GoCompatibilityBridge extends OncePerRequestFilter {
     }
     public static boolean ownsNative(HttpServletRequest req) {
         String path=req.getRequestURI(),method=req.getMethod();
+        if(path.equals("/api/v1/knowledge/move")&&method.equals("POST")||path.matches("/api/v1/knowledge/move/progress/[^/]+")&&method.equals("GET"))return true;
+        if(method.equals("DELETE")&&path.matches("/api/v1/knowledge-bases/[^/]+"))return true;
+        if(method.equals("POST")&&path.matches("/api/v1/knowledge-bases/[^/]+/duplicate"))return true;
+        if(method.equals("PUT")&&path.matches("/api/v1/knowledge/image/[^/]+/[^/]+"))return true;
         if(path.equals("/api/v1/system/parser-engines")&&method.equals("GET"))return true;
         if(Set.of("/api/v1/system/parser-engines/check","/api/v1/system/docreader/reconnect").contains(path)&&method.equals("POST"))return true;
         if(path.equals("/api/v1/chunker/preview")&&method.equals("POST"))return true;
@@ -59,7 +63,11 @@ public class GoCompatibilityBridge extends OncePerRequestFilter {
         if(path.matches("/api/v1/tenants/[1-9][0-9]*/members/[^/]+")&&Set.of("PUT","DELETE").contains(method))return true;
         if(path.equals("/api/v1/knowledge-bases")&&method.equals("GET")&&req.getParameter("agent_id")==null) return true;
         if(method.equals("GET")) {
+            if(path.matches("/api/v1/knowledge/[^/]+/index-status")) return true;
+            if(path.matches("/api/v1/knowledge/[^/]+/(spans|stages)")) return true;
+            if(path.matches("/api/v1/knowledge/[^/]+/chunks/[^/]+/details")) return true;
             if(path.matches("/api/v1/knowledge-bases/[^/]+/knowledge")) return true;
+            if(path.matches("/api/v1/knowledge-bases/[^/]+/(images|gallery-config|move-targets)")) return true;
             if(path.matches("/api/v1/knowledge/(?!batch$|search$)[^/]+")) return true;
             if(path.matches("/api/v1/chunks/[^/]+")) return true;
             if(path.matches("/api/v1/chunks/by-id/[^/]+")) return true;

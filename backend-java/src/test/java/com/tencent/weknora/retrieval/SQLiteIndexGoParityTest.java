@@ -104,4 +104,57 @@ class SQLiteIndexGoParityTest {
             assertThat(rows(c)).isEmpty();
         }
     }
+    @Test void independentlyConfiguredReadersReuseTheSamePhysicalExtensionRegistration()throws Exception {
+        try(Database db=new Database();Connection c=db.connection()) {
+            var library=Path.of(System.getProperty("weknora.sqlite.vec.extension"));
+            new SQLiteVectorExtension(library).load(c);
+            new SQLiteVectorExtension(library).load(c);
+            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT vec_version()")) {
+                assertThat(r.next()).isTrue();assertThat(r.getString(1)).isEqualTo("v0.1.6");
+            }
+        }
+    }
+    @Test void replacementsOnOnePhysicalConnectionPreserveVectorAndFtsData()throws Exception {
+        try(Database db=new Database();var pool=new com.zaxxer.hikari.HikariDataSource()) {
+            pool.setJdbcUrl(db.ds.getUrl());pool.setMaximumPoolSize(1);pool.setConnectionTimeout(1000);
+            var index=new SQLiteIndexRepository(pool,new SQLiteVectorExtension(Path.of(System.getProperty("weknora.sqlite.vec.extension"))));
+            index.initialize();index.prepare(Set.of(3));
+            for(int i=0;i<10;i++) {
+                try(Connection c=pool.getConnection()) {
+                    c.setAutoCommit(false);
+                    index.deleteByKnowledge(c,List.of("doc"));
+                    index.batchSave(c,List.of(new IndexEntry("a",0,"a","doc","kb","","hello",true),new IndexEntry("b",0,"b","doc","kb","","world",true)),Map.of("a",new float[]{1,0,0},"b",new float[]{0,1,0}));c.commit();
+                }
+                assertThat(index.retrieve(new RetrievalQuery("",new float[]{1,0,0},List.of("kb"),null,null,2,0,"vector")).getFirst().results()).extracting(RetrievalHit::sourceId).containsExactly("a","b");
+            }
+        }
+    }
+    @Test void vectorBlobReadsPermitSubsequentConstrainedQueueWritesOnOneConnection()throws Exception {
+        try(Database db=new Database();var pool=new com.zaxxer.hikari.HikariDataSource()) {
+            pool.setJdbcUrl(db.ds.getUrl());pool.setMaximumPoolSize(1);pool.setConnectionTimeout(1000);
+            try(Connection c=pool.getConnection()){ScriptUtils.executeSqlScript(c,new FileSystemResource("migration/sql/java-tasks.sql"));}
+            var jdbc=new org.springframework.jdbc.core.JdbcTemplate(pool);
+            var tasks=new com.tencent.weknora.task.TaskRepository(jdbc,JSON,new org.springframework.jdbc.datasource.DataSourceTransactionManager(pool));
+            var index=new SQLiteIndexRepository(pool,new SQLiteVectorExtension(Path.of(System.getProperty("weknora.sqlite.vec.extension"))));
+            index.initialize();index.prepare(Set.of(3));
+            tasks.enqueue(1,"test","before",JSON.createObjectNode(),4,java.time.Duration.ZERO);
+            Connection duck=java.sql.DriverManager.getConnection("jdbc:duckdb:");
+            tasks.enqueue(1,"test","after-duck",JSON.createObjectNode(),4,java.time.Duration.ZERO);
+            try(Connection c=pool.getConnection()) {
+                c.setAutoCommit(false);
+                index.batchSave(c,List.of(new IndexEntry("a",0,"a","doc","kb","","hello",true)),Map.of("a",new float[]{1,0,0}));c.commit();
+            }
+            for(int i=0;i<3;i++){
+                try(Connection c=pool.getConnection()){
+                    new SQLiteVectorExtension(Path.of(System.getProperty("weknora.sqlite.vec.extension"))).load(c);
+                    try(var s=c.prepareStatement("SELECT embedding FROM vec_embeddings_3 WHERE rowid=?")){
+                        s.setLong(1,1);try(var r=s.executeQuery()){assertThat(r.next()).isTrue();assertThat(FloatVectors.decode(r.getBytes(1),3)).containsExactly(1,0,0);}
+                    }
+                }
+                assertThat(tasks.enqueue(1,"test","after-"+i,JSON.createObjectNode(),4,java.time.Duration.ZERO).status()).isEqualTo("pending");
+            }
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM java_task_jobs",Integer.class)).isEqualTo(5);
+            duck.close();
+        }
+    }
 }

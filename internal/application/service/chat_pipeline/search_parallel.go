@@ -81,6 +81,33 @@ func NewPluginSearchParallel(
 	return res
 }
 
+// NewPluginSearchParallelAuthorized also wires fresh permissions into the unregistered
+// entity plugin used by the production parallel retrieval branch.
+func NewPluginSearchParallelAuthorized(
+	eventManager *EventManager,
+	knowledgeBaseService interfaces.KnowledgeBaseService,
+	knowledgeService interfaces.KnowledgeService,
+	chunkService interfaces.ChunkService,
+	config *config.Config,
+	webSearchService interfaces.WebSearchService,
+	tenantService interfaces.TenantService,
+	sessionService interfaces.SessionService,
+	webSearchStateService interfaces.WebSearchStateService,
+	webSearchProviderRepo interfaces.WebSearchProviderRepository,
+	graphRepository interfaces.RetrieveGraphRepository,
+	chunkRepository interfaces.ChunkRepository,
+	knowledgeRepository interfaces.KnowledgeRepository,
+	bases interfaces.KnowledgeBaseRepository,
+	shares interfaces.KBShareService,
+) *PluginSearchParallel {
+	p := NewPluginSearchParallel(eventManager, knowledgeBaseService, knowledgeService,
+		chunkService, config, webSearchService, tenantService, sessionService,
+		webSearchStateService, webSearchProviderRepo, graphRepository, chunkRepository, knowledgeRepository)
+	p.searchEntityPlugin.bases = bases
+	p.searchEntityPlugin.shares = shares
+	return p
+}
+
 // ActivationEvents returns the event types this plugin handles
 func (p *PluginSearchParallel) ActivationEvents() []types.EventType {
 	return []types.EventType{types.CHUNK_SEARCH_PARALLEL}

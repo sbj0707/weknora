@@ -229,6 +229,7 @@ class DocumentProcessingCompatibilityTest {
               .put("next", ids.get(Objects.toString(chunk.get("next_chunk_id"), "")))
               .put("enabled", !chunk.get("is_enabled").toString().equals("0"))
               .put("status", ((Number) chunk.get("status")).intValue());
+      out.set("tag_id", json.valueToTree(chunk.get("tag_id")));
       out.set(
           "source_locators",
           chunk.get("source_locators") == null
@@ -420,6 +421,29 @@ class DocumentProcessingCompatibilityTest {
     } finally {
       factory.close();
       server.stop(0);
+    }
+  }
+
+  @Test
+  void documentAndDurablePostprocessEnqueueShareOnePhysicalConnection() throws Exception {
+    database(160,true);
+    try(var pool=new com.zaxxer.hikari.HikariDataSource()) {
+      pool.setJdbcUrl(source.getUrl());pool.setMaximumPoolSize(1);pool.setConnectionTimeout(1000);
+      jdbc=new JdbcTemplate(pool);manager=new DataSourceTransactionManager(pool);
+      knowledge=new KnowledgeRepository(jdbc,json,manager);tasks=new TaskRepository(jdbc,json,manager);
+      processing=new DocumentProcessingRepository(jdbc,json,knowledge,manager,Clock.systemUTC());
+      index=new SQLiteIndexRepository(pool,new SQLiteVectorExtension(Path.of(System.getProperty("weknora.sqlite.vec.extension"))));index.initialize();
+      var row=seed(json.createObjectNode().put("file_type","txt"));
+      var job=job(row,"document:process");
+      var model=new com.tencent.weknora.model.client.EmbeddingModel() {
+        public String modelId(){return "embedding";}public String modelName(){return "test";}public int dimensions(){return 3;}
+        public float[][] embed(com.tencent.weknora.model.client.CallContext call,List<String> texts,boolean query) {
+          float[][] values=new float[texts.size()][];for(int i=0;i<values.length;i++)values[i]=new float[]{1,0,0};return values;
+        }
+      };
+      var result=handler((owner,kb,path)->new ByteArrayInputStream("Hello world".getBytes(StandardCharsets.UTF_8)),(owner,id)->model,index).execute(job,cancellation(job));
+      assertThat(result.path("indexed").asBoolean()).isTrue();
+      assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM java_task_jobs WHERE type='knowledge:post_process'",Integer.class)).isEqualTo(1);
     }
   }
 
@@ -618,13 +642,20 @@ class DocumentProcessingCompatibilityTest {
 
   @Test
   void tableMetadataPublishedDuringEmbeddingSurvivesDocumentReplacement() throws Exception {
-    // A table task finishing before Go's cleanup boundary is replaced; one finishing after it
-    // survives. Exercise both schedules against actual chunks, vec0 and FTS storage.
+    // Reparse clears the previous attempt before enqueue. Current table metadata
+    // survives either worker order; source-only orphan indexes retain snapshot cleanup.
     for (boolean duringEmbedding : List.of(false, true)) {
       database(duringEmbedding ? 702 : 701, true);
       ObjectNode row = seed(json.createObjectNode().put("file_type", "csv"));
       index.prepare(Set.of(3));
       publishTableMetadata("old");
+      new org.springframework.transaction.support.TransactionTemplate(manager).executeWithoutResult(tx -> {
+        jdbc.update("DELETE FROM chunks WHERE tenant_id=1 AND knowledge_id='knowledge'");
+        jdbc.execute((org.springframework.jdbc.core.ConnectionCallback<Void>) c -> {
+          index.deleteBySource(c, List.of("old-summary", "old-column", "old-orphan"));
+          return null;
+        });
+      });
       Runnable publish = () -> publishTableMetadata("parallel");
       var model = new com.tencent.weknora.model.client.EmbeddingModel() {
         public String modelId() { return "embedding"; }
@@ -645,26 +676,22 @@ class DocumentProcessingCompatibilityTest {
       assertThat(ids).doesNotContain("old-summary", "old-column");
       List<String> indexIds = jdbc.queryForList("SELECT source_id FROM lite_embeddings", String.class);
       assertThat(indexIds).doesNotContain("old-summary", "old-column", "old-orphan");
-      if (duringEmbedding) {
-        assertThat(ids).contains("parallel-summary", "parallel-column").hasSize(3);
-        assertThat(indexIds).contains("parallel-summary", "parallel-column", "parallel-orphan")
-            .hasSize(4);
-        assertThat(jdbc.queryForObject("SELECT parent_chunk_id FROM chunks WHERE id='parallel-column'",
-            String.class)).isEqualTo("parallel-summary");
-      } else {
-        assertThat(ids).doesNotContain("parallel-summary", "parallel-column").hasSize(1);
-        assertThat(indexIds).doesNotContain("parallel-summary", "parallel-column", "parallel-orphan")
-            .hasSize(1);
-      }
+      assertThat(ids).contains("parallel-summary", "parallel-column").hasSize(3);
+      assertThat(indexIds).contains("parallel-summary", "parallel-column")
+          .hasSize(duringEmbedding ? 4 : 3);
+      if (duringEmbedding) assertThat(indexIds).contains("parallel-orphan");
+      else assertThat(indexIds).doesNotContain("parallel-orphan");
+      assertThat(jdbc.queryForObject("SELECT parent_chunk_id FROM chunks WHERE id='parallel-column'",
+          String.class)).isEqualTo("parallel-summary");
       assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM lite_embeddings_fts WHERE lite_embeddings_fts"
-          + " MATCH '\"metadata\"'", Integer.class)).isEqualTo(duringEmbedding ? 3 : 0);
+          + " MATCH '\"metadata\"'", Integer.class)).isEqualTo(duringEmbedding ? 3 : 2);
       assertThat(jdbc.execute((org.springframework.jdbc.core.ConnectionCallback<Integer>) c -> {
         new SQLiteVectorExtension(Path.of(System.getProperty("weknora.sqlite.vec.extension"))).load(c);
         try (var statement = c.createStatement();
             var result = statement.executeQuery("SELECT COUNT(*) FROM vec_embeddings_3")) {
           return result.getInt(1);
         }
-      })).isEqualTo(duringEmbedding ? 4 : 1);
+      })).isEqualTo(duringEmbedding ? 4 : 3);
       assertThat(enqueues).hasSize(1);
     }
   }

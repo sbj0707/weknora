@@ -22,6 +22,26 @@ import org.springframework.mock.env.MockEnvironment;
 import static org.assertj.core.api.Assertions.*;
 
 class ModelTransportSecurityTest {
+    @Test void slowConsumerPausesFurtherSocketReadsAndThenReceivesEveryByte()throws Exception {
+        byte[] block=new byte[65536];Arrays.fill(block,(byte)'x');var finished=new CountDownLatch(1);
+        try(Server server=new Server(exchange->{try{exchange.sendResponseHeaders(200,0);try(var out=exchange.getResponseBody()){for(int i=0;i<1024;i++)out.write(block);}}finally{finished.countDown();exchange.close();}});SafeModelHttp http=new SafeModelHttp((u,c)->new InetAddress[]{InetAddress.getLoopbackAddress()});var call=CallContext.timeout(Duration.ofSeconds(20))){
+            try(var response=http.get(call,server.url(),Map.of(),Duration.ZERO)){
+                assertThat(finished.await(200,TimeUnit.MILLISECONDS)).as("64 MiB producer must wait while the application has not consumed its response").isFalse();
+                var expected=MessageDigest.getInstance("SHA-256");for(int i=0;i<1024;i++)expected.update(block);var actual=MessageDigest.getInstance("SHA-256");
+                long copied=response.body().transferTo(new DigestOutputStream(OutputStream.nullOutputStream(),actual));assertThat(copied).isEqualTo(64L*1024*1024);assertThat(actual.digest()).isEqualTo(expected.digest());assertThat(finished.await(2,TimeUnit.SECONDS)).isTrue();
+            }
+        }
+    }
+    @Test void oneSocketReadWithManySmallHttpChunksNeverDropsResponseBytes()throws Exception {
+        byte[] expected=new byte[512];for(int i=0;i<expected.length;i++)expected[i]=(byte)i;
+        try(var socket=new ServerSocket(0,1,InetAddress.getByName("127.0.0.1"));var executor=Executors.newVirtualThreadPerTaskExecutor();SafeModelHttp http=new SafeModelHttp((u,c)->new InetAddress[]{InetAddress.getLoopbackAddress()});var call=CallContext.timeout(Duration.ofSeconds(5))){
+            var sent=new CountDownLatch(1);var server=executor.submit(()->{try(var client=socket.accept()){
+                var input=client.getInputStream();int state=0;while(state<4){int c=input.read();if(c<0)throw new EOFException();state=c==(state%2==0?'\r':'\n')?state+1:c=='\r'?1:0;}
+                var reply=new ByteArrayOutputStream();reply.write("HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nConnection: close\r\n\r\n".getBytes(StandardCharsets.US_ASCII));for(byte value:expected){reply.write("1\r\n".getBytes(StandardCharsets.US_ASCII));reply.write(value);reply.write("\r\n".getBytes(StandardCharsets.US_ASCII));}reply.write("0\r\n\r\n".getBytes(StandardCharsets.US_ASCII));client.getOutputStream().write(reply.toByteArray());client.getOutputStream().flush();sent.countDown();
+            }return null;});
+            try(var response=http.get(call,"http://127.0.0.1:"+socket.getLocalPort()+"/",Map.of(),Duration.ZERO)){assertThat(sent.await(2,TimeUnit.SECONDS)).isTrue();assertThat(response.bytes(expected.length)).isEqualTo(expected);}server.get(2,TimeUnit.SECONDS);
+        }
+    }
     static final ObjectMapper JSON=new ObjectMapper();
     static InetAddress[] ips(String... values)throws Exception{InetAddress[] out=new InetAddress[values.length];for(int i=0;i<values.length;i++)out[i]=InetAddress.getByName(values[i]);return out;}
     static ModelEgressPolicy policy(MockEnvironment env,ModelEgressPolicy.DNS dns){return new ModelEgressPolicy(null,JSON,env,dns);}

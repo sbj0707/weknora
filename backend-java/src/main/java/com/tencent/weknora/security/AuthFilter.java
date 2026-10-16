@@ -135,6 +135,11 @@ public class AuthFilter extends OncePerRequestFilter {
     }
     private void authorizeKeyRoute(HttpServletRequest request, AuthContext auth) {
         String systemPath=request.getRequestURI(),systemMethod=request.getMethod();
+        String vectorPath=request.getRequestURI(),vectorMethod=request.getMethod();
+        if((vectorPath.equals("/api/v1/vector-stores")&&Set.of("GET","POST").contains(vectorMethod))||(vectorPath.equals("/api/v1/vector-stores/types")&&vectorMethod.equals("GET"))||(vectorPath.equals("/api/v1/vector-stores/test")&&vectorMethod.equals("POST"))||(vectorPath.matches("/api/v1/vector-stores/[^/]+")&&Set.of("GET","PUT","DELETE").contains(vectorMethod))||(vectorPath.matches("/api/v1/vector-stores/[^/]+/test")&&vectorMethod.equals("POST"))){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("manage_vector_stores"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
         if(systemPath.equals("/api/v1/system/parser-engines")&&systemMethod.equals("GET") || Set.of("/api/v1/system/parser-engines/check","/api/v1/system/docreader/reconnect").contains(systemPath)&&systemMethod.equals("POST")) {
             if(!auth.fullAccess()&&!auth.capabilities().contains("manage_vector_stores"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
             return;
@@ -155,7 +160,61 @@ public class AuthFilter extends OncePerRequestFilter {
         String base = "/api/v1/knowledge-bases";
         String path = request.getRequestURI();
         String method = request.getMethod();
-        if(method.equals("GET")&&(path.matches("/api/v1/knowledge-bases/[^/]+/knowledge")||path.matches("/api/v1/knowledge/[^/]+")||path.matches("/api/v1/chunks/[^/]+")||path.matches("/api/v1/chunks/by-id/[^/]+"))){
+        if(method.equals("DELETE")&&path.matches("/api/v1/knowledge-bases/[^/]+")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("manage_kbs"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("POST")&&path.matches("/api/v1/knowledge-bases/[^/]+/duplicate")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("manage_kbs"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("POST")&&path.matches("/api/v1/knowledge-bases/[^/]+/knowledge/batch-download")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("retrieve"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(path.matches("/api/v1/knowledge-bases/[^/]+/knowledge/folders")&&Set.of("GET","PUT").contains(method)||path.equals("/api/v1/knowledge/folder")&&method.equals("POST")){
+            String capability=method.equals("GET")?"retrieve":"ingest";
+            if(!auth.fullAccess()&&!auth.capabilities().contains(capability))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("POST")&&path.matches("/api/v1/knowledge-bases/[^/]+/knowledge/(manual|url)")||method.equals("PUT")&&path.matches("/api/v1/knowledge/manual/[^/]+")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("ingest"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("DELETE")&&(path.matches("/api/v1/chunks/[^/]+")||path.matches("/api/v1/chunks/[^/]+/[^/]+"))||method.equals("PUT")&&path.matches("/api/v1/chunks/[^/]+/[^/]+")||method.equals("POST")&&path.matches("/api/v1/chunks/[^/]+/[^/]+/revert")||Set.of("PUT","DELETE").contains(method)&&path.matches("/api/v1/chunks/by-id/[^/]+/questions")||method.equals("POST")&&path.matches("/api/v1/chunks/by-id/[^/]+/questions/regenerate")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("ingest"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("GET")&&path.matches("/api/v1/chunks/[^/]+/[^/]+/revisions")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("retrieve"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(method.equals("DELETE")&&path.matches("/api/v1/knowledge-bases/[^/]+/knowledge")){
+            if(!auth.fullAccess())throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(Set.of("DELETE","PUT").contains(method)&&path.matches("/api/v1/knowledge/[^/]+")||method.equals("PUT")&&path.matches("/api/v1/knowledge/image/[^/]+/[^/]+")||method.equals("POST")&&path.equals("/api/v1/knowledge/batch-delete")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("ingest"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return;
+        }
+        if(path.matches("/api/v1/knowledge-bases/[^/]+/hybrid-search")&&Set.of("GET","POST").contains(method)){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("retrieve"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return; // Hybrid search resolves the authoritative KB read grant and allow-list.
+        }
+        if(path.matches("/api/v1/knowledge-bases/[^/]+/tags")&&Set.of("GET","POST").contains(method)||path.matches("/api/v1/knowledge-bases/[^/]+/tags/[^/]+")&&Set.of("PUT","DELETE").contains(method)){
+            String capability=method.equals("GET")?"retrieve":"ingest";
+            if(!auth.fullAccess()&&!auth.capabilities().contains(capability))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return; // Native tag controllers verify the authoritative KB grant and allow-list.
+        }
+        if(method.equals("POST")&&path.matches("/api/v1/knowledge-bases/[^/]+/profile/generate")){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("manage_kbs"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return; // The profile controller resolves the authoritative KB write grant and allow-list.
+        }
+        if(method.equals("POST")&&(path.matches("/api/v1/knowledge/[^/]+/(cancel-parse|regenerate-summary|reparse)")||path.equals("/api/v1/knowledge/batch-reparse")||path.equals("/api/v1/knowledge/move"))){
+            if(!auth.fullAccess()&&!auth.capabilities().contains("ingest"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
+            return; // Native document controllers resolve the authoritative parent KB write grant.
+        }
+        if(method.equals("GET")&&(path.matches("/api/v1/knowledge/move/progress/[^/]+")||path.matches("/api/v1/knowledge-bases/[^/]+/(images|gallery-config|move-targets)")||path.matches("/api/v1/knowledge-bases/[^/]+/knowledge")||path.matches("/api/v1/knowledge/[^/]+")||path.matches("/api/v1/knowledge/[^/]+/(index-status|spans|stages|download|preview)")||path.matches("/api/v1/knowledge/[^/]+/chunks/[^/]+/details")||path.matches("/api/v1/chunks/[^/]+")||path.matches("/api/v1/chunks/by-id/[^/]+"))){
             if(!auth.fullAccess()&&!auth.capabilities().contains("retrieve"))throw new ApiException(403,"FORBIDDEN","Forbidden: API key scope does not allow this operation").withResponse(Map.of("error","Forbidden: API key scope does not allow this operation"));
             return; // Native content controllers resolve authoritative parent KB scope before reading data.
         }

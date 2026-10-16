@@ -48,6 +48,40 @@ public class KnowledgeBaseRepository {
         if(rows.isEmpty()) return Optional.empty();
         var result=project(rows.getFirst()); enrichCounts(result); return Optional.of(result);
     }
+    /** Go ListMoveTargets returns the service DTO, without the normal list handler's enrichment. */
+    public List<ObjectNode> moveTargets(long tenant, String user, String sourceId) {
+        // Re-read after the middleware grant, as the Go handler does; ownership is checked
+        // against the original caller even when the read grant came from an organization.
+        var sources=jdbc.queryForList("SELECT * FROM knowledge_bases WHERE id=? AND deleted_at IS NULL",sourceId);
+        if(sources.isEmpty())throw new com.tencent.weknora.security.ApiException(404,"NOT_FOUND","Source knowledge base not found");
+        boolean sqlite=Boolean.TRUE.equals(jdbc.execute((org.springframework.jdbc.core.ConnectionCallback<Boolean>)c->c.getMetaData().getDatabaseProductName().equals("SQLite")));
+        var source=codec.fromDatabaseRow(sources.getFirst(),sqlite);
+        if(source.path("tenant_id").asLong()!=tenant)throw new com.tencent.weknora.security.ApiException(403,"FORBIDDEN","No permission to access this knowledge base");
+        var result=new ArrayList<ObjectNode>();
+        for(var row:jdbc.queryForList("SELECT * FROM knowledge_bases WHERE tenant_id=? AND is_temporary=? AND deleted_at IS NULL ORDER BY created_at DESC",tenant,false)) {
+            var kb=codec.render(codec.fromDatabaseRow(row,sqlite));
+            enrichReadCounts(kb);
+            result.add(kb);
+        }
+        if(user!=null&&!user.isEmpty()&&!result.isEmpty()) {
+            try {
+                var pins=jdbc.queryForList("SELECT kb_id,pinned_at FROM user_kb_pins WHERE tenant_id=? AND user_id=?",tenant,user);
+                if(!pins.isEmpty()) {
+                    for(var kb:result)for(var pin:pins)if(kb.path("id").asText().equals(pin.get("kb_id"))) {
+                        kb.put("is_pinned",true);kb.put("pinned_at",timestamp(pin.get("pinned_at")));
+                    }
+                    result.sort(Comparator.<ObjectNode,Boolean>comparing(kb->kb.path("is_pinned").asBoolean()).reversed()
+                        .thenComparing(kb->kb.path("is_pinned").asBoolean()?Instant.parse(kb.path("pinned_at").asText()):Instant.MIN,Comparator.reverseOrder())
+                        .thenComparing(kb->Instant.parse(kb.path("created_at").asText()),Comparator.reverseOrder()));
+                }
+            }catch(org.springframework.dao.DataAccessException ignored) {
+                // Pin lookup is best-effort in Go and does not invalidate a readable list.
+            }
+        }
+        return result.stream().filter(kb->!kb.path("id").asText().equals(sourceId)
+            &&kb.path("type").equals(source.path("type"))
+            &&kb.path("embedding_model_id").equals(source.path("embedding_model_id"))).toList();
+    }
     public ObjectNode getForRead(com.tencent.weknora.security.KnowledgeBaseReadAuthorization.ReadAccess grant,long callerTenant) {
         var result=codec.render(grant.knowledgeBase());enrichReadCounts(result);
         if(grant.ownTenant())return decorateStore(result);

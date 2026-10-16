@@ -6,7 +6,7 @@
 
 - 实际显式 HTTP 路由：**482**，注册语法位置 **480/480**，动态未解析 **0**。
 - Swagger：**376** 个操作，覆盖实际路由 **371** 个；差异详见 coverage-report.json。
-- Go：**1263** 个实现文件、**1190** 个测试文件、**7859** 个测试/基准/Fuzz 函数（internal/cmd/client）。
+- Go：**1275** 个实现文件、**1208** 个测试文件、**7885** 个测试/基准/Fuzz 函数（internal/cmd/client）。
 - 任务注册：Asynq **22**、同步执行器 **22**。
 
 ## 可追踪文件
@@ -60,7 +60,7 @@
 | RegisterKnowledgeBaseActivityRoutes | 1 | not_started |
 | RegisterKnowledgeBaseRoutes | 13 | in_progress |
 | RegisterKnowledgeRoutes | 32 | in_progress |
-| RegisterKnowledgeTagRoutes | 4 | not_started |
+| RegisterKnowledgeTagRoutes | 4 | in_progress |
 | RegisterMCPEndpointRoutes | 7 | not_started |
 | RegisterMCPServerRoutes | 3 | not_started |
 | RegisterMCPServiceRoutes | 22 | not_started |
@@ -80,7 +80,7 @@
 | RegisterSystemRoutes | 9 | in_progress |
 | RegisterTenantRoutes | 26 | in_progress |
 | RegisterUserFavoriteRoutes | 3 | not_started |
-| RegisterVectorStoreRoutes | 8 | not_started |
+| RegisterVectorStoreRoutes | 8 | in_progress |
 | RegisterWeKnoraCloudRoutes | 2 | not_started |
 | RegisterWebSearchProviderRoutes | 10 | not_started |
 | RegisterWebSearchRoutes | 1 | not_started |

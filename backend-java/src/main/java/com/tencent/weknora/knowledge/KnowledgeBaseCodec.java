@@ -42,6 +42,23 @@ public class KnowledgeBaseCodec {
         if(!input.hasNonNull("indexing_strategy"))input.set("indexing_strategy",defaultIndexing());
         var kb=fromPayload(input);ensureDefaults(kb);return kb;
     }
+    /** Match the production Go Scanner input types, rather than treating SQLite TEXT as BLOB. */
+    public ObjectNode fromDatabaseRow(Map<String,Object> row, boolean sqlite) {
+        var scanned=new LinkedHashMap<>(row);
+        // These Go Scanners accept []byte only. GORM still allocates a non-null
+        // pointer for a non-null TEXT value, leaving its configuration at zero.
+        for(String field:List.of("chunking_config","image_processing_config","vlm_config","asr_config",
+            "storage_provider_config","cos_config","question_generation_config","extract_config","faq_config","wiki_config","indexing_strategy"))
+            if(sqlite&&scanned.get(field) instanceof String)scanned.put(field,field.equals("indexing_strategy")?defaultIndexing().toString():"{}");
+        // GORM skips the Scanner for SQL NULL and leaves the struct at zero.
+        // This matters for FAQ's early return in EnsureDefaults.
+        if(scanned.get("indexing_strategy")==null)scanned.put("indexing_strategy","{}");
+        var kb=fromRow(scanned);
+        // The legacy-provider fallback belongs to Go's JSON request unmarshal,
+        // not its database Scan or EnsureDefaults.
+        if(row.get("storage_provider_config")==null)kb.putNull("storage_provider_config");
+        return kb;
+    }
     public ObjectNode render(ObjectNode kb) {
         var out=kb.deepCopy();
         ((ObjectNode)out.get("storage_config")).put("secret_id","").put("secret_key","");

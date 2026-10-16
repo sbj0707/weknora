@@ -10,5 +10,5 @@ public final class TaskCancellation {
     public boolean isCanceled(){if(reason.get()==null&&repository.canceledOrLeaseLost(lease))cancel(Reason.LEASE_LOST);return reason.get()!=null;}
     public void check(){if(isCanceled()||Thread.currentThread().isInterrupted())throw new CancellationException("Java task canceled");}
     public Reason reason(){return reason.get();}
-    void cancel(Reason cause){reason.compareAndSet(null,cause);}
+    boolean cancel(Reason cause){return reason.compareAndSet(null,cause);}
 }

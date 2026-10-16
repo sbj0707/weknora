@@ -18,15 +18,65 @@ public final class KnowledgeBaseWriteAuthorization {
     public WriteAccess authorizeUpload(AuthContext caller,String id,String rawPath,String method){return authorize(caller,id,rawPath,"/api/v1/knowledge-bases/:id/knowledge/file",method,"ingest");}
     public WriteAccess authorizeUpdate(AuthContext caller,String id){return authorizeUpdate(caller,id,"/api/v1/knowledge-bases/"+id,"PUT");}
     public WriteAccess authorizeUpdate(AuthContext caller,String id,String rawPath,String method){return authorize(caller,id,rawPath,"/api/v1/knowledge-bases/:id",method,"manage_kbs");}
-    private WriteAccess authorize(AuthContext caller,String id,String raw,String template,String method,String capability){
+    public WriteAccess authorizeDelete(AuthContext caller,String id,String rawPath){return authorize(caller,id,rawPath,"/api/v1/knowledge-bases/:id","DELETE","manage_kbs");}
+    public WriteAccess authorizeTag(AuthContext caller,String id,String rawPath,String method){return authorize(caller,id,rawPath,method.equals("POST")?"/api/v1/knowledge-bases/:id/tags":"/api/v1/knowledge-bases/:id/tags/:tag_id",method,"ingest");}
+    public WriteAccess authorizeProfile(AuthContext caller,String id,String rawPath,String method){return authorize(caller,id,rawPath,"/api/v1/knowledge-bases/:id/profile/generate",method,"manage_kbs");}
+    public WriteAccess authorizeCancelParse(AuthContext caller,String id,String rawPath,String method){return authorize(caller,id,rawPath,"/api/v1/knowledge/:id/cancel-parse",method,"ingest");}
+    public WriteAccess authorizeKnowledgeDelete(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge/:id",method,"ingest");}
+    public WriteAccess authorizeDocumentUpdate(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge/:id",method,"ingest");}
+    public WriteAccess authorizeImageUpdate(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/image/:id/:chunk_id","PUT","ingest");}
+    public WriteAccess authorizeSummaryRegeneration(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/:id/regenerate-summary","POST","ingest");}
+    public WriteAccess authorizeReparse(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/:id/reparse","POST","ingest");}
+    public WriteAccess authorizeMove(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/move","POST","ingest",false);}
+    public WriteAccess authorizeBatchReparse(AuthContext caller,String id,String raw){
+        var grant=authorize(caller,id,raw,"/api/v1/knowledge/batch-reparse","POST","ingest",false);
+        if(!bypass(caller)&&grant.ownTenant()&&!grant.knowledgeBase().path("creator_id").asText().equals(caller.userId()))throw forbidden("No permission to operate on this knowledge base");
+        return grant;
+    }
+    public WriteAccess resolveBatchTags(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/tags","PUT","ingest",false);}
+    public void requireBatchTagsOwnership(AuthContext caller,String id){
+        if(bypass(caller))return;
+        try{var rows=jdbc.queryForList("SELECT creator_id,tenant_id FROM knowledge_bases WHERE id=? AND deleted_at IS NULL",id);if(rows.isEmpty())throw notFound();var row=rows.getFirst();if(AuthRepository.number(row,"tenant_id")!=caller.tenantId())throw notFound();if(!AuthRepository.string(row,"creator_id").equals(caller.userId()))throw forbidden("No permission to operate on this knowledge base");}
+        catch(DataAccessException failure){throw new ApiException(500,"INTERNAL_SERVER_ERROR","cannot verify knowledge base ownership").withAppCode(1007);}
+    }
+    public WriteAccess authorizeManualCreate(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge-bases/:id/knowledge/manual",method,"ingest");}
+    public WriteAccess authorizeURLCreate(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge-bases/:id/knowledge/url",method,"ingest");}
+    public WriteAccess authorizeFileDownload(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge/:id/download","GET","retrieve",false);}
+    public WriteAccess authorizeBatchDownload(AuthContext caller,String id,String raw){return authorize(caller,id,raw,"/api/v1/knowledge-bases/:id/knowledge/batch-download","POST","retrieve",false);}
+    public WriteAccess authorizeManualUpdate(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge/manual/:id",method,"ingest");}
+    public WriteAccess authorizeChunkMutation(AuthContext caller,String id,String raw,String method,boolean single){return authorize(caller,id,raw,single?"/api/v1/chunks/:knowledge_id/:id":"/api/v1/chunks/:knowledge_id",method,"ingest");}
+    public WriteAccess authorizeChunkEdit(AuthContext caller,String id,String raw,boolean revert){return authorize(caller,id,raw,revert?"/api/v1/chunks/:knowledge_id/:id/revert":"/api/v1/chunks/:knowledge_id/:id",revert?"POST":"PUT","ingest");}
+    public WriteAccess authorizeChunkQuestion(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/chunks/by-id/:id/questions"+(method.equals("POST")?"/regenerate":""),method,"ingest",false);}
+    public WriteAccess authorizeFolderRename(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge-bases/:id/knowledge/folders",method,"ingest");}
+    public WriteAccess authorizeFolderMove(AuthContext caller,String id,String raw,String method){
+        var grant=authorize(caller,id,raw,"/api/v1/knowledge/folder",method,"ingest",false);
+        // This is Go's handler ownership check, which does not emit the middleware role-denial audit.
+        if(!bypass(caller)&&grant.effectiveTenantId()==caller.tenantId()&&!grant.knowledgeBase().path("creator_id").asText().equals(caller.userId()))throw forbidden("No permission to operate on this knowledge base");
+        return grant;
+    }
+    public WriteAccess authorizeKnowledgeClear(AuthContext caller,String id,String raw,String method){return authorize(caller,id,raw,"/api/v1/knowledge-bases/:id/knowledge",method,"ingest",false);}
+    public WriteAccess authorizeKnowledgeBatchDelete(AuthContext caller,String id,String raw,String method){
+        String clean=id;
+        var grant=authorize(caller,clean,raw,"/api/v1/knowledge/batch-delete",method,"ingest",false);
+        try{requireLoadedOwnership(caller,Map.of("tenant_id",grant.effectiveTenantId(),"creator_id",grant.knowledgeBase().path("creator_id").asText()),raw,"/api/v1/knowledge/batch-delete",method);}
+        catch(ApiException denied){if(denied.status()==403)throw forbidden("No permission to operate on this knowledge base");throw denied;}
+        return grant;
+    }
+    private WriteAccess authorize(AuthContext caller,String id,String raw,String template,String method,String capability){return authorize(caller,id,raw,template,method,capability,true);}
+    private WriteAccess authorize(AuthContext caller,String id,String raw,String template,String method,String capability,boolean ownership){
         // APIKeyGate runs before ownership and the KB allow-list middleware.
         if(caller.isApiKey()&&!caller.fullAccess()&&!caller.capabilities().contains(capability))throw simple(403,"Forbidden: API key scope does not allow this operation");
-        requireOwnership(caller,id,raw,template,method);
+        if(ownership)requireOwnership(caller,id,raw,template,method);
         if(!caller.allowsKnowledgeBase(id))throw forbidden("API key scope does not allow one or more knowledge bases");
         if(caller.tenantId()==0)throw new ApiException(401,"UNAUTHORIZED","Unauthorized").withAppCode(1001);
         Map<String,Object> row;
-        try{var rows=jdbc.queryForList("SELECT * FROM knowledge_bases WHERE id=? AND deleted_at IS NULL",id);if(rows.isEmpty())throw notFound();row=rows.getFirst();}catch(DataAccessException ex){throw new ApiException(503,"SERVICE_UNAVAILABLE","cannot verify KB access right now").withAppCode(1008);}
-        ObjectNode kb=codec.fromRow(row);long owner=AuthRepository.number(row,"tenant_id");boolean own=owner==caller.tenantId();String permission=own?"admin":sharedPermission(id,caller);
+        try{var rows=jdbc.queryForList("SELECT * FROM knowledge_bases WHERE id=? AND deleted_at IS NULL",id);if(rows.isEmpty())throw notFound();row=rows.getFirst();}catch(DataAccessException ex){
+            if(template.equals("/api/v1/knowledge/batch-delete")&&id.indexOf('\0')>=0){for(Throwable cause=ex;cause!=null;cause=cause.getCause())if(cause instanceof java.sql.SQLException sql&&"22021".equals(sql.getSQLState()))throw new ApiException(500,"INTERNAL_SERVER_ERROR","ERROR: invalid byte sequence for encoding \"UTF8\": 0x00 (SQLSTATE 22021)").withAppCode(1007);}
+            throw new ApiException(503,"SERVICE_UNAVAILABLE","cannot verify KB access right now").withAppCode(1008);
+        }
+        Map<String,Object> configRow=row;
+        if((method.equals("PUT")&&template.equals("/api/v1/chunks/:knowledge_id/:id"))||template.equals("/api/v1/chunks/:knowledge_id/:id/revert")||template.equals("/api/v1/chunks/by-id/:id/questions")||template.equals("/api/v1/chunks/by-id/:id/questions/regenerate")){configRow=new java.util.LinkedHashMap<>(row);configRow.remove("indexing_strategy");}
+        ObjectNode kb=codec.fromRow(configRow);long owner=AuthRepository.number(row,"tenant_id");boolean own=owner==caller.tenantId();String permission=own?"admin":sharedPermission(id,caller);
         if(level(permission)<level("editor"))throw forbidden("Permission denied to access this knowledge base");
         return new WriteAccess(kb,id,owner,permission,own);
     }

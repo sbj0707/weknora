@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -153,7 +154,7 @@ func newAutoTagFixture(t *testing.T, response string, opts ...func(*autoTagFixtu
 			AutoTagConfig:  &types.AutoTagConfig{Enabled: true, MaxTags: 3},
 		}},
 		chunkService: &autoTagChunkService{chunks: []*types.Chunk{
-			{ChunkType: types.ChunkTypeText, Content: "quarterly HR policy", StartAt: 1},
+			{ID: "chunk", TenantID: 7, KnowledgeID: "doc", KnowledgeBaseID: "kb", ChunkType: types.ChunkTypeText, Content: "quarterly HR policy", StartAt: 1},
 		}},
 		modelService: &stubModelService{chatModel: chatModel},
 	}
@@ -371,4 +372,27 @@ func TestEnqueueAutoTagTaskCarriesScopeWithoutOwningFinalizingSlot(t *testing.T)
 	assert.Equal(t, "kb", payload.KnowledgeBaseID)
 	assert.Equal(t, "doc", payload.KnowledgeID)
 	assert.Equal(t, 4, payload.Attempt)
+}
+
+func TestAutoTagRejectsForeignChunkBeforeModel(t *testing.T) {
+	f := newAutoTagFixture(t, `{"matches":[{"index":1}]}`)
+	f.service.chunkService.(*autoTagChunkService).chunks[0].KnowledgeBaseID = "other"
+	require.NoError(t, f.handle(t))
+	require.Empty(t, f.chatModel.messages)
+	require.Empty(t, f.repo.added)
+}
+func TestAutoTagRejectsSupersededTask(t *testing.T) {
+	for _, latest := range [][]int{{2}, {1, 2}} {
+		t.Run(fmt.Sprint(latest), func(t *testing.T) {
+			f := newAutoTagFixture(t, `{"matches":[{"index":1}]}`)
+			f.service.spanTracker = newAttemptTracker(latest...)
+			require.NoError(t, f.handle(t))
+			require.Empty(t, f.repo.added)
+			if latest[0] == 2 {
+				require.Empty(t, f.chatModel.messages)
+			} else {
+				require.Len(t, f.chatModel.messages, 2)
+			}
+		})
+	}
 }

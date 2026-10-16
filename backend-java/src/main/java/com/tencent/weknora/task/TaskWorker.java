@@ -7,6 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /** Opt-in worker: separate SQL queue, bounded concurrency, renewable fenced leases, cooperative cancel. */
 public final class TaskWorker implements TaskExecutor {
+    // Lease renewal can wait for a SQL connection. A job deadline must still interrupt its
+    // handler when every renewal thread is blocked behind that handler's database statement.
+    private static final ScheduledExecutorService DEADLINES=deadlineTimers();
+    private static ScheduledExecutorService deadlineTimers(){var timer=new ScheduledThreadPoolExecutor(1,Thread.ofPlatform().daemon(true).name("java-task-deadline-",0).factory());timer.setRemoveOnCancelPolicy(true);return timer;}
     private final TaskRepository repository;private final Map<String,TaskHandler> handlers=new HashMap<>();
     private final String worker="java-"+UUID.randomUUID();private final Duration lease;private final int concurrency;private final TaskQueueOrder queueOrder;
     private final ExecutorService executor;private final ScheduledExecutorService heartbeat;
@@ -28,8 +32,8 @@ public final class TaskWorker implements TaskExecutor {
         ScheduledFuture<?> renewal=null,timeout=null;
         try{
             TaskHandler handler=handlers.get(job.type());if(handler==null)throw new TaskFailure("No Java handler registered for this task type",false);
-            renewal=heartbeat.scheduleAtFixedRate(()->{try{if(!repository.renew(job,lease)){cancellation.cancel(TaskCancellation.Reason.LEASE_LOST);current.interrupt();}}catch(Exception ex){cancellation.cancel(TaskCancellation.Reason.LEASE_LOST);current.interrupt();}},lease.toMillis()/3,lease.toMillis()/3,TimeUnit.MILLISECONDS);
-            timeout=heartbeat.schedule(()->{cancellation.cancel(TaskCancellation.Reason.TIMEOUT);current.interrupt();},job.timeoutMillis()>0?job.timeoutMillis():Math.max(1,handler.timeout().toMillis()),TimeUnit.MILLISECONDS);
+            renewal=heartbeat.scheduleAtFixedRate(()->{try{if(!repository.renew(job,lease)&&cancellation.cancel(TaskCancellation.Reason.LEASE_LOST))current.interrupt();}catch(Exception ex){if(cancellation.cancel(TaskCancellation.Reason.LEASE_LOST))current.interrupt();}},lease.toMillis()/3,lease.toMillis()/3,TimeUnit.MILLISECONDS);
+            timeout=DEADLINES.schedule(()->{if(cancellation.cancel(TaskCancellation.Reason.TIMEOUT))current.interrupt();},job.timeoutMillis()>0?job.timeoutMillis():Math.max(1,handler.timeout().toMillis()),TimeUnit.MILLISECONDS);
             cancellation.check();JsonNode result=handler.execute(job,cancellation);
             var committed=repository.get(job.tenantId(),job.id());
             if(committed.isPresent()&&committed.get().status().equals("succeeded")&&committed.get().attempts()==job.attempts())return;

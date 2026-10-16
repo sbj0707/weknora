@@ -1,0 +1,661 @@
+{
+  "date": "2026-10-16",
+  "status": "in_progress",
+  "full_goal": "All Go functionality migrated natively to Java and strictly aligned; not complete",
+  "scope": "Native gallery configuration and SQL image list, request policy/user merge, Viewer/retrieve/KB grants, DB projection winner/filter/rules/sort/page and read-only behavior",
+  "input_hashes": {
+    "backend-java/scripts/postgres-gallery-parity.py": "da9645666f9b82f59101a60561ee94765d9cb7f0f10297f5b3c92fb8eb180781",
+    "backend-java/scripts/processing_smoke.py": "f2b18967df52a17b161fa1afb209a46860a6a2bdf0e1ee0b635218af7a012521",
+    "backend-java/src/main/java/com/tencent/weknora/bridge/GoCompatibilityBridge.java": "b6f2a5fdb5fd52dceea0da31df9b2c122f333b95ead011c6297407c21d98c324",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/GalleryConfigService.java": "74e4f5cd23cd7b40a5ad9123298cb7d1155a403494bc1d2b64010b1a0657c6b7",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/GalleryImageRepository.java": "3e049f6d5180c6653046d093ebeb0afdc68447b167b17796d039ba6fe801f079",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java": "937a3948eb9b105f62fb90d8c851e109ffd2902cd1783b35e85bd7d4450dcd43",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeGalleryController.java": "663882c47019fb45c8fa70d1bc94fdddd04504d1b3de16313153eb4ec1b660da",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/gallery-migration-notes.md": "49da65765ad643067932f5221a2492990549aaedf83b2ca9f294be0ef6d51685",
+    "backend-java/src/main/java/com/tencent/weknora/security/AuthFilter.java": "49090ca54199baa70f0d360ddcdea435bec673e10b10812d0fed8ad19bd5dc08",
+    "backend-java/src/main/java/com/tencent/weknora/security/NativeRoleGuard.java": "bbb4a12cbb1ed513981ee243b91ff2904c9f405203e27f420a93c7949704c4fe",
+    "backend-java/src/main/resources/gallery-contract.json": "a1ef537bb59912a28b0385ed090857d2556a53ab24af5be41d6a7b4df9b15e83",
+    "backend-java/src/test/fixtures/knowledge_gallery_http_fixture.go": "6e35ff7728960bf697b07f744b6811dd3499afc277e55e208201eaa2b7f41821",
+    "backend-java/src/test/java/com/tencent/weknora/bridge/GoCompatibilityBridgeTest.java": "738efb8498db7ff0083d262e0b55ba19682ee0ec10ac0cb96896d49dd81893a1",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeGalleryGoHttpParityTest.java": "2f9fbc7a2273f5f37c6011ba9deeb1ecdca181ef0b69f507984c1d3057598681",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeGalleryHttpIntegrationTest.java": "1082854b5d0bd431bc241e425c2c9f550881eb2641105c97819a7dec1b397bba",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeGalleryPostgresGoParityIT.java": "ebb374a9a8fe949a7fefe9dd98881acd018e2ed57bbdd3fb9049f36cc24d7f18",
+    "backend-java/src/test/resources/go-knowledge-gallery-http.json": "6684b274072c3bf470fdd1e652df4fcff23f2f776d52c5ad1d454f05576fa7bb",
+    "internal/application/repository/chunk_image_assets.go": "34295e08167319b2d5479bb7b09e7e782d7d1c05206e5b626399d92e93f6291e",
+    "internal/application/service/chunk.go": "cd8a62f788e00b5eef0c356053095889b51d9de51743337d89e45d70ace02ea6",
+    "internal/application/service/gallery_attrs.go": "8b2336a1ca18ad8882c78a48c54e25bf96fd96d225b95ca0e40ffd5158702f92",
+    "internal/handler/knowledge.go": "ac1c5ad24fb24f84d3f907fdff0baaa18d234c589645a52624a0519a0ac2af3b",
+    "internal/router/routes_knowledge.go": "f0985b89dadee2fddb6946edc32ae421701302c5935e50e823d19560e4e75453",
+    "internal/types/gallery_attr_source.go": "2101e01cc4f394df578ddfa2fc8ffb20828b6258151e8acfd3acb21fe32ae8ea",
+    "internal/types/gallery_builtin_source.go": "ef3fafe963fcc8a5ecaee6e77b6e703cc076ef0cf0e19c74db475068a84b3e8d",
+    "internal/types/gallery_policy.go": "0e6b5842a7fae9614d9f223d8984b2131a924962d708884852d33a53b953552c",
+    "internal/types/image_attrs.go": "b3d003abbfb231974ddaff3f3c9827e35533cb9db681c7540daaf914de6e6572",
+    "internal/types/image_attrs_gallery.go": "e4d96cabd78ec8784645d8994dc0041287c5311641a1b8f20f02c83b77792b3c",
+    "internal/types/image_gallery.go": "cd4d7a1195d3ae6cb623b2b3981c28123f864b298c2ea394c2e8134dcf517feb",
+    "internal/types/user.go": "e81be0335ff25ecc4028cbf7a4b90dc6d3d16b36f309e932a9cb6046dda62812",
+    "migrations/sqlite/000032_chunk_images.up.sql": "ff07c58e95207855f6a48d8559424b18a132f39d7b7d0f1e0e2506ed1acd51f6",
+    "migrations/versioned/000113_chunk_images.up.sql": "04411d4a17c28ea23dcbb274f2dfc1dee9829e65bb4930968527ae48123aeff0"
+  },
+  "actual_go_sqlite": {
+    "cases": 152,
+    "actual_exit_code": 0,
+    "output": "/tmp/weknora-go-gallery152-http-20261016.json",
+    "sha256": "6684b274072c3bf470fdd1e652df4fcff23f2f776d52c5ad1d454f05576fa7bb",
+    "log": "/tmp/weknora-go-gallery152-20261016.log"
+  },
+  "postgres": {
+    "directory": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-gallery-78rc15bk/build/surefire-reports",
+    "tests": 150,
+    "classes": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "report_hashes": {
+      "TEST-com.tencent.weknora.knowledge.KnowledgeGalleryPostgresGoParityIT.xml": "7d7c3849fca9cc69fc47c384b9edd7906020a90f41d09e630d8e065cd41a1190"
+    },
+    "actual_exit_code": 0,
+    "go_migrations": 115,
+    "pool_size": 1,
+    "go_output": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-postgres-gallery-78rc15bk/go-gallery-http-pg.json",
+    "runner_log": "/tmp/weknora-postgres-gallery152-20261016-first.log",
+    "nonpersistable_json_cases": [
+      "gallery-150-gallery-config-prefs",
+      "gallery-151-gallery-config-prefs"
+    ],
+    "go_output_sha256": "73e899119e4ccc71414469aac3c592a93905de72b39bb2dfba112a04f0738c12"
+  },
+  "focused_regression": {
+    "directory": "/tmp/weknora-java-gallery152-20261016-build/surefire-reports",
+    "tests": 952,
+    "classes": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "report_hashes": {
+      "TEST-com.tencent.weknora.bridge.GoCompatibilityBridgeTest.xml": "1ba329f58ee50e9ef696d78104f0e1739b2bac5922458634142dd8f95bca938d",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeCollectionReadGoHttpParityTest.xml": "228eff923db62fe9245783c758297407fb7e296084eb060b532877bc47954d77",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeGalleryGoHttpParityTest.xml": "1f293d37c1b82cc28b1e3f70e9999eb57bd63d8ddbbbeab6b09bfa8e3e7ecdda",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeGalleryHttpIntegrationTest.xml": "74e26c90ba7ea1286e7e1c99029d5000c6a46ab27f576b9ca38e5b9a60f38b05",
+      "TEST-com.tencent.weknora.security.KnowledgeContentReadHttpIntegrationTest.xml": "597ae8dec03c60078667ae15d889034b53ede09eb13af6e1143ad4fc610dac63"
+    },
+    "actual_exit_code": 0,
+    "log": "/tmp/weknora-java-gallery152-20261016-second.log",
+    "scope": "152 gallery Go HTTP, 4 production Spring gallery flows, 203 collection read, 585 content authorization HTTP, 8 bridge regressions; the later bridge selector assertion extension is covered by frozen full build"
+  },
+  "full_build": {
+    "directory": "/tmp/weknora-java-gallery152-20261016-full-build/surefire-reports",
+    "tests": 9064,
+    "classes": 178,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "report_hashes": {
+      "TEST-com.tencent.weknora.bridge.GoCompatibilityBridgeTest.xml": "61851fe40db9d53fb8731c90dfab06b91531f0f43ebcdb50f7ad0a9486b672a7",
+      "TEST-com.tencent.weknora.chunker.ChunkerPreviewIntegrationTest.xml": "43db625653c6401d3f5ea6c3da2c0a0b7b33ffee49e250a4b29a43cbfcb2b4e3",
+      "TEST-com.tencent.weknora.chunker.GoAdaptiveChunkerCompatibilityTest.xml": "6988245a3dcd0efa2435c5cd7f09f2fca2d8510364a517ee1f149bd79c97923d",
+      "TEST-com.tencent.weknora.chunker.GoChunkerCompatibilityTest.xml": "3622f63442d762074972e113f8cc43baf68669e3fc01ee041c33c9b8d8a26c7f",
+      "TEST-com.tencent.weknora.chunker.GoJsonFirstValueCompatibilityTest.xml": "333f389c304bb7e8f777814dfabc9ec130891d4e8c1a7220bc45c76a14d77cb0",
+      "TEST-com.tencent.weknora.docreader.DocReaderClientTest.xml": "58c6b450e650fa366100ddc73e289936f38d7dfbd75ff52ee08f01fea2bc6da9",
+      "TEST-com.tencent.weknora.docreader.DocReaderSettingsTest.xml": "a625a139b4baf7e1c4a6939a8f10188978c2094940076c5a161dad0fdd338174",
+      "TEST-com.tencent.weknora.docreader.DocReaderTlsTest.xml": "afcfb78c1cf44e8ea932ab3a7a61f70d975ef664929c47f7695710bcfb463f30",
+      "TEST-com.tencent.weknora.docreader.GoDocReaderCompatibilityTest.xml": "dbd39cb8949cfab9d39db142cfe89b5ac9b3c2bfd0aecc5a154be301684cfd26",
+      "TEST-com.tencent.weknora.docreader.GoHtmlTableCompatibilityTest.xml": "76b2f4fc93b4a6f293accc5b160fc38df29f3b3fca73807ef52c029cc3346666",
+      "TEST-com.tencent.weknora.docreader.GoSimpleFormatCompatibilityTest.xml": "3d8c11ac4d1a6e76555ee917c7f2b6542dc7415825935f1e84ddc0f0c3381ef4",
+      "TEST-com.tencent.weknora.docreader.HttpDocumentReaderCompatibilityTest.xml": "34fb507ed0f0b268011de6432c02779dd2c92ec359e7dc268ad593bd7be71d16",
+      "TEST-com.tencent.weknora.docreader.ParserConfigurationCompatibilityTest.xml": "fda6b2a34a5a0d65b3d5b353e9a886a9baba88391240949d2fe2c8c4ab6897ae",
+      "TEST-com.tencent.weknora.docreader.ParserEngineProbesGoParityTest.xml": "d370f5970cb90742d95ce5280957bbc69d34c39e890a9b4227c3c55962cae58d",
+      "TEST-com.tencent.weknora.docreader.ParserEngineRegistryGoParityTest.xml": "73b9bea4d197b3b5b449acdbdd4d8d23109f6d50899e32d827804ca3698ea2d7",
+      "TEST-com.tencent.weknora.knowledge.ChunkEditGoHttpParityTest.xml": "2487950f860af0e6e4c9c2a68f1d2aa10cda3d9ad54d18d10585588200f118b6",
+      "TEST-com.tencent.weknora.knowledge.ChunkEditPipelineHttpIntegrationTest.xml": "5e299b53f6f5259691587cbb1031ed5809ddbbfdb90f564c17bf102ae07a5ed7",
+      "TEST-com.tencent.weknora.knowledge.ChunkLifecycleGoHttpParityTest.xml": "2f21132e971a3e6644b9188fb45ec5e0d7ab95e8869694f695a3e866f9d14607",
+      "TEST-com.tencent.weknora.knowledge.ChunkLifecyclePipelineHttpIntegrationTest.xml": "949b24aea93ebbb7bb941544babf0d5514c190472adaacb74784a04474d2ec33",
+      "TEST-com.tencent.weknora.knowledge.ChunkQuestionGoHttpParityTest.xml": "bad7f6d6b8beb48f58df477452e303504adee7ee3c3664f88ae6edfbcc3c9bfc",
+      "TEST-com.tencent.weknora.knowledge.ChunkQuestionPipelineHttpIntegrationTest.xml": "82692db92aa96dd22465091f7a40982639e08e5f6e92977ec41288d1f4bdf9e2",
+      "TEST-com.tencent.weknora.knowledge.ChunkQuestionRegenerationGoHttpParityTest.xml": "4f72cb7f3b9cfb71eb8989065b260bc76266bec8905dcedea8128e7933c8e455",
+      "TEST-com.tencent.weknora.knowledge.ChunkQuestionRegenerationPipelineHttpIntegrationTest.xml": "52c0feb5d9deff3cd34c96cb3f481eeb6e06737886d6e185033e65aa2e9865dc",
+      "TEST-com.tencent.weknora.knowledge.DataTableCompatibilityTest.xml": "87091bcb46efcc165f9c2d7652086cdc676207010f176f566b8d2e5e52d5a836",
+      "TEST-com.tencent.weknora.knowledge.DataTableSummaryHandlerGoParityTest.xml": "82664bab94bbbdc4bc43e4c265e82ddd08f75b4a10fb70de4813ef1d781997ad",
+      "TEST-com.tencent.weknora.knowledge.DocumentProcessingCompatibilityTest.xml": "1885870911092afbcffbb371fe0fa93a91b0dbd0c01b78097efd6bfd106bb5cd",
+      "TEST-com.tencent.weknora.knowledge.GoKnowledgeBaseSerializationTest.xml": "4c65f7d96b634624847401c6c0a57a3b4a20e6b7ac202dd2fd1f6d9e8eacd43d",
+      "TEST-com.tencent.weknora.knowledge.GoKnowledgeFilterTimeParityTest.xml": "c23c5e3a139312116cd3c65285a84600cc4552aef14e669821503f5a2613a844",
+      "TEST-com.tencent.weknora.knowledge.GraphExtractionDisabledStartupTest.xml": "eecbbb22d1b9e1d70467b14168d3e39ec8d0c728efbdabdf7416af12a6cd020d",
+      "TEST-com.tencent.weknora.knowledge.GraphExtractionFanoutGoParityTest.xml": "897736c85178ae9545711e41bd20a6b8f5e727225d087ad8b5c4a005af7afa65",
+      "TEST-com.tencent.weknora.knowledge.GraphExtractionSchemaTest.xml": "825558ea8a0550b8d5741084b6f0fd29d5004680892e6c9d43f6d0185d1089e7",
+      "TEST-com.tencent.weknora.knowledge.GraphExtractionTextGoParityTest.xml": "9130172e383e2ed171084e284b557ffb62b4cc220af581b888ace500ef043d16",
+      "TEST-com.tencent.weknora.knowledge.HybridSearchDeadlineTest.xml": "33b89f33fc3a4f14803259a9ebf547040351aa415f78859ee9959a775983526c",
+      "TEST-com.tencent.weknora.knowledge.HybridSearchFanoutTest.xml": "f630546525ca1afd8af577408287109b125bc76a4954dd98c550b5484b6a2c17",
+      "TEST-com.tencent.weknora.knowledge.HybridSearchGoHttpParityTest.xml": "bb195b1fc172fa1926137a4566dc1b7c1066c77d37df178217cfb278441b40e7",
+      "TEST-com.tencent.weknora.knowledge.HybridSearchPipelineHttpIntegrationTest.xml": "d537c7b56ae6999923293e16279acf5fab7341e9a2869f9005084e0eaaa71812",
+      "TEST-com.tencent.weknora.knowledge.ImageMultimodalFanoutGoParityTest.xml": "4068da97d1e2205a6aa09cf6c034f2184ca278bfe9d54790d00731a501dfafd2",
+      "TEST-com.tencent.weknora.knowledge.ImageMultimodalGoParityTest.xml": "4837478141620fc3702b3a93a3c6a523a85f277bd87f5d0516991b78333078c7",
+      "TEST-com.tencent.weknora.knowledge.ImageMultimodalRawQueueTest.xml": "4b083270d2efe204b92a702c5fbaef97db210ac73e8b826978c8f93e874f6a05",
+      "TEST-com.tencent.weknora.knowledge.IndexDeleteEnqueueGoParityTest.xml": "f72780e66c0d4ccf9460607a70f8f656fcc483902a0015b3eb39532f9ebae3bd",
+      "TEST-com.tencent.weknora.knowledge.IndexDeleteGoParityTest.xml": "c37efc12f27f41a7931cde14358fec8e335303ba688ff35b198048c78d214cb6",
+      "TEST-com.tencent.weknora.knowledge.IndexDeletePipelineHttpIntegrationTest.xml": "219f5d405223e9eced84674b40d049348937bd6a271de293390a3c682f6a41e2",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeAutoTagFanoutGoParityTest.xml": "f7b9926b763d6433909bcbfb30bb71c3e55c610465e8bc20ce0d9d6c703c6552",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeAutoTagGoParityTest.xml": "e0384aa49ca43961457bd2d9b66ea345ad015c32f24bc5578c40bc3d7b05544d",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeAutoTagPipelineHttpIntegrationTest.xml": "8d3ceffb2f0fd255134941d7b4a08db9962afe91fb71acd14771deaf7bcd9279",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseIntegrationTest.xml": "11fa2a7636248648274e19eff5fbab3d95d3a7a406415a1494cbd97309f0ac9e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseLifecycleIntegrationTest.xml": "6b1c9b705a47d26b1d32c3505d18f8e8c6ea611249084d2fca6aba6f2c4ff983",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseProfileEnqueueGoParityTest.xml": "59559adcb2d02ed4f2cc705e7cc36a279cb60f73455dfda63acce0aeaaa6137e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseProfileGoHttpParityTest.xml": "fed053bef056a1c24300237dc911b5c4fb90ec82b95f666f8c51a639d5214959",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseProfileGoParityTest.xml": "51a4d11abd55aad6350c8cd7a40184796b126f725861495139f8d34ce8f09b9e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseProfilePipelineHttpIntegrationTest.xml": "7b08a5d2ed619f09cc26df8e43642feff38750e9028c80d68eb2030accdb4cf2",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBaseProfilePromptConfigurationGoParityTest.xml": "378c6e0853381aa29634a9f7aa604f52a4279de96eb2a008746ebcf25ea8bce4",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBatchDownloadConcurrencyTest.xml": "4a03aeccfbecd38fd18fa7c8f40d30ad37bb4db2a1bc07ec0fb18c58d62d0f64",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBatchDownloadGoHttpParityTest.xml": "0cc0b4d8e2650c9db779c902a7b2da8bbc0b0361f0d6766b5d2be304ed9e1d30",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeBatchTagsGoHttpParityTest.xml": "90c3aa506ecf552fafc854bc90f6fa1b15f9c383a28ea38c02f234bde888a5e0",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeCollectionReadGoHttpParityTest.xml": "2c04c32bbde0e1c3ce74558341f01c8b48aba1db5702316b386e39e3696d9a51",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeDeleteGoHttpParityTest.xml": "4265cc0ad68eae2083d7bf738428a5f78814bb286f77790235071ace30473810",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeDeletePipelineHttpIntegrationTest.xml": "276ff2ba63dc79f4a5289d88c054bf7ed67a888f5e6c6128390a163f9fd6767b",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeDownloadArchiveGoParityTest.xml": "10dfa411648051be6a9d36f2415e9dee830400819e10db05b72bf1d0c31f37f7",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeFileGoHttpParityTest.xml": "9d2cd3e774c450609bd6d210967c172717e89014397a629b3371102fd69c2aec",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeFolderGoHttpParityTest.xml": "cac247ca200893166c3e3569a526102d10085368b66d1e905e01e780f39300da",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeFolderPipelineHttpIntegrationTest.xml": "62b23ae5cc4140638ef7863effb71776d56a950a83280ad491f045924160f559",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeGalleryGoHttpParityTest.xml": "1acdaf481ca8dc751237589c8bdf9b707a7d7152cdfbcf1e5c42a55805dbcb31",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeGalleryHttpIntegrationTest.xml": "ccfe0343e622b91e8f217a82c7b093c8b726fef6ff838dcd72a15eed70972946",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeIndexReadDeadlineTest.xml": "2a2b6d2d7a8fed46de9d6041e8e6a7037f42fe1a943b030b762245883f55bf2f",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeIndexReadGoHttpParityTest.xml": "525e3717b45a73ae9ff33e706580de2ed73b7e016ed2e5d0a1b94c27d32eba63",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeIndexReadHttpIntegrationTest.xml": "d6cbca5e290dfe7bd7822b6842b9aef2b63f339f6733bc9e79814a00baad6000",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeIndexStatesGoParityTest.xml": "f42fac59649c76e9baa7fe0a7fb5dac726115f01ea80708b3bfffab12ee6cadd",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeListDeleteGoParityTest.xml": "58922ee93099cfb5d56c2566a489a88f9243b7655906a706d6667b18bdedc51e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeParseCancelGoParityTest.xml": "0051af3b5a8c09f752de7324983d4919f72425928f63a3a85e82ccb99774581d",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeParseCancelHttpIntegrationTest.xml": "3990690259c8dc7184f355f01ee8e47f7905d4c4b546645c7e20f7aaa465b026",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessCompatibilityTest.xml": "66ce768db074cdc100f5b4182c76838943e6ad08536c42e840c6f05325cef8ed",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanGoHttpParityTest.xml": "bc72a4b11689c439ff5a106bcc87432fba7a2dcea0219105be896fecdd8e409e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanHttpIntegrationTest.xml": "66b27793aee62a98d9a633223d98722fdfbc23ce495dc1b748c8a5b1557817fc",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanPipelineHttpIntegrationTest.xml": "610b58869b89fb96d7d10d17c0dbe624fd34ba9babaa42b29a5825ee847f571e",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanTrackerTest.xml": "326f8bd09589e7f5b0eb519f69039b650c6b5e8e5fbb740bdcbbd4f3870bdc27",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeProcessingSpanWritesGoParityTest.xml": "63c80071c5f88955916e8d64358266e4c327521144d32ee3eabb89c39909c10f",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeReparseGoHttpParityTest.xml": "79cfadcc7fce1ebc275dbbdc038e6b179cb07756bfb8b712da4a8b263573c9ed",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeReparsePipelineHttpIntegrationTest.xml": "683d753da70d6d998e7cd00928eae8389aeb9c6e104b8f2fcf469684d749ed30",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeReparseWorkerGoParityTest.xml": "4c7110578f21326101481d083994aaf8d492ff526f64c17de6b08ec85c9e9b75",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeSummaryPublicGoHttpParityTest.xml": "7be7abf33e15765c1cf6aeaf1676e2adf84fa9ca86735541a10b747d30945b3b",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeSummaryPublicPipelineHttpIntegrationTest.xml": "c9e510e3c2697accf70507f4a5689721db412e30124aafb8323745b17711e507",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeTagDocumentDeleteGoParityTest.xml": "f081d0dc465cd2eb078b2b3be2f0ec2d30f9a28fea336b109de7a29aeebba5e8",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeTagGoHttpParityTest.xml": "c5e0f739256cb90df9ee21206457dbb10314f332d987804661339cad14e822cc",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeTagPipelineHttpIntegrationTest.xml": "e5e2f2d7a4953953a6a33ab13d9e48e5e32d48c58851695f4ef89a41d9d60ee3",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeURLGoHttpParityTest.xml": "54e24588de83d7b60ea929863a247240977bb4ca2a8dcf957ebc06f4d0257ed5",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUpdateGoHttpParityTest.xml": "ec498858256f5ce4212e1eac8c9941d1ba14908da250327bc8aa207322e7785f",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUpdatePipelineHttpIntegrationTest.xml": "b8d0ac1a8832b43d6ec1886e27e0faa5e876327b61f9778980c4893c1a07aa7c",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUploadCompatibilityTest.xml": "075163651564bfb212776a54ef2c6c1c3aba79762f53ffea699010136241439c",
+      "TEST-com.tencent.weknora.knowledge.KnowledgeUploadHttpCompatibilityTest.xml": "15dc055e23698f7c82f30a8a10fb889c6a24bf7c1b0a69761142f1297b5bd0c7",
+      "TEST-com.tencent.weknora.knowledge.ManualEmbeddingPoolGoParityTest.xml": "9d715825aaf42021854c0cefe05ddb4098396e67d9e230794b072c31d4a0118d",
+      "TEST-com.tencent.weknora.knowledge.ManualImageResolverGoParityTest.xml": "33f36594585075dee89a8cdedf8654a99f11a7d358c8ae190860014a69e9b168",
+      "TEST-com.tencent.weknora.knowledge.ManualKnowledgeGoHttpParityTest.xml": "a490bae9e8e6a0d63d2ec960652bfa9cbedfe7e858a43423f7911cc7c56ecd8f",
+      "TEST-com.tencent.weknora.knowledge.ManualKnowledgePipelineHttpIntegrationTest.xml": "77c45a875bfa041886008911029b3f41b77aff298ebbfb500a978f3b6803a466",
+      "TEST-com.tencent.weknora.knowledge.ManualProcessingGoParityTest.xml": "e02ca560f88d03aa1f01016f997036d5781460280a8fdbe8860e343be668de0f",
+      "TEST-com.tencent.weknora.knowledge.ManualProcessingRawQueueTest.xml": "b0d312ba7e1209ed2af7b22fb4919462e2305b11391d4c45a312bcb79b9ed66e",
+      "TEST-com.tencent.weknora.knowledge.OfficeProcessingCompatibilityTest.xml": "bbe1b65c444c25b066138f52e57e480f6abbde755c6243dbbb7ff2c289da6a27",
+      "TEST-com.tencent.weknora.knowledge.QuestionGenerationFanoutGoParityTest.xml": "6449007be145b2eb5f899785d14da2cb64084987d3ab237daf1b55d0486cfba7",
+      "TEST-com.tencent.weknora.knowledge.QuestionGenerationGoParityTest.xml": "9272cb4cf2866076007b93a2efeaec8c68d8711edfc1dc31fd2e5dae0f231d8f",
+      "TEST-com.tencent.weknora.knowledge.QuestionGenerationPipelineHttpIntegrationTest.xml": "ec40bdde3920f9ae37e889e40da0e7c01afc757551b6e3b8f8fe15b69d18fab6",
+      "TEST-com.tencent.weknora.knowledge.QuestionGenerationSchemaTest.xml": "296bf1f9b2c50e01065c2d7b9f22d32de12a14bbc54bc4edd77399dfb4f3d921",
+      "TEST-com.tencent.weknora.knowledge.RemoteDocumentDownloadsGoParityTest.xml": "f44e984256c2999603d2a950cfcb0cf0c40994f4daa23bf5ee5ffc4420f53892",
+      "TEST-com.tencent.weknora.knowledge.RemoteDocumentWorkerGoParityTest.xml": "23bc07cb6b39406bfb91c54ea2eade0de6a850e7a970370c475fc9fd6b3fbc51",
+      "TEST-com.tencent.weknora.knowledge.SummaryGenerationGoParityTest.xml": "003b818cf8bfb941f8c5a00032d27a1b9dd79b5563800a84e1e056be407cb01a",
+      "TEST-com.tencent.weknora.knowledge.SummaryGenerationPipelineHttpIntegrationTest.xml": "1efb474c7817c9cc795dac6c8ba3b7798cded3562ce7bfddb54b7033db435f1c",
+      "TEST-com.tencent.weknora.knowledge.SummaryGenerationSchemaTest.xml": "3e516eee5a5e1545eb0e879b0bd4558f4b6928682f9d37caaf7e8c0a4b53c80b",
+      "TEST-com.tencent.weknora.model.AnthropicMessagesParityTest.xml": "a9b00ed09b5e5bf359cf595f19ab4ecd75f1617dcfedda094280c171d2c6ba92",
+      "TEST-com.tencent.weknora.model.CatalogOverlaySecurityTest.xml": "e76c995de8bad9afa69935dba9553819ac56c3619849f829998ea71ffb923e10",
+      "TEST-com.tencent.weknora.model.HybridSQLiteModelGoParityTest.xml": "b3f4c40fa5cbb0f09e65d3ed9f07c41e7a207fbdf836593935f40b278f6bb144",
+      "TEST-com.tencent.weknora.model.ModelIntegrationTest.xml": "1feae4d49f3924273fd4151b42b76b901a6de5569724fb1e28e46c18e40c42b8",
+      "TEST-com.tencent.weknora.model.ModelMutationTest.xml": "2f715033f714a9ecf6aeb9769acdff1ef5b0aa3bc114a63e798a4d5a32a3bf86",
+      "TEST-com.tencent.weknora.model.ModelParametersBlobGoParityTest.xml": "0b813219c481f6381c48f8ed8456eb0e76b58ddffa248545623c5a9ab227592e",
+      "TEST-com.tencent.weknora.model.ModelProjectionTest.xml": "f6c002c2a4d396e3df9fc228f4d563a8547a7949fa17e5cccae9d8c816f19537",
+      "TEST-com.tencent.weknora.model.ModelTransportSecurityTest.xml": "c1ada67ef121532f661009625ceb3438eb390f3ed9958df2a32dad4e48338bb5",
+      "TEST-com.tencent.weknora.model.ModelURLPolicyTest.xml": "acae9441cfb92f1056e2e334605aa62e38e6496fd22b9a1a0f5e321031211fa7",
+      "TEST-com.tencent.weknora.model.NativeModelClientsTest.xml": "c634bfc4e6f0cf5677cd6450e545e425062967be6a9f1a8b4a2f27c343e0be25",
+      "TEST-com.tencent.weknora.model.OllamaBinderHTTPParityTest.xml": "e901217ace9118d3c9bca6ec6fe31da56cfbebac791a9f1a92b3b9a89cb71a5d",
+      "TEST-com.tencent.weknora.model.OllamaClientsParityTest.xml": "bd4d218b11a78a485a9a756fed7a34f3024824e81040a2cd2672251e5a4ec3b5",
+      "TEST-com.tencent.weknora.model.OpenAIResponsesParityTest.xml": "b18401ea858541e1bcd10c5a2017151346afe1c1756dafa09f2da49366247498",
+      "TEST-com.tencent.weknora.model.RuntimeCatalogTest.xml": "fe147bb6c577de59add68cb07dcf9aea8007925a282b39d5fbd84df7b5de2b4c",
+      "TEST-com.tencent.weknora.model.client.ChatFallbackParityTest.xml": "f7d96a77ad7306d6d8a1af51d44a35f7963ab436c87c5223082171753aae5b32",
+      "TEST-com.tencent.weknora.model.client.GoStreamHelpersParityTest.xml": "fb231b4b6535cc8c4850bfcebc036ec215830f8e480d0d261c34631123f65971",
+      "TEST-com.tencent.weknora.model.client.ModelClientResponsesTest.xml": "84a606b9fb047e81378ddfb3f4d4f35b0c8cc135dbd2818acef0014d5f7fab63",
+      "TEST-com.tencent.weknora.model.client.OllamaTypedBinderParityTest.xml": "0daa66dbf4f246181334d266d362c33141dca6c6f2bfb5c1b40b42be5a54856b",
+      "TEST-com.tencent.weknora.model.client.ParserRedirectGoParityTest.xml": "257475fe19e0bb648f6eada552d7d3a65370cd39c6d11f0638a1f033ae56c2c4",
+      "TEST-com.tencent.weknora.retrieval.HybridFoundationGoParityTest.xml": "1f40797e64e56c26cda39c3993eed2ba1fe1c10f403e21e0dd2dd919b1157a3e",
+      "TEST-com.tencent.weknora.retrieval.HybridSearchCompositeGoParityTest.xml": "0aa866b312c55c7402ba93698920dc5c64765cad397e1f9e226282aec69a5e4f",
+      "TEST-com.tencent.weknora.retrieval.RerankMetadataGoParityTest.xml": "a2018f278c1034b76d2448f06b653a8a8b6ccc53e97b765359431298ece42604",
+      "TEST-com.tencent.weknora.retrieval.SQLiteIndexGoParityTest.xml": "4f281a49092f5d55955ab763eabb989babc725952e334fe5855b698e3e88191c",
+      "TEST-com.tencent.weknora.security.AuthHttpIntegrationTest.xml": "7ac2dccaaf10cbc67b79c12eb658ee1cef0b302003d9770a32b41a2d7f9377c7",
+      "TEST-com.tencent.weknora.security.DeniedRoleAuditCompatibilityTest.xml": "e87ed78b7e82248e199a87c90be521bcff11da6eaac6915a1ed240db249b7756",
+      "TEST-com.tencent.weknora.security.GoSecretCodecTest.xml": "979ffc3b4d110d867e737a7d0af4eb269756145efe41aca98c44706ccab0cb59",
+      "TEST-com.tencent.weknora.security.InvitationRegistrationGoParityTest.xml": "24d49012928b84889d555543a1446038d91fbcc22a4e4343b822eb2923c8e0f2",
+      "TEST-com.tencent.weknora.security.InvitationRegistrationHttpIntegrationTest.xml": "15716f849b587fc943aad790e72ff24b2d4269950ba4ce5a17155b73b7a22624",
+      "TEST-com.tencent.weknora.security.InvitationRequestDecoderCompatibilityTest.xml": "2928fe789cffe6a0b92a978b0beca7741ebfe1e0bd810738c74264f0a20ced32",
+      "TEST-com.tencent.weknora.security.KnowledgeBaseOwnershipHttpIntegrationTest.xml": "8d27beaf1fa51d0eb405c2151c791ac26c2b997200779d93b62dcd92b71c24c9",
+      "TEST-com.tencent.weknora.security.KnowledgeBaseReadAuthorizationCompatibilityTest.xml": "f490fa9336268ea00e62896ed758c5b2b708f4e3dac3d55de2bb9d84d9474401",
+      "TEST-com.tencent.weknora.security.KnowledgeBaseReadConfiguredBuiltinHttpTest.xml": "267c53d1e054ff9747ecfff955c0f525ccdb8ff73331be021f4d2693d1ccdaba",
+      "TEST-com.tencent.weknora.security.KnowledgeBaseReadHttpIntegrationTest.xml": "74ce5013a07a5ffc7e32724bdf8e0dad29454c540742516585560487926662dc",
+      "TEST-com.tencent.weknora.security.KnowledgeBaseWriteAuthorizationCompatibilityTest.xml": "7e502e5406abf8710c55f75bd4689625cd94a3d136c9d9083ed14920dc4f0c26",
+      "TEST-com.tencent.weknora.security.KnowledgeContentReadEdgeHttpIntegrationTest.xml": "87b0e705f913fc0bd14aded9c32c5dd7bc8e54dd732ceb961b88fd5f4dc491c5",
+      "TEST-com.tencent.weknora.security.KnowledgeContentReadHttpIntegrationTest.xml": "86a6994d30bc7d0bfef393624e006ca6eb1d8281da3d7c0279001382ca90a383",
+      "TEST-com.tencent.weknora.security.NativeRoleGuardHttpIntegrationTest.xml": "51becd13a52ce6932106d5b3e08dd7f683e1e564c742a461799899ef6f35d029",
+      "TEST-com.tencent.weknora.security.OidcProviderHttpIntegrationTest.xml": "e1385e7f2da7a9c8c53b8f964ff9c50e6821905b59465a4bd1b041c6b9bde433",
+      "TEST-com.tencent.weknora.security.OidcSettingsCompatibilityTest.xml": "b22a93fbd590fec27636c7d9b54b04654b80be9169ddce704a55f6ab7e66a565",
+      "TEST-com.tencent.weknora.security.OidcStateCompatibilityTest.xml": "60bb97e8eaea7cb58e129385849ccf3cb2cd892bd7ae446a3e4894582c5f6dec",
+      "TEST-com.tencent.weknora.security.OidcTransportCompatibilityTest.xml": "0c9b6f1a5523d7c46b8590646b80bd60117216557ce2c990948e6ff4482e1a25",
+      "TEST-com.tencent.weknora.security.OidcWiringIntegrationTest.xml": "d96dc8633921bc96e777719c7f9a1297c6587f712accd137debda706cf479f47",
+      "TEST-com.tencent.weknora.security.OrphanMembershipHttpIntegrationTest.xml": "12bb4cdd60bf9ed58316bf0fa10fd4d5f06ea56b397db0ad1a5977320c2cbcd7",
+      "TEST-com.tencent.weknora.security.PublicAuthRateLimiterTest.xml": "d140a38027deebff2be697b7de007b6ce1620ec3f57508348e4762370d4464c1",
+      "TEST-com.tencent.weknora.security.SecurityCompatibilityTest.xml": "acbeb8f35c04a85f6d67b0190b67a8202dc9a65b61138e16b696e0c9bb915243",
+      "TEST-com.tencent.weknora.security.TenantApiKeyHttpIntegrationTest.xml": "64c9d5fe8646317531b0a756cf4da81ed5b5722204ded7cf98a91d8adacdc698",
+      "TEST-com.tencent.weknora.security.TenantInvitationCodecCompatibilityTest.xml": "83333976409b502a90514e6af5bc93ae0c0cc856217960d06256b0e70c933a15",
+      "TEST-com.tencent.weknora.security.TenantInvitationHttpIntegrationTest.xml": "f0fc3da10de7178e5ff916830c320e39468da56860cdf14354dc7a035f7a28a6",
+      "TEST-com.tencent.weknora.security.TenantInvitationServiceCompatibilityTest.xml": "f61956b336c9949c494d226d78874531f059fe749da707e533122c2b9c6a6fe6",
+      "TEST-com.tencent.weknora.security.TenantLeaveHttpIntegrationTest.xml": "80cac08ec34c0af2efb3f0d03f44c873ba660d26481d58fc9653183f06575795",
+      "TEST-com.tencent.weknora.security.TenantMemberHttpIntegrationTest.xml": "d4f1c1faba046b698f7b6ebbe237b655b724f42794399eaedb6a04db1df0d860",
+      "TEST-com.tencent.weknora.sourceloc.ExcelFormattingCompatibilityTest.xml": "d7e7cc6813e6a715e50197fadfdb0db5d57597e624d134be513da72a2d0a8e6f",
+      "TEST-com.tencent.weknora.sourceloc.OfficeStructureCompatibilityTest.xml": "3cdabde07fdd668ceb59bc80feb5bfcaddf30f795b2888487a918c9ad6201040",
+      "TEST-com.tencent.weknora.sourceloc.SourceLocatorGoParityTest.xml": "415741e1180fad2dbcffe9762e6e921774bce7e8ee98cf43b5df7ed37526632a",
+      "TEST-com.tencent.weknora.storage.FileTransportTomcatHttpIntegrationTest.xml": "c670cb150ae801db1c695add8dc549c39f818651ba65acf1c31aba7e5c75f901",
+      "TEST-com.tencent.weknora.storage.LocalFileStoreTest.xml": "1e6ff34af3a52f2d7f587ceb8481c2b71eb1ff80781a8cb02e6b52b9d954c18b",
+      "TEST-com.tencent.weknora.storage.ResourceCatalogTest.xml": "0705955b6b85b37e8b350d1360511ed3d7ef705253b931f2b74c1a6440e347cf",
+      "TEST-com.tencent.weknora.storage.StorageGoCompatibilityTest.xml": "e78d992bed6c229f96e68c11ce788b4dd80b65493e40e35d91f64c5811e6f153",
+      "TEST-com.tencent.weknora.storage.StorageMimeCompatibilityTest.xml": "8ff291599e8741accaa45424a6e14af4b96e046749a407798744a4de37bba4bc",
+      "TEST-com.tencent.weknora.storage.StorageResolverTest.xml": "a8294b4bbd1a390cea86ef62fd87fa77f20415dabed4f18ee528512d436bee43",
+      "TEST-com.tencent.weknora.system.SystemParserControllerGoParityTest.xml": "ef3e76304f1c739eb40a9ab674be023ce0d216ebf398cbc467226d3f8f19f1e9",
+      "TEST-com.tencent.weknora.task.ProducerTaskOptionsIntegrationTest.xml": "b54070027833b157bee4cc891e2c6478add2f0cba0efd74798aa0f6b8123b4e2",
+      "TEST-com.tencent.weknora.task.TaskRepositoryTest.xml": "d1a35e48734608cdcfbdc129cb405535e501a84e30aaa88e5ac1bcfa7f4a4aab",
+      "TEST-com.tencent.weknora.task.TaskTopologyGoParityTest.xml": "33abba9ca6b9af8cdc02e0c790a43a632debe895ac226b49651cbf9fe92a4bb8",
+      "TEST-com.tencent.weknora.task.TaskWorkerTest.xml": "399dcd60e36d9c6d83af272a47a454391f4ee80cd67f5f029c93092c1e227ed7",
+      "TEST-com.tencent.weknora.tenant.TenantHttpIntegrationTest.xml": "2a0749826a31475cc2a8d9ea8237ad66ccfe6aa62f49f473b04b27926f9f3246",
+      "TEST-com.tencent.weknora.tenant.TenantParserConfigHttpTest.xml": "abc9616e051b1809af526b3b54e4c846a62c7bcdc420f2b16f43074fafefb2ab",
+      "TEST-com.tencent.weknora.vectorstore.Elasticsearch8ContextGoParityTest.xml": "e083a4551d0bfc19e2f76c1b47b2aeb3e0d9def602d70fc00cda0c18f3b8db7a",
+      "TEST-com.tencent.weknora.vectorstore.VectorStoreMetadataGoParityTest.xml": "fe0bcd0f2eb4488e032b70815f6de382a9f250bfa959b6682108d796699c3104",
+      "TEST-com.tencent.weknora.vectorstore.VectorStorePublicGoParityIT.xml": "a53e61d7430509d225b7848be0437d20f5ec7267b0446656520240baf627b562",
+      "TEST-com.tencent.weknora.vectorstore.VectorStorePublicPipelineHttpIT.xml": "eccedccd5fb9fd39f95251d2e064126bdb3801573d3d075888f2fcb59ad0bede",
+      "TEST-com.tencent.weknora.vectorstore.VectorStoreRegistryGoParityTest.xml": "db673ae95894433d12e117e7e71bf1027f11981c818e337190b8a1ec9a72345b"
+    },
+    "actual_exit_code": 0,
+    "manifest": "/tmp/weknora-java-gallery152-20261016-full-manifest.json",
+    "log": "/tmp/weknora-java-gallery152-20261016-full.log"
+  },
+  "frozen_src_and_pom_input_count": 940,
+  "package": {
+    "acceptance_script": "/tmp/weknora-java-gallery152-20261016-layout/backend-java/scripts/processing_smoke.py",
+    "jar": "/tmp/weknora-java-gallery152-20261016-full-build/backend-java-0.1.0-SNAPSHOT.jar",
+    "bytes": 153100938,
+    "sha256": "c15ad20031c852a3beb97e757269528b7711f4f7e515c812838bac4845f06363",
+    "modes": {
+      "single": {
+        "command": [
+          "python3",
+          "/tmp/weknora-java-gallery152-20261016-layout/backend-java/scripts/processing_smoke.py",
+          "/tmp/weknora-java-gallery152-20261016-full-build/backend-java-0.1.0-SNAPSHOT.jar",
+          "/tmp/weknora-sqlite-vec-native/vec0.dylib",
+          "--file-response",
+          "--topology",
+          "single",
+          "--root",
+          "/tmp/weknora-java-gallery152-20261016-layout"
+        ],
+        "actual_exit_code": 0,
+        "log": "/tmp/weknora-java-gallery152-20261016-package-single.log",
+        "output_sha256": "c3dfe897cfbbeb6c90fc00cf7b7b2b62397bcb3a6a0b79b1b18a8ce1932a3974"
+      },
+      "go": {
+        "command": [
+          "python3",
+          "/tmp/weknora-java-gallery152-20261016-layout/backend-java/scripts/processing_smoke.py",
+          "/tmp/weknora-java-gallery152-20261016-full-build/backend-java-0.1.0-SNAPSHOT.jar",
+          "/tmp/weknora-sqlite-vec-native/vec0.dylib",
+          "--file-response",
+          "--topology",
+          "go",
+          "--root",
+          "/tmp/weknora-java-gallery152-20261016-layout"
+        ],
+        "actual_exit_code": 0,
+        "log": "/tmp/weknora-java-gallery152-20261016-package-go.log",
+        "output_sha256": "a5395ad23eefb08343c799b4f0dab0ea7f63a690d0683cecfafb15c661732028"
+      }
+    },
+    "jar_hash_rechecked": true
+  },
+  "independent_sql_recheck": {
+    "jar_sha256": "c15ad20031c852a3beb97e757269528b7711f4f7e515c812838bac4845f06363",
+    "modes": {
+      "single": {
+        "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-as7kq8es/test.db",
+        "counts": {
+          "knowledges": 2,
+          "lite_embeddings": 2,
+          "lite_embeddings_fts": 2,
+          "vec_embeddings_3": 2,
+          "resources": 2,
+          "resource_bindings": 2,
+          "java_task_jobs": 4,
+          "java_task_attempts": 4
+        },
+        "documents": [
+          [
+            "acba04d5-521b-4c81-b842-5730c0f1e9e9",
+            1,
+            "completed",
+            243,
+            "resource://yE8NAv_KPQmZ6nS35S85bQ",
+            "owner.txt"
+          ],
+          [
+            "f9623b7c-093e-42d2-8d5c-74b535945f65",
+            1,
+            "completed",
+            231,
+            "resource://acStNbjGjhumoGaQoFZ7jg",
+            "foreign.txt"
+          ]
+        ],
+        "quota": [
+          [
+            1,
+            474
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "jobs": [
+          [
+            "document:process",
+            "succeeded",
+            1,
+            2
+          ],
+          [
+            "knowledge:post_process",
+            "succeeded",
+            1,
+            2
+          ]
+        ],
+        "attempt_outcomes": [
+          [
+            "succeeded",
+            4
+          ]
+        ],
+        "vectors": [
+          [
+            "acba04d5-521b-4c81-b842-5730c0f1e9e9",
+            "owner.txt\nFirst paragraph\n\nSecond paragraph",
+            "0000803F0000000000000000"
+          ],
+          [
+            "f9623b7c-093e-42d2-8d5c-74b535945f65",
+            "foreign.txt\nForeign caller body",
+            "0000803F0000000000000000"
+          ]
+        ],
+        "fts_match": [
+          [
+            "acba04d5-521b-4c81-b842-5730c0f1e9e9",
+            "owner.txt\nFirst paragraph\n\nSecond paragraph"
+          ]
+        ],
+        "source_files": [
+          {
+            "knowledge_id": "acba04d5-521b-4c81-b842-5730c0f1e9e9",
+            "physical_path": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-as7kq8es/files/1/acba04d5-521b-4c81-b842-5730c0f1e9e9/1792106003818549000.txt",
+            "size": 35,
+            "sha256": "71bbf6275a598ca5e7583a100548c1123fae561ce86031f407f9df0a210aeb35"
+          },
+          {
+            "knowledge_id": "f9623b7c-093e-42d2-8d5c-74b535945f65",
+            "physical_path": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-as7kq8es/files/1/f9623b7c-093e-42d2-8d5c-74b535945f65/1792106003856178000.txt",
+            "size": 19,
+            "sha256": "85fa4b4ad541c7a96d4237e8a7fa9274559ee8343314f79c0c0fe945b41ad0be"
+          }
+        ],
+        "audit_groups": [
+          [
+            "foreign",
+            "contributor",
+            "knowledge.created",
+            "accepted",
+            1
+          ],
+          [
+            "owner",
+            "owner",
+            "knowledge.created",
+            "accepted",
+            1
+          ],
+          [
+            "owner",
+            "viewer",
+            "rbac.access_denied",
+            "denied",
+            2
+          ]
+        ],
+        "temporary_control_id_and_keys_cleaned": true,
+        "actual_exit_code": 0,
+        "gallery_projection_and_policy_cleaned": true
+      },
+      "go": {
+        "database": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-eyu724zi/test.db",
+        "counts": {
+          "knowledges": 2,
+          "lite_embeddings": 2,
+          "lite_embeddings_fts": 2,
+          "vec_embeddings_3": 2,
+          "resources": 2,
+          "resource_bindings": 2,
+          "java_task_jobs": 4,
+          "java_task_attempts": 4
+        },
+        "documents": [
+          [
+            "5dde3dbb-c3d2-4c47-86c5-5401fa972fe2",
+            1,
+            "completed",
+            231,
+            "resource://P0YOhEQ_3LVDPrRCtr_UWA",
+            "foreign.txt"
+          ],
+          [
+            "7afadc70-2ef5-4dfe-b173-7152fb23def2",
+            1,
+            "completed",
+            243,
+            "resource://ew2xsLSqO0kdpjit3hinRA",
+            "owner.txt"
+          ]
+        ],
+        "quota": [
+          [
+            1,
+            474
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "jobs": [
+          [
+            "document:process",
+            "succeeded",
+            1,
+            2
+          ],
+          [
+            "knowledge:post_process",
+            "succeeded",
+            1,
+            2
+          ]
+        ],
+        "attempt_outcomes": [
+          [
+            "succeeded",
+            4
+          ]
+        ],
+        "vectors": [
+          [
+            "5dde3dbb-c3d2-4c47-86c5-5401fa972fe2",
+            "foreign.txt\nForeign caller body",
+            "0000803F0000000000000000"
+          ],
+          [
+            "7afadc70-2ef5-4dfe-b173-7152fb23def2",
+            "owner.txt\nFirst paragraph\n\nSecond paragraph",
+            "0000803F0000000000000000"
+          ]
+        ],
+        "fts_match": [
+          [
+            "7afadc70-2ef5-4dfe-b173-7152fb23def2",
+            "owner.txt\nFirst paragraph\n\nSecond paragraph"
+          ]
+        ],
+        "source_files": [
+          {
+            "knowledge_id": "5dde3dbb-c3d2-4c47-86c5-5401fa972fe2",
+            "physical_path": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-eyu724zi/files/1/5dde3dbb-c3d2-4c47-86c5-5401fa972fe2/1792106003888186000.txt",
+            "size": 19,
+            "sha256": "85fa4b4ad541c7a96d4237e8a7fa9274559ee8343314f79c0c0fe945b41ad0be"
+          },
+          {
+            "knowledge_id": "7afadc70-2ef5-4dfe-b173-7152fb23def2",
+            "physical_path": "/var/folders/pf/6ssfy5pj7fj9w1jyg4kpbmcr0000gn/T/weknora-java-processing-smoke-eyu724zi/files/1/7afadc70-2ef5-4dfe-b173-7152fb23def2/1792106003857323000.txt",
+            "size": 35,
+            "sha256": "71bbf6275a598ca5e7583a100548c1123fae561ce86031f407f9df0a210aeb35"
+          }
+        ],
+        "audit_groups": [
+          [
+            "foreign",
+            "contributor",
+            "knowledge.created",
+            "accepted",
+            1
+          ],
+          [
+            "owner",
+            "owner",
+            "knowledge.created",
+            "accepted",
+            1
+          ],
+          [
+            "owner",
+            "viewer",
+            "rbac.access_denied",
+            "denied",
+            2
+          ]
+        ],
+        "temporary_control_id_and_keys_cleaned": true,
+        "actual_exit_code": 0,
+        "gallery_projection_and_policy_cleaned": true
+      }
+    }
+  },
+  "fresh_task_audit": {
+    "go_task_types": [
+      "chunk:extract",
+      "datasource:sync",
+      "datatable:summary",
+      "document:process",
+      "faq:import",
+      "image:multimodal",
+      "index:delete",
+      "kb:clone",
+      "kb:delete",
+      "kb:profile",
+      "knowledge:auto_tag",
+      "knowledge:list_delete",
+      "knowledge:list_reparse",
+      "knowledge:move",
+      "knowledge:post_process",
+      "manual:process",
+      "memory:extract",
+      "question:generation",
+      "summary:generation",
+      "temporary_document:process",
+      "wiki:finalize",
+      "wiki:ingest"
+    ],
+    "native_partial_handler_sources": {
+      "manual:process": "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualProcessingHandler.java",
+      "question:generation": "backend-java/src/main/java/com/tencent/weknora/knowledge/QuestionGenerationHandler.java",
+      "index:delete": "backend-java/src/main/java/com/tencent/weknora/knowledge/IndexDeleteHandler.java",
+      "knowledge:list_delete": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeListDeleteHandler.java",
+      "knowledge:list_reparse": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeListReparseHandler.java",
+      "knowledge:auto_tag": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeAutoTagHandler.java",
+      "kb:profile": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileHandler.java",
+      "summary:generation": "backend-java/src/main/java/com/tencent/weknora/knowledge/SummaryGenerationHandler.java",
+      "document:process": "backend-java/src/main/java/com/tencent/weknora/knowledge/DocumentProcessingHandler.java",
+      "knowledge:post_process": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgePostProcessHandler.java",
+      "chunk:extract": "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphExtractionHandler.java",
+      "datatable:summary": "backend-java/src/main/java/com/tencent/weknora/knowledge/DataTableSummaryHandler.java",
+      "image:multimodal": "backend-java/src/main/java/com/tencent/weknora/knowledge/ImageMultimodalHandler.java"
+    },
+    "missing_handlers": [
+      "datasource:sync",
+      "faq:import",
+      "kb:clone",
+      "kb:delete",
+      "knowledge:move",
+      "memory:extract",
+      "temporary_document:process",
+      "wiki:finalize",
+      "wiki:ingest"
+    ]
+  },
+  "remaining": [
+    "Image update PUT knowledge/image/:id/:chunk_id still needs native child chunk and index side effects; document move/progress missing",
+    "Full stored-data JSON size/Unicode/type/error boundaries, changes to authorization/resources during multi-query reads, concurrent projection updates and full lifecycle/cutover not completely verified",
+    "All other 367 Go route templates and nine missing task handlers; public chat/RAG/Agent and other modules",
+    "Existing document publication transaction, additive-vs-delta quota, external bound vector document writes, Redis/Asynq backlog and full Lite differences",
+    "No development instance restarted or jar deployed; historical jar modes are not cumulative evidence"
+  ],
+  "ledger_transition": {
+    "routes": [
+      "GET /api/v1/knowledge-bases/:id/gallery-config",
+      "GET /api/v1/knowledge-bases/:id/images"
+    ],
+    "from": "not_started",
+    "to": "in_progress",
+    "go_routes": 482,
+    "explicit_java_go_routes": 115,
+    "route_counts": {
+      "in_progress": 114,
+      "not_started": 367,
+      "implemented": 1,
+      "verified": 0
+    },
+    "partial_task_handlers": 13,
+    "missing_task_handlers": 9
+  },
+  "historical_failures": [
+    {
+      "kind": "New repository declared final, preventing Spring exception-translation proxy; corrected before final passing full build",
+      "actual_exit_code": 1,
+      "log": "/tmp/weknora-java-gallery152-20261016-first.log"
+    },
+    {
+      "kind": "Standalone replay retained URL plus signs in JSON filter whitespace; form decoding corrected, shared numeric pagination now trims like Gin 1.12",
+      "actual_exit_code": 1,
+      "log": "/tmp/weknora-java-gallery-20261016-second.log"
+    },
+    {
+      "kind": "Initial ObjectNode primitive/boxed Boolean overload compile error corrected",
+      "actual_exit_code": 1,
+      "log": "/tmp/weknora-java-gallery-20261016-first.log"
+    }
+  ],
+  "historical_evidence": [
+    {
+      "checkpoint": "batch-tags-checkpoint-2026-10-16.json",
+      "scope": "Earlier frozen8908/176 build and older jar acceptance"
+    }
+  ]
+}

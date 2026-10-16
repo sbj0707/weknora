@@ -1,3 +1,7 @@
+# 当前表格摘要原生进展（2026-10-14）
+
+生产 `DataTableSummaryHandler/Repository` 已注册并接入模型、DuckDB、实际索引与 SQL worker。40 个正式 JUnit 测试通过：37 个真实 Go 全处理器回放、单连接清理、取消与表格后接文档发布回归。先完成的表格摘要不再被同一次文档构建清理；Go/Java 两端已修复，Go 重解析前置清理仍删除旧 attempt。DuckDB JNI 提前加载已进入 Java main，最终 jar 单池与六池的 Office 7-job 验收均通过，每次 3 上传/7 成功任务/4 Embedding HTTP/2 Chat HTTP/1 受控 reader，真实 table chunks/index/link/source locator 均保留；日志 `/tmp/weknora-java-final-office-{single,go}.log`。受控 reader 不等于原生 Office 内容转换。以下为历史审计，不能把历史“没有 handler”当作当前状态，也不能把未完成运行提前记成通过。
+
 # 表格摘要生产缺口
 
 2026-10-13，Excel里程碑 Java 构建为 3,088 tests / 84 classes，全绿；这不证明表格上传完整完成。

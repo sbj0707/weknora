@@ -5,6 +5,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -120,7 +121,15 @@ func snapshot(db *gorm.DB, k *types.Knowledge) map[string]interface{} {
 	}
 	out := []interface{}{}
 	for _, c := range chunks {
-		out = append(out, map[string]interface{}{"id": ids[c.ID], "content": c.Content, "context_header": c.ContextHeader, "index": c.ChunkIndex, "start": c.StartAt, "end": c.EndAt, "type": c.ChunkType, "parent": ids[c.ParentChunkID], "previous": ids[c.PreChunkID], "next": ids[c.NextChunkID], "enabled": c.IsEnabled, "status": c.Status, "source_locators": c.SourceLocators})
+		var storedTag sql.NullString
+		if err := db.Raw("SELECT tag_id FROM chunks WHERE id=?", c.ID).Row().Scan(&storedTag); err != nil {
+			panic(err)
+		}
+		var tag any
+		if storedTag.Valid {
+			tag = storedTag.String
+		}
+		out = append(out, map[string]interface{}{"id": ids[c.ID], "tag_id": tag, "content": c.Content, "context_header": c.ContextHeader, "index": c.ChunkIndex, "start": c.StartAt, "end": c.EndAt, "type": c.ChunkType, "parent": ids[c.ParentChunkID], "previous": ids[c.PreChunkID], "next": ids[c.NextChunkID], "enabled": c.IsEnabled, "status": c.Status, "source_locators": c.SourceLocators})
 	}
 	return map[string]interface{}{"parse_status": stored.ParseStatus, "enable_status": stored.EnableStatus, "summary_status": stored.SummaryStatus, "error": stored.ErrorMessage, "storage_size": stored.StorageSize, "pending": stored.PendingSubtasksCount, "chunks": out}
 }

@@ -178,7 +178,7 @@ func (s *ImageMultimodalService) Handle(ctx context.Context, task *asynq.Task) (
 	// capacity (asynq default MaxRetry=25 on legacy tasks).
 	drop, dropErr := s.shouldDropOrphanedMultimodal(ctx, &payload)
 	if dropErr != nil {
-		if isFinalAsynqAttempt(ctx) {
+		if isFinalAsynqAttempt(ctx) && !errors.Is(dropErr, asynq.SkipRetry) {
 			// No retry follows, so this image must still be counted or
 			// the parent never reaches post-process.
 			if err := s.checkAndFinalizeAllImages(ctx, payload); err != nil {
@@ -196,6 +196,11 @@ func (s *ImageMultimodalService) Handle(ctx context.Context, task *asynq.Task) (
 		return s.checkAndFinalizeAllImages(ctx, payload)
 	}
 
+	ctx, err := s.bindImageSource(ctx, &payload)
+	if err != nil {
+		return err
+	}
+
 	tracker := s.tracker()
 	// The trace map is shared with the per-image stage below: fields Handle
 	// knows before the pipeline starts (which VLM ran) and fields the pipeline
@@ -210,7 +215,7 @@ func (s *ImageMultimodalService) Handle(ctx context.Context, task *asynq.Task) (
 	// double-count and prematurely trigger post-process.
 	var handleErr error
 	defer func() {
-		if handleErr == nil || isFinalAsynqAttempt(ctx) {
+		if ctx.Err() == nil && !errors.Is(handleErr, errImageSourceChanged) && (handleErr == nil || isFinalAsynqAttempt(ctx)) {
 			if err := s.checkAndFinalizeAllImages(ctx, payload); err != nil && retErr == nil {
 				retErr = err
 			}
@@ -237,6 +242,13 @@ func (s *ImageMultimodalService) Handle(ctx context.Context, task *asynq.Task) (
 	}
 
 	handleErr = s.processImage(ctx, &payload, vlmModel, vlmCfg, tracker, imgOut)
+	if errors.Is(handleErr, errImageSourceChanged) {
+		// Only touch a still-owned trace; a newer parse keeps its own fan-in slots.
+		if row, err := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, payload.KnowledgeID); err == nil && row != nil && row.TenantID == payload.TenantID {
+			tracker.AbortAttempt(ctx, payload.KnowledgeID, payload.Attempt, "TASK_SUPERSEDED", "image multimodal source changed", "image multimodal source changed")
+		}
+		return nil
+	}
 	return handleErr
 }
 
@@ -301,7 +313,7 @@ func (s *ImageMultimodalService) processImage(
 		}
 		if handleErr == nil {
 			tracker.EndSpan(ctx, imgSpan, out)
-		} else if isFinalAsynqAttempt(ctx) {
+		} else if ctx.Err() == nil && !errors.Is(handleErr, errImageSourceChanged) && isFinalAsynqAttempt(ctx) {
 			tracker.FailSpan(ctx, imgSpan,
 				"MULTIMODAL_VLM_FAILED",
 				handleErr.Error(),
@@ -313,6 +325,10 @@ func (s *ImageMultimodalService) processImage(
 	// it must NEVER be handed to the HTTP downloader (which would fail with
 	// "unsupported URL scheme"). On unrecoverable read failure the image is
 	// skipped (the deferred finalize still counts it).
+	if err := checkImageSource(ctx); err != nil {
+		handleErr = err
+		return err
+	}
 	imgBytes, readErr := s.readImageBytes(ctx, *payload)
 	if readErr != nil {
 		logger.Errorf(ctx, "[ImageMultimodal] Skip unreadable image %s: %v", payload.ImageURL, readErr)
@@ -345,8 +361,16 @@ func (s *ImageMultimodalService) processImage(
 	}
 	plan := selectImageActionRounds(payload)
 	for i := 0; i < len(plan); i++ {
+		if err := checkImageSource(ctx); err != nil {
+			handleErr = err
+			return err
+		}
 		round := plan[i]
 		s.executeActionRound(ctx, payload, vlmModel, imgBytes, vlmCfg, &imageInfo, out, round)
+		if err := checkImageSource(ctx); err != nil {
+			handleErr = err
+			return err
+		}
 		// Result processor: only an observation round feeds the OCR decision.
 		if round.Contains(types.ActionObservation) {
 			ocrWanted := payload.EnableOCR && DecideOCR(imageInfo.Attrs, payload.ImageActions)
@@ -410,6 +434,10 @@ func (s *ImageMultimodalService) processImage(
 	}
 
 	// Persist chunks
+	if err := checkImageSource(ctx); err != nil {
+		handleErr = err
+		return err
+	}
 	if err := s.chunkService.GetRepository().CreateChunks(ctx, newChunks); err != nil {
 		handleErr = fmt.Errorf("create multimodal chunks: %w", err)
 		return handleErr
@@ -421,6 +449,10 @@ func (s *ImageMultimodalService) processImage(
 
 	// Index chunks so they can be retrieved
 	s.indexChunks(ctx, *payload, newChunks)
+	if err := checkImageSource(ctx); err != nil {
+		handleErr = err
+		return err
+	}
 	out["indexed"] = true
 
 	return nil
@@ -534,6 +566,7 @@ func (s *ImageMultimodalService) runImageOCR(
 func (s *ImageMultimodalService) shouldDropOrphanedMultimodal(
 	ctx context.Context, payload *types.ImageMultimodalPayload,
 ) (bool, error) {
+	aborted := false
 	if payload.KnowledgeID != "" && s.knowledgeRepo != nil {
 		k, err := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, payload.KnowledgeID)
 		if errors.Is(err, repository.ErrKnowledgeNotFound) {
@@ -542,9 +575,12 @@ func (s *ImageMultimodalService) shouldDropOrphanedMultimodal(
 		if err != nil {
 			return false, err
 		}
+		if payload.TenantID > 0 && k != nil && (k.TenantID != payload.TenantID || k.KnowledgeBaseID != payload.KnowledgeBaseID) {
+			return false, fmt.Errorf("image multimodal document binding mismatch: %w", asynq.SkipRetry)
+		}
 		switch k.ParseStatus {
 		case types.ParseStatusCancelled, types.ParseStatusDeleting:
-			return true, nil
+			aborted = true
 		}
 	}
 	if payload.KnowledgeBaseID != "" && s.kbService != nil {
@@ -555,11 +591,14 @@ func (s *ImageMultimodalService) shouldDropOrphanedMultimodal(
 		if err != nil {
 			return false, err
 		}
+		if payload.TenantID > 0 && kb != nil && kb.TenantID != payload.TenantID {
+			return false, fmt.Errorf("image multimodal knowledge base binding mismatch: %w", asynq.SkipRetry)
+		}
 		if kb == nil {
 			return true, nil
 		}
 	}
-	return false, nil
+	return aborted, nil
 }
 
 // isFinalAsynqAttempt reports whether the current task context belongs to the
@@ -654,11 +693,17 @@ func (s *ImageMultimodalService) indexChunks(ctx context.Context, payload types.
 		})
 	}
 
-	if err := engine.BatchIndex(ctx, embeddingModel, indexInfoList); err != nil {
+	if err := checkImageSource(ctx); err != nil {
+		return
+	}
+	if err := engine.BatchIndex(ctx, imageFencedEmbedder{embeddingModel}, indexInfoList); err != nil {
 		logger.Errorf(ctx, "[ImageMultimodal] Failed to index multimodal chunks: %v", err)
 		return
 	}
 
+	if err := checkImageSource(ctx); err != nil {
+		return
+	}
 	// Mark chunks as indexed.
 	// Must re-fetch from DB because the in-memory objects lack auto-generated fields
 	// (e.g. seq_id), and GORM Save would overwrite them with zero values.

@@ -260,15 +260,15 @@
       "confidence": "path_and_method"
     }
   ],
-  "go_implementation_files": 1263,
-  "go_test_files": 1190,
-  "go_test_functions": 7859,
+  "go_implementation_files": 1275,
+  "go_test_files": 1208,
+  "go_test_functions": 7885,
   "async_task_registrations": 22,
   "sync_task_registrations": 22,
   "module_count": 129,
   "status_counts": {
-    "not_started": 416,
-    "in_progress": 65,
+    "not_started": 361,
+    "in_progress": 120,
     "implemented": 1
   },
   "limitations": [

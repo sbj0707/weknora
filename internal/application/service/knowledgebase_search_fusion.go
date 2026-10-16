@@ -4,6 +4,7 @@ import (
 	"context"
 	"math"
 	"slices"
+	"strings"
 
 	"github.com/Tencent/WeKnora/internal/logger"
 	"github.com/Tencent/WeKnora/internal/types"
@@ -90,7 +91,8 @@ func sortByScoreDesc(a, b *types.IndexWithScore) int {
 	} else if a.Score < b.Score {
 		return 1
 	}
-	return 0
+	// Chunk IDs define a deterministic tie order across map/goroutine completion order.
+	return strings.Compare(a.ChunkID, b.ChunkID)
 }
 
 // deduplicateByScore deduplicates retrieval results by chunk ID, keeping the highest score

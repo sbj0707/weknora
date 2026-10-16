@@ -460,8 +460,29 @@ func (s *knowledgeTagService) ProcessIndexDelete(ctx context.Context, t *asynq.T
 			end = len(chunkIDs)
 		}
 		batch := chunkIDs[i:end]
+		// A store grant does not grant access to every chunk in that store.
+		// Tag deletion soft-deletes chunks before enqueueing this task, so this
+		// lookup deliberately includes tombstones and deleted KBs. Preserve
+		// payload order and duplicates after narrowing the owner/KB scope.
+		allowed, err := s.chunkRepo.ListChunkIDsForIndexCleanup(ctx, payload.TenantID, payload.KnowledgeBaseID, batch)
+		if err != nil {
+			return err
+		}
+		allowedSet := make(map[string]struct{}, len(allowed))
+		for _, id := range allowed {
+			allowedSet[id] = struct{}{}
+		}
+		scoped := make([]string, 0, len(batch))
+		for _, id := range batch {
+			if _, ok := allowedSet[id]; ok {
+				scoped = append(scoped, id)
+			}
+		}
+		if len(scoped) == 0 {
+			continue
+		}
 
-		if err := retrieveEngine.DeleteByChunkIDList(ctx, batch, dimension, payload.KBType); err != nil {
+		if err := retrieveEngine.DeleteByChunkIDList(ctx, scoped, dimension, payload.KBType); err != nil {
 			logger.Warnf(ctx, "Failed to delete indices for chunks batch [%d-%d]: %v", i, end, err)
 			return err
 		}

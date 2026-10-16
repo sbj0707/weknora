@@ -243,6 +243,14 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		return nil
 	}
 
+	// Span rows carry no tenant column. An orphan task must not create new
+	// trace records once its owned document no longer exists.
+	if p.KnowledgeID != "" && s.knowledgeRepo != nil {
+		if _, err := s.knowledgeRepo.GetKnowledgeByID(ctx, p.TenantID, p.KnowledgeID); errors.Is(err, repository.ErrKnowledgeNotFound) {
+			return nil
+		}
+	}
+
 	// Open a postprocess subspan keyed by chunk ordinal so the trace
 	// shows real per-chunk graph extraction time. Skipped silently when
 	// upstream didn't pass the parent attempt (legacy in-flight tasks)
@@ -262,6 +270,8 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		}
 	}
 	var handleErr error
+	superseded := false
+	bound := true
 	graphOut := types.JSONMap{}
 	defer func() {
 		// Decrement the parent's enrichment counter on terminal exit so a
@@ -270,7 +280,7 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		// payload field; legacy in-flight tasks without it are skipped.
 		finalizeSubtaskDetached(ctx, s.knowledgeRepo, p.KnowledgeID,
 			fmt.Sprintf("graph_chunk[%d]", p.ChunkIndex),
-			handleErr, false, isFinalAsynqAttempt(ctx))
+			handleErr, superseded || !bound, isFinalAsynqAttempt(ctx))
 		if gSpan == nil {
 			return
 		}
@@ -281,19 +291,23 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		}
 	}()
 
-	// Short-circuit when the parent knowledge has been cancelled / deleted.
-	// Each graph extract is per-chunk and runs one LLM call — the most
-	// expensive enrichment fan-out in the pipeline. Skipping on cancel
-	// is the whole point of the finalizing-state machinery above.
+	// Resolve the payload's owned document before exposing any chunk to the model.
+	var knowledge *types.Knowledge
 	if p.KnowledgeID != "" && s.knowledgeRepo != nil {
-		if k, kerr := s.knowledgeRepo.GetKnowledgeByIDOnly(ctx, p.KnowledgeID); kerr == nil && k != nil {
-			switch k.ParseStatus {
-			case types.ParseStatusCancelled, types.ParseStatusDeleting:
-				logger.Infof(ctx, "graph extract: knowledge %s aborted (%s), skipping chunk %s",
-					p.KnowledgeID, k.ParseStatus, p.ChunkID)
-				graphOut["skipped"] = "knowledge_" + k.ParseStatus
-				return nil
-			}
+		var kerr error
+		knowledge, kerr = s.knowledgeRepo.GetKnowledgeByID(ctx, p.TenantID, p.KnowledgeID)
+		if errors.Is(kerr, repository.ErrKnowledgeNotFound) {
+			bound = false
+			graphOut["skipped"] = "knowledge_not_found"
+			return nil
+		}
+		if kerr != nil {
+			handleErr = kerr
+			return kerr
+		}
+		if knowledge.ParseStatus == types.ParseStatusCancelled || knowledge.ParseStatus == types.ParseStatusDeleting {
+			graphOut["skipped"] = "knowledge_" + knowledge.ParseStatus
+			return nil
 		}
 	}
 
@@ -303,6 +317,24 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		handleErr = err
 		return err
 	}
+	if knowledge == nil && s.knowledgeRepo != nil {
+		knowledge, err = s.knowledgeRepo.GetKnowledgeByID(ctx, p.TenantID, chunk.KnowledgeID)
+		if err != nil {
+			bound = false
+			graphOut["skipped"] = "knowledge_not_found"
+			return nil
+		}
+	}
+	if !graphChunkBound(chunk, knowledge, p.TenantID) {
+		bound = false
+		handleErr = fmt.Errorf("graph chunk binding changed: %w", asynq.SkipRetry)
+		return handleErr
+	}
+	if knowledge.ParseStatus == types.ParseStatusCancelled || knowledge.ParseStatus == types.ParseStatusDeleting {
+		graphOut["skipped"] = "knowledge_" + knowledge.ParseStatus
+		return nil
+	}
+	contentRevision := chunk.ContentRevision
 	// Capture chunk content shape on output — lets traces answer "WHAT
 	// did the LLM call see?" without joining back to the chunk store.
 	// Preview is truncated to keep span rows reasonable.
@@ -315,6 +347,12 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		logger.Errorf(ctx, "failed to get knowledge base: %v", err)
 		handleErr = err
 		return err
+	}
+
+	if kb.TenantID != p.TenantID {
+		bound = false
+		handleErr = fmt.Errorf("graph knowledge base binding changed: %w", asynq.SkipRetry)
+		return handleErr
 	}
 
 	var processOverrides *types.KnowledgeProcessOverrides
@@ -342,8 +380,7 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 	}
 
 	template := &types.PromptTemplateStructured{
-		Description: types.AppendCustomPromptInstructions(
-			s.template.Description, extractCfg.CustomInstructions, "graph_extraction"),
+		Description: graphExtractionPromptDescription(s.template.Description, &extractCfg),
 		Tags: extractCfg.Tags,
 		Examples: []types.GraphData{
 			{
@@ -354,17 +391,49 @@ func (s *ChunkExtractService) Handle(ctx context.Context, t *asynq.Task) error {
 		},
 	}
 	extractor := chatpipeline.NewExtractor(chatModel, template)
-	graph, err := extractor.Extract(ctx, chunk.Content)
-	if err != nil {
-		handleErr = err
-		return err
-	}
+	graph, extractErr := extractor.Extract(ctx, chunk.Content)
 
+	// Provider latency is an untrusted window: do not publish into a cancelled,
+	// superseded or edited document after the model response returns.
+	if attemptSuperseded(ctx, s.tracker(), p.KnowledgeID, p.Attempt) {
+		superseded = true
+		graphOut["skipped"] = "attempt_superseded"
+		return nil
+	}
+	currentKnowledge, kerr := s.knowledgeRepo.GetKnowledgeByID(ctx, p.TenantID, knowledge.ID)
+	if errors.Is(kerr, repository.ErrKnowledgeNotFound) {
+		bound = false
+		graphOut["skipped"] = "knowledge_not_found"
+		return nil
+	}
+	if kerr != nil {
+		handleErr = kerr
+		return kerr
+	}
+	if currentKnowledge.ParseStatus == types.ParseStatusCancelled || currentKnowledge.ParseStatus == types.ParseStatusDeleting {
+		graphOut["skipped"] = "knowledge_" + currentKnowledge.ParseStatus
+		return nil
+	}
 	chunk, err = s.chunkRepo.GetChunkByID(ctx, p.TenantID, p.ChunkID)
 	if err != nil {
 		logger.Warnf(ctx, "graph ignore chunk %s: %v", p.ChunkID, err)
 		graphOut["skipped"] = "chunk_disappeared"
 		return nil
+	}
+
+	if !graphChunkBound(chunk, currentKnowledge, p.TenantID) || currentKnowledge.KnowledgeBaseID != knowledge.KnowledgeBaseID {
+		bound = false
+		handleErr = fmt.Errorf("graph chunk binding changed: %w", asynq.SkipRetry)
+		return handleErr
+	}
+	if chunk.ContentRevision != contentRevision {
+		graphOut["skipped"] = "chunk_changed"
+		return nil
+	}
+
+	if extractErr != nil {
+		handleErr = extractErr
+		return extractErr
 	}
 
 	for _, node := range graph.Node {

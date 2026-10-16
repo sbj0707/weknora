@@ -31,7 +31,7 @@ def write_json(name: str, data: object) -> None:
 
 def csv_write(name: str, rows: list[dict], fields: list[str]) -> None:
     with (OUT / name).open("w", newline="") as f:
-        writer = csv.DictWriter(f, fields)
+        writer = csv.DictWriter(f, fields, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({k: json.dumps(row.get(k), ensure_ascii=False) if isinstance(row.get(k), (list, dict)) else row.get(k, "") for k in fields})

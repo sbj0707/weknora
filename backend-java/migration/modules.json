@@ -125,6 +125,7 @@
     ],
     "service_repository_candidates": [
       "internal/application/repository/chunk.go",
+      "internal/application/repository/chunk_edit_state.go",
       "internal/application/repository/chunk_image_assets.go",
       "internal/application/repository/chunk_wiki_detail.go",
       "internal/application/repository/retriever/neo4j/chunk_detail.go",
@@ -132,6 +133,8 @@
       "internal/application/repository/retriever/sqlite/chunk_detail.go",
       "internal/application/service/chunk.go",
       "internal/application/service/chunk_detail.go",
+      "internal/application/service/chunk_edit_binding.go",
+      "internal/application/service/chunk_question_regenerate_binding.go",
       "internal/application/service/chunk_write.go",
       "internal/application/service/image_chunk_owner.go",
       "internal/application/service/retriever/chunk_detail.go"
@@ -166,128 +169,153 @@
             "code": "if err := r.db.WithContext(ctx).Where(\"tenant_id = ? AND seq_id = ?\", tenantID, seqID).First(&chunk).Error; err != nil {"
           },
           {
-            "line": 143,
+            "line": 145,
+            "code": "Where(\"EXISTS (SELECT 1 FROM knowledge_bases kb WHERE kb.id = chunks.knowledge_base_id AND kb.tenant_id = ?)\", tenantID)."
+          },
+          {
+            "line": 156,
             "code": "if err := r.db.WithContext(ctx).Where(\"id IN ?\", ids).Find(&chunks).Error; err != nil {"
           },
           {
-            "line": 348,
+            "line": 361,
             "code": "Order(\"chunk_index DESC\").Limit(before).Find(&preceding).Error; err != nil {"
           },
           {
-            "line": 354,
+            "line": 367,
             "code": "Order(\"chunk_index ASC\").Limit(after).Find(&following).Error; err != nil {"
           },
           {
-            "line": 404,
+            "line": 417,
             "code": "return r.db.WithContext(ctx).Omit(\"SeqID\").Save(chunk).Error"
           },
           {
-            "line": 408,
+            "line": 421,
             "code": "return r.db.WithContext(ctx).Create(revision).Error"
           },
           {
-            "line": 414,
+            "line": 427,
             "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
           },
           {
-            "line": 434,
+            "line": 447,
             "code": "return tx.Create(revision).Error"
           },
           {
-            "line": 444,
+            "line": 457,
             "code": "Order(\"revision DESC\").Find(&revisions).Error"
           },
           {
-            "line": 458,
+            "line": 471,
             "code": "// SaveChunks persists full chunk objects in a single transaction using GORM Save (UPDATE)."
           },
           {
-            "line": 463,
+            "line": 476,
             "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
           },
           {
-            "line": 465,
+            "line": 478,
             "code": "if err := tx.Omit(\"SeqID\").Save(chunk).Error; err != nil {"
           },
           {
-            "line": 494,
+            "line": 507,
             "code": "// run one small UPDATE per row inside a single transaction, which is also"
           },
           {
-            "line": 501,
+            "line": 514,
             "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
           },
           {
-            "line": 523,
+            "line": 536,
             "code": "// updateChunksPostgres issues a single UPDATE ... FROM (VALUES ...) statement."
           },
           {
-            "line": 542,
+            "line": 555,
             "code": "UPDATE chunks AS c SET"
           },
           {
-            "line": 553,
+            "line": 566,
             "code": "return tx.Exec(sql, args...).Error"
           },
           {
-            "line": 578,
+            "line": 591,
             "code": "// with one UPDATE per batch of IDs. Use it for uniform state transitions"
           },
           {
-            "line": 597,
+            "line": 610,
             "code": "return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {"
           },
           {
-            "line": 616,
+            "line": 629,
             "code": "return r.db.WithContext(ctx).Where(\"tenant_id = ? AND id = ?\", tenantID, id).Delete(&types.Chunk{}).Error"
           },
           {
-            "line": 631,
+            "line": 644,
             "code": "if err := r.db.WithContext(ctx).Where(\"tenant_id = ? AND id IN ?\", tenantID, ids[i:end]).Delete(&types.Chunk{}).Error; err != nil {"
           },
           {
-            "line": 642,
+            "line": 655,
             "code": ").Delete(&types.Chunk{}).Error"
           },
           {
-            "line": 663,
+            "line": 676,
             "code": ").Delete(&types.Chunk{}).Error"
           },
           {
-            "line": 711,
+            "line": 724,
             "code": "if err := r.db.WithContext(ctx).Where(\"id IN ?\", batch).Delete(&types.Chunk{}).Error; err != nil {"
           },
           {
-            "line": 883,
+            "line": 896,
             "code": "\"SELECT 1 FROM jsonb_array_elements_text(\"+"
           },
           {
-            "line": 890,
+            "line": 903,
             "code": "\"SELECT 1 FROM json_each(\"+"
           },
           {
-            "line": 898,
+            "line": 911,
             "code": "if err := db.Limit(1).Find(&chunk).Error; err != nil {"
           },
           {
-            "line": 1018,
+            "line": 1031,
             "code": "UPDATE chunks"
           },
           {
-            "line": 1031,
+            "line": 1044,
             "code": "return r.db.WithContext(ctx).Exec(sql, args...).Error"
           },
           {
-            "line": 1101,
+            "line": 1114,
             "code": "updates[\"flags\"] = r.db.Raw(flagsExpr)"
           },
           {
-            "line": 1104,
+            "line": 1117,
             "code": "if err := query.Updates(updates).Error; err != nil {"
           },
           {
-            "line": 1138,
+            "line": 1151,
             "code": "if err := query.Find(&batch).Error; err != nil {"
+          }
+        ]
+      },
+      {
+        "source": "internal/application/repository/chunk_edit_state.go",
+        "calls": [
+          {
+            "line": 12,
+            "code": "result := r.db.WithContext(ctx).Exec(`UPDATE chunks SET metadata=?,source_content=?,parent_chunk_id=?,updated_at=?"
+          },
+          {
+            "line": 16,
+            "code": "AND EXISTS(SELECT 1 FROM knowledges k JOIN knowledge_bases b ON b.id=k.knowledge_base_id"
+          },
+          {
+            "line": 34,
+            "code": "result := r.db.WithContext(ctx).Exec(`UPDATE chunks SET index_status=?,updated_at=?"
+          },
+          {
+            "line": 37,
+            "code": "AND EXISTS(SELECT 1 FROM knowledges k JOIN knowledge_bases b ON b.id=k.knowledge_base_id"
           }
         ]
       },
@@ -329,7 +357,7 @@
           },
           {
             "line": 18,
-            "code": "(SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, ?) = ?))`, chunkID, docID, len(prefix), prefix)"
+            "code": "(SELECT 1 FROM json_each(wiki_pages.source_refs) WHERE value = ? OR substr(value, 1, length(?)) = ?))`, chunkID, docID, prefix, prefix)"
           },
           {
             "line": 28,
@@ -905,6 +933,7 @@
       "internal/application/service/image_attr_decision.go",
       "internal/application/service/image_chunk_owner.go",
       "internal/application/service/image_multimodal.go",
+      "internal/application/service/image_multimodal_binding.go",
       "internal/application/service/knowledge_faq_import.go",
       "internal/application/service/multimodal_pending_counter.go",
       "internal/application/service/tenant_skill_runtime_verify.go"
@@ -988,6 +1017,8 @@
       "internal/application/service/custom_agent_suggestion_limit_test.go",
       "internal/application/service/image_chunk_owner_test.go",
       "internal/application/service/image_multimodal_attrs_test.go",
+      "internal/application/service/image_multimodal_binding_test.go",
+      "internal/application/service/image_multimodal_fanout_oracle_test.go",
       "internal/application/service/image_multimodal_orphan_test.go",
       "internal/application/service/image_multimodal_prompt_test.go",
       "internal/application/service/knowledge_bind_stored_images_test.go",
@@ -1049,6 +1080,7 @@
       "internal/application/service/image_attr_decision.go",
       "internal/application/service/image_chunk_owner.go",
       "internal/application/service/image_multimodal.go",
+      "internal/application/service/image_multimodal_binding.go",
       "internal/application/service/knowledge_faq_import.go",
       "internal/application/service/multimodal_pending_counter.go",
       "internal/application/service/tenant_skill_runtime_verify.go"
@@ -1132,6 +1164,8 @@
       "internal/application/service/custom_agent_suggestion_limit_test.go",
       "internal/application/service/image_chunk_owner_test.go",
       "internal/application/service/image_multimodal_attrs_test.go",
+      "internal/application/service/image_multimodal_binding_test.go",
+      "internal/application/service/image_multimodal_fanout_oracle_test.go",
       "internal/application/service/image_multimodal_orphan_test.go",
       "internal/application/service/image_multimodal_prompt_test.go",
       "internal/application/service/knowledge_bind_stored_images_test.go",
@@ -1194,6 +1228,7 @@
       "internal/application/service/knowledgebase_access.go",
       "internal/application/service/knowledgebase_profile.go",
       "internal/application/service/knowledgebase_search.go",
+      "internal/application/service/knowledgebase_search_binding.go",
       "internal/application/service/knowledgebase_search_fanout.go",
       "internal/application/service/knowledgebase_search_faq.go",
       "internal/application/service/knowledgebase_search_fusion.go",
@@ -1244,11 +1279,11 @@
             "code": "return r.db.WithContext(ctx).Save(kb).Error"
           },
           {
-            "line": 198,
+            "line": 209,
             "code": "return r.db.WithContext(ctx).Where(\"id = ?\", id).Delete(&types.KnowledgeBase{}).Error"
           },
           {
-            "line": 257,
+            "line": 268,
             "code": "if err := query.Order(\"name ASC, id ASC\").Limit(types.ModelUsageListLimit).Find(&rows).Error; err != nil {"
           }
         ]
@@ -1291,11 +1326,13 @@
     ],
     "tests_candidates": [
       "internal/application/access/knowledgebase_test.go",
+      "internal/application/repository/knowledgebase_profile_owner_test.go",
       "internal/application/repository/knowledgebase_sqlite_test.go",
       "internal/application/service/knowledgebase_delete_datasource_test.go",
       "internal/application/service/knowledgebase_image_config_test.go",
       "internal/application/service/knowledgebase_pr3_test.go",
       "internal/application/service/knowledgebase_profile_test.go",
+      "internal/application/service/knowledgebase_search_binding_test.go",
       "internal/application/service/knowledgebase_search_budget_test.go",
       "internal/application/service/knowledgebase_search_dimension_test.go",
       "internal/application/service/knowledgebase_search_embedding_kb_test.go",
@@ -1414,6 +1451,7 @@
       "internal/application/service/knowledgebase_access.go",
       "internal/application/service/knowledgebase_profile.go",
       "internal/application/service/knowledgebase_search.go",
+      "internal/application/service/knowledgebase_search_binding.go",
       "internal/application/service/knowledgebase_search_fanout.go",
       "internal/application/service/knowledgebase_search_faq.go",
       "internal/application/service/knowledgebase_search_fusion.go",
@@ -1464,11 +1502,11 @@
             "code": "return r.db.WithContext(ctx).Save(kb).Error"
           },
           {
-            "line": 198,
+            "line": 209,
             "code": "return r.db.WithContext(ctx).Where(\"id = ?\", id).Delete(&types.KnowledgeBase{}).Error"
           },
           {
-            "line": 257,
+            "line": 268,
             "code": "if err := query.Order(\"name ASC, id ASC\").Limit(types.ModelUsageListLimit).Find(&rows).Error; err != nil {"
           }
         ]
@@ -1511,11 +1549,13 @@
     ],
     "tests_candidates": [
       "internal/application/access/knowledgebase_test.go",
+      "internal/application/repository/knowledgebase_profile_owner_test.go",
       "internal/application/repository/knowledgebase_sqlite_test.go",
       "internal/application/service/knowledgebase_delete_datasource_test.go",
       "internal/application/service/knowledgebase_image_config_test.go",
       "internal/application/service/knowledgebase_pr3_test.go",
       "internal/application/service/knowledgebase_profile_test.go",
+      "internal/application/service/knowledgebase_search_binding_test.go",
       "internal/application/service/knowledgebase_search_budget_test.go",
       "internal/application/service/knowledgebase_search_dimension_test.go",
       "internal/application/service/knowledgebase_search_embedding_kb_test.go",
@@ -1577,12 +1617,17 @@
       "internal/application/service/knowledge_faq_batch.go",
       "internal/application/service/knowledge_faq_create_guard.go",
       "internal/application/service/knowledge_faq_import.go",
+      "internal/application/service/knowledge_graph_binding.go",
+      "internal/application/service/knowledge_graph_prompt.go",
       "internal/application/service/knowledge_housekeeping.go",
       "internal/application/service/knowledge_index_content.go",
       "internal/application/service/knowledge_index_status.go",
+      "internal/application/service/knowledge_manual_binding.go",
       "internal/application/service/knowledge_post_process.go",
       "internal/application/service/knowledge_process.go",
       "internal/application/service/knowledge_process_config.go",
+      "internal/application/service/knowledge_process_table_cleanup.go",
+      "internal/application/service/knowledge_question_binding.go",
       "internal/application/service/knowledge_reparse_scope.go",
       "internal/application/service/knowledge_replace.go",
       "internal/application/service/knowledge_source_locators.go",
@@ -1596,6 +1641,7 @@
       "internal/application/service/knowledgebase_access.go",
       "internal/application/service/knowledgebase_profile.go",
       "internal/application/service/knowledgebase_search.go",
+      "internal/application/service/knowledgebase_search_binding.go",
       "internal/application/service/knowledgebase_search_fanout.go",
       "internal/application/service/knowledgebase_search_faq.go",
       "internal/application/service/knowledgebase_search_fusion.go",
@@ -1804,11 +1850,11 @@
             "code": "return r.db.WithContext(ctx).Save(kb).Error"
           },
           {
-            "line": 198,
+            "line": 209,
             "code": "return r.db.WithContext(ctx).Where(\"id = ?\", id).Delete(&types.KnowledgeBase{}).Error"
           },
           {
-            "line": 257,
+            "line": 268,
             "code": "if err := query.Order(\"name ASC, id ASC\").Limit(types.ModelUsageListLimit).Find(&rows).Error; err != nil {"
           }
         ]
@@ -1920,15 +1966,15 @@
         "source": "internal/application/service/knowledge_post_process.go",
         "calls": [
           {
-            "line": 564,
+            "line": 567,
             "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
           },
           {
-            "line": 596,
+            "line": 599,
             "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
           },
           {
-            "line": 692,
+            "line": 695,
             "code": "if _, err := s.taskEnqueuer.Enqueue(task); err != nil {"
           }
         ]
@@ -1937,19 +1983,19 @@
         "source": "internal/application/service/knowledge_process.go",
         "calls": [
           {
-            "line": 2848,
+            "line": 2940,
             "code": "info, err := s.task.Enqueue(task)"
           },
           {
-            "line": 2902,
+            "line": 2994,
             "code": "info, err := s.task.Enqueue(task)"
           },
           {
-            "line": 2953,
+            "line": 3045,
             "code": "info, err := s.task.Enqueue(task)"
           },
           {
-            "line": 4326,
+            "line": 4451,
             "code": "if _, err := s.task.Enqueue(task); err != nil {"
           }
         ]
@@ -1980,7 +2026,7 @@
         "source": "internal/application/service/knowledge_summary_refresh.go",
         "calls": [
           {
-            "line": 133,
+            "line": 140,
             "code": "if _, err = taskEnqueuer.Enqueue(task); err != nil {"
           }
         ]
@@ -2050,6 +2096,7 @@
       "internal/application/repository/knowledge_span_repo_test.go",
       "internal/application/repository/knowledge_tag_test.go",
       "internal/application/repository/knowledge_transfer_test.go",
+      "internal/application/repository/knowledgebase_profile_owner_test.go",
       "internal/application/repository/knowledgebase_sqlite_test.go",
       "internal/application/repository/retriever/postgres/chunk_detail_test.go",
       "internal/application/repository/retriever/sqlite/chunk_detail_test.go",
@@ -2068,12 +2115,17 @@
       "internal/application/service/knowledge_delete_test.go",
       "internal/application/service/knowledge_faq_create_guard_test.go",
       "internal/application/service/knowledge_faq_sanitize_test.go",
+      "internal/application/service/knowledge_fileurl_java_parity_test.go",
       "internal/application/service/knowledge_folder_move_test.go",
+      "internal/application/service/knowledge_graph_binding_test.go",
+      "internal/application/service/knowledge_graph_prompt_test.go",
       "internal/application/service/knowledge_housekeeping_stranded_test.go",
       "internal/application/service/knowledge_housekeeping_test.go",
       "internal/application/service/knowledge_image_cleanup_test.go",
       "internal/application/service/knowledge_index_content_test.go",
+      "internal/application/service/knowledge_index_java_parity_test.go",
       "internal/application/service/knowledge_index_status_test.go",
+      "internal/application/service/knowledge_manual_binding_test.go",
       "internal/application/service/knowledge_manual_test.go",
       "internal/application/service/knowledge_move_gate_test.go",
       "internal/application/service/knowledge_move_wiki_test.go",
@@ -2087,6 +2139,9 @@
       "internal/application/service/knowledge_process_embedding_failure_test.go",
       "internal/application/service/knowledge_process_parent_child_test.go",
       "internal/application/service/knowledge_process_status_test.go",
+      "internal/application/service/knowledge_process_table_cleanup_test.go",
+      "internal/application/service/knowledge_question_binding_test.go",
+      "internal/application/service/knowledge_question_post_binding_test.go",
       "internal/application/service/knowledge_reparse_dequeue_test.go",
       "internal/application/service/knowledge_reparse_test.go",
       "internal/application/service/knowledge_replace_test.go",
@@ -2115,6 +2170,7 @@
       "internal/application/service/knowledgebase_image_config_test.go",
       "internal/application/service/knowledgebase_pr3_test.go",
       "internal/application/service/knowledgebase_profile_test.go",
+      "internal/application/service/knowledgebase_search_binding_test.go",
       "internal/application/service/knowledgebase_search_budget_test.go",
       "internal/application/service/knowledgebase_search_dimension_test.go",
       "internal/application/service/knowledgebase_search_embedding_kb_test.go",
@@ -2266,7 +2322,7 @@
     "database_audit_status": "pending",
     "task_dependency_audit_status": "pending; consult tasks.json and Enqueue evidence",
     "external_dependency_audit_status": "pending",
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "module": "RegisterMCPEndpointRoutes",
@@ -4512,7 +4568,7 @@
     "database_audit_status": "pending",
     "task_dependency_audit_status": "pending; consult tasks.json and Enqueue evidence",
     "external_dependency_audit_status": "pending",
-    "status": "not_started"
+    "status": "in_progress"
   },
   {
     "module": "RegisterWeKnoraCloudRoutes",
@@ -4748,47 +4804,59 @@
             "code": "if err := query.Find(&pages).Error; err != nil {"
           },
           {
-            "line": 652,
+            "line": 514,
+            "code": "Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)"
+          },
+          {
+            "line": 516,
+            "code": "sourceKnowledgeID, sourceKnowledgeID+\"|\", sourceKnowledgeID+\"|\").Find(&pages).Error"
+          },
+          {
+            "line": 569,
+            "code": "Where(`EXISTS (SELECT 1 FROM json_each(wiki_pages.source_refs)"
+          },
+          {
+            "line": 680,
             "code": "return r.db.WithContext(ctx).Create(folder).Error"
           },
           {
-            "line": 734,
+            "line": 762,
             "code": "result := r.db.WithContext(ctx).Exec(`"
           },
           {
-            "line": 735,
+            "line": 763,
             "code": "UPDATE wiki_folders"
           },
           {
-            "line": 739,
+            "line": 767,
             "code": "SELECT 1 FROM wiki_pages"
           },
           {
-            "line": 743,
+            "line": 771,
             "code": "SELECT 1 FROM wiki_folders AS child"
           },
           {
-            "line": 790,
+            "line": 818,
             "code": "if err := q.Group(\"folder_id\").Scan(&rows).Error; err != nil {"
           },
           {
-            "line": 885,
+            "line": 913,
             "code": "if err := q.Scan(&rows).Error; err != nil {"
           },
           {
-            "line": 992,
+            "line": 1020,
             "code": "if err := q.Find(&pages).Error; err != nil {"
           },
           {
-            "line": 1270,
+            "line": 1298,
             "code": "// queries auto-filter deleted_at IS NULL, so this is a one-shot UPDATE."
           },
           {
-            "line": 1457,
+            "line": 1485,
             "code": "return r.db.WithContext(ctx).Create(issue).Error"
           },
           {
-            "line": 1470,
+            "line": 1498,
             "code": "if err := query.Order(\"created_at DESC\").Find(&issues).Error; err != nil {"
           }
         ]
@@ -5679,6 +5747,7 @@
       "internal/application/repository/agent_share.go",
       "internal/application/repository/audit_log.go",
       "internal/application/repository/chunk.go",
+      "internal/application/repository/chunk_edit_state.go",
       "internal/application/repository/chunk_image_assets.go",
       "internal/application/repository/chunk_wiki_detail.go",
       "internal/application/repository/custom_agent.go",
@@ -5805,6 +5874,7 @@
       "internal/application/repository/knowledge_span_repo_test.go",
       "internal/application/repository/knowledge_tag_test.go",
       "internal/application/repository/knowledge_transfer_test.go",
+      "internal/application/repository/knowledgebase_profile_owner_test.go",
       "internal/application/repository/knowledgebase_sqlite_test.go",
       "internal/application/repository/like_escape_sqlite_test.go",
       "internal/application/repository/mcp_metadata_test.go",
@@ -5833,6 +5903,7 @@
       "internal/application/repository/retriever/milvus/move_test.go",
       "internal/application/repository/retriever/milvus/repository_test.go",
       "internal/application/repository/retriever/milvus/score_test.go",
+      "internal/application/repository/retriever/neo4j/graph_search_scope_test.go",
       "internal/application/repository/retriever/neo4j/repository_test.go",
       "internal/application/repository/retriever/opensearch/audit_config_test.go",
       "internal/application/repository/retriever/opensearch/copy_bulk_test.go",
@@ -5863,7 +5934,8 @@
       "internal/application/repository/tenant_skill_test.go",
       "internal/application/repository/tenant_test.go",
       "internal/application/repository/user_tenantless_test.go",
-      "internal/application/repository/wiki_page_test.go"
+      "internal/application/repository/wiki_page_test.go",
+      "internal/application/repository/wiki_source_ref_sqlite_test.go"
     ],
     "database_audit_status": "pending",
     "task_dependency_audit_status": "pending",
@@ -5892,6 +5964,7 @@
       "internal/application/service/chat_pipeline/data_analysis.go",
       "internal/application/service/chat_pipeline/extract_entity.go",
       "internal/application/service/chat_pipeline/filter_top_k.go",
+      "internal/application/service/chat_pipeline/graph_query_scope.go",
       "internal/application/service/chat_pipeline/into_chat_message.go",
       "internal/application/service/chat_pipeline/load_history.go",
       "internal/application/service/chat_pipeline/memory_affinity.go",
@@ -5913,6 +5986,8 @@
       "internal/application/service/chat_pipeline/wiki_boost.go",
       "internal/application/service/chunk.go",
       "internal/application/service/chunk_detail.go",
+      "internal/application/service/chunk_edit_binding.go",
+      "internal/application/service/chunk_question_regenerate_binding.go",
       "internal/application/service/chunk_write.go",
       "internal/application/service/custom_agent.go",
       "internal/application/service/dataset.go",
@@ -5949,6 +6024,7 @@
       "internal/application/service/image_attr_decision.go",
       "internal/application/service/image_chunk_owner.go",
       "internal/application/service/image_multimodal.go",
+      "internal/application/service/image_multimodal_binding.go",
       "internal/application/service/kb_activity.go",
       "internal/application/service/kbshare.go",
       "internal/application/service/knowledge.go",
@@ -5961,12 +6037,17 @@
       "internal/application/service/knowledge_faq_batch.go",
       "internal/application/service/knowledge_faq_create_guard.go",
       "internal/application/service/knowledge_faq_import.go",
+      "internal/application/service/knowledge_graph_binding.go",
+      "internal/application/service/knowledge_graph_prompt.go",
       "internal/application/service/knowledge_housekeeping.go",
       "internal/application/service/knowledge_index_content.go",
       "internal/application/service/knowledge_index_status.go",
+      "internal/application/service/knowledge_manual_binding.go",
       "internal/application/service/knowledge_post_process.go",
       "internal/application/service/knowledge_process.go",
       "internal/application/service/knowledge_process_config.go",
+      "internal/application/service/knowledge_process_table_cleanup.go",
+      "internal/application/service/knowledge_question_binding.go",
       "internal/application/service/knowledge_reparse_scope.go",
       "internal/application/service/knowledge_replace.go",
       "internal/application/service/knowledge_source_locators.go",
@@ -5980,6 +6061,7 @@
       "internal/application/service/knowledgebase_access.go",
       "internal/application/service/knowledgebase_profile.go",
       "internal/application/service/knowledgebase_search.go",
+      "internal/application/service/knowledgebase_search_binding.go",
       "internal/application/service/knowledgebase_search_fanout.go",
       "internal/application/service/knowledgebase_search_faq.go",
       "internal/application/service/knowledgebase_search_fusion.go",
@@ -6028,6 +6110,7 @@
       "internal/application/service/retriever/factory.go",
       "internal/application/service/retriever/index_status.go",
       "internal/application/service/retriever/keywords_vector_hybrid_indexer.go",
+      "internal/application/service/retriever/manual_batch_order.go",
       "internal/application/service/retriever/normalizer.go",
       "internal/application/service/retriever/ownership.go",
       "internal/application/service/retriever/registry.go",
@@ -6154,6 +6237,7 @@
       "internal/application/service/chat_pipeline/rerank_test.go",
       "internal/application/service/chat_pipeline/search_entity_scope_test.go",
       "internal/application/service/chat_pipeline/search_error_test.go",
+      "internal/application/service/chat_pipeline/search_parallel_scope_test.go",
       "internal/application/service/chunk_detail_test.go",
       "internal/application/service/chunk_edit_parent_test.go",
       "internal/application/service/custom_agent_api_key_scope_test.go",
@@ -6196,6 +6280,8 @@
       "internal/application/service/html_table_normalize_wiring_test.go",
       "internal/application/service/image_chunk_owner_test.go",
       "internal/application/service/image_multimodal_attrs_test.go",
+      "internal/application/service/image_multimodal_binding_test.go",
+      "internal/application/service/image_multimodal_fanout_oracle_test.go",
       "internal/application/service/image_multimodal_orphan_test.go",
       "internal/application/service/image_multimodal_prompt_test.go",
       "internal/application/service/kb_activity_test.go",
@@ -6214,12 +6300,17 @@
       "internal/application/service/knowledge_delete_test.go",
       "internal/application/service/knowledge_faq_create_guard_test.go",
       "internal/application/service/knowledge_faq_sanitize_test.go",
+      "internal/application/service/knowledge_fileurl_java_parity_test.go",
       "internal/application/service/knowledge_folder_move_test.go",
+      "internal/application/service/knowledge_graph_binding_test.go",
+      "internal/application/service/knowledge_graph_prompt_test.go",
       "internal/application/service/knowledge_housekeeping_stranded_test.go",
       "internal/application/service/knowledge_housekeeping_test.go",
       "internal/application/service/knowledge_image_cleanup_test.go",
       "internal/application/service/knowledge_index_content_test.go",
+      "internal/application/service/knowledge_index_java_parity_test.go",
       "internal/application/service/knowledge_index_status_test.go",
+      "internal/application/service/knowledge_manual_binding_test.go",
       "internal/application/service/knowledge_manual_test.go",
       "internal/application/service/knowledge_move_gate_test.go",
       "internal/application/service/knowledge_move_wiki_test.go",
@@ -6233,6 +6324,9 @@
       "internal/application/service/knowledge_process_embedding_failure_test.go",
       "internal/application/service/knowledge_process_parent_child_test.go",
       "internal/application/service/knowledge_process_status_test.go",
+      "internal/application/service/knowledge_process_table_cleanup_test.go",
+      "internal/application/service/knowledge_question_binding_test.go",
+      "internal/application/service/knowledge_question_post_binding_test.go",
       "internal/application/service/knowledge_reparse_dequeue_test.go",
       "internal/application/service/knowledge_reparse_test.go",
       "internal/application/service/knowledge_replace_test.go",
@@ -6261,6 +6355,7 @@
       "internal/application/service/knowledgebase_image_config_test.go",
       "internal/application/service/knowledgebase_pr3_test.go",
       "internal/application/service/knowledgebase_profile_test.go",
+      "internal/application/service/knowledgebase_search_binding_test.go",
       "internal/application/service/knowledgebase_search_budget_test.go",
       "internal/application/service/knowledgebase_search_dimension_test.go",
       "internal/application/service/knowledgebase_search_embedding_kb_test.go",
@@ -6329,6 +6424,7 @@
       "internal/application/service/retriever/normalizer_test.go",
       "internal/application/service/retriever/registry_rehydrate_test.go",
       "internal/application/service/retriever/registry_test.go",
+      "internal/application/service/retriever/vector_store_lifecycle_oracle_test.go",
       "internal/application/service/sandbox_desktop_last_test.go",
       "internal/application/service/sandbox_desktop_service_test.go",
       "internal/application/service/sandbox_desktop_ticket_test.go",
@@ -6540,6 +6636,7 @@
       "internal/container/sandbox_test.go",
       "internal/container/ssrf_test.go",
       "internal/container/storagebackend_migration_test.go",
+      "internal/container/vector_store_es_context_oracle_test.go",
       "internal/container/vector_store_whitelist_only_test.go"
     ],
     "database_audit_status": "pending",
@@ -7727,6 +7824,7 @@
       "internal/router/task_delete_scope_test.go",
       "internal/router/task_inspector_errors_test.go",
       "internal/router/task_inspector_kb_cancel_test.go",
+      "internal/router/task_inspector_kb_scope_oracle_test.go",
       "internal/router/task_inspector_queued_ids_test.go",
       "internal/router/task_inspector_runtime_test.go",
       "internal/router/task_processing_scope_test.go"

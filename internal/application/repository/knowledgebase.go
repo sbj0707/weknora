@@ -181,16 +181,27 @@ func (r *knowledgeBaseRepository) UpdateKnowledgeBaseGeneratedProfile(
 	if id == "" {
 		return errors.New("knowledge base ID cannot be empty")
 	}
+	owner, ok := types.TenantIDFromContext(ctx)
+	if !ok || owner == 0 {
+		return errors.New("knowledge base profile owner is required")
+	}
 	var value interface{}
 	if profile != nil {
 		value = *profile
 	}
-	return r.db.WithContext(ctx).Model(&types.KnowledgeBase{}).
-		Where("id = ?", id).
+	result := r.db.WithContext(ctx).Model(&types.KnowledgeBase{}).
+		Where("id = ? AND tenant_id = ?", id, owner).
 		Updates(map[string]interface{}{
 			"generated_profile": value,
 			"updated_at":        time.Now(),
-		}).Error
+		})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return ErrKnowledgeBaseNotFound
+	}
+	return nil
 }
 
 // DeleteKnowledgeBase deletes a knowledge base

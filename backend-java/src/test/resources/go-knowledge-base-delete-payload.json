@@ -1,0 +1,960 @@
+[
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "unexpected end of JSON input",
+    "name": "empty",
+    "raw": ""
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "unexpected end of JSON input",
+    "name": "malformed",
+    "raw": "{"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "null",
+    "raw": "null"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "object",
+    "raw": "{}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go value of type types.KBDeletePayload",
+    "name": "array",
+    "raw": "[]"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "invalid character '{' after top-level value",
+    "name": "trailing",
+    "raw": "{}{}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 1,
+      "knowledge_base_id": "kb",
+      "data_source_ids": [
+        "source",
+        ""
+      ],
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "error": "",
+    "name": "casefold",
+    "raw": "{\"TENANT_ID\":1,\"KNOWLEDGE_BASE_ID\":\"kb\",\"DATA_SOURCE_IDS\":[\"source\",null],\"EFFECTIVE_ENGINES\":[{\"RETRIEVER_ENGINE_TYPE\":\"sqlite\",\"RETRIEVER_TYPE\":\"vector\"}]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "kb",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "duplicate-null",
+    "raw": "{\"knowledge_base_id\":\"kb\",\"knowledge_base_id\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 1,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal string into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "duplicate-error",
+    "raw": "{\"tenant_id\":\"bad\",\"tenant_id\":1}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "data_source_ids": [
+        "b",
+        ""
+      ],
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "duplicate-slice",
+    "raw": "{\"data_source_ids\":[\"a\"],\"data_source_ids\":[\"b\",null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "duplicate-pointer",
+    "raw": "{\"vector_store_id\":\"one\",\"vector_store_id\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": "two"
+    },
+    "error": "",
+    "name": "duplicate-pointer-string",
+    "raw": "{\"vector_store_id\":\"one\",\"vector_store_id\":\"two\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "keywords"
+        }
+      ]
+    },
+    "error": "",
+    "name": "duplicate-engines",
+    "raw": "{\"effective_engines\":[{\"retriever_engine_type\":\"sqlite\"}],\"effective_engines\":[{\"retriever_type\":\"keywords\"}]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "",
+          "retriever_type": ""
+        }
+      ]
+    },
+    "error": "",
+    "name": "null-engine",
+    "raw": "{\"effective_engines\":[null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "data_source_ids": [
+        "source"
+      ],
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "duplicate-source-null",
+    "raw": "{\"data_source_ids\":[\"source\"],\"data_source_ids\":[null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "data_source_ids": [
+        "new",
+        "b"
+      ],
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "source-shrink-expand",
+    "raw": "{\"data_source_ids\":[\"a\",\"b\"],\"data_source_ids\":[\"new\"],\"data_source_ids\":[null,null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "data_source_ids": [
+        "",
+        ""
+      ],
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "source-empty-resets",
+    "raw": "{\"data_source_ids\":[\"a\",\"b\"],\"data_source_ids\":[],\"data_source_ids\":[null,null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "data_source_ids": [
+        "",
+        ""
+      ],
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "source-null-resets",
+    "raw": "{\"data_source_ids\":[\"a\",\"b\"],\"data_source_ids\":null,\"data_source_ids\":[null,null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "error": "",
+    "name": "engine-null-retains",
+    "raw": "{\"effective_engines\":[{\"retriever_engine_type\":\"sqlite\",\"retriever_type\":\"vector\"}],\"effective_engines\":[null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "sqlite",
+          "retriever_type": "vector"
+        },
+        {
+          "retriever_engine_type": "postgres",
+          "retriever_type": ""
+        }
+      ]
+    },
+    "error": "",
+    "name": "engine-shrink-expand",
+    "raw": "{\"effective_engines\":[{\"retriever_engine_type\":\"sqlite\"},{\"retriever_engine_type\":\"postgres\"}],\"effective_engines\":[{\"retriever_type\":\"vector\"}],\"effective_engines\":[null,null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "",
+          "retriever_type": ""
+        }
+      ]
+    },
+    "error": "",
+    "name": "engine-empty-resets",
+    "raw": "{\"effective_engines\":[{\"retriever_engine_type\":\"sqlite\"}],\"effective_engines\":[],\"effective_engines\":[null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "",
+          "retriever_type": ""
+        }
+      ]
+    },
+    "error": "",
+    "name": "engine-null-resets",
+    "raw": "{\"effective_engines\":[{\"retriever_engine_type\":\"sqlite\"}],\"effective_engines\":null,\"effective_engines\":[null]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": [
+        {
+          "retriever_engine_type": "",
+          "retriever_type": "vector"
+        }
+      ]
+    },
+    "error": "json: cannot unmarshal number into Go struct field RetrieverEngineParams.effective_engines.retriever_type of type types.RetrieverType",
+    "name": "duplicate-engine-field-error",
+    "raw": "{\"effective_engines\":[{\"retriever_type\":7,\"retriever_type\":\"vector\"}]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 18446744073709551615,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "uint-max",
+    "raw": "{\"tenant_id\":18446744073709551615}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number 18446744073709551616 into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "uint-overflow",
+    "raw": "{\"tenant_id\":18446744073709551616}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number -1 into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "uint-negative",
+    "raw": "{\"tenant_id\":-1}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number 1e0 into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "uint-exponent",
+    "raw": "{\"tenant_id\":1e0}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "unknown-fields",
+    "raw": "{\"initiator\":{\"api_key_id\":false},\"unknown\":[\"ignored\"]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 7,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "tenant_id/7",
+    "raw": "{\"tenant_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "tenant_id/true",
+    "raw": "{\"tenant_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "tenant_id/{}",
+    "raw": "{\"tenant_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "tenant_id/[]",
+    "raw": "{\"tenant_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "tenant_id/null",
+    "raw": "{\"tenant_id\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal string into Go struct field KBDeletePayload.tenant_id of type uint64",
+    "name": "tenant_id/\"value\"",
+    "raw": "{\"tenant_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.knowledge_base_id of type string",
+    "name": "knowledge_base_id/7",
+    "raw": "{\"knowledge_base_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.knowledge_base_id of type string",
+    "name": "knowledge_base_id/true",
+    "raw": "{\"knowledge_base_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.knowledge_base_id of type string",
+    "name": "knowledge_base_id/{}",
+    "raw": "{\"knowledge_base_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.knowledge_base_id of type string",
+    "name": "knowledge_base_id/[]",
+    "raw": "{\"knowledge_base_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "knowledge_base_id/null",
+    "raw": "{\"knowledge_base_id\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "value",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "knowledge_base_id/\"value\"",
+    "raw": "{\"knowledge_base_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.data_source_ids of type []string",
+    "name": "data_source_ids/7",
+    "raw": "{\"data_source_ids\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.data_source_ids of type []string",
+    "name": "data_source_ids/true",
+    "raw": "{\"data_source_ids\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.data_source_ids of type []string",
+    "name": "data_source_ids/{}",
+    "raw": "{\"data_source_ids\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "data_source_ids/[]",
+    "raw": "{\"data_source_ids\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "data_source_ids/null",
+    "raw": "{\"data_source_ids\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal string into Go struct field KBDeletePayload.data_source_ids of type []string",
+    "name": "data_source_ids/\"value\"",
+    "raw": "{\"data_source_ids\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.effective_engines of type []types.RetrieverEngineParams",
+    "name": "effective_engines/7",
+    "raw": "{\"effective_engines\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.effective_engines of type []types.RetrieverEngineParams",
+    "name": "effective_engines/true",
+    "raw": "{\"effective_engines\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.effective_engines of type []types.RetrieverEngineParams",
+    "name": "effective_engines/{}",
+    "raw": "{\"effective_engines\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": []
+    },
+    "error": "",
+    "name": "effective_engines/[]",
+    "raw": "{\"effective_engines\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "effective_engines/null",
+    "raw": "{\"effective_engines\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal string into Go struct field KBDeletePayload.effective_engines of type []types.RetrieverEngineParams",
+    "name": "effective_engines/\"value\"",
+    "raw": "{\"effective_engines\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": ""
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.vector_store_id of type string",
+    "name": "vector_store_id/7",
+    "raw": "{\"vector_store_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": ""
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.vector_store_id of type string",
+    "name": "vector_store_id/true",
+    "raw": "{\"vector_store_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": ""
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.vector_store_id of type string",
+    "name": "vector_store_id/{}",
+    "raw": "{\"vector_store_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": ""
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.vector_store_id of type string",
+    "name": "vector_store_id/[]",
+    "raw": "{\"vector_store_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "vector_store_id/null",
+    "raw": "{\"vector_store_id\":null}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null,
+      "vector_store_id": "value"
+    },
+    "error": "",
+    "name": "vector_store_id/\"value\"",
+    "raw": "{\"vector_store_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.TracingContext.lf_trace_id of type string",
+    "name": "lf_trace_id/7",
+    "raw": "{\"lf_trace_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.TracingContext.lf_trace_id of type string",
+    "name": "lf_trace_id/true",
+    "raw": "{\"lf_trace_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.TracingContext.lf_trace_id of type string",
+    "name": "lf_trace_id/{}",
+    "raw": "{\"lf_trace_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.TracingContext.lf_trace_id of type string",
+    "name": "lf_trace_id/[]",
+    "raw": "{\"lf_trace_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_trace_id/null",
+    "raw": "{\"lf_trace_id\":null}"
+  },
+  {
+    "decoded": {
+      "lf_trace_id": "value",
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_trace_id/\"value\"",
+    "raw": "{\"lf_trace_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.TracingContext.lf_parent_obs_id of type string",
+    "name": "lf_parent_obs_id/7",
+    "raw": "{\"lf_parent_obs_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.TracingContext.lf_parent_obs_id of type string",
+    "name": "lf_parent_obs_id/true",
+    "raw": "{\"lf_parent_obs_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.TracingContext.lf_parent_obs_id of type string",
+    "name": "lf_parent_obs_id/{}",
+    "raw": "{\"lf_parent_obs_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.TracingContext.lf_parent_obs_id of type string",
+    "name": "lf_parent_obs_id/[]",
+    "raw": "{\"lf_parent_obs_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_parent_obs_id/null",
+    "raw": "{\"lf_parent_obs_id\":null}"
+  },
+  {
+    "decoded": {
+      "lf_parent_obs_id": "value",
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_parent_obs_id/\"value\"",
+    "raw": "{\"lf_parent_obs_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.TracingContext.lf_traceparent of type string",
+    "name": "lf_traceparent/7",
+    "raw": "{\"lf_traceparent\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.TracingContext.lf_traceparent of type string",
+    "name": "lf_traceparent/true",
+    "raw": "{\"lf_traceparent\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.TracingContext.lf_traceparent of type string",
+    "name": "lf_traceparent/{}",
+    "raw": "{\"lf_traceparent\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.TracingContext.lf_traceparent of type string",
+    "name": "lf_traceparent/[]",
+    "raw": "{\"lf_traceparent\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_traceparent/null",
+    "raw": "{\"lf_traceparent\":null}"
+  },
+  {
+    "decoded": {
+      "lf_traceparent": "value",
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_traceparent/\"value\"",
+    "raw": "{\"lf_traceparent\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.TracingContext.lf_user_id of type string",
+    "name": "lf_user_id/7",
+    "raw": "{\"lf_user_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.TracingContext.lf_user_id of type string",
+    "name": "lf_user_id/true",
+    "raw": "{\"lf_user_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.TracingContext.lf_user_id of type string",
+    "name": "lf_user_id/{}",
+    "raw": "{\"lf_user_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.TracingContext.lf_user_id of type string",
+    "name": "lf_user_id/[]",
+    "raw": "{\"lf_user_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_user_id/null",
+    "raw": "{\"lf_user_id\":null}"
+  },
+  {
+    "decoded": {
+      "lf_user_id": "value",
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_user_id/\"value\"",
+    "raw": "{\"lf_user_id\":\"value\"}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal number into Go struct field KBDeletePayload.TracingContext.lf_session_id of type string",
+    "name": "lf_session_id/7",
+    "raw": "{\"lf_session_id\":7}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal bool into Go struct field KBDeletePayload.TracingContext.lf_session_id of type string",
+    "name": "lf_session_id/true",
+    "raw": "{\"lf_session_id\":true}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal object into Go struct field KBDeletePayload.TracingContext.lf_session_id of type string",
+    "name": "lf_session_id/{}",
+    "raw": "{\"lf_session_id\":{}}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "json: cannot unmarshal array into Go struct field KBDeletePayload.TracingContext.lf_session_id of type string",
+    "name": "lf_session_id/[]",
+    "raw": "{\"lf_session_id\":[]}"
+  },
+  {
+    "decoded": {
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_session_id/null",
+    "raw": "{\"lf_session_id\":null}"
+  },
+  {
+    "decoded": {
+      "lf_session_id": "value",
+      "tenant_id": 0,
+      "knowledge_base_id": "",
+      "effective_engines": null
+    },
+    "error": "",
+    "name": "lf_session_id/\"value\"",
+    "raw": "{\"lf_session_id\":\"value\"}"
+  }
+]
