@@ -5000,6 +5000,22 @@ export default {
     defaultLocaleBrowser: '跟随浏览器 / 宿主'
   },
   knowledgeList: {
+    configTransfer: {
+      unavailableModels: "导入配置中有当前空间不可用的模型，请在相应设置中重新选择。",
+      "export": "导出配置",
+      "import": "导入配置",
+      "exported": "配置已导出",
+      "failed": "配置导出失败，请重试",
+      "review": "已载入导入配置。请检查各项设置、模型和存储选择，保存后生效。",
+      "locked": "此知识库已有文档，已保留当前嵌入模型和索引开关。",
+      "errors": {
+        "invalid": "配置文件格式或字段不正确，请选择导出的 JSON 配置文件",
+        "version": "不支持此配置文件版本",
+        "type": "配置文件与目标知识库类型不一致",
+        "empty": "配置文件中没有可导入的设置",
+        "tooLarge": "配置文件不能超过 1 MB"
+      }
+    },
     create: '新建知识库',
     subtitle: '管理和组织您的知识库，支持文档型和问答型知识库',
     sharedToOrgs: '已共享给 {count} 个空间',

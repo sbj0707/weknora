@@ -4998,6 +4998,22 @@ export default {
     defaultLocaleBrowser: '브라우저 / 호스트 기본값'
   },
   knowledgeList: {
+    configTransfer: {
+      unavailableModels: "가져온 모델 중 현재 작업 공간에서 사용할 수 없는 모델이 있습니다. 해당 설정에서 다시 선택하세요.",
+      "export": "설정 내보내기",
+      "import": "설정 가져오기",
+      "exported": "설정을 내보냈습니다",
+      "failed": "설정을 내보내지 못했습니다. 다시 시도하세요.",
+      "review": "가져온 설정을 검토하세요. 모델과 저장소 선택을 확인한 후 저장하면 적용됩니다.",
+      "locked": "문서가 있으므로 현재 임베딩 모델과 인덱스 설정을 유지했습니다.",
+      "errors": {
+        "invalid": "설정 파일 또는 필드가 올바르지 않습니다. 내보낸 JSON 설정 파일을 선택하세요.",
+        "version": "지원하지 않는 설정 파일 버전입니다",
+        "type": "설정과 대상 지식 베이스의 유형이 다릅니다",
+        "empty": "가져올 설정이 없습니다",
+        "tooLarge": "설정 파일은 1 MB 이하여야 합니다"
+      }
+    },
     create: '지식베이스 생성',
     subtitle: '지식베이스를 관리하고 구성합니다. 문서형과 Q&A형 지식베이스를 지원합니다',
     sharedToOrgs: '{count} 스페이스에 공유됨',

@@ -60,10 +60,10 @@
 
 | 验证范围 | 已核对结果 | 能证明什么 |
 |---|---|---|
-| 当前相关回归 | 745 项 / 7 类，失败/错误/跳过均 0，实际退出 0 | 新增75个文档复制场景，加chunk/图片复制、复制预检、移动计划/执行/worker和SQL索引复制回归；构建输入前后哈希稳定 |
+| 当前相关回归 | 791 项 / 8 类，失败/错误/跳过均 0，实际退出 0 | 新增46个普通复制执行场景，各两次尝试；加文档75、chunk/图片68、复制预检219、移动计划/执行/worker和SQL索引复制回归；1068个构建输入前后哈希稳定 |
 | 前批独立 PostgreSQL 复制预检对照 | 219 项 / 1 类，全部通过、实际退出 0 | 全部 115 个 Go 迁移、连接池 1，真实 Go oracle；自建容器最终停止退出 0 |
 | 最近完成的默认完整构建 | 10,464 项 / 196 类，失败/错误/跳过均 0、实际退出 0 | 仅对应索引复制批次冻结的 1047 个 src/pom 输入；不含随后新增的复制计划代码 |
-| 当前代码的完整构建 | 本次未重跑 | 当前1063个src/pom输入，相对上述冻结快照有3个修改、16个新增；不能称当前全量通过 |
+| 当前代码的完整构建 | 本次未重跑 | 当前1068个src/pom输入，相对上述冻结快照有3个修改、21个新增；不能称当前全量通过 |
 | 本批 PostgreSQL chunk复制执行 | 未验收通过 | 首轮63个旧场景断言失败；修正后重跑因Docker镜像/containerd I/O故障未执行，不能用前批219项预检替代 |
 | 历史完整构建失败 | 10,443 项 / 195 类，1 项失败、实际退出 1 | Elasticsearch TCP 复用计数预期 2、实际 3，原因尚未确认；后续通过不等于原失败已定位修复 |
 
@@ -74,6 +74,8 @@
 本批另新增 `KnowledgeCloneChunks/Repository/Objects`，实现全部类型chunk、标签、图片深复制及失败清理核心。68个实际Go场景既核对image_info原始字符串，也核对SQLite metadata BLOB/locator TEXT类型。尚无生产Effects/公开复制/worker接线。随后文档执行核心见下，FAQ及其他运行时效果仍待完成。[实现范围](clone-chunks-notes.md)、[证据](clone-chunks-checkpoint-2026-10-16.json)。
 
 本批另补 `KnowledgeCloneDocument` 和真实 SQL 文档创建，覆盖源文件独立复制、字段/default/Profile/JSON、最终 CAS/配额及外层失败记账。实际 Go75 场景与相关回归共745项通过；当前1063输入在构建前后哈希一致。修正 NotFound 1003、自定义JSON外围空白和 SQLite transfer metadata BLOB。仍无生产适配器、公开复制/进度或 `kb:clone` 接线；本批未执行 PostgreSQL 对照。[范围](clone-document-notes.md)、[证据](clone-document-checkpoint-2026-10-16.json)。
+
+本批新增 `KnowledgeCloneExecution` 和同步 `KnowledgeReferencedDelete`，实现整批预检后先删目标、再串行复制及阶段进度。46个实际Go场景各两次尝试，与相关回归共791项/8类通过，1068输入哈希稳定。删除失败可能留下deleting并在重试时拒绝，第二篇复制失败则保留此前成功结果。仍无生产适配器/公开复制/worker接线；FAQ、PG、完整SQL Scan、Wiki/资源引用等效果及租户完整typed Save副作用待对齐。[执行范围](clone-execution-notes.md)、[证据](clone-execution-checkpoint-2026-10-16.json)。
 
 ## 使用结论
 

@@ -83,6 +83,18 @@ final class KnowledgeTransferMetadata {
     return "{" + String.join(",", entries) + "}";
   }
 
+  /** FAQ container creation copies RawMessage fields while removing a source transfer marker. */
+  String withoutTransfer(Object stored) throws IOException {
+    String raw=KnowledgeCloneRepository.raw(stored);
+    if(raw.isEmpty())return null;
+    var values=fields(stored);
+    if(raw.trim().equals("null"))return "null";
+    values.remove(KEY);
+    var entries=new ArrayList<String>();
+    for(var e:values.entrySet())entries.add(escape(json.writeValueAsString(e.getKey()))+":"+escape(compact(e.getValue())));
+    return "{"+String.join(",",entries)+"}";
+  }
+
   static boolean matches(
       JsonNode state, String task, String source, String target, String id, String mode) {
     return matches(state,task,source,target,id,"move",mode);

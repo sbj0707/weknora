@@ -173,7 +173,7 @@
                      is now per-user and available to anyone who can see the KB
                      (backend route only requires KB read access). Settings /
                      Delete are mutations, so they stay behind canManageKBCard. -->
-                <t-popup overlayClassName="card-more-popup" trigger="click" destroy-on-close
+                <t-popup v-model="kb.showMore" overlayClassName="card-more-popup" trigger="click" destroy-on-close
                   placement="bottom-right">
                   <button type="button" :aria-label="$t('common.expand')" class="more-wrap" @click.stop>
                     <img class="more-icon" src="@/assets/img/more.png" alt="" />
@@ -190,6 +190,14 @@
                         <span>{{ $t('knowledgeList.menu.duplicate') }}</span>
                       </div>
                       <template v-if="canManageKBCard(kb)">
+                        <div class="popup-menu-item" @click.stop="handleExportConfig(kb)">
+                          <t-icon class="menu-icon" name="download" />
+                          <span>{{ $t('knowledgeList.configTransfer.export') }}</span>
+                        </div>
+                        <div class="popup-menu-item" @click.stop="handleImportConfig(kb)">
+                          <t-icon class="menu-icon" name="upload" />
+                          <span>{{ $t('knowledgeList.configTransfer.import') }}</span>
+                        </div>
                         <div class="popup-menu-item" @click.stop="handleSettingsById(kb.id)">
                           <t-icon class="menu-icon" name="setting" />
                           <span>{{ $t('knowledgeBase.settings') }}</span>
@@ -421,6 +429,14 @@
                         <span>{{ $t('knowledgeList.menu.duplicate') }}</span>
                       </div>
                       <template v-if="canManageKBCard(kb)">
+                        <div class="popup-menu-item" @click.stop="handleExportConfig(kb)">
+                          <t-icon class="menu-icon" name="download" />
+                          <span>{{ $t('knowledgeList.configTransfer.export') }}</span>
+                        </div>
+                        <div class="popup-menu-item" @click.stop="handleImportConfig(kb)">
+                          <t-icon class="menu-icon" name="upload" />
+                          <span>{{ $t('knowledgeList.configTransfer.import') }}</span>
+                        </div>
                         <div class="popup-menu-item" @click.stop="handleSettings(kb)">
                           <t-icon class="menu-icon" name="setting" />
                           <span>{{ $t('knowledgeBase.settings') }}</span>
@@ -630,9 +646,12 @@
       </div>
     </div>
 
+    <input ref="configFileInput" type="file" accept=".json,application/json" hidden @change="onConfigFileSelected" />
+
     <!-- 知识库编辑器（创建/编辑统一组件） -->
     <KnowledgeBaseEditorModal :visible="uiStore.showKBEditorModal" :mode="uiStore.kbEditorMode"
       :kb-id="uiStore.currentKBId || undefined" :initial-type="uiStore.kbEditorType"
+      :imported-configuration="importedConfiguration"
       @update:visible="(val) => val ? null : uiStore.closeKBEditor()" @success="handleKBEditorSuccess" />
 
     <!-- 右侧：共享知识库详情面板 -->
@@ -714,7 +733,7 @@ import { MessagePlugin, Icon as TIcon } from 'tdesign-vue-next'
 import EmptyState from '@/components/EmptyState.vue'
 import ResourceIcon from '@/components/icons/ResourceIcon.vue'
 import { useConfirmDelete } from '@/components/settings/useConfirmDelete'
-import { deleteKnowledgeBase, duplicateKnowledgeBase, togglePinKnowledgeBase } from '@/api/knowledge-base'
+import { getKnowledgeBaseById, deleteKnowledgeBase, duplicateKnowledgeBase, togglePinKnowledgeBase } from '@/api/knowledge-base'
 import { useChatResourcesStore } from '@/stores/chatResources'
 import { formatStringDate } from '@/utils/index'
 import { useUIStore } from '@/stores/ui'
@@ -723,6 +742,8 @@ import { useOrganizationStore } from '@/stores/organization'
 import { listOrganizationSharedKnowledgeBases, type SharedKnowledgeBase, type OrganizationSharedKnowledgeBaseItem, type SourceFromAgentInfo } from '@/api/organization'
 import { mergeAllScopeKnowledgeBases, type OwnedKnowledgeBase, type SharedKnowledgeBaseLike } from './kbListMerge'
 import KnowledgeBaseEditorModal from './KnowledgeBaseEditorModal.vue'
+import { exportKnowledgeBaseConfig, parseKnowledgeBaseConfig, knowledgeBaseConfigFilename,
+  KnowledgeBaseConfigError, MAX_KB_CONFIG_BYTES, type KnowledgeBaseConfigFile } from '@/utils/knowledgeBaseConfigTransfer'
 import KbWikiBadge from './components/KbWikiBadge.vue'
 import ResourceListToolbar from '@/components/ResourceListToolbar.vue'
 import { matchesResourceQuery } from '@/utils/resourceListSearch'
@@ -751,6 +772,68 @@ const { loaded: modelsReadyLoaded, isReadyForDocumentKb } = useTenantModelReadin
 const orgStore = useOrganizationStore()
 const chatResources = useChatResourcesStore()
 const { t } = useI18n()
+const configFileInput = ref<HTMLInputElement | null>(null)
+const configImportTarget = ref<KB | null>(null)
+const importedConfiguration = ref<KnowledgeBaseConfigFile | null>(null)
+let configImportVersion = 0
+watch(() => uiStore.showKBEditorModal, visible => {
+  if (!visible) importedConfiguration.value = null
+})
+
+async function handleExportConfig(kb: KB) {
+  if (!canManageKBCard(kb)) return
+  kb.showMore = false
+  try {
+    const response: any = await getKnowledgeBaseById(kb.id)
+    if (!response?.data || response.success === false) throw new Error('Failed to load configuration')
+    const file = exportKnowledgeBaseConfig(response.data)
+    const url = URL.createObjectURL(new Blob([JSON.stringify(file, null, 2) + '\n'], { type: 'application/json' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = knowledgeBaseConfigFilename(file.source_name)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    MessagePlugin.success(t('knowledgeList.configTransfer.exported'))
+  } catch {
+    MessagePlugin.error(t('knowledgeList.configTransfer.failed'))
+  }
+}
+
+function handleImportConfig(kb: KB) {
+  if (!canManageKBCard(kb)) return
+  kb.showMore = false
+  configImportVersion++
+  configImportTarget.value = kb
+  if (configFileInput.value) {
+    configFileInput.value.value = ''
+    configFileInput.value.click()
+  }
+}
+
+async function onConfigFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement
+  const selected = input.files?.[0]
+  const kb = configImportTarget.value
+  const version = configImportVersion
+  input.value = ''
+  configImportTarget.value = null
+  if (!selected || !kb || !canManageKBCard(kb)) return
+  try {
+    if (selected.size > MAX_KB_CONFIG_BYTES) throw new KnowledgeBaseConfigError('tooLarge')
+    const file = parseKnowledgeBaseConfig(await selected.text())
+    if (version !== configImportVersion) return
+    if (file.type !== (kb.type || 'document')) throw new KnowledgeBaseConfigError('type')
+    importedConfiguration.value = file
+    uiStore.openKBSettings(kb.id)
+  } catch (error) {
+    if (version !== configImportVersion) return
+    const code = error instanceof KnowledgeBaseConfigError ? error.code : 'invalid'
+    MessagePlugin.error(t(`knowledgeList.configTransfer.errors.${code}`))
+  }
+}
+
 const selectedResourceSort = ref<ResourceSortValue>(DEFAULT_RESOURCE_SORT)
 
 // 左侧空间选择：默认根据当前角色决定。
@@ -1194,6 +1277,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  configImportVersion++
+  configImportTarget.value = null
   window.removeEventListener('knowledgeFileUploaded', handleUploadFinishedEvent as EventListener)
 
   if (uploadRefreshTimer) {
@@ -1483,12 +1568,16 @@ const goDetail = (id: string) => {
 }
 
 const goSettings = (id: string) => {
+  configImportVersion++
+  importedConfiguration.value = null
   // 使用模态框打开设置
   uiStore.openKBSettings(id)
 }
 
 // 创建知识库
 const handleCreateKnowledgeBase = () => {
+  configImportVersion++
+  importedConfiguration.value = null
   markContextualGuideDone('kbList')
   // 无模型时仍打开创建向导，并定位到模型配置页；用户可在向导内添加模型，无需先跳转系统设置
   const initialSection =

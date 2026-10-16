@@ -3082,6 +3082,22 @@ export default {
     }
   },
   knowledgeList: {
+    configTransfer: {
+      unavailableModels: "Some imported models are unavailable in this workspace. Select available models in the corresponding settings.",
+      "export": "Export configuration",
+      "import": "Import configuration",
+      "exported": "Configuration exported",
+      "failed": "Could not export configuration. Please try again.",
+      "review": "Imported settings are ready for review. Check the settings, models and storage selection, then save to apply.",
+      "locked": "This knowledge base has documents. Its current embedding model and index switches have been preserved.",
+      "errors": {
+        "invalid": "Invalid configuration file or fields. Select an exported JSON configuration file.",
+        "version": "Unsupported configuration file version",
+        "type": "The configuration and target knowledge base types do not match",
+        "empty": "The file contains no settings to import",
+        "tooLarge": "The configuration file must be no larger than 1 MB"
+      }
+    },
     create: 'Create Knowledge Base',
     subtitle: 'Manage and organize your knowledge bases, supporting document-based and FAQ-based knowledge bases',
     sharedToOrgs: 'Shared to {count} space(s)',

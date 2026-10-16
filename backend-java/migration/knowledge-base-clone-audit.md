@@ -38,13 +38,17 @@ Java `IndexCopier`、`SQLiteIndexRepository.copyIndices` 和 `PostgresIndexRepos
 
 新增分阶段文档创建、源文件独立复制、Profile/JSON/默认字段、最终 CAS/配额及外层失败记账。75个实际Go SQLite场景及相关745项/7类通过，1063个构建输入哈希前后稳定。仍无生产Effects/公开worker接线；下列第6项仅有核心及有界对照，完整生命周期和PG尚未验收。详见 [文档范围](clone-document-notes.md) 与 [checkpoint](clone-document-checkpoint-2026-10-16.json)。
 
+## 新增普通复制编排与同步目标清理
+
+新增整批只读预检后同步删除多余目标、再逐文档复制及阶段进度。实际Go46场景各两次尝试，相关791项/8类通过；1068构建输入哈希稳定。覆盖预检后数据变化、各级部分提交、删除失败重试与第二篇复制失败重试。仍缺生产Effects、完整typed SQL读取/租户Save、Wiki/资源引用效果、FAQ、公开复制/进度、worker和PG执行验收。下列第5项已有有界执行核心，尚未完成生产链路。[范围](clone-execution-notes.md)、[checkpoint](clone-execution-checkpoint-2026-10-16.json)。
+
 ## 仍需迁移的 Go 契约
 
 1. 公开 admission：`POST /api/v1/knowledge-bases/copy`。JSON 绑定、management key/Contributor、KB allow-list、本租户来源读取和既有目标的 creator/Admin 置换权限。新目标只在 payload 中保留 UUID，不提前创建空 KB；入队失败返回 500。任务业务 ID、low、3 retries、2 小时和原 actor/tracing 必须保留。
 2. 目标创建：实际 `knowledgeBaseService.CopyKnowledgeBase` 复制的是指定配置子集，和 `DuplicateKnowledgeBase` 不同。需要持久目标预留、创建/恢复、默认值、creator 的 synthetic-user 规则及并发竞争验收。
 3. 进度：`GET /api/v1/knowledge-bases/copy/progress/:task_id` 先验证任务租户。Redis `kb_clone_progress:` 保存 24 小时；初始值 SET NX 不覆盖已运行任务；类型解码、未找到和故障结果须按 Go 对照。
 4. `kb:clone` worker：Go typed JSON、原始 payload、tenant/source/task 校验及 SkipRetry，legacy 空 target 的 UUID v5（OID namespace、`kb-clone:{tenant}:{source}:{task}`），重新验证 transfer binding、tenant 和兼容性。
-5. 普通文档计划（只读计算已验证，删除/复制执行待接线）：完整读取两端所有文档、所有 chunk 类型、parent/tag 关系，先整批只读预检，再按 id 排序。优先匹配本任务的完成 transfer state，再按非空 file hash 一对一匹配；拒绝忙碌目标和未完成来源。先删除多余目标，再逐文档复制，阶段独立提交。
+5. 普通文档计划（只读计算及有界普通执行已验证，生产删除/复制执行待接线）：完整读取两端所有文档、所有 chunk 类型、parent/tag 关系，先整批只读预检，再按 id 排序。优先匹配本任务的完成 transfer state，再按非空 file hash 一对一匹配；拒绝忙碌目标和未完成来源。先删除多余目标，再逐文档复制，阶段独立提交。
 6. 文档复制：文件及其引用、配额、metadata、所有字段、标签映射、持久 transfer state、重试及 CAS。逐阶段故障后的可见状态必须和 Go 一致。
 7. Chunk 复制：所有字段、source locators、metadata/hash/flags/index status，parent/pre/next ID 重映射，100 条批量保存。图片按 URL 缓存深复制到 exports 路径；OriginalURL 条件改写，最终按旧 URL 长度倒序替换全部内容。失败清理目标状态、索引、chunks 和新文件的顺序必须对照。
 8. 索引接线：使用 source 绑定的引擎和目标 embedding 模型维度，不重新 embedding。SQL 原语已完成；ES7/8、Qdrant、Milvus、Weaviate、Doris、TencentVectorDB、OpenSearch、混合引擎等仍待接线和独立验证。

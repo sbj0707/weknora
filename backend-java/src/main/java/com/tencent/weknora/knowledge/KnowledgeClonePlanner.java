@@ -93,7 +93,7 @@ final class KnowledgeClonePlanner {
   }
 
   private List<Map<String,Object>> documents(long tenant,String kb) {
-    return new ArrayList<>(jdbc.queryForList("SELECT * FROM knowledges WHERE tenant_id=? AND knowledge_base_id=? AND deleted_at IS NULL ORDER BY created_at DESC",tenant,kb));
+    return new ArrayList<>(KnowledgeTransferRows.query(jdbc,"SELECT * FROM knowledges WHERE tenant_id=? AND knowledge_base_id=? AND deleted_at IS NULL ORDER BY created_at DESC",tenant,kb));
   }
   private void preflight(long tenant,String kb,List<Map<String,Object>> rows) {
     for(var row:rows) {

@@ -4,6 +4,8 @@
     v-model="currentSection" :nav-groups="navGroups" :loading="loading" :z-index="1000"
     nav-guide="kb-editor-sidebar" nav-item-guide-prefix="kb-editor-nav" @close="modalShell.requestClose">
     <div class="content-wrapper">
+      <t-alert v-if="importApplied" theme="info" :message="$t('knowledgeList.configTransfer.review')"
+        :description="hasFiles ? $t('knowledgeList.configTransfer.locked') : undefined" style="margin-bottom: 20px" />
       <!-- 基本信息 -->
       <div v-show="currentSection === 'basic'" class="section">
         <div v-if="formData" class="section-content">
@@ -572,6 +574,7 @@ import {
   type ImageAttrSchema,
   type KnowledgeBaseProfile,
 } from '@/api/knowledge-base'
+import { applyKnowledgeBaseConfig, type KnowledgeBaseConfigFile } from '@/utils/knowledgeBaseConfigTransfer'
 import { buildImageProcessingConfig } from '@/utils/imageProcessingConfig'
 import { imageAttrDisplay, imageAttrConditionDisplay } from '@/utils/imageAttrDisplay'
 
@@ -635,6 +638,7 @@ const props = defineProps<{
   mode: 'create' | 'edit'
   kbId?: string
   initialType?: 'document' | 'faq'
+  importedConfiguration?: KnowledgeBaseConfigFile | null
 }>()
 
 // Emits
@@ -674,6 +678,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener(KB_EDITOR_FOCUS_SECTION_EVENT, onKbEditorFocusSection)
 })
+const importApplied = ref(false)
 const saving = ref(false)
 const loading = ref(false)
 const allModels = ref<any[]>([])
@@ -995,6 +1000,121 @@ const isCurrentKBLoad = (generation: number, kbId: string) => (
 )
 
 // 加载知识库数据（编辑模式）
+const applyKBFormData = (kb: any) => {
+  const kbType = (kb.type as 'document' | 'faq') || 'document'
+  formData.value = {
+    type: kbType,
+    name: kb.name || '',
+    description: kb.description || '',
+    faqConfig: {
+      indexMode: kb.faq_config?.index_mode || 'question_only',
+      questionIndexMode: kb.faq_config?.question_index_mode || 'separate'
+    },
+    modelConfig: {
+      llmModelId: kb.summary_model_id || '',
+      embeddingModelId: kb.embedding_model_id || '',
+      wikiSynthesisModelId: kb.wiki_config?.synthesis_model_id || ''
+    },
+    chunkingConfig: {
+      chunkSize: kb.chunking_config?.chunk_size || 512,
+      // Fallback only used when the loaded KB has no chunk_overlap stored.
+      // Aligned with chunker.DefaultChunkOverlap on the backend.
+      chunkOverlap: kb.chunking_config?.chunk_overlap ?? 80,
+      separators: kb.chunking_config?.separators || ['\n\n', '\n', '。', '！', '？', ';', '；'],
+      parserEngineRules: kb.chunking_config?.parser_engine_rules || undefined,
+      enableParentChild: kb.chunking_config?.enable_parent_child || false,
+      parentChunkSize: kb.chunking_config?.parent_chunk_size || 4096,
+      childChunkSize: kb.chunking_config?.child_chunk_size || 384,
+      // Existing KBs without strategy field render as empty (= legacy behavior).
+      // The user has to actively pick a value to opt in to the new tiers.
+      strategy: kb.chunking_config?.strategy || '',
+      tokenLimit: kb.chunking_config?.token_limit || 0,
+      languages: kb.chunking_config?.languages || [],
+      tableMetadataInstructions: kb.chunking_config?.table_metadata_instructions || ''
+    },
+    storageBackendId: (kb.storage_backend_id || '') as string,
+    storageProvider: (kb.storage_provider_config?.provider || kb.storage_config?.provider || 'local') as string,
+    multimodalConfig: {
+      enabled: !!kb.vlm_config?.enabled,
+      vllmModelId: kb.vlm_config?.model_id || '',
+      descriptionLanguage: kb.vlm_config?.description_language || '',
+      customInstructions: kb.vlm_config?.custom_instructions || ''
+    },
+    imageAttrsEnabled:
+      !!(kb as Record<string, any>).image_processing_config?.image_attrs_enabled,
+    imageActions: mergeImageActions(
+      (kb as Record<string, any>).image_processing_config?.image_actions,
+    ),
+    imageProcessingConfigSnapshot:
+      (kb as Record<string, any>).image_processing_config || null,
+    asrConfig: {
+      enabled: !!kb.asr_config?.enabled,
+      modelId: kb.asr_config?.model_id || '',
+      language: kb.asr_config?.language || ''
+    },
+    nodeExtractConfig: {
+      enabled: kb.extract_config?.enabled || false,
+      text: kb.extract_config?.text || '',
+      tags: kb.extract_config?.tags || [],
+      nodes: (kb.extract_config?.nodes || []).map((node: any) => ({
+        name: node.name,
+        attributes: node.attributes || []
+      })),
+      relations: kb.extract_config?.relations || [],
+      customInstructions: kb.extract_config?.custom_instructions || ''
+    },
+    questionGenerationConfig: {
+      enabled: kb.question_generation_config?.enabled || false,
+      questionCount: kb.question_generation_config?.question_count || 3,
+      customInstructions: kb.question_generation_config?.custom_instructions || ''
+    },
+    autoTagConfig: {
+      enabled: kb.auto_tag_config?.enabled || false,
+      modelId: kb.auto_tag_config?.model_id || '',
+      maxTags: kb.auto_tag_config?.max_tags || 3,
+      // Absent on knowledge bases saved before the toggle existed; the
+      // backend treats that as "skip", so mirror it here.
+      skipIfTagged: kb.auto_tag_config?.skip_if_tagged ?? true
+    },
+    profileConfig: {
+      enabled: kb.profile_config?.enabled || false,
+      modelId: kb.profile_config?.model_id || '',
+      customInstructions: kb.profile_config?.custom_instructions || ''
+    },
+    wikiConfig: {
+      synthesisModelId: kb.wiki_config?.synthesis_model_id || '',
+      maxPagesPerIngest: kb.wiki_config?.max_pages_per_ingest || 0,
+      extractionGranularity: (
+        kb.wiki_config?.extraction_granularity === 'focused' ||
+        kb.wiki_config?.extraction_granularity === 'exhaustive'
+          ? kb.wiki_config.extraction_granularity
+          : 'standard'
+      ) as 'focused' | 'standard' | 'exhaustive',
+      contentInstructions: kb.wiki_config?.content_instructions || '',
+      extractionInstructions: kb.wiki_config?.extraction_instructions || '',
+    },
+    indexingStrategy: {
+      vectorEnabled: kb.indexing_strategy?.vector_enabled ?? true,
+      keywordEnabled: kb.indexing_strategy?.keyword_enabled ?? true,
+      wikiEnabled: kb.indexing_strategy?.wiki_enabled ?? false,
+      graphEnabled: kb.indexing_strategy?.graph_enabled ?? false,
+    },
+    // Vector-store binding. vectorStoreId is editor-only state; it
+    // is only included in the create request, never the update
+    // request, because the binding is immutable after creation.
+    // vectorStoreInfo carries the read-only display fields that the
+    // edit view renders below; they come straight from the KB
+    // response.
+    vectorStoreId: '',
+    vectorStoreInfo: {
+      source: kb.vector_store_source,
+      name: kb.vector_store_name,
+      engineType: kb.vector_store_engine_type,
+      status: kb.vector_store_status,
+    },
+  }
+}
+
 const loadKBData = async (
   kbIdOverride?: string,
   generation = kbEditorLoadGeneration,
@@ -1021,123 +1141,16 @@ const loadKBData = async (
     kbCreatorId.value = (kb as any).creator_id || ''
     kbTenantId.value = Number((kb as any).tenant_id || 0)
 
-    // 设置表单数据
-    const kbType = (kb.type as 'document' | 'faq') || 'document'
-    formData.value = {
-      type: kbType,
-      name: kb.name || '',
-      description: kb.description || '',
-      faqConfig: {
-        indexMode: kb.faq_config?.index_mode || 'question_only',
-        questionIndexMode: kb.faq_config?.question_index_mode || 'separate'
-      },
-      modelConfig: {
-        llmModelId: kb.summary_model_id || '',
-        embeddingModelId: kb.embedding_model_id || '',
-        wikiSynthesisModelId: kb.wiki_config?.synthesis_model_id || ''
-      },
-      chunkingConfig: {
-        chunkSize: kb.chunking_config?.chunk_size || 512,
-        // Fallback only used when the loaded KB has no chunk_overlap stored.
-        // Aligned with chunker.DefaultChunkOverlap on the backend.
-        chunkOverlap: kb.chunking_config?.chunk_overlap || 80,
-        separators: kb.chunking_config?.separators || ['\n\n', '\n', '。', '！', '？', ';', '；'],
-        parserEngineRules: kb.chunking_config?.parser_engine_rules || undefined,
-        enableParentChild: kb.chunking_config?.enable_parent_child || false,
-        parentChunkSize: kb.chunking_config?.parent_chunk_size || 4096,
-        childChunkSize: kb.chunking_config?.child_chunk_size || 384,
-        // Existing KBs without strategy field render as empty (= legacy behavior).
-        // The user has to actively pick a value to opt in to the new tiers.
-        strategy: kb.chunking_config?.strategy || '',
-        tokenLimit: kb.chunking_config?.token_limit || 0,
-        languages: kb.chunking_config?.languages || [],
-        tableMetadataInstructions: kb.chunking_config?.table_metadata_instructions || ''
-      },
-      storageBackendId: (kb.storage_backend_id || '') as string,
-      storageProvider: (kb.storage_provider_config?.provider || kb.storage_config?.provider || 'local') as string,
-      multimodalConfig: {
-        enabled: !!kb.vlm_config?.enabled,
-        vllmModelId: kb.vlm_config?.model_id || '',
-        descriptionLanguage: kb.vlm_config?.description_language || '',
-        customInstructions: kb.vlm_config?.custom_instructions || ''
-      },
-      imageAttrsEnabled:
-        !!(kb as Record<string, any>).image_processing_config?.image_attrs_enabled,
-      imageActions: mergeImageActions(
-        (kb as Record<string, any>).image_processing_config?.image_actions,
-      ),
-      imageProcessingConfigSnapshot:
-        (kb as Record<string, any>).image_processing_config || null,
-      asrConfig: {
-        enabled: !!kb.asr_config?.enabled,
-        modelId: kb.asr_config?.model_id || '',
-        language: kb.asr_config?.language || ''
-      },
-      nodeExtractConfig: {
-        enabled: kb.extract_config?.enabled || false,
-        text: kb.extract_config?.text || '',
-        tags: kb.extract_config?.tags || [],
-        nodes: (kb.extract_config?.nodes || []).map((node: any) => ({
-          name: node.name,
-          attributes: node.attributes || []
-        })),
-        relations: kb.extract_config?.relations || [],
-        customInstructions: kb.extract_config?.custom_instructions || ''
-      },
-      questionGenerationConfig: {
-        enabled: kb.question_generation_config?.enabled || false,
-        questionCount: kb.question_generation_config?.question_count || 3,
-        customInstructions: kb.question_generation_config?.custom_instructions || ''
-      },
-      autoTagConfig: {
-        enabled: kb.auto_tag_config?.enabled || false,
-        modelId: kb.auto_tag_config?.model_id || '',
-        maxTags: kb.auto_tag_config?.max_tags || 3,
-        // Absent on knowledge bases saved before the toggle existed; the
-        // backend treats that as "skip", so mirror it here.
-        skipIfTagged: kb.auto_tag_config?.skip_if_tagged ?? true
-      },
-      profileConfig: {
-        enabled: kb.profile_config?.enabled || false,
-        modelId: kb.profile_config?.model_id || '',
-        customInstructions: kb.profile_config?.custom_instructions || ''
-      },
-      wikiConfig: {
-        synthesisModelId: kb.wiki_config?.synthesis_model_id || '',
-        maxPagesPerIngest: kb.wiki_config?.max_pages_per_ingest || 0,
-        extractionGranularity: (
-          kb.wiki_config?.extraction_granularity === 'focused' ||
-          kb.wiki_config?.extraction_granularity === 'exhaustive'
-            ? kb.wiki_config.extraction_granularity
-            : 'standard'
-        ) as 'focused' | 'standard' | 'exhaustive',
-        contentInstructions: kb.wiki_config?.content_instructions || '',
-        extractionInstructions: kb.wiki_config?.extraction_instructions || '',
-      },
-      indexingStrategy: {
-        vectorEnabled: kb.indexing_strategy?.vector_enabled ?? true,
-        keywordEnabled: kb.indexing_strategy?.keyword_enabled ?? true,
-        wikiEnabled: kb.indexing_strategy?.wiki_enabled ?? false,
-        graphEnabled: kb.indexing_strategy?.graph_enabled ?? false,
-      },
-      // Vector-store binding. vectorStoreId is editor-only state; it
-      // is only included in the create request, never the update
-      // request, because the binding is immutable after creation.
-      // vectorStoreInfo carries the read-only display fields that the
-      // edit view renders below; they come straight from the KB
-      // response.
-      vectorStoreId: '',
-      vectorStoreInfo: {
-        source: kb.vector_store_source,
-        name: kb.vector_store_name,
-        engineType: kb.vector_store_engine_type,
-        status: kb.vector_store_status,
-      },
+    applyKBFormData(kb)
+    initialStorageProvider.value = formData.value!.storageProvider
+    initialIndexingStrategy.value = { ...formData.value!.indexingStrategy }
+    modalShell.markClean()
+    if (props.importedConfiguration && !importApplied.value) {
+      applyKBFormData(applyKnowledgeBaseConfig(kb, props.importedConfiguration, hasFiles.value))
+      importApplied.value = true
     }
     // 拉取后端属性注册表，驱动属性面板的动态渲染（编辑模式有 kbId）。
     loadImageAttrSchema(kbId)
-    initialStorageProvider.value = formData.value.storageProvider
-    initialIndexingStrategy.value = { ...formData.value.indexingStrategy }
   } catch (error) {
     if (!isCurrentKBLoad(generation, kbId)) return
     console.error('Failed to load knowledge base data:', error)
@@ -1146,7 +1159,7 @@ const loadKBData = async (
   } finally {
     if (isCurrentKBLoad(generation, kbId)) {
       loading.value = false
-      modalShell.markClean()
+      if (!importApplied.value) modalShell.markClean()
     }
   }
 }
@@ -1361,6 +1374,23 @@ const handleGraphRecommendation = () => {
 const validateForm = (): boolean => {
   if (!formData.value) return false
 
+  // A configuration exported from another space can reference unavailable
+  // models. Catch those before the basic-info request writes any settings.
+  if (importApplied.value) {
+    const form = formData.value
+    const modelIds = [form.modelConfig.llmModelId, form.modelConfig.embeddingModelId,
+      form.indexingStrategy.wikiEnabled && form.modelConfig.wikiSynthesisModelId,
+      form.multimodalConfig.enabled && form.multimodalConfig.vllmModelId,
+      form.asrConfig.enabled && form.asrConfig.modelId,
+      form.autoTagConfig.enabled && form.autoTagConfig.modelId,
+      form.profileConfig.enabled && form.profileConfig.modelId].filter(Boolean)
+    if (modelIds.some(id => !allModels.value.some(model => model.id === id))) {
+      MessagePlugin.warning(t('knowledgeList.configTransfer.unavailableModels'))
+      currentSection.value = 'models'
+      return false
+    }
+  }
+
   // 验证基本信息
   if (!formData.value.name || !formData.value.name.trim()) {
     MessagePlugin.warning(t('knowledgeEditor.messages.nameRequired'))
@@ -1466,8 +1496,8 @@ const buildSubmitData = () => {
       onUnobserved: formData.value.imageActions.ocr.on_unobserved,
       defaultOn: displaySchema.value.default_actions.ocr.on,
     })
-    if (built) {
-      data.image_processing_config = built
+    if (built || (importApplied.value && props.importedConfiguration?.configuration.image_processing_config)) {
+      data.image_processing_config = built || formData.value.imageProcessingConfigSnapshot
     }
   }
 
@@ -1812,6 +1842,7 @@ watch(() => props.visible, async (newVal) => {
   if (newVal) {
     // 打开弹窗时，先重置状态
     resetState()
+    importApplied.value = false
     modalShell.markClean()
     loading.value = true
     const targetKbId = props.kbId

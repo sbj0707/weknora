@@ -140,7 +140,7 @@ final class KnowledgeTransferRepository {
 
   List<Map<String, Object>> chunks(long tenant, String id, Set<String> allowed) {
     var rows =
-        jdbc.queryForList(
+        KnowledgeTransferRows.query(jdbc,
             "SELECT * FROM chunks WHERE tenant_id=? AND knowledge_id=?"
                 + " AND deleted_at IS NULL ORDER BY id ASC",
             tenant,

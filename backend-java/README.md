@@ -1,6 +1,6 @@
 # WeKnora Java 后端迁移
 
-2026-10-16 当前复核：**121/482 条 Go 接口有 Java 原生入口，361 条缺失；15/22 种任务有部分 handler，7 种缺失，0 verified，功能仍不一致。** 本批补齐分阶段文档复制核心，与已有 chunk/图片复制及真实 SQL CAS/配额接合；实际 Go75 场景及相关回归 **745项/7类全部通过、实际退出0**。1063个src/pom输入构建前后哈希一致。生产适配器、公开复制/进度和 kb:clone 尚未接通，PostgreSQL 执行未验收。最近默认完整10464项通过只覆盖旧索引复制1047输入快照，当前3个修改、16个新增，本批未重跑完整构建。未部署或重启服务。 见 [最新对比](migration/comparison-latest.md)、[文档复制范围](migration/clone-document-notes.md) 和 [本批证据](migration/clone-document-checkpoint-2026-10-16.json)。
+2026-10-16 当前复核：**121/482 条 Go 接口有 Java 原生入口，361 条缺失；15/22 种任务有部分 handler，7 种缺失，0 verified，功能仍不一致。** 本批新增普通复制执行编排和同步目标清理，连接已有文档/chunk复制核心；实际 Go46 场景各执行两次，相关回归 **791项/8类全部通过、实际退出0**。1068个src/pom输入构建前后哈希一致。生产适配器、目标创建、FAQ、公开复制/进度和 kb:clone 尚未完成，PostgreSQL 执行未验收。最近默认完整10464项通过只覆盖旧索引复制1047输入快照，当前3个修改、21个新增，本批未重跑完整构建。未部署或重启服务。见 [最新对比](migration/comparison-latest.md)、[普通复制范围](migration/clone-execution-notes.md) 和 [本批证据](migration/clone-execution-checkpoint-2026-10-16.json)。
 
 ## 历史批次（以下结果仅对应当时快照）
 
