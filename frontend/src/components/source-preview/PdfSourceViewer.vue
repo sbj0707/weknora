@@ -5,6 +5,8 @@ import type { SourceLocateRequest } from '@/utils/sourceLocator'
 import { resolvePdfSource, mergeSourceRects, type PdfTarget } from '@/utils/pdfSourceLocate'
 import { findTextRanges } from '@/utils/sourceLocatorDom'
 import { loadPdfJs, type PdfJs } from './pdfjsLoader'
+import type { SourceSelection } from '@/utils/documentChunkRelations'
+import SourcePageNavigation from './SourcePageNavigation.vue'
 
 type PdfDocument = Awaited<ReturnType<PdfJs['getDocument']>['promise']>
 type PdfPage = Awaited<ReturnType<PdfDocument['getPage']>>
@@ -18,11 +20,15 @@ const props = defineProps<{
   data: ArrayBuffer | null
   fileName?: string
   locate?: SourceLocateRequest | null
+  selectable?: boolean
+  selectedPage?: number
+  pageNavigation?: boolean
 }>()
 
 const emit = defineEmits<{
   located: [result: PdfLocateResult]
   error: [message: string]
+  'source-select': [selection: SourceSelection]
 }>()
 
 const { t } = useI18n()
@@ -56,6 +62,24 @@ let resizeObserver: ResizeObserver | null = null
 let containerWidth = 0
 let disposed = false
 let locateVersion = 0
+let selectionVersion = 0
+
+async function selectPage(page: number) {
+  if (!props.selectable) return
+  currentPage.value = page
+  const version = ++selectionVersion
+  emit('source-select', { type: 'pdf', page })
+  try {
+    const quote = await pageText(page)
+    if (!disposed && version === selectionVersion) emit('source-select', { type: 'pdf', page, quote })
+  } catch { /* Stored structural mappings still work without extracted text. */ }
+}
+
+function onPageKey(event: KeyboardEvent, page: number) {
+  if (!props.selectable || !['Enter', ' '].includes(event.key)) return
+  event.preventDefault()
+  void selectPage(page)
+}
 
 const MAX_RENDERED_PAGES = 12
 const PAGE_GAP = 12
@@ -264,6 +288,14 @@ function scrollToPageFraction(page: number, fraction: number) {
   box.scrollTop = Math.max(0, el.offsetTop + el.offsetHeight * fraction - box.clientHeight / 3)
 }
 
+function navigatePage(page: number) {
+  if (!Number.isInteger(page) || page < 1 || page > pageCount.value) return
+  scrollToPageFraction(page, 0)
+  currentPage.value = page
+  void renderPage(page)
+  void selectPage(page)
+}
+
 async function pageText(pageNumber: number): Promise<string> {
   const cached = pageTexts.get(pageNumber)
   if (cached !== undefined) return cached
@@ -422,37 +454,47 @@ defineExpose({ relocate: () => applyLocate(props.locate) })
 <template>
   <div class="pdf-source-viewer">
     <div v-if="error" class="pdf-source-viewer__error">{{ error }}</div>
-    <div
-      ref="scroller"
-      class="pdf-source-viewer__scroller"
-      tabindex="0"
-      :aria-label="fileName"
-      @scroll.passive="onScroll"
-    >
-      <div v-if="loading && !pageCount" class="pdf-source-viewer__loading">
-        <t-loading size="small" />
-      </div>
+    <div class="pdf-source-viewer__body">
+      <SourcePageNavigation v-if="pageNavigation && pageCount && !error" :page-count="pageCount" :current-page="currentPage" @navigate="navigatePage" />
       <div
-        v-for="page in pageCount"
-        :key="page"
-        :ref="(el) => setPageRef(page, el)"
-        class="pdf-source-page"
-        :data-page="page"
-        :style="pageStyle(page)"
+        ref="scroller"
+        class="pdf-source-viewer__scroller"
+        tabindex="0"
+        :aria-label="fileName"
+        @scroll.passive="onScroll"
       >
-        <div class="pdf-source-page__marks" aria-hidden="true">
-          <div
-            v-for="(mark, i) in marks[page] || []"
-            :key="i"
-            class="pdf-source-mark"
-            :class="`pdf-source-mark--${mark.kind}`"
-            :style="{
-              left: `${mark.left * 100}%`,
-              top: `${mark.top * 100}%`,
-              width: `${mark.width * 100}%`,
-              height: `${mark.height * 100}%`,
-            }"
-          />
+        <div v-if="loading && !pageCount" class="pdf-source-viewer__loading">
+          <t-loading size="small" />
+        </div>
+        <div
+          v-for="page in pageCount"
+          :key="page"
+          :ref="(el) => setPageRef(page, el)"
+          class="pdf-source-page"
+          :class="{ 'pdf-source-page--selected': selectable && selectedPage === page, 'pdf-source-page--selectable': selectable }"
+          :data-page="page"
+          :style="pageStyle(page)"
+          :role="selectable ? 'button' : undefined"
+          :tabindex="selectable ? 0 : undefined"
+          :aria-label="selectable ? `${fileName || ''} · ${page}` : undefined"
+          :aria-pressed="selectable ? selectedPage === page : undefined"
+          @click="selectPage(page)"
+          @keydown.self="onPageKey($event, page)"
+        >
+          <div class="pdf-source-page__marks" aria-hidden="true">
+            <div
+              v-for="(mark, i) in marks[page] || []"
+              :key="i"
+              class="pdf-source-mark"
+              :class="`pdf-source-mark--${mark.kind}`"
+              :style="{
+                left: `${mark.left * 100}%`,
+                top: `${mark.top * 100}%`,
+                width: `${mark.width * 100}%`,
+                height: `${mark.height * 100}%`,
+              }"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -483,6 +525,9 @@ defineExpose({ relocate: () => applyLocate(props.locate) })
 </template>
 
 <style scoped lang="less">
+.pdf-source-page--selectable { cursor: pointer; }
+.pdf-source-page--selected { outline: 3px solid var(--td-brand-color); outline-offset: -3px; }
+.pdf-source-page--selectable:focus-visible { outline: 3px solid var(--td-brand-color); }
 .pdf-source-viewer {
   position: relative;
   display: flex;
@@ -496,11 +541,14 @@ defineExpose({ relocate: () => applyLocate(props.locate) })
   // Positioned so page offsetTop is measured from the scroll content.
   position: relative;
   flex: 1;
+  min-width: 0;
   min-height: 0;
   overflow: auto;
   padding: 12px;
   outline: none;
 }
+
+.pdf-source-viewer__body { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
 
 .pdf-source-viewer__loading,
 .pdf-source-viewer__error {

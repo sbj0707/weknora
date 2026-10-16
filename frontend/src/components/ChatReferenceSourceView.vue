@@ -21,8 +21,8 @@
         :href="documentHref"
         target="_blank"
         rel="noopener noreferrer"
-        :title="t('chat.navigateToDocument')"
-        :aria-label="t('chat.navigateToDocument')"
+        :title="t('knowledgeBase.sourceChunks.title')"
+        :aria-label="t('knowledgeBase.sourceChunks.title')"
       >
         <t-icon name="jump" size="16px" />
       </a>
@@ -67,7 +67,7 @@ import DocumentPreview from '@/components/document-preview.vue'
 import ArtifactFileIcon from '@/views/chat/components/ArtifactFileIcon.vue'
 import { getChunkByIdOnly, getKnowledgeDetails } from '@/api/knowledge-base/index'
 import { isKnownPreviewableFile } from '@/utils/filePreview'
-import type { ReferenceSourceTarget } from '@/utils/referenceSources'
+import { documentChunkRelationsRoute, type ReferenceSourceTarget } from '@/utils/referenceSources'
 import {
   locatorPages,
   parseSourceLocators,
@@ -110,7 +110,7 @@ const edited = ref(false)
 const imageDigest = ref<string>()
 const imageContext = ref<SourceLocateRequest['imageContext']>()
 let locateToken = 0
-const meta = reactive({ fileName: '', fileType: '', knowledgeSource: '', knowledgeType: '', title: '' })
+const meta = reactive({ fileName: '', fileType: '', knowledgeSource: '', knowledgeType: '', title: '', knowledgeBaseId: '' })
 let loadVersion = 0
 /** The knowledge whose file the preview currently shows. */
 let shownKnowledgeId = ''
@@ -119,11 +119,8 @@ const displayName = computed(() => meta.fileName || props.target.fileName || pro
 const displayTitle = computed(() => props.target.title || meta.title || displayName.value)
 
 const documentHref = computed(() => {
-  if (!props.target.knowledgeBaseId) return ''
-  return router.resolve({
-    path: `/platform/knowledge-bases/${props.target.knowledgeBaseId}`,
-    query: { knowledge_id: props.target.knowledgeId },
-  }).href
+  const target = documentChunkRelationsRoute(props.target.knowledgeBaseId || meta.knowledgeBaseId, props.target.knowledgeId, props.target.chunkId)
+  return target ? router.resolve(target).href : ''
 })
 
 const statusText = computed(() => {
@@ -164,11 +161,13 @@ async function loadMeta(version: number) {
   meta.knowledgeSource = props.target.knowledgeSource || ''
   meta.knowledgeType = ''
   meta.title = props.target.title || ''
+  meta.knowledgeBaseId = ''
   sourceHash.value = ''
   try {
     const res: any = await getKnowledgeDetails(props.target.knowledgeId)
     if (version !== loadVersion) return
     const data = res?.data || {}
+    meta.knowledgeBaseId = data.knowledge_base_id || ''
     sourceHash.value = data.file_hash || ''
     meta.fileName = meta.fileName || data.file_name || ''
     meta.fileType = data.file_type || ''

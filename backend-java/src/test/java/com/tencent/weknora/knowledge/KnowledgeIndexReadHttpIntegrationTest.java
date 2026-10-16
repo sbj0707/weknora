@@ -63,6 +63,25 @@ class KnowledgeIndexReadHttpIntegrationTest {
   String statusPath(){return "/api/v1/knowledge/doc/index-status";}
   String detailPath(){return "/api/v1/knowledge/doc/chunks/chunk/details";}
 
+  @Test void sourceInspectionIncludesAllTypesAndStatesWithScopedPagination() throws Exception {
+    jdbc.update("INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,chunk_type,status,is_enabled,chunk_index,start_at,end_at) VALUES('parent',7,'kb','doc','Parent','parent_text',1,true,2,0,6)");
+    jdbc.update("INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,chunk_type,status,is_enabled,chunk_index,start_at,end_at) VALUES('summary',7,'kb','doc','Summary','summary',1,false,3,0,7)");
+    jdbc.update("INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,chunk_type,chunk_index,start_at,end_at) VALUES('foreign',8,'kb','doc','Foreign','text',4,0,7)");
+    jdbc.update("INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,chunk_type,chunk_index,start_at,end_at) VALUES('other',7,'kb','other','Other','text',4,0,5)");
+    jdbc.update("INSERT INTO chunks(id,tenant_id,knowledge_base_id,knowledge_id,content,chunk_type,deleted_at,chunk_index,start_at,end_at) VALUES('deleted',7,'kb','doc','Deleted','text','2026-10-16',4,0,7)");
+    var first = request("/api/v1/chunks/doc?include_all=true&page_size=2&page=1", 200);
+    var second = request("/api/v1/chunks/doc?include_all=true&page_size=2&page=2", 200);
+    assertEquals(4, first.path("total").asInt());
+    assertEquals(4, second.path("total").asInt());
+    assertEquals("chunk", first.path("data").get(0).path("id").asText());
+    assertEquals("ocr", first.path("data").get(1).path("id").asText());
+    assertEquals("parent", second.path("data").get(0).path("id").asText());
+    assertEquals("summary", second.path("data").get(1).path("id").asText());
+    assertFalse(second.path("data").get(1).path("is_enabled").asBoolean());
+    assertEquals(1, request("/api/v1/chunks/doc", 200).path("total").asInt());
+    assertEquals(0, request("/api/v1/chunks/doc?include_all=true&page_size=2&page=3", 200).path("data").size());
+  }
+
   @Test void completeContentActualVectorsAliasesAndScopedWiki() throws Exception {
     var detail=request(detailPath(),200).path("data");assertEquals("Current body",detail.path("chunk").path("content").asText());assertEquals("Parser body",detail.path("source_content").asText());assertEquals("Heading",detail.path("context_header").asText());assertEquals("Visible embedding",detail.path("model_name").asText());assertFalse(detail.toString().contains("NEVER-EXPOSE-SECRET"));assertEquals(1,detail.path("children").size());
     var vector=index(detail,"vector");assertEquals("completed",vector.path("status").asText());assertEquals(2,vector.path("records").size());assertEquals(1,vector.path("records").get(0).path("embedding").get(0).asDouble());assertEquals("Actual index text",vector.path("records").get(0).path("content").asText());assertFalse(vector.path("records").get(1).path("is_enabled").asBoolean());

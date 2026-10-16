@@ -28,8 +28,8 @@
                         <span class="doc-group-count">{{ $t('chat.referenceChunkCount', { count: group.chunks.length })
                             }}</span>
                     </div>
-                    <div class="doc-group-actions" v-if="!embeddedMode && group.knowledgeBaseId" @click.stop>
-                        <t-tooltip :content="$t('chat.navigateToDocument')">
+                    <div class="doc-group-actions" v-if="!embeddedMode && group.knowledgeBaseId && group.knowledgeId" @click.stop>
+                        <t-tooltip :content="$t('knowledgeBase.sourceChunks.title')">
                             <a
                                 class="doc-group-navigate"
                                 :href="getDocumentHref(group)"
@@ -66,6 +66,7 @@ import { useI18n } from 'vue-i18n';
 import { sanitizeHTML } from '@/utils/security';
 import ContentPopup from './tool-results/ContentPopup.vue';
 import { useChatReferencesDrawer } from '@/composables/useChatReferencesDrawer';
+import { documentChunkRelationsRoute } from '@/utils/referenceSources';
 
 const router = useRouter();
 const { t } = useI18n();
@@ -171,15 +172,9 @@ const truncateContent = (content, maxLen) => {
 };
 
 const getDocumentHref = (group) => {
-    if (!group.knowledgeBaseId) return '';
-    const query = {};
-    if (group.knowledgeId) {
-        query.knowledge_id = group.knowledgeId;
-    }
-    return router.resolve({
-        path: `/platform/knowledge-bases/${group.knowledgeBaseId}`,
-        query
-    }).href;
+    const chunk = group.chunks[0];
+    const target = documentChunkRelationsRoute(group.knowledgeBaseId, group.knowledgeId, chunk?.source_chunk_id || chunk?.chunk_ids?.[0] || chunk?.id);
+    return target ? router.resolve(target).href : '';
 };
 
 const getWebSearchUrl = (item) => {

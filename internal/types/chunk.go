@@ -13,6 +13,9 @@ import (
 type ChunkType = string
 
 const (
+	// ChunkTypeAll is a query-only selector for source/chunk inspection.
+	// It includes every non-deleted chunk type and lifecycle state.
+	ChunkTypeAll ChunkType = "*"
 	// ChunkTypeText 表示普通的文本 Chunk
 	ChunkTypeText ChunkType = "text"
 	// ChunkTypeParentText 表示父子分块策略中的父文本 Chunk（仅用于上下文，不参与向量索引）

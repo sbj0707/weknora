@@ -652,6 +652,31 @@ export default {
     sharedTooltip: '共有スペース経由で外部ワークスペースからアクセス'
   },
   knowledgeBase: {
+    sourceChunks: {
+      "open": "Source/Chunk",
+      "title": "Source and chunk relationships",
+      "original": "Original document",
+      "related": "Related chunks",
+      "export": "Export all chunks as JSON",
+      "selectHint": "Click a source page or region to view its chunks, or choose a chunk from the list.",
+      "selectedRegion": "Selected source region",
+      "selectedChunk": "Selected chunk",
+      "targetMissing": "引用された Chunk は削除されたか、この文書に属していないため自動移動できません。一覧から現在の Chunk を確認してください。",
+      "allChunks": "All chunks · {count}",
+      "unmapped": "{count} chunks have no exact location. Use the chunk list to inspect them.",
+      "page": "Page {page}",
+      "pages": "Pages {pages}",
+      "slide": "Slide {slide}",
+      "blocks": "Source blocks {start}–{end}",
+      "noMatches": "No confirmed chunks for this region. Chunks without source positions remain available in the full list.",
+      "loadFailed": "Could not load the document or chunks. Refresh to retry.",
+      "exportFailed": "Export failed or the document changed during export. Retry; no incomplete file was downloaded.",
+      "match": {
+        "locator": "Source position",
+        "text": "Text candidate",
+        "parent": "Parent relationship"
+      }
+    },
     tagAddAction: 'タグを追加',
     documentCount: '{count} 件のドキュメント',
     filters: '絞り込み',
@@ -6136,6 +6161,11 @@ export default {
     }
   },
   preview: {
+    pageNavigation: 'ページ一覧',
+    totalPages: '全 {count} ページ',
+    previousPage: '前のページ',
+    nextPage: '次のページ',
+    goToPage: 'ページ番号を入力して Enter キーで移動',
     tab: 'プレビュー',
     loading: 'ドキュメントのプレビューを読み込み中...',
     loadFailed: 'ドキュメントのプレビューの読み込みに失敗しました',

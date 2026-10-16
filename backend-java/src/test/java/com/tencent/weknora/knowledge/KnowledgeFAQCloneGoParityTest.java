@@ -22,7 +22,7 @@ class KnowledgeFAQCloneGoParityTest {
     JsonNode cases;String file=System.getProperty("weknora.faq.clone.fixture","");
     if(!file.isEmpty())cases=json.readTree(Files.readAllBytes(Path.of(file)));
     else try(var in=getClass().getResourceAsStream("/go-knowledge-faq-clone.json")){cases=json.readTree(Objects.requireNonNull(in));}
-    assertThat(cases.size()).isEqualTo(54);
+    assertThat(cases.size()).isEqualTo(74);
     var tests=new ArrayList<DynamicTest>();for(var c:cases)tests.add(DynamicTest.dynamicTest(c.path("name").asText(),()->run(c)));return tests.stream();
   }
   void run(JsonNode c)throws Exception {
@@ -98,6 +98,13 @@ class KnowledgeFAQCloneGoParityTest {
       var snapshot=new LinkedHashMap<String,Object>();snapshot.put("error",error);snapshot.put("events",events);snapshot.put("progress",progress);
       var queries=c.path("queries").fields();while(queries.hasNext()){var e=queries.next();snapshot.put(e.getKey(),db.jdbc.queryForList(e.getValue().asText()));}
       JsonNode actual=normalize(json.readTree(json.writeValueAsBytes(snapshot)),ids,"");
+      // Go CompositeRetrieveEngine deduplicates through a map. Only entries inside
+      // one index call are unordered; preserve calls, duplicates, and every field.
+      for(var event:actual.path("events"))if(event.path("kind").asText().equals("index")) {
+        var entries=new ArrayList<JsonNode>();event.path("entries").forEach(entries::add);
+        entries.sort(Comparator.comparing(e->e.path("sourceId").asText()));
+        ((ObjectNode)event).set("entries",json.valueToTree(entries));
+      }
       for(String table:List.of("documents","chunks","tags")) {var rows=new ArrayList<JsonNode>();actual.path(table).forEach(rows::add);rows.sort(Comparator.comparing(r->r.path("id").asText()));((ObjectNode)actual).set(table,json.valueToTree(rows));}
       assertThat(actual).as("attempt %d",n).isEqualTo(c.path("snapshots").get(n-1));
       if(n==1)for(var statement:c.path("repair_statements"))db.jdbc.execute(statement.asText());

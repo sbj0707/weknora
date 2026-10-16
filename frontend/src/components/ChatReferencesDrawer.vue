@@ -114,12 +114,13 @@
                           <t-icon name="file-search" size="14px" />
                         </button>
                         <a
-                          v-if="item.knowledgeBaseId && !embeddedMode"
+                          v-if="item.knowledgeBaseId && item.knowledgeId && !embeddedMode"
                           class="reference-item__open"
                           :href="getDocumentHref(item)"
                           target="_blank"
                           rel="noopener noreferrer"
-                          :aria-label="t('chat.navigateToDocument')"
+                          :title="t('knowledgeBase.sourceChunks.title')"
+                          :aria-label="t('knowledgeBase.sourceChunks.title')"
                           @click.stop
                         >
                           <t-icon name="jump" size="14px" />
@@ -189,6 +190,8 @@ import {
   buildReferenceSections,
   formatReferenceSnippet,
   resolveReferenceHighlightKey,
+  referenceNavigationChunkId,
+  documentChunkRelationsRoute,
   type ReferenceListItem,
 } from '@/utils/referenceSources'
 
@@ -381,13 +384,9 @@ function toggleDocumentSnippet(item: ReferenceListItem, event?: MouseEvent) {
 }
 
 function getDocumentHref(item: ReferenceListItem) {
-  if (!item.knowledgeBaseId) return ''
-  const query: Record<string, string> = {}
-  if (item.knowledgeId) query.knowledge_id = item.knowledgeId
-  return router.resolve({
-    path: `/platform/knowledge-bases/${item.knowledgeBaseId}`,
-    query,
-  }).href
+  const chunkId = referenceNavigationChunkId(item, highlight.value?.chunkId)
+  const target = documentChunkRelationsRoute(item.knowledgeBaseId, item.knowledgeId, chunkId)
+  return target ? router.resolve(target).href : ''
 }
 
 function shouldShowItemTitle(item: ReferenceListItem) {

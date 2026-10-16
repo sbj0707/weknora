@@ -652,6 +652,31 @@ export default {
     sharedTooltip: 'Accessed from an external workspace via a shared space'
   },
   knowledgeBase: {
+    sourceChunks: {
+      "open": "Source/Chunk",
+      "title": "Source and chunk relationships",
+      "original": "Original document",
+      "related": "Related chunks",
+      "export": "Export all chunks as JSON",
+      "selectHint": "Click a source page or region to view its chunks, or choose a chunk from the list.",
+      "selectedRegion": "Selected source region",
+      "selectedChunk": "Selected chunk",
+      "targetMissing": "The referenced chunk was deleted or does not belong to this document. Automatic navigation is unavailable; browse the current chunk list.",
+      "allChunks": "All chunks · {count}",
+      "unmapped": "{count} chunks have no exact location. Use the chunk list to inspect them.",
+      "page": "Page {page}",
+      "pages": "Pages {pages}",
+      "slide": "Slide {slide}",
+      "blocks": "Source blocks {start}–{end}",
+      "noMatches": "No confirmed chunks for this region. Chunks without source positions remain available in the full list.",
+      "loadFailed": "Could not load the document or chunks. Refresh to retry.",
+      "exportFailed": "Export failed or the document changed during export. Retry; no incomplete file was downloaded.",
+      "match": {
+        "locator": "Source position",
+        "text": "Text candidate",
+        "parent": "Parent relationship"
+      }
+    },
     tagAddAction: 'Add tags',
     documentCount: '{count} documents',
     filters: 'Filters',
@@ -6136,6 +6161,11 @@ export default {
     }
   },
   preview: {
+    pageNavigation: 'Pages',
+    totalPages: '{count} pages',
+    previousPage: 'Previous page',
+    nextPage: 'Next page',
+    goToPage: 'Enter a page number and press Enter',
     tab: 'Preview',
     loading: 'Loading document preview...',
     loadFailed: 'Failed to load document preview',

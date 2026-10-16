@@ -20,6 +20,7 @@ import { normalizeSpuriousTablePrefixes } from '@/utils/markdownTableNormalize';
 import { openMermaidFullscreen } from '@/utils/mermaidViewer';
 import { diffWikiLines, type WikiDiffLine } from '@/utils/wikiLineDiff';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import DocumentPreview from '@/components/document-preview.vue';
 import DocumentIndexStatus from '@/components/document-index-status.vue';
@@ -30,6 +31,12 @@ import { resolveKnowledgeDownloadFileName } from '@/views/knowledge/knowledgeDow
 import { isKnownPreviewableExt, resolveFilePreviewExt } from '@/utils/filePreview';
 
 const { t } = useI18n();
+const router = useRouter();
+const sourceChunksHref = computed(() => {
+  const knowledgeId = props.details?.id;
+  const kbId = props.details?.knowledge_base_id || props.kbId;
+  return knowledgeId && kbId ? router.resolve({ name: 'documentChunkRelations', params: { kbId, knowledgeId } }).href : '';
+});
 const authStore = useAuthStore();
 
 // canDeleteGeneratedQuestion 对应后端 DELETE /chunks/by-id/:id/questions
@@ -1845,6 +1852,11 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
               </span>
             </div>
             <div class="view-mode-buttons">
+              <t-button v-if="sourceChunksHref" tag="a" :href="sourceChunksHref" target="_blank" rel="noopener noreferrer"
+                size="small" variant="outline" class="view-mode-btn" @click.stop>
+                <template #icon><t-icon name="relation" /></template>
+                {{ $t('knowledgeBase.sourceChunks.open') }}
+              </t-button>
               <t-button v-if="canPreview()" size="small" :variant="viewMode === 'preview' ? 'base' : 'outline'"
                 :theme="viewMode === 'preview' ? 'primary' : 'default'" @click="viewMode = 'preview'"
                 class="view-mode-btn">

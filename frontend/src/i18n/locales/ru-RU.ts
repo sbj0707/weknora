@@ -2011,6 +2011,11 @@ export default {
     }
   },
   preview: {
+    pageNavigation: 'Страницы',
+    totalPages: 'Всего страниц: {count}',
+    previousPage: 'Предыдущая страница',
+    nextPage: 'Следующая страница',
+    goToPage: 'Введите номер страницы и нажмите Enter',
     tab: 'Предпросмотр',
     loading: 'Загрузка предпросмотра документа...',
     loadFailed: 'Не удалось загрузить предпросмотр документа',
@@ -7071,6 +7076,31 @@ export default {
     }
   },
   knowledgeBase: {
+    sourceChunks: {
+      "open": "Source/Chunk",
+      "title": "Source and chunk relationships",
+      "original": "Original document",
+      "related": "Related chunks",
+      "export": "Export all chunks as JSON",
+      "selectHint": "Click a source page or region to view its chunks, or choose a chunk from the list.",
+      "selectedRegion": "Selected source region",
+      "selectedChunk": "Selected chunk",
+      "targetMissing": "Цитируемый фрагмент удалён или не относится к этому документу. Автоматический переход недоступен; выберите фрагмент из списка.",
+      "allChunks": "All chunks · {count}",
+      "unmapped": "{count} chunks have no exact location. Use the chunk list to inspect them.",
+      "page": "Page {page}",
+      "pages": "Pages {pages}",
+      "slide": "Slide {slide}",
+      "blocks": "Source blocks {start}–{end}",
+      "noMatches": "No confirmed chunks for this region. Chunks without source positions remain available in the full list.",
+      "loadFailed": "Could not load the document or chunks. Refresh to retry.",
+      "exportFailed": "Export failed or the document changed during export. Retry; no incomplete file was downloaded.",
+      "match": {
+        "locator": "Source position",
+        "text": "Text candidate",
+        "parent": "Parent relationship"
+      }
+    },
     tagAddAction: 'Добавить теги',
     documentCount: 'Документов: {count}',
     filters: 'Фильтры',

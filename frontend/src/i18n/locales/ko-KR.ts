@@ -2011,6 +2011,11 @@ export default {
     }
   },
   preview: {
+    pageNavigation: '페이지 탐색',
+    totalPages: '총 {count}페이지',
+    previousPage: '이전 페이지',
+    nextPage: '다음 페이지',
+    goToPage: '페이지 번호를 입력하고 Enter 키를 누르세요',
     tab: '미리보기',
     loading: '문서 미리보기 로딩 중...',
     loadFailed: '문서 미리보기 로드 실패',
@@ -7071,6 +7076,31 @@ export default {
     }
   },
   knowledgeBase: {
+    sourceChunks: {
+      "open": "Source/Chunk",
+      "title": "Source and chunk relationships",
+      "original": "Original document",
+      "related": "Related chunks",
+      "export": "Export all chunks as JSON",
+      "selectHint": "Click a source page or region to view its chunks, or choose a chunk from the list.",
+      "selectedRegion": "Selected source region",
+      "selectedChunk": "Selected chunk",
+      "targetMissing": "참조된 Chunk가 삭제되었거나 현재 문서에 속하지 않아 자동으로 이동할 수 없습니다. 목록에서 현재 Chunk를 확인하세요.",
+      "allChunks": "All chunks · {count}",
+      "unmapped": "{count} chunks have no exact location. Use the chunk list to inspect them.",
+      "page": "Page {page}",
+      "pages": "Pages {pages}",
+      "slide": "Slide {slide}",
+      "blocks": "Source blocks {start}–{end}",
+      "noMatches": "No confirmed chunks for this region. Chunks without source positions remain available in the full list.",
+      "loadFailed": "Could not load the document or chunks. Refresh to retry.",
+      "exportFailed": "Export failed or the document changed during export. Retry; no incomplete file was downloaded.",
+      "match": {
+        "locator": "Source position",
+        "text": "Text candidate",
+        "parent": "Parent relationship"
+      }
+    },
     tagAddAction: '태그 추가',
     documentCount: '문서 {count}개',
     filters: '필터',

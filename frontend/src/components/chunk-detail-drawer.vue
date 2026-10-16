@@ -2,6 +2,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { Drawer } from 'tdesign-vue-next'
 import { getDocumentChunkDetail } from '@/api/knowledge-base'
 import { useChunkDetail } from '@/composables/useChunkDetail'
 import { hydrateProtectedFileImages } from '@/utils/security'
@@ -12,6 +13,7 @@ import type { KnowledgeIndexBuildState, KnowledgeIndexKind } from '@/types/knowl
 const props = defineProps<{
   visible: boolean; knowledgeId: string; chunkId: string; revision?: number
   renderMarkdown: (value: string) => string
+  inline?: boolean
 }>()
 const emit = defineEmits<{ close: []; navigate: [id: string] }>()
 const { t, locale } = useI18n()
@@ -46,7 +48,7 @@ watch(() => [props.knowledgeId, props.chunkId, props.revision] as const,
   ([docID, id, revision], [previousDocID, previousID, previousRevision]) => {
     if (docID === previousDocID && id === previousID && revision !== previousRevision) void refresh()
   })
-watch([detail, activeTab, rawContent], async () => {
+watch([detail, activeTab, rawContent, contentRoot], async () => {
   await nextTick()
   const root = contentRoot.value
   if (props.visible && root) {
@@ -87,9 +89,12 @@ function wikiHref(slug: string) {
 </script>
 
 <template>
-  <t-drawer :visible="visible" :size="fullscreen ? '100vw' : 'min(960px, 100vw)'" :z-index="2200"
-    attach="body" :footer="false" :destroy-on-close="true" class="chunk-detail-drawer" @close="emit('close')">
-    <template #header>
+  <component :is="inline && !fullscreen ? 'section' : Drawer"
+    v-bind="inline && !fullscreen ? {} : { visible, size: fullscreen ? '100vw' : 'min(960px, 100vw)', zIndex: 2200,
+      attach: 'body', footer: false, destroyOnClose: true }"
+    class="chunk-detail-drawer" :class="{ 'chunk-detail-inline': inline && !fullscreen }"
+    @close="inline ? fullscreen = false : emit('close')">
+    <template v-if="!inline || fullscreen" #header>
       <div class="detail-header">
         <div class="detail-heading">
           <strong>{{ t('knowledgeBase.chunkDetail.title') }}</strong>
@@ -102,6 +107,15 @@ function wikiHref(slug: string) {
           @click="fullscreen = !fullscreen"><template #icon><t-icon :name="fullscreen ? 'fullscreen-exit' : 'fullscreen'" /></template></t-button>
       </div>
     </template>
+    <div v-if="inline && !fullscreen" class="detail-header inline-header">
+      <div class="detail-heading"><strong>{{ t('knowledgeBase.chunkDetail.title') }}</strong><span>{{ chunkId }}</span></div>
+      <t-button variant="text" shape="square" :loading="loading" :title="t('common.refresh')" :aria-label="t('common.refresh')" @click="refresh">
+        <template #icon><t-icon name="refresh" /></template>
+      </t-button>
+      <t-button variant="text" shape="square" :title="t('common.fullscreen')" :aria-label="t('common.fullscreen')" @click="fullscreen = true">
+        <template #icon><t-icon name="fullscreen" /></template>
+      </t-button>
+    </div>
     <div class="chunk-detail-body" :aria-busy="loading">
       <div v-if="loading && !detail" class="detail-state"><t-loading size="small" />{{ t('common.loading') }}</div>
       <div v-else-if="failed" class="detail-state" role="alert">
@@ -242,7 +256,7 @@ function wikiHref(slug: string) {
         </div>
       </template>
     </div>
-  </t-drawer>
+  </component>
 </template>
 
 <style scoped lang="less">
@@ -252,6 +266,8 @@ function wikiHref(slug: string) {
 .detail-heading strong { font-size: var(--app-text-base); }
 .detail-heading span { font-size: var(--app-text-xs); color: var(--td-text-color-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chunk-detail-body { color: var(--td-text-color-primary); }
+.chunk-detail-inline { min-width: 0; }
+.inline-header { padding: 0 0 12px; }
 .detail-state { display: flex; gap: 12px; align-items: center; justify-content: center; min-height: 180px; }
 .detail-tabs { display: flex; gap: 6px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--td-component-stroke); }
 .detail-tabs button { display: inline-flex; align-items: center; gap: 4px; border: 0; border-radius: var(--app-radius-sm); background: var(--td-bg-color-secondarycontainer); padding: 8px 12px; color: var(--td-text-color-secondary); cursor: pointer; }

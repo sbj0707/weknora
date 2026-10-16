@@ -132,6 +132,9 @@ func (h *ChunkHandler) ListKnowledgeChunks(c *gin.Context) {
 			chunkType = append(chunkType, types.ChunkType(qt))
 		}
 	}
+	if c.Query("include_all") == "true" {
+		chunkType = []types.ChunkType{types.ChunkTypeAll}
+	}
 
 	// The route-level guard has rewritten the request's tenant context
 	// to the effective tenant for shared KBs.

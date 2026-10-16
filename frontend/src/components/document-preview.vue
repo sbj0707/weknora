@@ -42,6 +42,8 @@ import {
   scrollRectIntoContainer,
 } from '@/utils/sourceLocatorDom';
 import { renderEpubPreview } from '@/utils/epubPreview';
+import type { SourceSelection } from '@/utils/documentChunkRelations';
+import SourcePageNavigation from '@/components/source-preview/SourcePageNavigation.vue';
 
 
 const VueOfficePptx = defineAsyncComponent(() => import('@vue-office/pptx'));
@@ -69,12 +71,16 @@ const props = defineProps<{
   sourceMode?: boolean;
   /** Where to scroll and what to highlight once the file is rendered. */
   locate?: SourceLocateRequest | null;
+  selectable?: boolean;
+  sourceSelection?: SourceSelection | null;
+  pageNavigation?: boolean;
 }>();
 
 export type SourceLocateResult = { found: boolean; precise: boolean; granularity?: string; reason?: string };
 
 const emit = defineEmits<{
   located: [result: SourceLocateResult];
+  'source-select': [selection: SourceSelection];
 }>();
 
 const loading = ref(false);
@@ -100,6 +106,7 @@ function onPptxRendered(result: unknown) {
     return;
   }
   scheduleLocate();
+  void nextTick(indexSourcePages);
 }
 const docxContainer = ref<HTMLElement | null>(null);
 const imageNaturalWidth = ref(0);
@@ -107,8 +114,91 @@ const imageNaturalHeight = ref(0);
 let loadedForId = '';
 
 const isFullscreen = ref(false);
+const sourcePages = shallowRef<HTMLElement[]>([]);
+const sourcePage = ref(1);
+
+function indexSourcePages() {
+  if (!props.pageNavigation) return;
+  sourcePages.value = previewType.value === 'docx'
+    ? [...(docxContainer.value?.querySelectorAll<HTMLElement>('section > article') || [])]
+    : previewType.value === 'pptx'
+      ? [...(previewContent.value?.querySelectorAll<HTMLElement>('.pptx-preview-slide-wrapper') || [])] : [];
+  updateSourcePage();
+}
+
+function sourcePageScroller() {
+  return previewType.value === 'docx' ? docxContainer.value : previewContent.value;
+}
+
+function updateSourcePage() {
+  const box = sourcePageScroller();
+  if (!box || !sourcePages.value.length) return;
+  const anchor = box.getBoundingClientRect().top + Math.min(box.clientHeight / 3, 100);
+  let page = 1;
+  sourcePages.value.forEach((element, index) => {
+    if (element.getBoundingClientRect().top <= anchor) page = index + 1;
+  });
+  sourcePage.value = page;
+}
+
+function selectDocumentPage(element: Element) {
+  if (!props.selectable) return;
+  const pageIndex = sourcePages.value.indexOf(element as HTMLElement);
+  if (pageIndex >= 0) sourcePage.value = pageIndex + 1;
+  if (previewType.value === 'docx') {
+    const articles = [...(docxContainer.value?.querySelectorAll('section > article') || [])];
+    const blocks = articles.flatMap(article => [...article.children].filter(child => child.tagName === 'P' || child.tagName === 'TABLE'));
+    const own = blocks.filter(block => element.contains(block));
+    emit('source-select', { type: 'docx', page: articles.indexOf(element) + 1 || undefined,
+      blockStart: own.length ? blocks.indexOf(own[0]) + 1 : undefined,
+      blockEnd: own.length ? blocks.indexOf(own[own.length - 1]) + 1 : undefined, quote: element.textContent || '' });
+  } else if (previewType.value === 'pptx') {
+    const slides = [...(previewContent.value?.querySelectorAll('.pptx-preview-slide-wrapper') || [])];
+    const index = slides.indexOf(element);
+    if (index >= 0) emit('source-select', { type: 'slide', slide: index + 1, quote: element.textContent || '' });
+  }
+}
+
+function navigateSourcePage(page: number) {
+  const box = sourcePageScroller();
+  const element = sourcePages.value[page - 1];
+  if (!box || !element || !Number.isInteger(page)) return;
+  box.scrollTop += element.getBoundingClientRect().top - box.getBoundingClientRect().top - 12;
+  sourcePage.value = page;
+  selectDocumentPage(element);
+}
+
 const previewRoot = ref<HTMLElement | null>(null);
 const previewContent = ref<HTMLElement | null>(null);
+
+function onSourceClick(event: MouseEvent) {
+  if (!props.selectable || previewType.value === 'pdf') return;
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target || target.closest('button, a, input, audio, .preview-toolbar')) return;
+  if (previewType.value === 'docx' && docxContainer.value?.contains(target)) {
+    const article = target.closest('article');
+    if (article) selectDocumentPage(article);
+  } else if (previewType.value === 'pptx') {
+    const slide = target.closest('.pptx-preview-slide-wrapper');
+    if (slide) selectDocumentPage(slide);
+  } else if (previewType.value === 'excel') {
+    const sheets = [...(previewContent.value?.querySelectorAll('.excel-sheet') || [])];
+    const sheet = target.closest('.excel-sheet');
+    if (!sheet) return;
+    const cell = target.closest('td[id]');
+    const row = cell ? /-[A-Z]+(\d+)$/.exec(cell.id) : null;
+    emit('source-select', { type: 'sheet', sheet: excelSheetNames[sheets.indexOf(sheet)], rowStart: row ? Number(row[1]) : undefined, quote: (cell?.closest('tr') || sheet).textContent || '' });
+  } else if (previewType.value === 'epub') {
+    const section = target.closest('[data-epub-section]');
+    if (section) emit('source-select', { type: 'section', section: Number(section.getAttribute('data-epub-section')), quote: section.textContent || '' });
+  } else if (previewType.value === 'image' && previewContent.value?.contains(target)) {
+    emit('source-select', { type: 'image', page: 1 });
+  } else if (['text', 'markdown', 'html'].includes(previewType.value) && previewContent.value?.contains(target)) {
+    const selection = window.getSelection();
+    const quote = selection?.toString().trim() || target.closest('p, li, tr, pre, h1, h2, h3')?.textContent || target.textContent || '';
+    emit('source-select', { type: 'text', quote });
+  }
+}
 
 function focusPreviewContent() {
   const root = previewRoot.value;
@@ -264,6 +354,7 @@ async function renderDocx(blob: Blob) {
       useBase64URL: true,
     });
     if (docxContainer.value) await indexEmbeddedSourceImages(docxContainer.value);
+    indexSourcePages();
   }
 }
 
@@ -529,6 +620,8 @@ function cleanup() {
   excelSheetNames = [];
   clearLocateMarks();
   pptxSlideCount = 0;
+  sourcePages.value = [];
+  sourcePage.value = 1;
   imageNaturalWidth.value = 0;
   imageNaturalHeight.value = 0;
   loadedForId = '';
@@ -858,7 +951,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="previewRoot" tabindex="-1" :aria-label="fileName" class="document-preview" :class="{ 'is-fullscreen': isFullscreen, 'fill-height': fillHeight }">
+  <div ref="previewRoot" tabindex="-1" :aria-label="fileName" class="document-preview" :class="{ 'is-fullscreen': isFullscreen, 'fill-height': fillHeight, 'with-page-navigation': pageNavigation && sourcePages.length > 0 && !loading && !error }" @click="onSourceClick">
     <!-- Toolbar -->
     <Teleport :to="toolbarTarget || 'body'" :disabled="isFullscreen || !toolbarTarget">
       <div class="preview-toolbar" :class="{ 'is-inline': toolbarTarget && !isFullscreen }" v-if="isFullscreen || (!loading && !error && previewType !== 'unsupported')">
@@ -882,6 +975,9 @@ onUnmounted(() => {
         </div>
       </div>
     </Teleport>
+
+    <SourcePageNavigation v-if="pageNavigation && sourcePages.length && !loading && !error"
+      class="document-page-navigation" :page-count="sourcePages.length" :current-page="sourcePage" @navigate="navigateSourcePage" />
 
     <!-- Loading -->
     <div v-if="loading" class="preview-loading">
@@ -907,7 +1003,9 @@ onUnmounted(() => {
 
     <!-- PDF -->
     <div v-else-if="previewType === 'pdf' && pdfData" class="preview-pdf preview-pdf--source">
-      <PdfSourceViewer :data="pdfData" :file-name="fileName" :locate="locate" @located="(r) => emit('located', r)" />
+      <PdfSourceViewer :data="pdfData" :file-name="fileName" :locate="locate" :selectable="selectable" :page-navigation="pageNavigation"
+        :selected-page="sourceSelection?.type === 'pdf' ? sourceSelection.page : undefined"
+        @source-select="(selection) => emit('source-select', selection)" @located="(r) => emit('located', r)" />
     </div>
     <div v-else-if="previewType === 'pdf' && blobUrl" class="preview-pdf">
       <iframe ref="previewContent" tabindex="0" :title="fileName" :src="blobUrl" class="pdf-iframe" @load="onPreviewFrameLoad" />
@@ -950,11 +1048,11 @@ onUnmounted(() => {
 
     <!-- DOCX -->
     <div v-else-if="previewType === 'docx'" class="preview-docx">
-      <div ref="docxContainer" tabindex="0" :aria-label="fileName" class="docx-container" />
+      <div ref="docxContainer" tabindex="0" :aria-label="fileName" class="docx-container" @scroll.passive="updateSourcePage" />
     </div>
 
     <!-- PPTX -->
-    <div v-else-if="previewType === 'pptx' && pptxData" ref="previewContent" tabindex="0" :aria-label="fileName" class="preview-pptx">
+    <div v-else-if="previewType === 'pptx' && pptxData" ref="previewContent" tabindex="0" :aria-label="fileName" class="preview-pptx" @scroll.passive="updateSourcePage">
       <vue-office-pptx :key="loadedForId" :src="pptxData" @rendered="onPptxRendered" @error="(e: any) => { error = e?.message || $t('preview.loadFailed'); }" />
     </div>
 
@@ -1117,6 +1215,16 @@ onUnmounted(() => {
       min-height: 0;
     }
   }
+}
+
+.document-preview.with-page-navigation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+
+  > .preview-toolbar { grid-column: 1 / -1; grid-row: 1; }
+  > .document-page-navigation { grid-column: 1; grid-row: 2; }
+  > .preview-docx, > .preview-pptx { grid-column: 1; grid-row: 3; min-width: 0; }
 }
 
 .is-fullscreen {

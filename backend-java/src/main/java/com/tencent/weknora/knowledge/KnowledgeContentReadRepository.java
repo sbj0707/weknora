@@ -176,13 +176,14 @@ public class KnowledgeContentReadRepository {
   }
 
   public Map<String, Object> chunks(long tenant, String knowledge, Page page, List<String> types) {
+    boolean includeAll = types.equals(List.of("*"));
     List<Object> args = new ArrayList<>(List.of(tenant, knowledge));
-    args.addAll(types);
+    if (!includeAll) args.addAll(types);
     String where =
-        "tenant_id=? AND knowledge_id=? AND deleted_at IS NULL AND status IN (0,2) AND chunk_type"
+        "tenant_id=? AND knowledge_id=? AND deleted_at IS NULL" + (includeAll ? "" : " AND status IN (0,2) AND chunk_type"
             + " IN ("
             + placeholders(types.size())
-            + ")";
+            + ")");
     long total =
         jdbc.queryForObject(
             "SELECT COUNT(*) FROM chunks WHERE " + where, Long.class, args.toArray());
@@ -191,7 +192,7 @@ public class KnowledgeContentReadRepository {
     List<ObjectNode> data = new ArrayList<>();
     for (var row :
         jdbc.queryForList(
-            "SELECT * FROM chunks WHERE " + where + " ORDER BY chunk_index ASC LIMIT ? OFFSET ?",
+            "SELECT * FROM chunks WHERE " + where + " ORDER BY chunk_index ASC" + (includeAll ? ",id ASC" : "") + " LIMIT ? OFFSET ?",
             args.toArray())) data.add(project(row, chunkDefaults));
     return result(data, total, page);
   }

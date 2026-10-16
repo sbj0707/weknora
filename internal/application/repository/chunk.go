@@ -226,10 +226,14 @@ func (r *chunkRepository) ListPagedChunksByKnowledgeID(
 	var chunks []*types.Chunk
 	var total int64
 	keyword = strings.TrimSpace(keyword)
+	includeAll := len(chunkType) == 1 && chunkType[0] == types.ChunkTypeAll
 
 	baseFilter := func(db *gorm.DB) *gorm.DB {
-		db = db.Where("tenant_id = ? AND knowledge_id = ? AND chunk_type IN (?) AND status in (?)",
-			tenantID, knowledgeID, chunkType, []int{int(types.ChunkStatusIndexed), int(types.ChunkStatusDefault)})
+		db = db.Where("tenant_id = ? AND knowledge_id = ?", tenantID, knowledgeID)
+		if !includeAll {
+			db = db.Where("chunk_type IN (?) AND status in (?)",
+				chunkType, []int{int(types.ChunkStatusIndexed), int(types.ChunkStatusDefault)})
+		}
 		if len(tagIDs) > 0 {
 			db = db.Where("tag_id IN ?", tagIDs)
 		}
@@ -314,6 +318,9 @@ func (r *chunkRepository) ListPagedChunksByKnowledgeID(
 		}
 	}
 
+	if includeAll {
+		orderClause += ", id ASC"
+	}
 	if err := dataQuery.
 		Order(orderClause).
 		Offset(page.Offset()).

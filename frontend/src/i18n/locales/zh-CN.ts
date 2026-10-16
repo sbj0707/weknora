@@ -2013,6 +2013,11 @@ export default {
     }
   },
   preview: {
+    pageNavigation: '页码导航',
+    totalPages: '共 {count} 页',
+    previousPage: '上一页',
+    nextPage: '下一页',
+    goToPage: '输入页码并回车跳转',
     tab: '预览',
     loading: '正在加载文档预览...',
     loadFailed: '加载文档预览失败',
@@ -7073,6 +7078,31 @@ export default {
     }
   },
   knowledgeBase: {
+    sourceChunks: {
+      "open": "源文件/Chunk",
+      "title": "源文件与 Chunk 关系视图",
+      "original": "源文档",
+      "related": "关联 Chunk",
+      "export": "导出全部 Chunk JSON",
+      "selectHint": "点击原文中的页面或内容区域，查看关联的全部 Chunk；也可从片段列表选择。",
+      "selectedRegion": "已选择的原文区域",
+      "selectedChunk": "已选择的 Chunk",
+      "targetMissing": "引用的 Chunk 已删除或不属于当前文档，无法自动定位。可从全部 Chunk 列表查看现有片段。",
+      "allChunks": "全部 Chunk · {count}",
+      "unmapped": "有 {count} 个 Chunk 缺少精确位置，可从片段列表查看。",
+      "page": "第 {page} 页",
+      "pages": "第 {pages} 页",
+      "slide": "第 {slide} 张幻灯片",
+      "blocks": "原文块 {start}–{end}",
+      "noMatches": "当前区域没有可确认的关联 Chunk。缺少定位信息的片段仍可从全部 Chunk 列表查看。",
+      "loadFailed": "文档或 Chunk 加载失败，请刷新重试。",
+      "exportFailed": "导出失败或文档在导出期间发生变化，请重试。未下载不完整的文件。",
+      "match": {
+        "locator": "原文位置",
+        "text": "文本候选",
+        "parent": "父片段关联"
+      }
+    },
     tagAddAction: '添加标签',
     documentCount: '{count} 个文档',
     filters: '筛选',

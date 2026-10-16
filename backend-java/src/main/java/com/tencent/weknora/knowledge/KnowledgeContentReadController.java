@@ -71,10 +71,12 @@ public final class KnowledgeContentReadController {
     var page = pagination(request, true);
     String[] query = request.getParameterValues("chunk_type");
     List<String> types = query == null || query.length == 0 ? List.of("text") : List.of(query);
+    if ("true".equals(request.getParameter("include_all"))) types = List.of("*");
+    final List<String> selectedTypes = types;
     return execute(
         () ->
             repository.chunks(
-                grant.effectiveTenantId(), KnowledgeImportNames.sanitizeForLog(id), page, types));
+                grant.effectiveTenantId(), KnowledgeImportNames.sanitizeForLog(id), page, selectedTypes));
   }
 
   @GetMapping("/chunks/by-id/{id}")

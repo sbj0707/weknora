@@ -45,6 +45,22 @@ export type ReferenceDrawerSection = {
   items: ReferenceListItem[]
 }
 
+/** Keep the cited chunk when a reference card aggregates several chunks. */
+export function referenceNavigationChunkId(item: Pick<ReferenceListItem, 'chunkId' | 'chunkIds' | 'sourceChunkId'>, citedChunkId?: string) {
+  const ids = [item.chunkId, item.sourceChunkId, ...(item.chunkIds || [])]
+  if (citedChunkId && ids.includes(citedChunkId)) return citedChunkId
+  return item.sourceChunkId || item.chunkIds?.[0] || item.chunkId || ''
+}
+
+export function documentChunkRelationsRoute(knowledgeBaseId?: string, knowledgeId?: string, chunkId?: string) {
+  if (!knowledgeBaseId || !knowledgeId) return null
+  return {
+    name: 'documentChunkRelations',
+    params: { kbId: knowledgeBaseId, knowledgeId },
+    query: chunkId ? { chunk_id: chunkId } : {},
+  }
+}
+
 export function normalizeReferenceUrl(url: string): string {
   const raw = String(url || '').trim()
   if (!raw) return ''

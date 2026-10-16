@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-16T22:06:28.123781+08:00",
+  "date": "2026-10-16T22:34:12.827141+08:00",
   "conclusion": "not_equivalent",
   "method": "Fresh Go AST / explicit Spring annotations / concrete TaskHandler type declarations. Static presence is not functional parity; conditional configuration and runtime side effects require separate verification.",
   "go_routes": 482,
@@ -498,7 +498,7 @@
       "method": "GET",
       "path": "/api/v1/chunks/by-id/{id}",
       "source": "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
-      "line": 80
+      "line": 82
     },
     {
       "method": "DELETE",
@@ -13796,7 +13796,7 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/QuestionGenerationHandler.java": "63a94171f677e0480e4f6bfd12d96a8e056d2c4064fae9b5cdb02e5e311de212",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessConfig.java": "9b38ce51e490b2e743dcceb90e8bd4311260433e27b6db47cade8c2301944b07",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/QuestionGenerationConfiguration.java": "72fa9aa612846bda375aadb3adb690c06c2c7037e0014f786e9770e6423e4902",
-    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadRepository.java": "15a50c04bd0a7bbd42f45435cae6b3525a3afe1d00fe97982040bbbcb2472936",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadRepository.java": "9a8b6ffc0e235321cb420979315fcf89cfcc0ac2b87b6cd3a103400a46358142",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeMoveRequest.java": "508d9c62eb40f6ac574c6f96cee4515296d4e975cb35f89584db1fb9e23a6be0",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/image-update-migration-notes.md": "cae9568a7748986d7b7ff579293d921dbfb5945bba84004350435b7b8776f2ae",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileController.java": "120e24c5a16d36fd63120a19831343397c258c3aa4b8f0e46d42e28cfc2fa9e0",
@@ -13814,7 +13814,7 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUploadAudit.java": "6f2ad542d7b611a5e207e046795f5ec23d8cce4e28915b233d2dda6658a0ee0b",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/reparse-migration-notes.md": "ebc5fcba7aa36f85d40d62c9450dec7dc4d3dad5c4ea5c7ca855eac2b5df34e8",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUploadController.java": "bf80d8ce866677b50f03f3a706b259514aa85f8dc6056ab747c37d7552c9c63c",
-    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java": "937a3948eb9b105f62fb90d8c851e109ffd2902cd1783b35e85bd7d4450dcd43",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java": "2380bf9391a9940ee084a7645778135aa692eac61782640cb3c862e390fa2298",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFileService.java": "3429358327173e919aba0c5ea8e469671fd9ccb00370cdf0f054e2e272b59064",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/knowledge-list-delete-migration-notes.md": "708700413b6f7f0701dad18e70f6816adeee00d2605dc0a7992028538a7edba2",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneExecution.java": "f0ad385d93bea1cc206a188dfda2167ce7478a5621847a609ad51ee40ab40a13",
@@ -13842,6 +13842,7 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphExtractionText.java": "15c9bd118012336fa5e02c1f3fe326421d4bcfb0099bc503ae5259f7b6f04bda",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/DataTableSummaryRepository.java": "6c04ae7186cea3f5ac8b6dc9a72beff47ebcb15001393ac51815ce9e7442a7cd",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/NativeDocumentSources.java": "f2a84b727c5c3578e56ab55d4246754b115db067511040013db007a046ffa82b",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneRepository.java": "d1f3e525db6cef0b1723e29481bfdace06b8fad340ddc379c1baeebb13ca1776",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeIndexReadRepository.java": "768ceac14d01e5ec37db89711851fb2bb1c6080899284ce201557f0b8f963146",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeSummaryRegenerationService.java": "0931ab596186c2084204febe75db465c5b8fa3935ec952e48c5b09b5e391b9e1",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeMoveJson.java": "9ba77be6d7778b627cd772c0e56b4bd7d56bc4ce86f2a5a75fedfa5545c07179",
@@ -13849,6 +13850,7 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/graph-query-migration-notes.md": "e7c0723e528680ef05fd83ccbd2e4de5a8a1ad360c7ed6500f5dce181a4b8509",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeMoveController.java": "80b8eda3be249cf7afa83fc2959837c04bdfb4a5b3935143e517391476c722b0",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphQueryConfiguration.java": "fa86fb8631c97f1b4a29e208ce76d9631d2acf6dc0b3a569eec0f09aece828cd",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRows.java": "ebca35299c5108e85a9af5102aa43e828ed56251c73eac633ee049e7e3f2a3a4",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFileController.java": "01eb196bd7f67f9fdf8fcbc6efeb5c69d50e6d8a4acc21eb45f4bd4323599d6f",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/ImageMultimodalText.java": "2d0e66c2237bb8352e916254d2b81eea6a717d836b4c74784c5f08f76375f622",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUpdateService.java": "748475fcda945e54e8caead27468243e5fa04822f54787684f113bf525a1e0c3",
@@ -13914,9 +13916,11 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/file-response-migration-notes.md": "7e1abbe80e69edbdde49146e673adb143ddb1252d0088a66275f36dd0de8ec1b",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/url-import-migration-notes.md": "3df116465874752ac02f6a8fa56dc3f4cca51c122d63e145e1f498e1a4bb866c",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualProcessingRepository.java": "7f920213abf57aaaaa40869ec4f77cee693e601d77b2354f126be277564316e3",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQClone.java": "593700f2b8fe2ac3d5dfc3c8f83c1ea30dcf78e4ea4a61f01170b619baf78931",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseProfileHandler.java": "c81a45e443a0ab6d72c02dd9ae569308fb74632079e0fefa46ecf43b3ed26d24",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/summary-public-migration-notes.md": "aa84876ed38762bb04fd27a62b2a742e91ab655015f9906a034cf47cb7248b08",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/SummaryGenerationText.java": "32110fec5029d9317bcbfe47c9d1487db56a7d2ff6b6cb0046552f1997192b62",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQMetadata.java": "8a84e36e366f745f583d581e5a52a138eb6c1a3c9626863fb9a2b2da80df5c87",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeUploadForms.java": "a84a22952d454b101103614471be8bd64afed9de6ea9069ce77ca3955063ad5d",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeDeleteController.java": "c002a90c23439d40add17d05c508c1bd0ab1e5ea5b814e7f38d6feeedca6929b",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/GoKnowledgePrompts.java": "db20fc94fd6bfe50039808d5cd58a5ddc3cb33182c92f299f31d77e940c3da8a",
@@ -13933,7 +13937,7 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/batch-tags-migration-notes.md": "cfe9723b0016d1bdf6017454535500c157de68ef4a9bade1de29c0c2233dbb56",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeSummaryRegenerationController.java": "01dcf6057690adc1be662d11a6597bdeef540dd41dbf9c7892331d805173e895",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphQueryScope.java": "b6bc0a2300c7618b6377d0803750b368dc869e5a32b6b8a076a16fa8b9c38e18",
-    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeClonePlanner.java": "4aebfaf9bf50e4163b2ad3d61a7a004fac68ff5a765fdd077c8d925218fc4619",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeClonePlanner.java": "0749827714509ef74c6a9fa7d5bd840f53ebe92ceaae12de45c8573ede0f8e91",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/tag-migration-notes.md": "62ef647b4d4689005014dcc4574bbb882151317fe914bc7f4f026ab1c89cf114",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/ManualKnowledgeRequest.java": "a002e8caacd7074975ec68d7d8860224d9a7846214f8462c02d2b9279f4b8bbe",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReparseRequest.java": "64e5875c527e72edeca5aab1fb1b8c3fb4ec45e4127dc276216632764bd1fc39",
@@ -13984,13 +13988,13 @@
     "backend-java/src/main/java/com/tencent/weknora/knowledge/summary-generation-migration-notes.md": "1836deeb0f9108f3e24eb9a0927b08bdf7721f9af3bfafd2f6a72394317931be",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkQuestionRegenerationService.java": "92a5f38bc5aefabc0deae3799c08668ebd5d06426183392ce91044627b883d23",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagRepository.java": "2036505b6047725f98b208aa6cf68f54871adb9cdf73f103fdfbc4757a32f918",
-    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferMetadata.java": "e492c67bd399dbe453fda3d734a060a405ff02fdece9d318c4be7429ffff8f8e",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferMetadata.java": "e2dfeecc2a9d9ac9c08bb8d1e0e8fc9bf826dd6772de732e4177a5213c0a6e6e",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/GraphExtractionHandler.java": "c6b69c2cef1f2b57bd4f211c820e9346144271f4265a62587e88a94d1dbf4c4d",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTagRequestDecoder.java": "0563f6737e49ddc7629364f5b375d70b552f09fcc7172bf5fcb9bde56de244b4",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeSummaryRefresh.java": "b81ad0b46913230f5fbff522eb270eb57999320539971a02db4d582c73b36030",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeBaseLifecycle.java": "7fa01aaf33c0014462566edc146cfb899e88831ff9e314cfbb6360d32a28b968",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/ChunkLifecycleController.java": "06ef113435d91d702b2c75e6db882ad88d746fea4facbfda7ba0f32465e1ca13",
-    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRepository.java": "921d6e82eddb77add0ec49758e176a0788f3c86d9e34b3ae244b5871e7a99fdf",
+    "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRepository.java": "62697e1baf5a02db562560be99827521d9cfa2ca81457d571a95b79006e537bd",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeGalleryController.java": "663882c47019fb45c8fa70d1bc94fdddd04504d1b3de16313153eb4ec1b660da",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFolderRequest.java": "22dffdb51a4e07f278ef33fcf85a00a9664d62503009359e162b8f3478e39011",
     "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeProcessingConfiguration.java": "4dba014262512624164552b16b7462e465ea00819688eb5d70567b7c6ac28e43",
@@ -14319,6 +14323,7 @@
     "backend-java/src/test/fixtures/knowledge_url_http_fixture.go": "ffb0cfd1581470aa8804c0baa4ed7c306d355a4bbcef154735bd3cc7304a61b1",
     "backend-java/src/test/fixtures/knowledge_clone_execution_fixture_test.go": "a05a953ca2f28249aa18b24d299a88ab403e116547458f8861b0e236397d0e21",
     "backend-java/src/test/fixtures/question_generation_fixture.go": "2a65eb8abd26195d682454652bf3c8e530257f1b4f2878b4a1bb00a2504543b5",
+    "backend-java/src/test/fixtures/knowledge_faq_clone_fixture_test.go": "1e6f3b254b7a1507323529c1e9f559541337722a44d18a3beca2ad96f3e19980",
     "backend-java/src/test/fixtures/parser_settings_schema.go": "5ebb9ae67e57447680171492bc0e13599b96e0e5df505a408be4c9068c6c717e",
     "backend-java/src/test/fixtures/manual_processing_fixture.go": "335c4d09b6ea1d2cc5b08ff04fd7237f5ea241b18bb3acf7e3fc5bd168e9801b",
     "backend-java/src/test/fixtures/knowledge_image_update_http_fixture.go": "d6781dab753eaad38f6524e2f22d595172f6aeaf5286676dfaf1b5aae5c0426d",
@@ -14471,6 +14476,7 @@
     "backend-java/src/test/java/com/tencent/weknora/retrieval/rerank_metadata_fixture.go": "c0b25b8b9357aea009fbdd2b1304ddfdb17e3e02b29e4bd9d693f0f1614b7305",
     "backend-java/src/test/java/com/tencent/weknora/retrieval/hybrid_fixture.go": "da3f9474954e84fb6dc9c7870e5f87b33a92dce2e37e4b56ab90e55e6e75e279",
     "backend-java/src/test/java/com/tencent/weknora/retrieval/RerankMetadataGoParityTest.java": "03887fb69691dc93c141624ab46e6f6c572e154565da760a8770bf4abe78226d",
+    "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneGoParityTest.java": "4c6700c0ac93397acafdca8c5fd9dc421de10d37b730df1448264adeb64c2b08",
     "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeProcessingSpanTrackerTest.java": "c93a288e13c129417e26310196349ec44e6208d1164e30bd1f1c74cf0cee312e",
     "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeMoveWorkerGoParityTest.java": "1cdb004ee6773059892024a4a6191fdcded0f4389dbcd8c0a62a8a87fc00c35e",
     "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeIndexReadDeadlineTest.java": "a7093e8a6211ca9c2ba7e225517f5c47299b8365391539d2a372ceedd079797e",
@@ -15307,7 +15313,7 @@
     ],
     "current_workspace_is_this_snapshot": false
   },
-  "current_focused_tests": {
+  "previous_focused_tests": {
     "directory": "/tmp/weknora-java-clone-execution-20261016-r3-build/surefire-reports",
     "classes": 8,
     "tests": 791,
@@ -15341,7 +15347,7 @@
     "log_sha256": "d990e47e22b92f8d0bada37cd252e14e640d77b38f3d53525610000492030823",
     "scope": "46 ordinary clone execution scenes with two attempts each; document75/chunk68/clone-plan219/move-plan252/move-execution64/move-worker46/SQL-index-copy21. SQLite with controlled external boundary spies; public clone and worker unwired."
   },
-  "current_validation": {
+  "previous_validation": {
     "checkpoint": "backend-java/migration/clone-execution-checkpoint-2026-10-16.json",
     "postgres": {
       "status": "not_run_this_batch_not_verified",
@@ -15378,5 +15384,93 @@
     },
     "scope": "Bounded ordinary clone execution and related regression only; no production clone/FAQ/public/worker or full-suite verification."
   },
-  "current_full_suite_passed": false
+  "current_focused_tests": {
+    "status": "failed_not_rerun_during_comparison",
+    "classes": 1,
+    "tests": 54,
+    "failures": 54,
+    "errors": 0,
+    "skipped": 0,
+    "actual_exit_code": 1,
+    "report": "/tmp/weknora-java-faq-clone-20261016-r2-build/surefire-reports/TEST-com.tencent.weknora.knowledge.KnowledgeFAQCloneGoParityTest.xml",
+    "report_sha256": "4fe5ccbefb06030fb9874ec9975d56281be74e9840c010a4ed84a70d167111ad",
+    "result": "/tmp/weknora-java-faq-clone-20261016-r2-result.json",
+    "scope": "FAQ clone draft, external Go SQLite oracle, no production controller/worker wiring. Latest existing run was inspected, not rerun in this comparison.",
+    "diagnosis": "All 54 first differ at is_enabled: Go JSON boolean vs Java SQLite integer. Diagnostic-only normalization gives 51 equal first-attempt snapshots; remaining 3 first differ in index entry chunkId order. No formal test pass or full retry parity is claimed."
+  },
+  "change_since_previous_791_inputs": {
+    "added": [
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQClone.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneRepository.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQMetadata.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRows.java",
+      "backend-java/src/test/fixtures/knowledge_faq_clone_fixture_test.go",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneGoParityTest.java"
+    ],
+    "removed": [],
+    "modified": [
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeClonePlanner.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadRepository.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferMetadata.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRepository.java"
+    ]
+  },
+  "change_since_frozen_full": {
+    "added": [
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneChunks.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneDocument.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneExecution.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneObjects.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeClonePlanner.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeCloneRepository.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQClone.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneRepository.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeFAQMetadata.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeReferencedDelete.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRows.java",
+      "backend-java/src/test/fixtures/knowledge_clone_chunks_fixture_test.go",
+      "backend-java/src/test/fixtures/knowledge_clone_document_fixture_test.go",
+      "backend-java/src/test/fixtures/knowledge_clone_execution_fixture_test.go",
+      "backend-java/src/test/fixtures/knowledge_clone_plan_fixture_test.go",
+      "backend-java/src/test/fixtures/knowledge_faq_clone_fixture_test.go",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeCloneChunksGoParityTest.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeCloneChunksPostgresGoParityIT.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeCloneDocumentGoParityTest.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeCloneExecutionGoParityTest.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeClonePlanGoParityTest.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeClonePlanPostgresGoParityIT.java",
+      "backend-java/src/test/java/com/tencent/weknora/knowledge/KnowledgeFAQCloneGoParityTest.java",
+      "backend-java/src/test/resources/go-knowledge-clone-chunks.json",
+      "backend-java/src/test/resources/go-knowledge-clone-document.json",
+      "backend-java/src/test/resources/go-knowledge-clone-execution.json",
+      "backend-java/src/test/resources/go-knowledge-clone-plan.json"
+    ],
+    "removed": [],
+    "modified": [
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadRepository.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeMoveCompatibility.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferMetadata.java",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeTransferRepository.java"
+    ]
+  },
+  "current_validation": {
+    "status": "not_equivalent",
+    "current_src_pom_inputs": 1074,
+    "full_suite_rerun": false,
+    "faq_clone_production_wired": false,
+    "review": "Fresh static scan plus source and existing report inspection; no new equivalence tests. Earlier 791 passing tests apply to 1068 inputs, now 6 added and 5 modified. Full 10464 pass is historical."
+  },
+  "current_full_suite_passed": false,
+  "concurrent_chunk_inspection_changes": {
+    "source_hashes": {
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadController.java": "2380bf9391a9940ee084a7645778135aa692eac61782640cb3c862e390fa2298",
+      "backend-java/src/main/java/com/tencent/weknora/knowledge/KnowledgeContentReadRepository.java": "9a8b6ffc0e235321cb420979315fcf89cfcc0ac2b87b6cd3a103400a46358142",
+      "internal/application/repository/chunk.go": "ab129ca165ebba833a99e636ef12f949d794774a28e2780ab1b9abe977df9a3e",
+      "internal/handler/chunk.go": "acfda86f3f97fd09e6efc3e95a4fc473fd2b02067c41e6b8a35b803d339e86ca",
+      "internal/types/chunk.go": "aa66ebc8de07571473cc6b7f85cd72a5a8cd3aac934f5a6527dc15b0b0bc35d5"
+    },
+    "review": "Observed concurrent include_all chunk inspection edits in Go and Java. Entry counts unchanged; current edits have not been revalidated by historical suites."
+  }
 }

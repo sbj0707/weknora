@@ -6,7 +6,28 @@ import {
   getDomainFromUrl,
   normalizeReferenceUrl,
   resolveReferenceHighlightKey,
+  referenceNavigationChunkId,
+  documentChunkRelationsRoute,
 } from './referenceSources.ts'
+import { createRouter, createMemoryHistory } from 'vue-router'
+
+test('relationship links preserve the cited chunk after grouping and encode document scope', () => {
+  const [item] = buildReferenceList([
+    { id: 'summary', knowledge_id: 'doc/1', knowledge_base_id: 'kb 1', chunk_type: 'summary' },
+    { id: 'chunk-1', knowledge_id: 'doc/1', knowledge_base_id: 'kb 1', source_locators: [{ type: 'pdf', page: 2 }] },
+    { id: 'chunk/2?x=1', knowledge_id: 'doc/1', knowledge_base_id: 'kb 1' },
+  ])
+  const chunkId = referenceNavigationChunkId(item, 'chunk/2?x=1')
+  assert.equal(chunkId, 'chunk/2?x=1')
+  assert.equal(referenceNavigationChunkId(item, 'another-document-chunk'), 'chunk-1')
+  const router = createRouter({ history: createMemoryHistory(), routes: [{ name: 'documentChunkRelations', path: '/platform/knowledge-bases/:kbId/documents/:knowledgeId/source-chunks', component: {} }] })
+  const resolved = router.resolve(documentChunkRelationsRoute(item.knowledgeBaseId, item.knowledgeId, chunkId))
+  assert.match(resolved.href, /kb%201\/documents\/doc%2F1\/source-chunks\?chunk_id=chunk\/2\?x=1$/)
+  assert.equal(resolved.query.chunk_id, 'chunk/2?x=1')
+  assert.equal(resolved.params.knowledgeId, 'doc/1')
+  assert.equal(documentChunkRelationsRoute('', 'doc'), null)
+  assert.equal(documentChunkRelationsRoute('kb', ''), null)
+})
 
 test('buildReferenceList separates web and document references', () => {
   const items = buildReferenceList([

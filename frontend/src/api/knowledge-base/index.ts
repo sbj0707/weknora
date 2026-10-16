@@ -525,12 +525,12 @@ export function renameKnowledgeFolder(kbId: string, from: string, to: string) {
   return put(`/api/v1/knowledge-bases/${kbId}/knowledge/folders`, { from, to });
 }
 
-export function getKnowledgeDetails(id: string, options?: { agent_id?: string; agent_source_tenant_id?: string }) {
+export function getKnowledgeDetails(id: string, options?: { agent_id?: string; agent_source_tenant_id?: string; signal?: AbortSignal }) {
   const query = new URLSearchParams();
   if (options?.agent_id) query.set('agent_id', options.agent_id);
   if (options?.agent_source_tenant_id) query.set('agent_source_tenant_id', options.agent_source_tenant_id);
   const qs = query.toString();
-  return get(qs ? `/api/v1/knowledge/${id}?${qs}` : `/api/v1/knowledge/${id}`);
+  return get(qs ? `/api/v1/knowledge/${id}?${qs}` : `/api/v1/knowledge/${id}`, { signal: options?.signal });
 }
 
 export function updateManualKnowledge(
@@ -557,8 +557,12 @@ export function getKnowledgeIndexStatus(id: string): Promise<KnowledgeIndexStatu
   return get(`/api/v1/knowledge/${id}/index-status`) as unknown as Promise<KnowledgeIndexStatusResponse>;
 }
 
-export function getDocumentChunkDetail(knowledgeId: string, chunkId: string): Promise<ChunkDetailResponse> {
-  return get(`/api/v1/knowledge/${encodeURIComponent(knowledgeId)}/chunks/${encodeURIComponent(chunkId)}/details`) as unknown as Promise<ChunkDetailResponse>;
+export function getDocumentChunkDetail(knowledgeId: string, chunkId: string, signal?: AbortSignal): Promise<ChunkDetailResponse> {
+  return get(`/api/v1/knowledge/${encodeURIComponent(knowledgeId)}/chunks/${encodeURIComponent(chunkId)}/details`, { signal }) as unknown as Promise<ChunkDetailResponse>;
+}
+
+export function listDocumentChunks(knowledgeId: string, page: number, signal?: AbortSignal) {
+  return get(`/api/v1/chunks/${encodeURIComponent(knowledgeId)}?include_all=true&page=${page}&page_size=100`, { signal }) as unknown as Promise<import('@/utils/documentChunkRelations').ChunkPage>;
 }
 
 export function delKnowledgeDetails(id: string) {
