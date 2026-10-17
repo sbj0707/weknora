@@ -14,6 +14,7 @@ const props = defineProps<{
   visible: boolean; knowledgeId: string; chunkId: string; revision?: number
   renderMarkdown: (value: string) => string
   inline?: boolean
+  chunkIndexes?: ReadonlyMap<string, number>
 }>()
 const emit = defineEmits<{ close: []; navigate: [id: string] }>()
 const { t, locale } = useI18n()
@@ -37,7 +38,8 @@ const navigation = computed(() => {
   const chunk = detail.value?.chunk
   if (!chunk) return []
   return ['pre_chunk_id', 'parent_chunk_id', 'next_chunk_id'].flatMap(key =>
-    typeof chunk[key] === 'string' && chunk[key] ? [{ key, id: chunk[key] as string }] : [])
+    typeof chunk[key] === 'string' && chunk[key] ? [{ key, id: chunk[key] as string,
+      index: props.chunkIndexes?.get(chunk[key] as string) }] : [])
 })
 watch(() => [props.visible, props.knowledgeId, props.chunkId], () => {
   fullscreen.value = false
@@ -152,6 +154,7 @@ function wikiHref(slug: string) {
             <div v-if="navigation.length" class="chunk-navigation">
               <t-button v-for="link in navigation" :key="link.key" size="small" variant="outline" @click="emit('navigate', link.id)">
                 {{ t(`knowledgeBase.chunkDetail.fields.${link.key}`) }}
+                <template v-if="link.key === 'parent_chunk_id' && link.index !== undefined"> #{{ link.index }}</template>
               </t-button>
             </div>
             <template v-if="detail.children?.length">

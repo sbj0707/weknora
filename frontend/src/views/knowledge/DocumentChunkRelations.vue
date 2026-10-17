@@ -35,6 +35,7 @@ const requestedChunkId = computed(() => typeof route.query.chunk_id === 'string'
 let locateToken = 0
 let outlineCenterScheduled = false
 const title = computed(() => document.value?.title || document.value?.file_name || id.value)
+const chunkIndexes = computed(() => new Map(chunks.value.map(chunk => [chunk.id, chunk.chunk_index])))
 const relations = computed(() => chunkRelations(chunks.value, selection.value, document.value?.file_hash || ''))
 const selectedChunks = computed(() => focusedChunkId.value
   ? chunks.value.filter(chunk => chunk.id === focusedChunkId.value)
@@ -210,7 +211,7 @@ function refresh() { selection.value = null; focusedChunkId.value = ''; locate.v
             <t-tag v-if="relations.get(chunk.id)" size="small" variant="light">{{ t(`knowledgeBase.sourceChunks.match.${relations.get(chunk.id)}`) }}</t-tag>
           </summary>
           <ChunkDetailDrawer v-if="openChunks.has(chunk.id)" inline visible :knowledge-id="id" :chunk-id="chunk.id"
-            :render-markdown="renderDocumentPreviewMarkdown" @navigate="focusChunk" />
+            :chunk-indexes="chunkIndexes" :render-markdown="renderDocumentPreviewMarkdown" @navigate="focusChunk" />
         </details>
       </aside>
     </div>
@@ -222,16 +223,16 @@ function refresh() { selection.value = null; focusedChunkId.value = ''; locate.v
 .source-chunks__header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--td-component-stroke); background: var(--td-bg-color-container); }
 .source-chunks__home { display: inline-flex; align-items: center; gap: 6px; color: var(--td-brand-color); text-decoration: none; white-space: nowrap; }
 .source-chunks__home:hover { text-decoration: underline; }
-.source-chunks__home:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 4px; border-radius: 2px; }
+.source-chunks__home:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 4px; border-radius: calc(var(--app-radius-xs) / 2); }
 .source-chunks__heading { flex: 1; min-width: 0; }
-h1 { font-size: 18px; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-h2 { font-size: 14px; margin: 0; }
-p { margin: 6px 0; font-size: 12px; color: var(--td-text-color-secondary); line-height: 1.6; }
+h1 { font-size: var(--app-text-2xl); margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+h2 { font-size: var(--app-text-base); margin: 0; }
+p { margin: 6px 0; font-size: var(--app-text-sm); color: var(--td-text-color-secondary); line-height: 1.6; }
 .source-chunks__layout { flex: 1; min-height: 0; display: grid; grid-template-columns: 210px minmax(360px, 1fr) minmax(390px, 40%); }
 .source-chunks__outline { min-height: 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; padding: 16px 12px; border-right: 1px solid var(--td-component-stroke); }
 .source-chunks__outline > :not(.source-chunks__chunk-list) { flex-shrink: 0; }
 .source-chunks__outline-heading { display: flex; align-items: center; gap: 6px; }
-.source-chunks__info-button { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--td-text-color-secondary); cursor: pointer; }
+.source-chunks__info-button { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: var(--app-radius-xs); background: transparent; color: var(--td-text-color-secondary); cursor: pointer; }
 .source-chunks__info-button:hover { color: var(--td-brand-color); background: var(--td-bg-color-container-hover); }
 .source-chunks__info-button:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 2px; }
 .source-chunks__info-content { width: 300px; max-width: calc(100vw - 48px); }
@@ -239,16 +240,16 @@ p { margin: 6px 0; font-size: 12px; color: var(--td-text-color-secondary); line-
 .source-chunks__info-content p + p { margin-top: 8px; }
 .source-chunks__search { margin-top: 8px; }
 .source-chunks__chunk-list { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding: 2px; scrollbar-gutter: stable; }
-.source-chunks__chunk-link { flex-shrink: 0; text-align: left; cursor: pointer; padding: 12px; display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--td-component-stroke); border-radius: 8px; background: var(--td-bg-color-container); color: var(--td-text-color-primary); min-width: 0; }
+.source-chunks__chunk-link { flex-shrink: 0; text-align: left; cursor: pointer; padding: 12px; display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--td-component-stroke); border-radius: var(--app-radius-md); background: var(--td-bg-color-container); color: var(--td-text-color-primary); min-width: 0; }
 .source-chunks__chunk-link.is-active { border-color: var(--td-brand-color); background: var(--td-brand-color-light); }
-.source-chunks__chunk-link span { font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; color: var(--td-text-color-secondary); }
+.source-chunks__chunk-link span { font-size: var(--app-text-xs); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; color: var(--td-text-color-secondary); }
 .source-chunks__source { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 12px; }
 .source-chunks__source-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 0 0 10px; }
 .source-chunks__source > :deep(.document-preview) { flex: 1; min-height: 0; }
 .source-chunks__details { overflow: auto; min-width: 0; border-left: 1px solid var(--td-component-stroke); padding: 16px; }
 .source-chunks__detail-head { position: sticky; top: -16px; z-index: 1; background: var(--td-bg-color-page); padding: 0 0 10px; }
-.source-chunks__card { padding: 14px; border: 1px solid var(--td-component-stroke); background: var(--td-bg-color-container); border-radius: 10px; margin: 0 0 12px; overflow-wrap: anywhere; }
-.source-chunks__card > summary { cursor: pointer; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; padding-bottom: 12px; }
+.source-chunks__card { padding: 14px; border: 1px solid var(--td-component-stroke); background: var(--td-bg-color-container); border-radius: var(--app-radius-lg); margin: 0 0 12px; overflow-wrap: anywhere; }
+.source-chunks__card > summary { cursor: pointer; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: var(--app-text-md); padding-bottom: 12px; }
 .source-chunks__state { display: flex; align-items: center; justify-content: center; gap: 12px; flex: 1; }
 .source-chunks__empty { padding: 30px 10px; text-align: center; }
 @media (max-width: 1400px) { .source-chunks__layout { grid-template-columns: 170px minmax(260px, 1fr) minmax(320px, 40%); overflow-x: auto; } }
