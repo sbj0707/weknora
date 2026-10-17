@@ -391,7 +391,14 @@ start_docker() {
     eval "$(./scripts/get_version.sh env)"
     export VERSION COMMIT_ID BUILD_TIME GO_VERSION
     log_info "从源码构建 Weknora-app-dev 和 Weknora-frontend-dev（首次构建耗时较长）..."
-    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile dev-docker build app frontend || return 1
+    (
+        # BuildKit 的认证请求由宿主机 CLI 发出，未必使用 Docker Desktop 的代理。
+        # 只对构建命令设置代理，避免把宿主机回环地址传给应用容器。
+        if [ -n "${DEV_DOCKER_BUILD_PROXY:-}" ]; then
+            export HTTP_PROXY="$DEV_DOCKER_BUILD_PROXY" HTTPS_PROXY="$DEV_DOCKER_BUILD_PROXY"
+        fi
+        "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile dev-docker build app frontend
+    ) || return 1
 
     # 基础设施在子 shell 中加载环境，避免覆盖容器专用配置。
     shift

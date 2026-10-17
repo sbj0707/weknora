@@ -1,5 +1,12 @@
 export default {
   evaluationPlan: {
+    "basicGroup": "基础",
+    "rulesGroup": "评估配置",
+    "basicDescription": "设置评估方案的名称和描述信息",
+    "generationDescription": "配置 QA 生成模型、提示词与问题生成规则",
+    "evaluationDescription": "配置答案评估模型与对比提示词",
+    "dimensionsDescription": "设置评分维度、权重及通过分数",
+    "saveAndClose": "保存并关闭",
     "search": "搜索方案 ID 或名称",
     "total": "共 {count} 个方案",
     "create": "新建评估方案",

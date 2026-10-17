@@ -1,5 +1,12 @@
 export default {
   evaluationPlan: {
+    "basicGroup": "基本",
+    "rulesGroup": "評価設定",
+    "basicDescription": "評価プランの名前と説明を設定します",
+    "generationDescription": "QA 生成モデル、プロンプト、質問の生成ルールを設定します",
+    "evaluationDescription": "評価モデルと比較プロンプトを設定します",
+    "dimensionsDescription": "評価項目、重み、合格点を設定します",
+    "saveAndClose": "保存して閉じる",
     "search": "ID または名前で検索",
     "total": "{count} 件の計画",
     "create": "評価計画を作成",

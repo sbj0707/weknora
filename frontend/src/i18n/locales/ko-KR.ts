@@ -1,5 +1,12 @@
 export default {
   evaluationPlan: {
+    "basicGroup": "기본",
+    "rulesGroup": "평가 설정",
+    "basicDescription": "평가 계획의 이름과 설명을 설정합니다",
+    "generationDescription": "QA 생성 모델, 프롬프트 및 질문 생성 규칙을 설정합니다",
+    "evaluationDescription": "평가 모델과 비교 프롬프트를 설정합니다",
+    "dimensionsDescription": "평가 항목, 가중치 및 통과 점수를 설정합니다",
+    "saveAndClose": "저장 후 닫기",
     "search": "계획 ID 또는 이름 검색",
     "total": "계획 {count}개",
     "create": "평가 계획 만들기",

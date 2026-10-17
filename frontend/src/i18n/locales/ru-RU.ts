@@ -1,5 +1,12 @@
 export default {
   evaluationPlan: {
+    "basicGroup": "Основное",
+    "rulesGroup": "Настройки оценки",
+    "basicDescription": "Задайте название и описание плана оценки",
+    "generationDescription": "Настройте модель генерации QA, промпт и правила создания вопросов",
+    "evaluationDescription": "Настройте модель оценки и промпт сравнения",
+    "dimensionsDescription": "Задайте критерии оценки, веса и проходной балл",
+    "saveAndClose": "Сохранить и закрыть",
     "search": "Поиск по ID или названию",
     "total": "Планов: {count}",
     "create": "Создать план оценки",

@@ -161,8 +161,8 @@ async function action(value: string, plan: EvaluationPlan) {
   } catch { if (alive && currentScope === scope) operationError.value = t('evaluationPlan.operationFailed') }
   finally { if (currentScope === scope) busy.delete(plan.id) }
 }
-function saved(plan: EvaluationPlan) {
-  editor.value = { mode: 'view', plan }; editorKey.value++
+function saved() {
+  editor.value = null
   void load()
 }
 async function remove() {

@@ -1,5 +1,12 @@
 export default {
   evaluationPlan: {
+    "basicGroup": "General",
+    "rulesGroup": "Evaluation configuration",
+    "basicDescription": "Set the name and description of this evaluation plan",
+    "generationDescription": "Configure the QA generation model, prompt and question rules",
+    "evaluationDescription": "Configure the evaluation model and comparison prompt",
+    "dimensionsDescription": "Set scoring dimensions, weights and the passing score",
+    "saveAndClose": "Save and close",
     "search": "Search by plan ID or name",
     "total": "{count} plans",
     "create": "New evaluation plan",

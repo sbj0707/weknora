@@ -128,4 +128,6 @@ DEV_DOCKER_FRONTEND_PORT=5175
 
 远程依赖沿用 `DEV_REMOTE_HOST` 及连接配置；也可用 `DEV_DOCKER_DB_HOST`、`DEV_DOCKER_DB_PORT`、`DEV_DOCKER_REDIS_ADDR`、`DEV_DOCKER_DOCREADER_ADDR` 等变量单独指定容器使用的地址。自定义模型服务若运行在宿主机，应将模型地址中的 `localhost` / `127.0.0.1` 改成 `host.docker.internal`。
 
+如果 Docker Desktop 可以拉取镜像，但构建时访问 `auth.docker.io` 失败，可在 `.env.local` 设置 `DEV_DOCKER_BUILD_PROXY=http://127.0.0.1:7897`（按实际代理端口调整）。该代理仅用于宿主机的构建命令，不会注入应用容器。
+
 修改源码后重新执行 `make dev-docker` 构建并更新容器，此模式不提供热更新。使用 `make dev-status` 查看状态，`make dev-logs` 查看日志，`make dev-stop` 停止全部开发容器（保留数据卷）。
