@@ -1504,7 +1504,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
         font-family: var(--app-font-family);
         font-size: var(--app-text-base);
         font-style: normal;
-        font-weight: 600;
+        font-weight: 400;
         line-height: 20px;
         overflow: hidden;
         white-space: nowrap;
