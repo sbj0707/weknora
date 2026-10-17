@@ -92,3 +92,40 @@ flowchart LR
 - **AnyDoc 仍可能在本地执行。** 当前 AnyDoc 是嵌入 Go 进程运行的，迁走 DocReader 不会自动迁走 AnyDoc。若你的目标还包括减少本地解析和编译负担，需要进一步调整解析路径。
 
 另一种选择是 **VS Code Remote SSH，把 Go 和前端也放在 Azure 上调试**，适合进一步降低本机负担。按你“部署依赖后继续本地调试”的目标，我优先推荐上面的 SSH 隧道方案。
+
+## app 和 frontend 容器模式
+
+在项目根目录执行：
+
+```bash
+make dev-docker
+```
+
+该命令从当前源码分别构建两个镜像，启动开发依赖，再启动以下容器：
+
+| 容器名称 | 镜像名称 | 默认访问地址 |
+| --- | --- | --- |
+| `Weknora-app-dev` | `weknora-app-dev:latest` | http://localhost:8081 |
+| `Weknora-frontend-dev` | `weknora-frontend-dev:latest` | http://localhost:5175 |
+
+前端使用 Nginx 提供构建后的页面，API 请求代理到 app 容器的 8080 端口。首次构建包含 Go、Rust 和前端依赖，耗时较长；宿主机无需安装 Go、Rust 或 Node.js。
+
+与本地开发模式相同，先加载 `.env`，再加载 `.env.local`。复用开发环境的数据库、Redis 和文件目录（默认 `.local-data/files`），容器间连接使用内部端口，不使用宿主机的 `DB_PORT` / `REDIS_PORT`。数据库和 Redis 中的数据、队列与本地开发模式共享。
+
+`DEV_DOCREADER_MODE=local` 时仍需在另一个终端运行 `make dev-docreader`，app 经 `host.docker.internal` 访问宿主机解析服务；否则启动并使用 DocReader 容器。可通过 `DEV_ARGS` 启用可选依赖，例如：
+
+```bash
+make dev-docker DEV_ARGS="--neo4j --no-langfuse"
+```
+
+可在 `.env.local` 中修改端口和文件目录：
+
+```dotenv
+DEV_DOCKER_APP_PORT=8081
+DEV_DOCKER_FRONTEND_PORT=5175
+# DEV_DOCKER_FILES_DIR=/absolute/path/to/files
+```
+
+远程依赖沿用 `DEV_REMOTE_HOST` 及连接配置；也可用 `DEV_DOCKER_DB_HOST`、`DEV_DOCKER_DB_PORT`、`DEV_DOCKER_REDIS_ADDR`、`DEV_DOCKER_DOCREADER_ADDR` 等变量单独指定容器使用的地址。自定义模型服务若运行在宿主机，应将模型地址中的 `localhost` / `127.0.0.1` 改成 `host.docker.internal`。
+
+修改源码后重新执行 `make dev-docker` 构建并更新容器，此模式不提供热更新。使用 `make dev-status` 查看状态，`make dev-logs` 查看日志，`make dev-stop` 停止全部开发容器（保留数据卷）。

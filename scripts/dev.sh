@@ -1,5 +1,5 @@
 #!/bin/bash
-# 开发环境启动脚本 - 只启动基础设施，app 和 frontend 需要手动在本地运行
+# 开发环境启动脚本 - 支持本地 app/frontend 或 docker 容器模式
 
 # 设置颜色
 GREEN='\033[0;32m'
@@ -56,6 +56,7 @@ show_help() {
     echo ""
     echo "命令:"
     echo "  start      启动基础设施服务（postgres, redis, docreader, langfuse）"
+    echo "  docker     从源码构建并启动 app、frontend 容器及基础设施"
     echo "  stop       停止所有服务"
     echo "  restart    重启所有服务"
     echo "  logs       查看服务日志"
@@ -65,7 +66,7 @@ show_help() {
     echo "  docreader  启动文档解析服务（本地 Python 环境）"
     echo "  help       显示此帮助信息"
     echo ""
-    echo "可选 Profile（用于 start 命令）:"
+    echo "可选 Profile（用于 start / docker 命令）:"
     echo "  --minio       启动 MinIO 对象存储"
     echo "  --qdrant      启动 Qdrant 向量数据库"
     echo "  --neo4j       启动 Neo4j 图数据库"
@@ -203,7 +204,9 @@ start_services() {
     if [ -n "${DEV_REMOTE_HOST:-}" ]; then
         log_warning "已配置 DEV_REMOTE_HOST=${DEV_REMOTE_HOST}，跳过本地 Docker 基础设施启动"
         log_info "远程服务: PostgreSQL/Redis/DocReader/Langfuse → ${DEV_REMOTE_HOST}"
-        log_info "接下来: make dev-app（本地后端）或 make dev-frontend（前端）"
+        if [ "${DEV_DOCKER_MODE:-false}" != "true" ]; then
+            log_info "接下来: make dev-app（本地后端）或 make dev-frontend（前端）"
+        fi
         return 0
     fi
     
@@ -319,13 +322,85 @@ start_services() {
         if [ "${DEV_DOCREADER_MODE:-docker}" = "local" ]; then
             printf "%b\n" "${YELLOW}在新终端运行文档解析服务:${NC} make dev-docreader"
         fi
-        printf "%b\n" "${YELLOW}1. 在新终端运行后端:${NC} make dev-app"
-        printf "%b\n" "${YELLOW}2. 在新终端运行前端:${NC} make dev-frontend"
+        if [ "${DEV_DOCKER_MODE:-false}" != "true" ]; then
+            printf "%b\n" "${YELLOW}1. 在新终端运行后端:${NC} make dev-app"
+            printf "%b\n" "${YELLOW}2. 在新终端运行前端:${NC} make dev-frontend"
+        fi
         return 0
     else
         log_error "服务启动失败"
         return 1
     fi
+}
+
+# 容器中的回环地址指向容器自身；宿主机服务需经 host-gateway 访问。
+docker_host_endpoint() {
+    local endpoint="$1"
+    endpoint="${endpoint//127.0.0.1/host.docker.internal}"
+    printf '%s' "${endpoint//localhost/host.docker.internal}"
+}
+
+start_docker() {
+    check_docker || return 1
+    cd "$PROJECT_ROOT" || return 1
+    if ! load_env_files; then
+        log_error ".env 文件不存在，请先从 .env.example 创建"
+        return 1
+    fi
+    local DEV_DOCKER_MODE=true
+    export DEV_DOCKER_ENV_OVERRIDE_FILE=.env
+    if [ -f .env.local ]; then
+        export DEV_DOCKER_ENV_OVERRIDE_FILE=.env.local
+    fi
+
+    # DB_PORT / REDIS_PORT 是宿主机映射端口，容器互联使用内部端口。
+    local db_host=postgres db_port=5432 redis_addr=redis:6379
+    if [ -n "${DEV_REMOTE_HOST:-}" ]; then
+        db_host="${DB_HOST:-$DEV_REMOTE_HOST}"
+        [ "$db_host" = postgres ] && db_host="$DEV_REMOTE_HOST"
+        db_port="${DB_PORT:-5432}"
+        redis_addr="${REDIS_ADDR:-$DEV_REMOTE_HOST:6379}"
+        [ "$redis_addr" = redis:6379 ] && redis_addr="$DEV_REMOTE_HOST:6379"
+    fi
+    export DEV_DOCKER_DB_HOST="${DEV_DOCKER_DB_HOST:-$(docker_host_endpoint "$db_host")}"
+    export DEV_DOCKER_DB_PORT="${DEV_DOCKER_DB_PORT:-$db_port}"
+    export DEV_DOCKER_REDIS_ADDR="${DEV_DOCKER_REDIS_ADDR:-$(docker_host_endpoint "$redis_addr")}"
+    local docreader_addr="${DOCREADER_ADDR:-docreader:50051}"
+    if [ -n "${DEV_REMOTE_HOST:-}" ] && [ "$docreader_addr" = docreader:50051 ]; then
+        docreader_addr="$DEV_REMOTE_HOST:${DOCREADER_PORT:-50051}"
+    fi
+    if [ "${DEV_DOCREADER_MODE:-docker}" = "local" ]; then
+        docreader_addr="${DEV_REMOTE_HOST:-host.docker.internal}:${DOCREADER_PORT:-50051}"
+        export DEV_DOCKER_DOCREADER_TMP="${DEV_DOCKER_DOCREADER_TMP:-/tmp/docreader}"
+        mkdir -p "$DEV_DOCKER_DOCREADER_TMP" || return 1
+    fi
+    export DEV_DOCKER_DOCREADER_ADDR="${DEV_DOCKER_DOCREADER_ADDR:-$(docker_host_endpoint "$docreader_addr")}"
+    export DEV_DOCKER_MINIO_ENDPOINT="${DEV_DOCKER_MINIO_ENDPOINT:-$(docker_host_endpoint "${MINIO_ENDPOINT:-minio:9000}")}"
+    export DEV_DOCKER_NEO4J_URI="${DEV_DOCKER_NEO4J_URI:-$(docker_host_endpoint "${NEO4J_URI:-bolt://neo4j:7687}")}"
+    export DEV_DOCKER_QDRANT_HOST="${DEV_DOCKER_QDRANT_HOST:-$(docker_host_endpoint "${QDRANT_HOST:-qdrant}")}"
+    export DEV_DOCKER_MILVUS_ADDRESS="${DEV_DOCKER_MILVUS_ADDRESS:-$(docker_host_endpoint "${MILVUS_ADDRESS:-milvus:19530}")}"
+    export DEV_DOCKER_LANGFUSE_HOST="${DEV_DOCKER_LANGFUSE_HOST:-$(docker_host_endpoint "${LANGFUSE_HOST:-http://langfuse-web:3000}")}"
+    local files_dir="${LOCAL_STORAGE_BASE_DIR:-/data/files}"
+    if [ "$files_dir" = /data/files ]; then
+        files_dir="$PROJECT_ROOT/.local-data/files"
+    fi
+    export DEV_DOCKER_FILES_DIR="${DEV_DOCKER_FILES_DIR:-$files_dir}"
+    mkdir -p "$DEV_DOCKER_FILES_DIR" || return 1
+
+    # .git 不进入构建上下文，由宿主机注入版本信息。
+    eval "$(./scripts/get_version.sh env)"
+    export VERSION COMMIT_ID BUILD_TIME GO_VERSION
+    log_info "从源码构建 Weknora-app-dev 和 Weknora-frontend-dev（首次构建耗时较长）..."
+    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile dev-docker build app frontend || return 1
+
+    # 基础设施在子 shell 中加载环境，避免覆盖容器专用配置。
+    shift
+    (start_services start "$@") || return 1
+    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile dev-docker up -d --no-build app frontend || return 1
+    log_success "容器已启动: Weknora-app-dev、Weknora-frontend-dev"
+    log_info "前端: http://localhost:${DEV_DOCKER_FRONTEND_PORT:-5175}"
+    log_info "后端: http://localhost:${DEV_DOCKER_APP_PORT:-8081}"
+    log_info "修改代码后重新运行 make dev-docker；查看日志: make dev-logs；停止: make dev-stop"
 }
 
 # 停止服务
@@ -338,7 +413,8 @@ stop_services() {
     fi
     
     cd "$PROJECT_ROOT"
-    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml down
+    load_env_files || return 1
+    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile '*' down
     
     if [ $? -eq 0 ]; then
         log_success "所有服务已停止"
@@ -364,7 +440,8 @@ show_logs() {
     fi
 
     cd "$PROJECT_ROOT"
-    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml logs -f
+    load_env_files || return 1
+    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile '*' logs -f
 }
 
 # 查看状态
@@ -375,7 +452,8 @@ show_status() {
     fi
 
     cd "$PROJECT_ROOT"
-    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml ps
+    load_env_files || return 1
+    "$DOCKER_COMPOSE_BIN" $DOCKER_COMPOSE_SUBCMD -f docker-compose.dev.yml --profile '*' ps
 }
 
 # 远程开发模式下检查基础设施端口是否可达
@@ -605,6 +683,9 @@ CMD="${1:-help}"
 case "$CMD" in
     start)
         start_services "$@"
+        ;;
+    docker)
+        start_docker "$@"
         ;;
     stop)
         stop_services

@@ -150,6 +150,16 @@ const router = createRouter({
           meta: { requiresInit: true, requiresAuth: true, requiredCapability: 'settings.sandbox' }
         },
         {
+          path: "quality-evaluation",
+          redirect: "/platform/quality-evaluation/plans"
+        },
+        {
+          path: "quality-evaluation/:section(plans|qa-generation|qa-evaluation|comparison)",
+          name: "qualityEvaluation",
+          component: () => import("../views/evaluation/QualityEvaluation.vue"),
+          meta: { requiresInit: true, requiresAuth: true }
+        },
+        {
           path: "toolbox/:section?",
           name: "toolbox",
           component: () => import("../views/toolbox/Toolbox.vue"),

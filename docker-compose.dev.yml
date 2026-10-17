@@ -1,5 +1,78 @@
-# 开发环境配置 - 只启动基础设施服务，app 和 frontend 在本地运行
+# 默认只启动基础设施；make dev-docker 额外构建并启动 app 和 frontend。
 services:
+  app:
+    image: weknora-app-dev:latest
+    container_name: Weknora-app-dev
+    profiles: [dev-docker]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+      args:
+        VERSION_ARG: ${VERSION:-unknown}
+        COMMIT_ID_ARG: ${COMMIT_ID:-unknown}
+        BUILD_TIME_ARG: ${BUILD_TIME:-unknown}
+        GO_VERSION_ARG: ${GO_VERSION:-unknown}
+        WITH_ANYDOC: ${WITH_ANYDOC:-1}
+        GOPROXY_ARG: ${GOPROXY:-https://proxy.golang.org,direct}
+        APK_MIRROR_ARG: ${APK_MIRROR_ARG:-}
+    env_file:
+      - .env
+      - ${DEV_DOCKER_ENV_OVERRIDE_FILE:-.env}
+    environment:
+      DB_HOST: ${DEV_DOCKER_DB_HOST:-postgres}
+      DB_PORT: ${DEV_DOCKER_DB_PORT:-5432}
+      REDIS_ADDR: ${DEV_DOCKER_REDIS_ADDR:-redis:6379}
+      DOCREADER_ADDR: ${DEV_DOCKER_DOCREADER_ADDR:-docreader:50051}
+      LOCAL_STORAGE_BASE_DIR: /data/files
+      MINIO_ENDPOINT: ${DEV_DOCKER_MINIO_ENDPOINT:-minio:9000}
+      NEO4J_URI: ${DEV_DOCKER_NEO4J_URI:-bolt://neo4j:7687}
+      QDRANT_HOST: ${DEV_DOCKER_QDRANT_HOST:-qdrant}
+      MILVUS_ADDRESS: ${DEV_DOCKER_MILVUS_ADDRESS:-milvus:19530}
+      LANGFUSE_HOST: ${DEV_DOCKER_LANGFUSE_HOST:-http://langfuse-web:3000}
+    ports:
+      - "${DEV_DOCKER_APP_PORT:-8081}:8080"
+    volumes:
+      - ${DEV_DOCKER_FILES_DIR:-./.local-data/files}:/data/files
+      - ${DEV_DOCKER_DOCREADER_TMP:-docreader-tmp-dev}:/tmp/docreader:ro
+      - ./config/config.yaml:/app/config/config.yaml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - WeKnora-network-dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+
+  frontend:
+    image: weknora-frontend-dev:latest
+    container_name: Weknora-frontend-dev
+    profiles: [dev-docker]
+    build:
+      context: ./frontend
+      args:
+        VITE_FRONTEND_COMMIT: ${COMMIT_ID:-unknown}
+        NPM_REGISTRY: ${NPM_REGISTRY:-}
+        NODE_MAX_OLD_SPACE_SIZE: ${NODE_MAX_OLD_SPACE_SIZE:-4096}
+    ports:
+      - "${DEV_DOCKER_FRONTEND_PORT:-5175}:80"
+    environment:
+      APP_HOST: app
+      APP_PORT: 8080
+      APP_SCHEME: http
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-50}
+      MAX_SKILL_BUNDLE_SIZE_MB: ${MAX_SKILL_BUNDLE_SIZE_MB:-256}
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE:-}
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - WeKnora-network-dev
+    restart: unless-stopped
+
   # 只启动依赖的基础设施服务
   postgres:
     image: paradedb/paradedb:v0.22.6-pg17
