@@ -2,10 +2,11 @@ package repository
 
 import (
 	"context"
+	"strings"
+
 	"github.com/Tencent/WeKnora/internal/types"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"strings"
 )
 
 // EvaluationPlanRepository scopes every read and write to the active workspace.

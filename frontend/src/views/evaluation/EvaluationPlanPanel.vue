@@ -51,6 +51,7 @@
       :cancel-btn="{ content: t('evaluationPlan.cancel'), disabled: deleting }" :close-btn="!deleting"
       :close-on-overlay-click="!deleting" :close-on-esc-keydown="!deleting"
       @close="!deleting && (deletingPlan = null)" @confirm="remove">
+      <t-alert v-if="deleteError" theme="error" :message="deleteError" />
       <p>{{ t('evaluationPlan.deleteConfirm', { name: deletingPlan?.name }) }}</p>
       <code class="plan-delete-id">{{ deletingPlan?.id }}</code>
     </t-dialog>
@@ -77,7 +78,7 @@ const total = ref(0), page = ref(1), pageSize = ref(12)
 const keyword = ref(''), searchTerm = ref(''), loading = ref(false), error = ref(false), operationError = ref('')
 const editor = ref<{ mode: 'create' | 'view' | 'edit'; plan?: EvaluationPlan } | null>(null)
 const editorKey = ref(0)
-const deletingPlan = ref<EvaluationPlan | null>(null), deleting = ref(false)
+const deletingPlan = ref<EvaluationPlan | null>(null), deleting = ref(false), deleteError = ref('')
 let sequence = 0, detailSequence = 0, scope = 0, alive = true
 let searchTimer: ReturnType<typeof setTimeout> | undefined
 const busy = new Set<string>()
@@ -146,7 +147,7 @@ function actions(plan: EvaluationPlan) {
 }
 async function action(value: string, plan: EvaluationPlan) {
   if (value === 'view' || value === 'edit') { await open(plan, value); return }
-  if (value === 'delete') { deletingPlan.value = plan; return }
+  if (value === 'delete') { deleteError.value = ''; deletingPlan.value = plan; return }
   if (value !== 'copy' || busy.has(plan.id)) return
   busy.add(plan.id)
   const currentScope = scope
@@ -167,14 +168,14 @@ function saved(plan: EvaluationPlan) {
 async function remove() {
   if (!deletingPlan.value || deleting.value) return
   const plan = deletingPlan.value, currentScope = scope
-  deleting.value = true
+  deleting.value = true; deleteError.value = ''
   try {
     await deleteEvaluationPlan(plan.id)
     if (!alive || currentScope !== scope) return
     deletingPlan.value = null
     if (editor.value?.plan?.id === plan.id) editor.value = null
     void load(); void MessagePlugin.success(t('evaluationPlan.deleted'))
-  } catch { if (alive && currentScope === scope) operationError.value = t('evaluationPlan.operationFailed') }
+  } catch { if (alive && currentScope === scope) deleteError.value = t('evaluationPlan.operationFailed') }
   finally { if (alive && currentScope === scope) deleting.value = false }
 }
 </script>

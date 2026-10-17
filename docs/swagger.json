@@ -18028,6 +18028,389 @@
                     }
                 }
             }
+        },
+        "/evaluation-plans": {
+            "get": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "查询评估方案",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "GUID 或名称，最多 100 字符",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码，默认 1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量，默认 12，上限 100",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "新建评估方案",
+                "parameters": [
+                    {
+                        "description": "完整方案配置",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/evaluation-plans/{id}": {
+            "get": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "查看评估方案",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "方案 GUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "编辑评估方案",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "方案 GUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "完整方案配置",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "删除评估方案",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "方案 GUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/evaluation-plans/{id}/copy": {
+            "post": {
+                "description": "仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "评估方案"
+                ],
+                "summary": "复制评估方案",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "方案 GUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.EvaluationPlanResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "未认证",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "无权操作",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "方案不存在",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
         }
     },
     "definitions": {
@@ -26501,6 +26884,193 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "types.EvaluationDimension": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.EvaluationPlan": {
+            "type": "object",
+            "required": [
+                "answer_comparison_prompt",
+                "evaluation_model_id",
+                "name",
+                "pass_score",
+                "qa_generation_model_id",
+                "qa_generation_prompt",
+                "qa_generation_rules",
+                "scoring_dimensions"
+            ],
+            "properties": {
+                "answer_comparison_prompt": {
+                    "type": "string"
+                },
+                "can_manage": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "creator_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "evaluation_model_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pass_score": {
+                    "type": "number"
+                },
+                "qa_generation_model_id": {
+                    "type": "string"
+                },
+                "qa_generation_prompt": {
+                    "type": "string"
+                },
+                "qa_generation_rules": {
+                    "$ref": "#/definitions/types.QAGenerationRules"
+                },
+                "scoring_dimensions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.EvaluationDimension"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.EvaluationPlanInput": {
+            "type": "object",
+            "required": [
+                "answer_comparison_prompt",
+                "evaluation_model_id",
+                "name",
+                "pass_score",
+                "qa_generation_model_id",
+                "qa_generation_prompt",
+                "qa_generation_rules",
+                "scoring_dimensions"
+            ],
+            "properties": {
+                "answer_comparison_prompt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "evaluation_model_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pass_score": {
+                    "type": "number"
+                },
+                "qa_generation_model_id": {
+                    "type": "string"
+                },
+                "qa_generation_prompt": {
+                    "type": "string"
+                },
+                "qa_generation_rules": {
+                    "$ref": "#/definitions/types.QAGenerationRules"
+                },
+                "scoring_dimensions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.EvaluationDimension"
+                    }
+                }
+            }
+        },
+        "types.EvaluationPlanListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/types.EvaluationPlanPage"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.EvaluationPlanPage": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.EvaluationPlan"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.EvaluationPlanResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/types.EvaluationPlan"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.QAGenerationRules": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "question_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "questions_per_chunk": {
+                    "type": "integer"
                 }
             }
         }

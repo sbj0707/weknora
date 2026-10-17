@@ -102,7 +102,7 @@ export default {
     "comingSoonDescription": "This section is ready for navigation. Operations will be available in a future update.",
     "plans": {
       "title": "Evaluation plans",
-      "description": "Define evaluation goals, data scope, metrics and run parameters."
+      "description": "Manage QA generation prompts, answer comparison prompts, models and scoring rules."
     },
     "qaGeneration": {
       "title": "QA generation",

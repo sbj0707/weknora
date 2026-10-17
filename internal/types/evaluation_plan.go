@@ -1,23 +1,24 @@
 package types
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"time"
 )
 
 // EvaluationPlanInput is the complete editable configuration. Identity and audit
 // fields are deliberately absent: clients cannot change workspace or ownership.
 type EvaluationPlanInput struct {
-	Name                   string                `json:"name" gorm:"type:varchar(100);not null"`
+	Name                   string                `json:"name" binding:"required" gorm:"type:varchar(100);not null"`
 	Description            string                `json:"description" gorm:"type:text;not null"`
-	QAGenerationPrompt     string                `json:"qa_generation_prompt" gorm:"type:text;not null"`
-	AnswerComparisonPrompt string                `json:"answer_comparison_prompt" gorm:"type:text;not null"`
-	QAGenerationModelID    string                `json:"qa_generation_model_id" gorm:"type:varchar(64);not null"`
-	EvaluationModelID      string                `json:"evaluation_model_id" gorm:"type:varchar(64);not null"`
-	ScoringDimensions      []EvaluationDimension `json:"scoring_dimensions" gorm:"serializer:json;type:jsonb;not null"`
-	PassScore              float64               `json:"pass_score" gorm:"not null"`
-	QAGenerationRules      QAGenerationRules     `json:"qa_generation_rules" gorm:"serializer:json;type:jsonb;not null"`
+	QAGenerationPrompt     string                `json:"qa_generation_prompt" binding:"required" gorm:"type:text;not null"`
+	AnswerComparisonPrompt string                `json:"answer_comparison_prompt" binding:"required" gorm:"type:text;not null"`
+	QAGenerationModelID    string                `json:"qa_generation_model_id" binding:"required" gorm:"type:varchar(64);not null"`
+	EvaluationModelID      string                `json:"evaluation_model_id" binding:"required" gorm:"type:varchar(64);not null"`
+	ScoringDimensions      []EvaluationDimension `json:"scoring_dimensions" binding:"required" gorm:"serializer:json;type:jsonb;not null"`
+	PassScore              float64               `json:"pass_score" binding:"required" gorm:"not null"`
+	QAGenerationRules      QAGenerationRules     `json:"qa_generation_rules" binding:"required" gorm:"serializer:json;type:jsonb;not null"`
 }
 
 type EvaluationDimension struct {
@@ -65,4 +66,16 @@ type EvaluationPlanPage struct {
 	Total    int64             `json:"total"`
 	Page     int               `json:"page"`
 	PageSize int               `json:"page_size"`
+}
+
+// EvaluationPlanResponse documents the standard envelope for a plan.
+type EvaluationPlanResponse struct {
+	Success bool            `json:"success"`
+	Data    *EvaluationPlan `json:"data"`
+}
+
+// EvaluationPlanListResponse documents the standard paginated envelope.
+type EvaluationPlanListResponse struct {
+	Success bool                `json:"success"`
+	Data    *EvaluationPlanPage `json:"data"`
 }

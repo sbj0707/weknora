@@ -102,7 +102,7 @@ export default {
     "comingSoonDescription": "页面入口已就绪，具体操作将在后续开放。",
     "plans": {
       "title": "评估方案",
-      "description": "定义评估目标、数据范围、评估指标和运行参数。"
+      "description": "管理 QA 生成提示词、答案对比提示词、模型及评分规则。"
     },
     "qaGeneration": {
       "title": "QA 生成",

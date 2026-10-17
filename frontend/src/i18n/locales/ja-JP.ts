@@ -102,7 +102,7 @@ export default {
     "comingSoonDescription": "ページへの移動が可能です。操作機能は今後の更新で提供されます。",
     "plans": {
       "title": "評価計画",
-      "description": "評価目標、データ範囲、指標、実行パラメータを定義します。"
+      "description": "QA 生成・回答比較のプロンプト、モデル、採点ルールを管理します。"
     },
     "qaGeneration": {
       "title": "QA 生成",

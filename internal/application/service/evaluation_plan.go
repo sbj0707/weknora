@@ -3,6 +3,11 @@ package service
 import (
 	"context"
 	"errors"
+	"math"
+	"regexp"
+	"strings"
+	"unicode/utf8"
+
 	"github.com/Tencent/WeKnora/internal/application/repository"
 	"github.com/Tencent/WeKnora/internal/config"
 	apperrors "github.com/Tencent/WeKnora/internal/errors"
@@ -10,10 +15,6 @@ import (
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"math"
-	"regexp"
-	"strings"
-	"unicode/utf8"
 )
 
 // These bounds match the form configuration in evaluationPlanConfig.ts.
@@ -85,7 +86,7 @@ func ValidateEvaluationPlan(p *types.EvaluationPlanInput) error {
 			return bad(field)
 		}
 	}
-	if strings.TrimSpace(p.QAGenerationModelID) == "" || strings.TrimSpace(p.EvaluationModelID) == "" {
+	if strings.TrimSpace(p.QAGenerationModelID) == "" || strings.TrimSpace(p.EvaluationModelID) == "" || len(p.QAGenerationModelID) > 64 || len(p.EvaluationModelID) > 64 {
 		return bad("model")
 	}
 	if math.IsNaN(p.PassScore) || math.IsInf(p.PassScore, 0) || p.PassScore < 0 || p.PassScore > 100 {

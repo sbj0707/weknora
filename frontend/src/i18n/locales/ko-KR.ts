@@ -102,7 +102,7 @@ export default {
     "comingSoonDescription": "페이지 탐색이 가능합니다. 작업 기능은 향후 업데이트에서 제공됩니다.",
     "plans": {
       "title": "평가 계획",
-      "description": "평가 목표, 데이터 범위, 지표 및 실행 매개변수를 정의합니다."
+      "description": "QA 생성 및 답변 비교 프롬프트, 모델과 채점 규칙을 관리합니다."
     },
     "qaGeneration": {
       "title": "QA 생성",

@@ -6,22 +6,21 @@
     @confirm="save" @close="close">
     <div class="plan-editor">
       <t-alert v-if="error" theme="error" :message="error" />
-          <dl v-if="plan" class="plan-metadata">
-            <div><dt>{{ t('evaluationPlan.id') }}</dt><dd><code>{{ plan.id }}</code><t-button variant="text" size="small" :aria-label="t('evaluationPlan.copyId')" @click="copyID"><t-icon name="copy" /></t-button></dd></div>
-            <div><dt>{{ t('evaluationPlan.creator') }}</dt><dd>{{ plan.creator_name || plan.created_by }}</dd></div>
-            <div><dt>{{ t('evaluationPlan.createdAt') }}</dt><dd>{{ date(plan.created_at) }}</dd></div>
-            <div><dt>{{ t('evaluationPlan.updatedAt') }}</dt><dd>{{ date(plan.updated_at) }}</dd></div>
-          </dl>
+      <dl v-if="plan" class="plan-metadata">
+        <div><dt>{{ t('evaluationPlan.id') }}</dt><dd><code>{{ plan.id }}</code><t-button variant="text" size="small" :aria-label="t('evaluationPlan.copyId')" @click="copyID"><t-icon name="copy" /></t-button></dd></div>
+        <div><dt>{{ t('evaluationPlan.creator') }}</dt><dd>{{ plan.creator_name || plan.created_by }}</dd></div>
+        <div><dt>{{ t('evaluationPlan.createdAt') }}</dt><dd>{{ date(plan.created_at) }}</dd></div>
+        <div><dt>{{ t('evaluationPlan.updatedAt') }}</dt><dd>{{ date(plan.updated_at) }}</dd></div>
+      </dl>
+      <t-alert v-if="modelsError" theme="warning" :message="t('evaluationPlan.modelsFailed')">
+        <template #operation><t-button variant="text" @click="loadModels">{{ t('evaluationPlan.retry') }}</t-button></template>
+      </t-alert>
       <t-form label-align="top" :disabled="readonly || saving" @submit="save">
         <section class="plan-form-section">
           <h3>{{ t('evaluationPlan.basic') }}</h3>
-
           <t-form-item :label="t('evaluationPlan.name')" required><t-input v-model="form.name" :maxlength="PLAN_LIMITS.name" show-limit-number /></t-form-item>
           <t-form-item :label="t('evaluationPlan.description')"><t-textarea v-model="form.description" :maxlength="PLAN_LIMITS.description" :autosize="{ minRows: 2, maxRows: 5 }" /></t-form-item>
         </section>
-        <t-alert v-if="modelsError" theme="warning" :message="t('evaluationPlan.modelsFailed')">
-          <template #operation><t-button variant="text" @click="loadModels">{{ t('evaluationPlan.retry') }}</t-button></template>
-        </t-alert>
         <section class="plan-form-section">
           <h3>{{ t('evaluationPlan.generation') }}</h3>
           <t-form-item :label="t('evaluationPlan.generationModel')" required>

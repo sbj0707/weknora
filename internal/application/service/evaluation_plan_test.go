@@ -218,3 +218,41 @@ func TestEvaluationPlanRejectsInvalidConfigurationAndModels(t *testing.T) {
 	require.NoError(t, err)
 	require.NotContains(t, string(encoded), "created_by")
 }
+
+type planTestAudit struct {
+	interfaces.AuditLogService
+	entries []*types.AuditLog
+}
+
+func (a *planTestAudit) Log(_ context.Context, entry *types.AuditLog) error {
+	a.entries = append(a.entries, entry)
+	return nil
+}
+func TestEvaluationPlanAuditExcludesPromptsAndDowngradedCreatorCanManage(t *testing.T) {
+	s, _, _ := newPlanFixture(t)
+	audit := &planTestAudit{}
+	s.audit = audit
+	ctx := planContext(1, "alice", types.TenantRoleContributor)
+	input := planInput()
+	input.QAGenerationPrompt = "PRIVATE_PROMPT_SENTINEL {{content}}"
+	p, err := s.Create(ctx, input)
+	require.NoError(t, err)
+	downgraded := planContext(1, "alice", types.TenantRoleViewer)
+	_, err = s.Update(downgraded, p.ID, input)
+	require.NoError(t, err)
+	copy, err := s.Copy(ctx, p.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, copy.ID)
+	require.NoError(t, s.Delete(downgraded, p.ID))
+	require.Len(t, audit.entries, 4)
+	actions := []string{"evaluation_plan.created", "evaluation_plan.updated", "evaluation_plan.copied", "evaluation_plan.deleted"}
+	for i, entry := range audit.entries {
+		require.Equal(t, types.AuditAction(actions[i]), entry.Action)
+		require.Equal(t, "alice", entry.ActorUserID)
+		require.Equal(t, uint64(1), entry.TenantID)
+		require.NotEmpty(t, entry.TargetID)
+		raw, err := json.Marshal(entry)
+		require.NoError(t, err)
+		require.NotContains(t, string(raw), "PRIVATE_PROMPT_SENTINEL")
+	}
+}

@@ -199,3 +199,44 @@ func swaggerInteger(value any) int {
 		return 0
 	}
 }
+
+func TestEvaluationPlanContract(t *testing.T) {
+	for _, tt := range swaggerDocuments() {
+		t.Run(tt.name, func(t *testing.T) {
+			var document struct {
+				Paths map[string]map[string]struct {
+					Security []map[string][]string `json:"security" yaml:"security"`
+				} `json:"paths" yaml:"paths"`
+				Definitions map[string]struct {
+					Properties map[string]any `json:"properties" yaml:"properties"`
+				} `json:"definitions" yaml:"definitions"`
+			}
+			if err := tt.parse(tt.loadSpec(t), &document); err != nil {
+				t.Fatal(err)
+			}
+			for path, methods := range map[string][]string{"/evaluation-plans": {"get", "post"}, "/evaluation-plans/{id}": {"get", "put", "delete"}, "/evaluation-plans/{id}/copy": {"post"}} {
+				for _, method := range methods {
+					operation, ok := document.Paths[path][method]
+					if !ok {
+						t.Fatalf("missing %s %s", method, path)
+					}
+					if len(operation.Security) != 1 {
+						t.Fatalf("%s %s must document user-session authentication only", method, path)
+					}
+					if _, ok := operation.Security[0]["Bearer"]; !ok {
+						t.Fatalf("missing Bearer authentication for %s %s", method, path)
+					}
+				}
+			}
+			input, ok := document.Definitions["types.EvaluationPlanInput"]
+			if !ok {
+				t.Fatal("missing plan input schema")
+			}
+			for _, field := range []string{"id", "tenant_id", "created_by", "created_at", "updated_at", "status", "version"} {
+				if _, ok := input.Properties[field]; ok {
+					t.Fatalf("unexpected editable field %s", field)
+				}
+			}
+		})
+	}
+}

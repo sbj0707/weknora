@@ -6604,6 +6604,133 @@ definitions:
           type: string
         type: array
     type: object
+  types.EvaluationDimension:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      weight:
+        type: integer
+    type: object
+  types.EvaluationPlan:
+    properties:
+      answer_comparison_prompt:
+        type: string
+      can_manage:
+        type: boolean
+      created_at:
+        type: string
+      created_by:
+        type: string
+      creator_name:
+        type: string
+      description:
+        type: string
+      evaluation_model_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      pass_score:
+        type: number
+      qa_generation_model_id:
+        type: string
+      qa_generation_prompt:
+        type: string
+      qa_generation_rules:
+        $ref: '#/definitions/types.QAGenerationRules'
+      scoring_dimensions:
+        items:
+          $ref: '#/definitions/types.EvaluationDimension'
+        type: array
+      updated_at:
+        type: string
+    required:
+    - answer_comparison_prompt
+    - evaluation_model_id
+    - name
+    - pass_score
+    - qa_generation_model_id
+    - qa_generation_prompt
+    - qa_generation_rules
+    - scoring_dimensions
+    type: object
+  types.EvaluationPlanInput:
+    properties:
+      answer_comparison_prompt:
+        type: string
+      description:
+        type: string
+      evaluation_model_id:
+        type: string
+      name:
+        type: string
+      pass_score:
+        type: number
+      qa_generation_model_id:
+        type: string
+      qa_generation_prompt:
+        type: string
+      qa_generation_rules:
+        $ref: '#/definitions/types.QAGenerationRules'
+      scoring_dimensions:
+        items:
+          $ref: '#/definitions/types.EvaluationDimension'
+        type: array
+    required:
+    - answer_comparison_prompt
+    - evaluation_model_id
+    - name
+    - pass_score
+    - qa_generation_model_id
+    - qa_generation_prompt
+    - qa_generation_rules
+    - scoring_dimensions
+    type: object
+  types.EvaluationPlanListResponse:
+    properties:
+      data:
+        $ref: '#/definitions/types.EvaluationPlanPage'
+      success:
+        type: boolean
+    type: object
+  types.EvaluationPlanPage:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/types.EvaluationPlan'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  types.EvaluationPlanResponse:
+    properties:
+      data:
+        $ref: '#/definitions/types.EvaluationPlan'
+      success:
+        type: boolean
+    type: object
+  types.QAGenerationRules:
+    properties:
+      difficulty:
+        type: string
+      language:
+        type: string
+      question_types:
+        items:
+          type: string
+        type: array
+      questions_per_chunk:
+        type: integer
+    type: object
 info:
   contact:
     name: WeKnora Github
@@ -18214,6 +18341,252 @@ paths:
       summary: 保存 WeKnoraCloud 凭证
       tags:
       - WeKnoraCloud
+  /evaluation-plans:
+    get:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: GUID 或名称，最多 100 字符
+        in: query
+        name: keyword
+        type: string
+      - description: 页码，默认 1
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量，默认 12，上限 100
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.EvaluationPlanListResponse'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 查询评估方案
+      tags:
+      - 评估方案
+    post:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: 完整方案配置
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.EvaluationPlanInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.EvaluationPlanResponse'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 新建评估方案
+      tags:
+      - 评估方案
+  /evaluation-plans/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: 方案 GUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 删除评估方案
+      tags:
+      - 评估方案
+    get:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: 方案 GUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.EvaluationPlanResponse'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 查看评估方案
+      tags:
+      - 评估方案
+    put:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: 方案 GUID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 完整方案配置
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.EvaluationPlanInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.EvaluationPlanResponse'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 编辑评估方案
+      tags:
+      - 评估方案
+  /evaluation-plans/{id}/copy:
+    post:
+      consumes:
+      - application/json
+      description: 仅管理配置，不调用模型；仅支持用户会话，不开放 API Key。所有操作按当前空间隔离。
+      parameters:
+      - description: 方案 GUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.EvaluationPlanResponse'
+        "400":
+          description: 参数错误
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "401":
+          description: 未认证
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "403":
+          description: 无权操作
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+        "404":
+          description: 方案不存在
+          schema:
+            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: 复制评估方案
+      tags:
+      - 评估方案
 securityDefinitions:
   ApiKeyAuth:
     description: API Key 认证：空间 Key 固定访问所属空间；平台 Key 调用空间接口时需同时传 X-Tenant-ID
