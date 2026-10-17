@@ -1,4 +1,4 @@
-.PHONY: help build run test clean docker-build-app docker-build-docreader docker-build-frontend docker-build-all docker-run migrate-up migrate-down docker-restart docker-stop start-all stop-all start-ollama stop-ollama build-images build-images-app build-images-docreader build-images-frontend clean-images check-env list-containers pull-images show-platform dev-start dev-docker dev-stop dev-restart dev-logs dev-status dev-app dev-frontend docs install-swagger build-lite run-lite package-lite anydoc-lib build-anydoc
+.PHONY: help build run test clean docker-build-app docker-build-docreader docker-build-frontend docker-build-all docker-run migrate-up migrate-down docker-restart docker-stop start-all stop-all start-ollama stop-ollama build-images build-images-app build-images-docreader build-images-frontend clean-images check-env list-containers pull-images show-platform dev-start dev-stop dev-restart dev-logs dev-status dev-app dev-frontend docs install-swagger build-lite run-lite package-lite anydoc-lib build-anydoc
 
 # Show help
 help:
@@ -58,8 +58,6 @@ help:
 	@echo "开发模式（推荐）:"
 	@echo "  dev-start         启动开发环境基础设施（仅启动依赖服务）"
 	@echo "                    可选: make dev-start DEV_ARGS=--odl-hybrid"
-	@echo "  dev-docker        从源码构建并启动 app、frontend 容器及开发依赖"
-	@echo "                    前端 http://localhost:5175，后端 http://localhost:8081"
 	@echo "  dev-stop          停止开发环境"
 	@echo "  dev-restart       重启开发环境"
 	@echo "  dev-logs          查看开发环境日志"
@@ -354,9 +352,6 @@ show-platform:
 # Development mode commands
 dev-start:
 	./scripts/dev.sh start $(DEV_ARGS)
-
-dev-docker:
-	./scripts/dev.sh docker $(DEV_ARGS)
 
 dev-stop:
 	./scripts/dev.sh stop
