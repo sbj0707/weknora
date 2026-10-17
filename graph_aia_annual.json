@@ -1,0 +1,381 @@
+{
+  "format": "weknora.knowledge-base-config",
+  "version": 1,
+  "type": "document",
+  "source_name": "graph_aia_annual",
+  "configuration": {
+    "description": "AIA 2026 原始财务披露：Q1 新业务公告及4月新闻稿；1H中期业绩公告、8月新闻稿、中期报告、分析师演示与问答实录。涵盖集团/各市场、代理/伙伴/银保/IFA渠道、VONB/ANP/TWPI/OPAT/UFSG/CSM、资本桥接、敏感性及产品组合。查询须匹配实体、渠道、期间、CER/AER和单位；数值以原始披露的表头、脚注与正文为准。",
+    "summary_model_id": "c6880306-c7db-4819-9b12-29ca5a6b1162",
+    "embedding_model_id": "ca976deb-4884-4167-b4fe-2502bec8fffc",
+    "chunking_config": {
+      "chunk_size": 1024,
+      "chunk_overlap": 128,
+      "separators": [
+        "\n\n",
+        "\n",
+        "。",
+        "！",
+        "？",
+        ";",
+        "；"
+      ],
+      "parser_engine_rules": [
+        {
+          "file_types": [
+            "pdf"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "docx",
+            "doc"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "pptx",
+            "ppt"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "xlsx",
+            "xls"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "epub"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "mhtml"
+          ],
+          "engine": "builtin"
+        },
+        {
+          "file_types": [
+            "csv"
+          ],
+          "engine": "simple"
+        },
+        {
+          "file_types": [
+            "md",
+            "markdown"
+          ],
+          "engine": "builtin"
+        },
+        {
+          "file_types": [
+            "txt"
+          ],
+          "engine": "simple"
+        },
+        {
+          "file_types": [
+            "json"
+          ],
+          "engine": "simple"
+        },
+        {
+          "file_types": [
+            "jpg",
+            "jpeg",
+            "png",
+            "gif",
+            "bmp",
+            "tiff",
+            "webp"
+          ],
+          "engine": "builtin"
+        },
+        {
+          "file_types": [
+            "mp3",
+            "wav",
+            "m4a",
+            "flac",
+            "ogg"
+          ],
+          "engine": "simple"
+        },
+        {
+          "file_types": [
+            "docm"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "htm"
+          ],
+          "engine": "builtin"
+        },
+        {
+          "file_types": [
+            "html"
+          ],
+          "engine": "builtin"
+        },
+        {
+          "file_types": [
+            "odp"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "ods"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "odt"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "pptm"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "rtf"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "xlsm"
+          ],
+          "engine": "anydoc"
+        },
+        {
+          "file_types": [
+            "xmind"
+          ],
+          "engine": "builtin"
+        }
+      ],
+      "enable_parent_child": true,
+      "parent_chunk_size": 4096,
+      "child_chunk_size": 768,
+      "strategy": "auto",
+      "languages": [
+        "en",
+        "zh"
+      ]
+    },
+    "vlm_config": {
+      "enabled": true,
+      "model_id": "808351cd-3a06-4e13-a9ae-ea29ff09d3c2",
+      "description_language": "English"
+    },
+    "asr_config": {
+      "enabled": false,
+      "model_id": "",
+      "language": ""
+    },
+    "image_processing_config": {
+      "model_id": "",
+      "image_actions": {
+        "ocr": {
+          "on": [
+            {
+              "prop": "contain.text",
+              "is": "block"
+            },
+            {
+              "prop": "contain.data_visual",
+              "is": "true"
+            }
+          ],
+          "on_unobserved": true
+        }
+      }
+    },
+    "storage_backend_id": "34e32b0a-cf68-4bcd-9d11-4914eed8447c",
+    "storage_provider_config": {
+      "provider": "local"
+    },
+    "extract_config": {
+      "enabled": true,
+      "text": "AIA Group Limited announces 13 per cent growth in value of new business (VONB) on constant exchange rates (CER) for the first quarter ended 31 March 2026.\nGrowth rates are shown on a constant exchange rate basis.\nVONB up 13 per cent to US$1,757 million.\nAnnualised new premiums (ANP) increased by 16 per cent to US$3,152 million.\nVONB margin continued to be strong at 56.0 per cent.\nLee Yuan Siong, AIA's Group Chief Executive and President, said: Our two largest markets, Mainland China and Hong Kong, achieved excellent growth of more than 20 per cent in the quarter.",
+      "tags": [
+        "reports_metric",
+        "for_period",
+        "in_market",
+        "through_channel",
+        "offers_product",
+        "has_basis",
+        "compared_with",
+        "led_by"
+      ],
+      "nodes": [
+        {
+          "name": "AIA Group Limited",
+          "attributes": [
+            "Also referred to as AIA",
+            "Announced first-quarter results for the quarter ended 31 March 2026",
+            "Growth rates are reported on a constant exchange rate basis",
+            "Mainland China and Hong Kong are its two largest markets"
+          ]
+        },
+        {
+          "name": "AIA Group | Q1 2026 | VONB",
+          "attributes": [
+            "US$1,757 million",
+            "Growth of 13 per cent on a constant exchange rate basis",
+            "Reported for the first quarter ended 31 March 2026"
+          ]
+        },
+        {
+          "name": "Constant exchange rates (CER)",
+          "attributes": [
+            "Basis used for the reported growth rates"
+          ]
+        },
+        {
+          "name": "First quarter ended 31 March 2026",
+          "attributes": [
+            "Reporting period for AIA's announced metrics and market growth"
+          ]
+        },
+        {
+          "name": "AIA Group | Q1 2026 | ANP",
+          "attributes": [
+            "US$3,152 million",
+            "Increased by 16 per cent on a constant exchange rate basis",
+            "Reported for the first quarter ended 31 March 2026"
+          ]
+        },
+        {
+          "name": "AIA Group | Q1 2026 | VONB margin",
+          "attributes": [
+            "56.0 per cent",
+            "Described as continuing to be strong",
+            "Reported for the first quarter ended 31 March 2026"
+          ]
+        },
+        {
+          "name": "Lee Yuan Siong",
+          "attributes": [
+            "AIA's Group Chief Executive and President",
+            "Said that Mainland China and Hong Kong achieved excellent growth of more than 20 per cent in the quarter"
+          ]
+        },
+        {
+          "name": "Mainland China",
+          "attributes": [
+            "One of AIA's two largest markets",
+            "Achieved growth of more than 20 per cent in the first quarter ended 31 March 2026",
+            "Growth described as excellent by Lee Yuan Siong",
+            "The metric underlying this market growth was not explicitly specified"
+          ]
+        },
+        {
+          "name": "Hong Kong",
+          "attributes": [
+            "One of AIA's two largest markets",
+            "Achieved growth of more than 20 per cent in the first quarter ended 31 March 2026",
+            "Growth described as excellent by Lee Yuan Siong",
+            "The metric underlying this market growth was not explicitly specified"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "node1": "AIA Group Limited",
+          "node2": "AIA Group | Q1 2026 | VONB",
+          "type": "reports_metric"
+        },
+        {
+          "node1": "AIA Group | Q1 2026 | VONB",
+          "node2": "First quarter ended 31 March 2026",
+          "type": "for_period"
+        },
+        {
+          "node1": "AIA Group | Q1 2026 | VONB",
+          "node2": "Constant exchange rates (CER)",
+          "type": "has_basis"
+        },
+        {
+          "node1": "AIA Group Limited",
+          "node2": "AIA Group | Q1 2026 | ANP",
+          "type": "reports_metric"
+        },
+        {
+          "node1": "AIA Group | Q1 2026 | ANP",
+          "node2": "First quarter ended 31 March 2026",
+          "type": "for_period"
+        },
+        {
+          "node1": "AIA Group | Q1 2026 | ANP",
+          "node2": "Constant exchange rates (CER)",
+          "type": "has_basis"
+        },
+        {
+          "node1": "AIA Group Limited",
+          "node2": "AIA Group | Q1 2026 | VONB margin",
+          "type": "reports_metric"
+        },
+        {
+          "node1": "AIA Group | Q1 2026 | VONB margin",
+          "node2": "First quarter ended 31 March 2026",
+          "type": "for_period"
+        },
+        {
+          "node1": "AIA Group Limited",
+          "node2": "Lee Yuan Siong",
+          "type": "led_by"
+        },
+        {
+          "node1": "AIA Group Limited",
+          "node2": "Mainland China",
+          "type": "in_market"
+        },
+        {
+          "node1": "AIA Group Limited",
+          "node2": "Hong Kong",
+          "type": "in_market"
+        }
+      ],
+      "custom_instructions": "Extract only entities and relationships explicitly supported by the current source chunk from AIA Group's financial disclosures. Do not copy facts or values from the few-shot example into other chunks. Use stable English entity names where the source supports them, retaining original financial abbreviations and useful Chinese aliases as attributes.\nPrioritize AIA Group, named markets, distribution channels (agency, partnership, bancassurance, IFA/brokers), products, management, reporting periods, financial metrics, capital management and explicitly disclosed drivers or sensitivities.\nKeep Group, Mainland China, Hong Kong, Thailand, Singapore and Malaysia distinct. Never merge Q1/1Q, Q2/2Q, 1H and FY or different years. Do not invent market/channel/period scope that is absent from the chunk.\nFor numeric financial observations, use a context-specific node name including entity/market, period and metric, plus channel/product and CER/AER basis when explicitly given. Store the exact reported value, currency/unit, growth basis, comparative period and qualifiers as attributes. Keep VONB separate from VONB margin, EV from EV Equity, OPAT from net profit, comprehensive equity from IFRS equity, new-business CSM from cumulative CSM growth, and totals from per-share figures. Preserve percentage points and basis points separately from percentages.\nRespect table headings, column labels and footnotes. Where a numeric table lacks enough context in this chunk, omit ambiguous numeric relationships rather than guess. Do not calculate undisclosed values, infer causality, extrapolate sensitivities, or replace 'more than'/'approximately' with exact values. Extract relationships using the configured relation types and the system JSON protocol only; source chunk links are managed by the application."
+    },
+    "wiki_config": {
+      "synthesis_model_id": "",
+      "max_pages_per_ingest": 0,
+      "extraction_granularity": "exhaustive"
+    },
+    "question_generation_config": {
+      "enabled": true,
+      "question_count": 10
+    },
+    "auto_tag_config": {
+      "enabled": true,
+      "model_id": "c6880306-c7db-4819-9b12-29ca5a6b1162",
+      "max_tags": 4,
+      "skip_if_tagged": true
+    },
+    "profile_config": {
+      "enabled": true,
+      "model_id": "c6880306-c7db-4819-9b12-29ca5a6b1162"
+    },
+    "indexing_strategy": {
+      "vector_enabled": true,
+      "keyword_enabled": true,
+      "wiki_enabled": false,
+      "graph_enabled": true
+    }
+  }
+}
