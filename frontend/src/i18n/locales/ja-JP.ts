@@ -653,6 +653,9 @@ export default {
   },
   knowledgeBase: {
     sourceChunks: {
+      "searchPlaceholder": "ID・番号・種類・本文を検索",
+      "searchCount": "検索結果 · {count}/{total}",
+      "searchEmpty": "一致する Chunk がありません。別のキーワードをお試しください。",
       "backHome": "ホームに戻る",
       "open": "Source/Chunk",
       "title": "Source and chunk relationships",

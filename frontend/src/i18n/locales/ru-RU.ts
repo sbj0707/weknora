@@ -7100,6 +7100,9 @@ export default {
   },
   knowledgeBase: {
     sourceChunks: {
+      "searchPlaceholder": "Поиск по ID, номеру, типу или тексту",
+      "searchCount": "Результаты · {count}/{total}",
+      "searchEmpty": "Подходящих фрагментов нет. Попробуйте другой запрос.",
       "backHome": "На главную",
       "open": "Source/Chunk",
       "title": "Source and chunk relationships",

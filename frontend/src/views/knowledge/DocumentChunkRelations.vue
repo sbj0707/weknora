@@ -27,16 +27,25 @@ const locate = ref<SourceLocateRequest | null>(null)
 const openChunks = ref(new Set<string>())
 const toolbar = ref<HTMLElement | null>(null)
 const outline = ref<HTMLElement | null>(null)
+const chunkSearch = ref('')
+const chunkInfoVisible = ref(false)
 const targetMissing = ref(false)
 const locateMessage = ref('')
 const requestedChunkId = computed(() => typeof route.query.chunk_id === 'string' ? route.query.chunk_id : '')
 let locateToken = 0
+let outlineCenterScheduled = false
 const title = computed(() => document.value?.title || document.value?.file_name || id.value)
 const relations = computed(() => chunkRelations(chunks.value, selection.value, document.value?.file_hash || ''))
 const selectedChunks = computed(() => focusedChunkId.value
   ? chunks.value.filter(chunk => chunk.id === focusedChunkId.value)
   : selection.value ? chunks.value.filter(chunk => relations.value.has(chunk.id)) : [])
 const unmapped = computed(() => chunks.value.filter(chunk => !parseSourceLocators(chunk.source_locators).some(locator => locator.mapping === 'exact')).length)
+const filteredChunks = computed(() => {
+  const query = chunkSearch.value.trim().toLowerCase()
+  if (!query) return chunks.value
+  return chunks.value.filter(chunk => [chunk.id, `#${chunk.chunk_index}`, chunk.chunk_type, chunk.content, chunk.context_header]
+    .some(value => typeof value === 'string' && value.toLowerCase().includes(query)))
+})
 const selectionLabel = computed(() => {
   const value = selection.value
   if (!value) return t('knowledgeBase.sourceChunks.selectHint')
@@ -47,7 +56,7 @@ const selectionLabel = computed(() => {
   return t('knowledgeBase.sourceChunks.selectedRegion')
 })
 
-watch([id, kbId], () => { selection.value = null; focusedChunkId.value = ''; locate.value = null; openChunks.value = new Set(); locateMessage.value = '' })
+watch([id, kbId], () => { selection.value = null; focusedChunkId.value = ''; locate.value = null; openChunks.value = new Set(); locateMessage.value = ''; chunkSearch.value = '' })
 watch(requestedChunkId, () => { selection.value = null; focusedChunkId.value = ''; locate.value = null; locateMessage.value = '' })
 watch([requestedChunkId, chunks, loading, document], () => {
   targetMissing.value = false
@@ -62,13 +71,34 @@ watch([requestedChunkId, chunks, loading, document], () => {
 }, { immediate: true, flush: 'post' })
 watch(() => selectedChunks.value.map(chunk => chunk.id).join(','), () => {
   openChunks.value = new Set(selectedChunks.value.map(chunk => chunk.id))
-})
+  centerChunkNavigation()
+}, { flush: 'post' })
+watch(filteredChunks, centerChunkNavigation, { flush: 'post' })
+function centerChunkNavigation() {
+  if (outlineCenterScheduled) return
+  outlineCenterScheduled = true
+  void nextTick(() => {
+    outlineCenterScheduled = false
+    const container = outline.value
+    if (!container) return
+    const active = container.querySelector<HTMLElement>('.source-chunks__chunk-link.is-active')
+    if (!active) {
+      if (chunkSearch.value.trim()) container.scrollTo({ top: 0 })
+      return
+    }
+    const bounds = active.getBoundingClientRect()
+    const top = bounds.top - container.getBoundingClientRect().top + container.scrollTop
+    container.scrollTo({ top: Math.max(0, top - (container.clientHeight - bounds.height) / 2), behavior: 'smooth' })
+  })
+}
 function selectSource(value: SourceSelection) {
   selection.value = value; focusedChunkId.value = ''; locate.value = null; locateMessage.value = ''
 }
 function focusChunk(chunkId: string) {
   const chunk = chunks.value.find(chunk => chunk.id === chunkId)
   if (!chunk) return
+  // Navigation from the detail view must reveal the target even if a search hid it.
+  if (!filteredChunks.value.some(chunk => chunk.id === chunkId)) chunkSearch.value = ''
   focusedChunkId.value = chunkId
   selection.value = null
   const locators = parseSourceLocators(chunk.source_locators)
@@ -79,14 +109,7 @@ function focusChunk(chunkId: string) {
   locateMessage.value = unavailable ? t('chat.referenceSourceStale') : t('chat.referenceSourceLocating')
   const locator = locators.find(loc => loc.mapping === 'exact')
   if (!unavailable && locator?.type === 'pdf') selection.value = { type: 'pdf', page: locator.page }
-  void nextTick(() => {
-    if (focusedChunkId.value !== chunkId) return
-    const container = outline.value
-    const active = container?.querySelector<HTMLElement>('.source-chunks__chunk-link.is-active')
-    if (!container || !active) return
-    const top = active.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop
-    container.scrollTo({ top: Math.max(0, top - 12), behavior: 'smooth' })
-  })
+  centerChunkNavigation()
 }
 function onLocated(result: { found: boolean; precise: boolean; page?: number; granularity?: string; reason?: string }) {
   if (!focusedChunkId.value || !locate.value) return
@@ -140,15 +163,34 @@ function refresh() { selection.value = null; focusedChunkId.value = ''; locate.v
       {{ t('knowledgeBase.sourceChunks.loadFailed') }}<t-button @click="refresh">{{ t('common.refresh') }}</t-button>
     </div>
     <div v-else-if="document" class="source-chunks__layout">
-      <aside ref="outline" class="source-chunks__outline">
-        <h2>{{ t('knowledgeBase.sourceChunks.allChunks', { count: chunks.length }) }}</h2>
-        <p class="source-chunks__muted">{{ t('knowledgeBase.sourceChunks.selectHint') }}</p>
-        <p v-if="unmapped" class="source-chunks__muted">{{ t('knowledgeBase.sourceChunks.unmapped', { count: unmapped }) }}</p>
-        <div class="source-chunks__chunk-list">
-          <button v-for="chunk in chunks" :key="chunk.id" class="source-chunks__chunk-link"
+      <aside class="source-chunks__outline">
+        <div class="source-chunks__outline-heading">
+          <h2>{{ t('knowledgeBase.sourceChunks.allChunks', { count: chunks.length }) }}</h2>
+          <t-popup v-model:visible="chunkInfoVisible" trigger="click" placement="bottom-left" attach="body" :show-arrow="true" destroy-on-close>
+            <button type="button" class="source-chunks__info-button" :aria-label="t('common.info')"
+              :title="t('common.info')" :aria-expanded="chunkInfoVisible" @keydown.esc="chunkInfoVisible = false">
+              <t-icon name="info-circle" size="16px" />
+            </button>
+            <template #content>
+              <div class="source-chunks__info-content" role="note">
+                <p>{{ t('knowledgeBase.sourceChunks.selectHint') }}</p>
+                <p v-if="unmapped">{{ t('knowledgeBase.sourceChunks.unmapped', { count: unmapped }) }}</p>
+              </div>
+            </template>
+          </t-popup>
+        </div>
+        <t-input v-model="chunkSearch" class="source-chunks__search" clearable
+          :placeholder="t('knowledgeBase.sourceChunks.searchPlaceholder')" :aria-label="t('knowledgeBase.sourceChunks.searchPlaceholder')">
+          <template #prefix-icon><t-icon name="search" /></template>
+        </t-input>
+        <p v-if="chunkSearch.trim()" role="status">{{ t('knowledgeBase.sourceChunks.searchCount', { count: filteredChunks.length, total: chunks.length }) }}</p>
+        <div ref="outline" class="source-chunks__chunk-list">
+          <p v-if="!filteredChunks.length" class="source-chunks__empty">{{ t('knowledgeBase.sourceChunks.searchEmpty') }}</p>
+          <button v-for="chunk in filteredChunks" :key="chunk.id" class="source-chunks__chunk-link"
             :class="{ 'is-active': selectedChunks.some(item => item.id === chunk.id) }" @click="focusChunk(chunk.id)">
             <strong>#{{ chunk.chunk_index }} · {{ chunk.chunk_type }}</strong>
-            <span>{{ position(chunk) || chunk.id }}</span>
+            <span :title="chunk.id">{{ chunk.id }}</span>
+            <span v-if="position(chunk)">{{ position(chunk) }}</span>
             <span class="source-chunks__excerpt">{{ chunk.content }}</span>
           </button>
         </div>
@@ -186,9 +228,18 @@ h1 { font-size: 18px; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis
 h2 { font-size: 14px; margin: 0; }
 p { margin: 6px 0; font-size: 12px; color: var(--td-text-color-secondary); line-height: 1.6; }
 .source-chunks__layout { flex: 1; min-height: 0; display: grid; grid-template-columns: 210px minmax(360px, 1fr) minmax(390px, 40%); }
-.source-chunks__outline { min-height: 0; overflow: auto; padding: 16px 12px; border-right: 1px solid var(--td-component-stroke); }
-.source-chunks__chunk-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.source-chunks__chunk-link { text-align: left; cursor: pointer; padding: 12px; display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--td-component-stroke); border-radius: 8px; background: var(--td-bg-color-container); color: var(--td-text-color-primary); min-width: 0; }
+.source-chunks__outline { min-height: 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; padding: 16px 12px; border-right: 1px solid var(--td-component-stroke); }
+.source-chunks__outline > :not(.source-chunks__chunk-list) { flex-shrink: 0; }
+.source-chunks__outline-heading { display: flex; align-items: center; gap: 6px; }
+.source-chunks__info-button { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--td-text-color-secondary); cursor: pointer; }
+.source-chunks__info-button:hover { color: var(--td-brand-color); background: var(--td-bg-color-container-hover); }
+.source-chunks__info-button:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 2px; }
+.source-chunks__info-content { width: 300px; max-width: calc(100vw - 48px); }
+.source-chunks__info-content p { margin: 0; }
+.source-chunks__info-content p + p { margin-top: 8px; }
+.source-chunks__search { margin-top: 8px; }
+.source-chunks__chunk-list { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding: 2px; scrollbar-gutter: stable; }
+.source-chunks__chunk-link { flex-shrink: 0; text-align: left; cursor: pointer; padding: 12px; display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--td-component-stroke); border-radius: 8px; background: var(--td-bg-color-container); color: var(--td-text-color-primary); min-width: 0; }
 .source-chunks__chunk-link.is-active { border-color: var(--td-brand-color); background: var(--td-brand-color-light); }
 .source-chunks__chunk-link span { font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; color: var(--td-text-color-secondary); }
 .source-chunks__source { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 12px; }
@@ -201,5 +252,5 @@ p { margin: 6px 0; font-size: 12px; color: var(--td-text-color-secondary); line-
 .source-chunks__state { display: flex; align-items: center; justify-content: center; gap: 12px; flex: 1; }
 .source-chunks__empty { padding: 30px 10px; text-align: center; }
 @media (max-width: 1400px) { .source-chunks__layout { grid-template-columns: 170px minmax(260px, 1fr) minmax(320px, 40%); overflow-x: auto; } }
-@media (max-width: 850px) { .source-chunks__layout { display: flex; flex-direction: column; overflow: auto; } .source-chunks__outline { flex: 0 0 180px; border-right: 0; border-bottom: 1px solid var(--td-component-stroke); } .source-chunks__source { flex: 0 0 60vh; } .source-chunks__details { flex-shrink: 0; overflow: visible; border-left: 0; border-top: 1px solid var(--td-component-stroke); } .source-chunks__header { flex-wrap: wrap; padding: 12px; } .source-chunks__heading { min-width: 120px; } }
+@media (max-width: 850px) { .source-chunks__layout { display: flex; flex-direction: column; overflow: auto; } .source-chunks__outline { flex: 0 0 300px; border-right: 0; border-bottom: 1px solid var(--td-component-stroke); } .source-chunks__source { flex: 0 0 60vh; } .source-chunks__details { flex-shrink: 0; overflow: visible; border-left: 0; border-top: 1px solid var(--td-component-stroke); } .source-chunks__header { flex-wrap: wrap; padding: 12px; } .source-chunks__heading { min-width: 120px; } }
 </style>

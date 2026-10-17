@@ -1,9 +1,0 @@
-/target/
-*.db
-*.db-shm
-*.db-wal
-.env
-
-# The repository's binary rule "WeKnora" also matches this package on macOS.
-!/src/main/java/com/tencent/weknora/
-!/src/test/java/com/tencent/weknora/

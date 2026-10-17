@@ -98,18 +98,18 @@ const router = createRouter({
       meta: { requiresInit: true, requiresAuth: true }
     },
     {
+      path: "/platform/chat/:sessionId/messages/:messageId/trace",
+      name: "chatTrace",
+      component: () => import("../views/chat/ChatTrace.vue"),
+      meta: { requiresInit: true, requiresAuth: true }
+    },
+    {
       path: "/platform",
       name: "Platform",
       redirect: "/platform/knowledge-bases",
       component: () => import("../views/platform/index.vue"),
       meta: { requiresInit: true, requiresAuth: true },
       children: [
-        {
-          path: "chat/:sessionId/messages/:messageId/trace",
-          name: "chatTrace",
-          component: () => import("../views/chat/ChatTrace.vue"),
-          meta: { requiresInit: true, requiresAuth: true }
-        },
         {
           path: "tenant",
           redirect: "/platform/settings"

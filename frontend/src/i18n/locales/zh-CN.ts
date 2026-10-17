@@ -7102,6 +7102,9 @@ export default {
   },
   knowledgeBase: {
     sourceChunks: {
+      "searchPlaceholder": "搜索 ID、编号、类型或正文",
+      "searchCount": "搜索结果 · {count}/{total}",
+      "searchEmpty": "没有匹配的 Chunk，请尝试其他关键词。",
       "backHome": "回到首页",
       "open": "源文件/Chunk",
       "title": "源文件与 Chunk 关系视图",

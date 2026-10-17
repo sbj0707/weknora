@@ -43,8 +43,9 @@ test('a reference waits for all chunks, focuses its exact chunk and locates the 
   const scrolls: number[] = []
   state.outline.value = {
     scrollTop: 20,
+    clientHeight: 400,
     getBoundingClientRect: () => ({ top: 100 }),
-    querySelector: () => ({ getBoundingClientRect: () => ({ top: 400 }) }),
+    querySelector: () => ({ getBoundingClientRect: () => ({ top: 400, height: 100 }) }),
     scrollTo: ({ top }: { top: number }) => scrolls.push(top),
   }
   assert.equal(state.focusedChunkId.value, '')
@@ -55,7 +56,7 @@ test('a reference waits for all chunks, focuses its exact chunk and locates the 
   assert.equal(state.selection.value.page, 8)
   assert.equal(state.locate.value.locators[0].page, 8)
   assert.equal(state.openChunks.value.has('cited'), true)
-  assert.deepEqual(scrolls, [308], 'the chunk outline scrolls to its selected card')
+  assert.deepEqual(scrolls, [170], 'the selected card is centered within the chunk list')
   state.onLocated({ found: true, precise: false, page: 8, granularity: 'page' })
   assert.equal(state.focusedChunkId.value, 'cited', 'source positioning keeps the cited chunk selected')
   assert.equal(state.locateMessage.value, 'chat.referenceSourceFoundPage')

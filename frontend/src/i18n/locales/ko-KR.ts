@@ -7100,6 +7100,9 @@ export default {
   },
   knowledgeBase: {
     sourceChunks: {
+      "searchPlaceholder": "ID, 번호, 유형 또는 본문 검색",
+      "searchCount": "검색 결과 · {count}/{total}",
+      "searchEmpty": "일치하는 Chunk가 없습니다. 다른 검색어를 입력하세요.",
       "backHome": "홈으로 돌아가기",
       "open": "Source/Chunk",
       "title": "Source and chunk relationships",

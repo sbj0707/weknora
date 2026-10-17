@@ -653,6 +653,9 @@ export default {
   },
   knowledgeBase: {
     sourceChunks: {
+      "searchPlaceholder": "Search ID, number, type or content",
+      "searchCount": "Results · {count}/{total}",
+      "searchEmpty": "No matching chunks. Try another search.",
       "backHome": "Back to home",
       "open": "Source/Chunk",
       "title": "Source and chunk relationships",

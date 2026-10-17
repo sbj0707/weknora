@@ -49,6 +49,7 @@ function back() { void router.push(`/platform/chat/${encodeURIComponent(sessionI
 <template>
   <main class="chat-trace">
     <header class="chat-trace__header">
+      <router-link class="chat-trace__home" :to="{ name: 'knowledgeBaseList' }"><t-icon name="home" />{{ t('knowledgeBase.sourceChunks.backHome') }}</router-link>
       <t-button variant="text" shape="square" :title="t('common.back')" :aria-label="t('common.back')" @click="back"><t-icon name="chevron-left" /></t-button>
       <div class="chat-trace__heading"><h1>{{ t('chat.trace.title') }}</h1><p>{{ result?.request_id || messageId }}</p></div>
       <t-button variant="outline" :loading="loading" @click="load"><t-icon name="refresh" />{{ t('common.refresh') }}</t-button>
@@ -114,8 +115,9 @@ function back() { void router.push(`/platform/chat/${encodeURIComponent(sessionI
 </template>
 
 <style scoped lang="less">
-.chat-trace { height: 100%; min-height: 0; overflow: auto; padding: 24px; color: var(--td-text-color-primary); background: var(--td-bg-color-page); }
+.chat-trace { height: 100%; min-height: 0; box-sizing: border-box; overflow: auto; padding: 24px; color: var(--td-text-color-primary); background: var(--td-bg-color-page); }
 .chat-trace__header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.chat-trace__home { display: inline-flex; align-items: center; gap: 6px; color: var(--td-brand-color); text-decoration: none; white-space: nowrap; &:hover { text-decoration: underline; } &:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 4px; border-radius: 2px; } }
 .chat-trace__heading { flex: 1; min-width: 0; h1 { margin: 0; font-size: 20px; } p { margin: 5px 0 0; color: var(--td-text-color-secondary); overflow-wrap: anywhere; } }
 .chat-trace__overview, .chat-trace__tree, .chat-trace__detail { border: 1px solid var(--td-component-stroke); background: var(--td-bg-color-container); border-radius: var(--app-radius-md, 10px); }
 .chat-trace__overview { padding: 18px; margin-bottom: 18px; }
