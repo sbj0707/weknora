@@ -21,10 +21,47 @@ package anydoc
 import "C"
 
 import (
+	"encoding/json"
 	"fmt"
 	"runtime"
 	"unsafe"
 )
+
+// PDFPage keeps the physical, 1-based PDF page alongside its Markdown.
+type PDFPage struct {
+	Page     int    `json:"page"`
+	Markdown string `json:"markdown"`
+}
+
+// PDFPages uses the same PDF extractor as ToMarkdownBytes without discarding
+// page boundaries. OCR-required pages fail rather than yield a partial map.
+func PDFPages(data []byte) ([]PDFPage, error) {
+	if len(data) == 0 {
+		return nil, &ConvertError{Kind: "unsupported", Detail: "empty input"}
+	}
+	var out *C.char
+	var outLen C.uintptr_t
+	if err := call(func() C.int {
+		return C.anydoc_pdf_pages((*C.uint8_t)(unsafe.Pointer(&data[0])), C.uintptr_t(len(data)), &out, &outLen)
+	}); err != nil {
+		return nil, err
+	}
+	defer C.anydoc_string_free(out)
+	raw, err := cStringN(out, outLen)
+	if err != nil {
+		return nil, err
+	}
+	var pages []PDFPage
+	if err := json.Unmarshal([]byte(raw), &pages); err != nil {
+		return nil, fmt.Errorf("decode PDF pages: %w", err)
+	}
+	for i, page := range pages {
+		if page.Page != i+1 {
+			return nil, fmt.Errorf("invalid PDF page ordinal: %d", page.Page)
+		}
+	}
+	return pages, nil
+}
 
 // call runs one ABI entry point and turns its status code into an error.
 //

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	stderrors "errors"
 	"net/http"
 	"strconv"
@@ -13,6 +14,7 @@ import (
 	"github.com/Tencent/WeKnora/internal/errors"
 	"github.com/Tencent/WeKnora/internal/logger"
 	"github.com/Tencent/WeKnora/internal/storageurl"
+	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
 	"github.com/Tencent/WeKnora/internal/types"
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
 	secutils "github.com/Tencent/WeKnora/internal/utils"
@@ -22,6 +24,7 @@ import (
 // It provides endpoints for loading and managing message history
 type MessageHandler struct {
 	MessageService interfaces.MessageService // Service that implements message business logic
+	TraceReader    func(context.Context, *types.Message) (*langfuse.ChatTrace, error)
 	// FileService and StorageResolver back the optional `resource_urls=public`
 	// mode, which returns loadable HTTP URLs instead of internal
 	// `resource://` handles. Both may be nil, in which case only the default

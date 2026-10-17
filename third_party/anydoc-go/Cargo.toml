@@ -20,6 +20,8 @@ crate-type = ["staticlib"]
 # Pinned exactly: the C ABI mirrors this version's error and format enums.
 [dependencies]
 anydoc = "=0.2.4"
+pdf-inspector = "=1.14.2"
+serde_json = "1.0"
 
 [build-dependencies]
 cbindgen = "0.29"

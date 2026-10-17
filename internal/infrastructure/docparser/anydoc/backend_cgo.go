@@ -31,7 +31,17 @@ func backendConvert(data []byte, opts Options) (*Result, error) {
 		if err != nil {
 			return nil, fmt.Errorf("anydoc: markdown conversion failed: %w", err)
 		}
-		return &Result{Markdown: markdown}, nil
+		result := &Result{Markdown: markdown}
+		if opts.Format == "pdf" || opts.Format == "" && strings.HasPrefix(string(data[:min(len(data), 5)]), "%PDF-") {
+			pages, err := upstream.PDFPages(data)
+			if err != nil {
+				return nil, fmt.Errorf("anydoc: PDF source pages: %w", err)
+			}
+			for _, page := range pages {
+				result.Pages = append(result.Pages, PDFPage{Page: page.Page, Markdown: page.Markdown})
+			}
+		}
+		return result, nil
 	}
 
 	// Official GFM serializer after rewriting Asset images to External URLs

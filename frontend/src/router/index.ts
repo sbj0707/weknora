@@ -92,12 +92,24 @@ const router = createRouter({
       meta: { requiresInit: true, requiresAuth: true }
     },
     {
+      path: "/platform/knowledge-bases/:kbId/documents/:knowledgeId/source-chunks",
+      name: "documentChunkRelations",
+      component: () => import("../views/knowledge/DocumentChunkRelations.vue"),
+      meta: { requiresInit: true, requiresAuth: true }
+    },
+    {
       path: "/platform",
       name: "Platform",
       redirect: "/platform/knowledge-bases",
       component: () => import("../views/platform/index.vue"),
       meta: { requiresInit: true, requiresAuth: true },
       children: [
+        {
+          path: "chat/:sessionId/messages/:messageId/trace",
+          name: "chatTrace",
+          component: () => import("../views/chat/ChatTrace.vue"),
+          meta: { requiresInit: true, requiresAuth: true }
+        },
         {
           path: "tenant",
           redirect: "/platform/settings"
@@ -112,12 +124,6 @@ const router = createRouter({
           path: "knowledge-bases",
           name: "knowledgeBaseList",
           component: () => import("../views/knowledge/KnowledgeBaseList.vue"),
-          meta: { requiresInit: true, requiresAuth: true }
-        },
-        {
-          path: "knowledge-bases/:kbId/documents/:knowledgeId/source-chunks",
-          name: "documentChunkRelations",
-          component: () => import("../views/knowledge/DocumentChunkRelations.vue"),
           meta: { requiresInit: true, requiresAuth: true }
         },
         {

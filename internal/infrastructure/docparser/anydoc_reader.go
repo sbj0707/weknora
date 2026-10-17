@@ -8,6 +8,7 @@ import (
 
 	"github.com/Tencent/WeKnora/internal/infrastructure/docparser/anydoc"
 	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/Tencent/WeKnora/internal/sourceloc"
 	"github.com/Tencent/WeKnora/internal/types"
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
 )
@@ -65,6 +66,7 @@ func (r *AnydocReader) Read(ctx context.Context, req *types.ReadRequest) (*types
 
 	return &types.ReadResult{
 		MarkdownContent: converted.Markdown,
+		SourceBlocks:    AnydocPDFSourceBlocks(converted.Markdown, converted.Pages),
 		ImageRefs:       imageRefsFromAssets(converted.Assets),
 		Metadata: map[string]string{
 			"parser":         AnydocEngineName,
@@ -72,6 +74,24 @@ func (r *AnydocReader) Read(ctx context.Context, req *types.ReadRequest) (*types
 			"source_format":  format,
 		},
 	}, nil
+}
+
+// AnydocPDFSourceBlocks aligns only complete, verified source lines. A table
+// spanning pages or an omitted line must not inherit a neighbouring page.
+// This also supports repairing existing documents without changing chunk IDs.
+func AnydocPDFSourceBlocks(markdown string, pages []anydoc.PDFPage) []types.SourceBlock {
+	var units []sourceloc.Unit
+	for i, page := range pages {
+		if page.Page != i+1 {
+			return nil
+		}
+		for _, line := range strings.Split(page.Markdown, "\n") {
+			if strings.TrimSpace(line) != "" {
+				units = append(units, sourceloc.Unit{Text: line, Locator: types.SourceLocator{Type: types.SourceLocatorPDF, Page: page.Page}})
+			}
+		}
+	}
+	return sourceloc.Align(markdown, units)
 }
 
 func pdfMarkdownIsEmpty(converted *anydoc.Result, err error) bool {

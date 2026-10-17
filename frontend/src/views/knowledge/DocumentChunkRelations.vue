@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import DocumentPreview from '@/components/document-preview.vue'
 import ChunkDetailDrawer from '@/components/chunk-detail-drawer.vue'
@@ -12,7 +12,7 @@ import { renderDocumentPreviewMarkdown } from '@/utils/documentPreviewMarkdown'
 import { knowledgeBaseConfigFilename } from '@/utils/knowledgeBaseConfigTransfer'
 import type { ChunkDetailContent } from '@/types/chunkDetail'
 
-const route = useRoute(), router = useRouter(), { t } = useI18n()
+const route = useRoute(), { t } = useI18n()
 const id = computed(() => String(route.params.knowledgeId || ''))
 const kbId = computed(() => String(route.params.kbId || ''))
 const state = useDocumentChunkRelations(() => id.value, () => kbId.value, {
@@ -119,16 +119,13 @@ async function exportJson() {
   window.document.body.appendChild(link); link.click(); link.remove()
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
-async function back() {
-  await router.push({ name: 'knowledgeBaseDetail', params: { kbId: kbId.value }, query: { knowledge_id: id.value } })
-}
 function refresh() { selection.value = null; focusedChunkId.value = ''; locate.value = null; locateMessage.value = ''; void state.load() }
 </script>
 
 <template>
   <main class="source-chunks">
     <header class="source-chunks__header">
-      <t-button variant="text" shape="square" :title="t('common.back')" :aria-label="t('common.back')" @click="back"><t-icon name="chevron-left" /></t-button>
+      <RouterLink class="source-chunks__home" :to="{ name: 'knowledgeBaseList' }"><t-icon name="home" />{{ t('knowledgeBase.sourceChunks.backHome') }}</RouterLink>
       <div class="source-chunks__heading"><h1>{{ title }}</h1><p>{{ t('knowledgeBase.sourceChunks.title') }}</p></div>
       <t-button variant="outline" :disabled="loading || exporting" @click="refresh"><t-icon name="refresh" />{{ t('common.refresh') }}</t-button>
       <t-button theme="primary" :loading="exporting" :disabled="loading || failed || !document" @click="exportJson">
@@ -181,6 +178,9 @@ function refresh() { selection.value = null; focusedChunkId.value = ''; locate.v
 <style scoped lang="less">
 .source-chunks { height: 100%; min-height: 0; display: flex; flex-direction: column; background: var(--td-bg-color-page); }
 .source-chunks__header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--td-component-stroke); background: var(--td-bg-color-container); }
+.source-chunks__home { display: inline-flex; align-items: center; gap: 6px; color: var(--td-brand-color); text-decoration: none; white-space: nowrap; }
+.source-chunks__home:hover { text-decoration: underline; }
+.source-chunks__home:focus-visible { outline: 2px solid var(--td-brand-color); outline-offset: 4px; border-radius: 2px; }
 .source-chunks__heading { flex: 1; min-width: 0; }
 h1 { font-size: 18px; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 h2 { font-size: 14px; margin: 0; }

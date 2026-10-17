@@ -187,6 +187,12 @@ int anydoc_format_from_extension(const char *ext, int *out);
 int anydoc_format_from_path(const char *path, int *out);
 
 /**
+ * Extract PDF Markdown with physical, 1-based page numbers. The JSON string
+ * uses the same ownership contract as anydoc_to_markdown_bytes.
+ */
+int anydoc_pdf_pages(const uint8_t *bytes, uintptr_t len, char **out_str, uintptr_t *out_len);
+
+/**
  * Convert a document file to Markdown. The format is detected from the file
  * content, with the extension as the fallback for signature-less formats
  * (CSV).

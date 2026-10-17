@@ -13,6 +13,7 @@
 package anydoc
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"path/filepath"
@@ -26,6 +27,8 @@ const ImageDir = "images/"
 
 // Result is one converted document.
 type Result struct {
+	// Pages retains PDF page boundaries for source-to-chunk alignment.
+	Pages []PDFPage
 	// Markdown is GitHub-Flavored Markdown for the whole document.
 	// When WithAssets is set, embedded images appear in place as
 	// `![alt](images/image-N.ext)` via anydoc's official serializer.
@@ -40,6 +43,11 @@ type Result struct {
 	// renderer so the conversion succeeds and the caller decides whether to
 	// log or ignore the loss.
 	AssetsError error
+}
+
+type PDFPage struct {
+	Page     int
+	Markdown string
 }
 
 // Asset is one image embedded in a document.
@@ -153,7 +161,7 @@ func Convert(data []byte, opts Options) (*Result, error) {
 	}
 	// PDF has no document model, so asset extraction would only produce an
 	// error the caller has to special-case. Drop the request instead.
-	if opts.Format == "pdf" {
+	if opts.Format == "pdf" || opts.Format == "" && bytes.HasPrefix(data, []byte("%PDF-")) {
 		opts.WithAssets = false
 	}
 	return backendConvert(data, opts)

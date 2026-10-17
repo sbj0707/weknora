@@ -40,6 +40,9 @@
             <span class="chat-request-value">{{ row.value }}</span>
           </div>
         </div>
+        <router-link v-if="traceLocation" :to="traceLocation" target="_blank" rel="noopener noreferrer" class="chat-request-trace-link" @click="visible = false">
+          <t-icon name="branch" />{{ $t('chat.trace.view') }}<t-icon name="jump" />
+        </router-link>
       </div>
     </template>
   </t-popup>
@@ -53,6 +56,7 @@ import {
   type ChatRequestDebugInfo,
 } from '@/utils/chatRequestDebug';
 import { copyWithToast } from '@/utils/clipboard';
+import { chatTraceLocation } from '@/utils/chatTrace';
 
 const props = defineProps<{
   session: Record<string, unknown>;
@@ -67,7 +71,7 @@ const debugInfo = computed((): ChatRequestDebugInfo => {
   const dr = s.debugRequest as ChatRequestDebugInfo | undefined;
   return {
     requestId: (s.request_id as string) || dr?.requestId,
-    messageId: (s.id as string) || undefined,
+    messageId: (s.assistant_message_id as string) || (s.id as string) || undefined,
     sessionId: props.sessionId || dr?.sessionId,
     url: dr?.url,
     method: dr?.method,
@@ -94,6 +98,8 @@ const rows = computed(() => {
   }
   return list;
 });
+
+const traceLocation = computed(() => chatTraceLocation(debugInfo.value.sessionId, debugInfo.value.messageId));
 
 const copyAll = async () => {
   const ok = await copyWithToast(buildChatRequestDebugPayload(debugInfo.value), 'common.copied');
@@ -165,6 +171,18 @@ const copyAll = async () => {
 .chat-request-empty {
   color: var(--td-text-color-placeholder);
   padding: 4px 0 8px;
+}
+
+.chat-request-trace-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--td-component-stroke);
+  color: var(--td-brand-color);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
 }
 
 </style>

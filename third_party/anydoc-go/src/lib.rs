@@ -304,6 +304,42 @@ pub unsafe extern "C" fn anydoc_format_from_path(path: *const c_char, out: *mut 
     ERR_OK
 }
 
+/// Extract PDF Markdown with physical, 1-based page numbers. The JSON string
+/// uses the same ownership contract as anydoc_to_markdown_bytes.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn anydoc_pdf_pages(
+    bytes: *const u8,
+    len: usize,
+    out_str: *mut *mut c_char,
+    out_len: *mut usize,
+) -> c_int {
+    if bytes.is_null() || out_str.is_null() {
+        set_last_error("anydoc: null pointer passed to anydoc_pdf_pages");
+        return ERR_INVALID_ARG;
+    }
+    let slice = unsafe { std::slice::from_raw_parts(bytes, len) };
+    match guarded("anydoc_pdf_pages", || {
+        let result = pdf_inspector::extract_pages_markdown_mem(slice, None).map_err(|e| match e {
+            pdf_inspector::PdfError::Encrypted => ConvertError::Encrypted,
+            pdf_inspector::PdfError::Io(e) => ConvertError::Io(e),
+            other => ConvertError::Malformed { part: None, detail: other.to_string() },
+        })?;
+        if !result.pages_needing_ocr.is_empty() {
+            return Err(ConvertError::NeedsOcr {
+                pages: result.pages_needing_ocr,
+                page_count: result.pages.len() as u32,
+            });
+        }
+        let pages: Vec<_> = result.pages.into_iter().map(|p| {
+            serde_json::json!({ "page": p.page + 1, "markdown": p.markdown })
+        }).collect();
+        serde_json::to_string(&pages).map_err(|e| ConvertError::Malformed { part: None, detail: e.to_string() })
+    }) {
+        Ok(json) => string_out(json, out_str, out_len),
+        Err(e) => fail(e),
+    }
+}
+
 /// Convert a document file to Markdown. The format is detected from the file
 /// content, with the extension as the fallback for signature-less formats
 /// (CSV).
