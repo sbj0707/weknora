@@ -1,0 +1,17 @@
+root = "/workspace"
+tmp_dir = "/tmp/weknora-air"
+
+# Air rebuilds the app; exec lets it stop Delve before starting the next binary.
+[build]
+cmd = "go build -buildvcs=false -gcflags='all=-N -l' -ldflags='-X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=warn' -o /tmp/weknora-air/app ./cmd/server"
+bin = "/tmp/weknora-air/app"
+full_bin = "exec dlv exec /tmp/weknora-air/app --headless --listen=0.0.0.0:2345 --api-version=2 --accept-multiclient --continue --only-same-user=false"
+delay = 1000
+exclude_dir = [".git", "frontend", "website-docs", "miniprogram", "cli", "client", "node_modules", "third_party/anydoc-go/target"]
+exclude_regex = ["_test\\.go$"]
+include_ext = ["go", "yaml", "yml", "json", "sql", "toml"]
+kill_delay = "2s"
+stop_on_error = true
+
+[log]
+time = true

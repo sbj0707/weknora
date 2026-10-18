@@ -5,6 +5,7 @@
 | [Go 接口文档](go-api.md) | 按模块查阅 HTTP 接口、认证、请求参数、响应、数据结构及未注释路由；文内附完整目录 |
 | [Go 主后端模块说明](go-service.md) | 后端模块、代码分层、模块关系与典型调用流程 |
 | [本地开发环境启动指南](develop.md) | 本地基础设施、Go 后端与前端的启动和排查 |
+| [Docker 远程开发调试手册](remote_docker_debug.md) | 容器内运行前后端、源码热更新、SSH 访问和 Delve 断点调试 |
 | [Chunk 学习笔记](chunk.md) | 文档分块相关笔记 |
 | [Chunk 分块补充笔记](chunk_split.md) | 分块相关补充内容与示例 |
 

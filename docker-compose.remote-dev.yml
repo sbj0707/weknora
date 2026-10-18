@@ -1,0 +1,76 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app.dev
+    image: weknora-app-dev:local
+    container_name: WeKnora-app-dev
+    working_dir: /workspace
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      REDIS_ADDR: redis:6379
+      DOCREADER_ADDR: docreader:50051
+      NEO4J_URI: bolt://neo4j:7687
+      LANGFUSE_HOST: http://langfuse-web:3000
+      LANGFUSE_ENABLED: ${REMOTE_LANGFUSE_ENABLED:-false}
+      RETRIEVE_DRIVER: postgres
+      STORAGE_TYPE: local
+      LOCAL_STORAGE_BASE_DIR: /data/files
+      GIN_MODE: debug
+      WEKNORA_SANDBOX_DOCKER_ENABLED: "false"
+      BROWSERSKILL_BINARY: ""
+      CGO_CFLAGS: -Wno-deprecated-declarations -Wno-gnu-folding-constant
+    volumes:
+      - ./:/workspace:ro
+      - app-go-mod-dev:/go/pkg/mod
+      - app-go-build-dev:/root/.cache/go-build
+      - app-files-dev:/data/files
+    ports:
+      - "127.0.0.1:${REMOTE_APP_PORT:-18081}:8080"
+      - "127.0.0.1:${REMOTE_DEBUG_PORT:-12345}:2345"
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    command: ["air", "-c", "docker/air.remote-dev.toml"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+      start_period: 10m
+    networks:
+      - dev-network
+    restart: unless-stopped
+
+  frontend:
+    image: node:24-bookworm-slim
+    container_name: WeKnora-frontend-dev
+    working_dir: /workspace
+    environment:
+      VITE_DEV_PROXY_TARGET: http://app:8080
+    volumes:
+      - ./frontend:/workspace
+      - frontend-node-modules-dev:/workspace/node_modules
+      - frontend-npm-cache-dev:/root/.npm
+    ports:
+      - "127.0.0.1:${REMOTE_FRONTEND_PORT:-15173}:5173"
+    command: ["sh", "-ec", "npm ci --no-audit --no-fund && exec npm run dev -- --host 0.0.0.0 --port 5173 --strictPort"]
+    networks:
+      - dev-network
+    restart: unless-stopped
+
+networks:
+  dev-network:
+    external: true
+    name: weknora_WeKnora-network-dev
+
+volumes:
+  app-go-mod-dev:
+  app-go-build-dev:
+  app-files-dev:
+  frontend-node-modules-dev:
+  frontend-npm-cache-dev:

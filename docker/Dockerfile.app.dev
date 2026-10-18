@@ -1,0 +1,18 @@
+FROM golang:1.26-bookworm
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential ca-certificates curl ffmpeg git libsqlite3-dev nodejs npm python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN go install github.com/air-verse/air@v1.67.4 \
+    && go install github.com/go-delve/delve/cmd/dlv@v1.27.2
+
+WORKDIR /workspace
+COPY go.mod go.sum ./
+COPY third_party/anydoc-go/go.mod third_party/anydoc-go/go.mod
+RUN go mod download
+COPY cmd/download/duckdb/duckdb.go cmd/download/duckdb/duckdb.go
+RUN go run cmd/download/duckdb/duckdb.go
+
+ENV CGO_ENABLED=1
+EXPOSE 8080 2345
