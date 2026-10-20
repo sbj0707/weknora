@@ -538,6 +538,8 @@ func ParseProviderScheme(filePath string) string {
 
 // ImageProcessingConfig represents the image processing configuration
 type ImageProcessingConfig struct {
+	UsePageImagesForAnswer bool `yaml:"use_page_images_for_answer" json:"use_page_images_for_answer"`
+	AutoSavePageImages bool `yaml:"auto_save_page_images" json:"auto_save_page_images"`
 	// Model ID
 	ModelID string `yaml:"model_id" json:"model_id"`
 	// ImageActions overrides the built-in attribute→work table (see
