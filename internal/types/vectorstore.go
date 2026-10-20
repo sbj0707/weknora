@@ -85,6 +85,7 @@ func (v *VectorStore) BeforeCreate(tx *gorm.DB) error {
 //     route through a separate code path (BuildEnvVectorStores) and do
 //     not pass through this validation.
 var validEngineTypes = map[RetrieverEngineType]bool{
+	AzureAISearchRetrieverEngineType:   true,
 	ElasticsearchRetrieverEngineType:   true,
 	QdrantRetrieverEngineType:          true,
 	MilvusRetrieverEngineType:          true,
@@ -120,6 +121,9 @@ func (v *VectorStore) Validate() error {
 // ConnectionConfig holds driver-specific connection parameters.
 // Sensitive fields (Password, APIKey) are encrypted with AES-GCM at rest.
 type ConnectionConfig struct {
+	// Azure AI Search. Empty AuthMode defaults to api_key for API clients.
+	AuthMode                string `yaml:"auth_mode" json:"auth_mode,omitempty"`
+	ManagedIdentityClientID string `yaml:"managed_identity_client_id" json:"managed_identity_client_id,omitempty"`
 	// Common
 	Addr     string `yaml:"addr" json:"addr,omitempty"`
 	Username string `yaml:"username" json:"username,omitempty"`
@@ -242,6 +246,9 @@ func (c ConnectionConfig) MaskSensitiveFields() ConnectionConfig {
 // IndexConfig holds optional index/collection configuration for the vector store.
 // If empty, engine-specific defaults are used.
 type IndexConfig struct {
+	// Azure AI Search: immutable vector schema and full-text analyzer.
+	VectorDimensions int    `yaml:"vector_dimensions" json:"vector_dimensions,omitempty"`
+	TextAnalyzer     string `yaml:"text_analyzer" json:"text_analyzer,omitempty"`
 	// --- Existing fields ---
 	IndexName        string `yaml:"index_name" json:"index_name,omitempty"`                 // ES, OpenSearch
 	NumberOfShards   int    `yaml:"number_of_shards" json:"number_of_shards,omitempty"`     // ES, OpenSearch
@@ -288,6 +295,11 @@ func (c *IndexConfig) Scan(value interface{}) error {
 // falling back to engine-specific defaults when the user has not specified one.
 func (c IndexConfig) GetIndexNameOrDefault(engineType RetrieverEngineType) string {
 	switch engineType {
+	case AzureAISearchRetrieverEngineType:
+		if c.IndexName != "" {
+			return c.IndexName
+		}
+		return "weknora"
 	case ElasticsearchRetrieverEngineType:
 		if c.IndexName != "" {
 			return c.IndexName
@@ -587,8 +599,9 @@ func SharedStoreDisplay() StoreDisplay {
 // Wraps VectorStore with additional metadata (source, readonly).
 type VectorStoreResponse struct {
 	VectorStore
-	Source   string `json:"source"`   // "env" or "user"
-	ReadOnly bool   `json:"readonly"` // env stores are read-only
+	PhysicalIndexName string `json:"physical_index_name,omitempty"`
+	Source            string `json:"source"`   // "env" or "user"
+	ReadOnly          bool   `json:"readonly"` // env stores are read-only
 }
 
 // NewVectorStoreResponse creates a response DTO from a VectorStore
@@ -597,9 +610,10 @@ func NewVectorStoreResponse(store *VectorStore, source string, readonly bool) Ve
 	masked := *store
 	masked.ConnectionConfig = store.ConnectionConfig.MaskSensitiveFields()
 	return VectorStoreResponse{
-		VectorStore: masked,
-		Source:      source,
-		ReadOnly:    readonly,
+		VectorStore:       masked,
+		PhysicalIndexName: azureAISearchDisplayIndexName(store),
+		Source:            source,
+		ReadOnly:          readonly,
 	}
 }
 
@@ -778,6 +792,20 @@ func GetVectorStoreTypes() []VectorStoreTypeInfo {
 				{Name: "hnsw_ef_construction", Type: "number", Required: false, Description: "HNSW build candidate list. Higher (e.g. 200-512) improves recall at the cost of build time. Immutable after creation.", Default: 100, Min: floatPtr(2), Max: floatPtr(4096), Immutable: true},
 				{Name: "hnsw_ef_search", Type: "number", Required: false, Description: "HNSW search candidate list. Effective on the faiss engine; the lucene engine reads it at query time. Immutable (no settings-update path).", Default: 100, Min: floatPtr(1), Max: floatPtr(10000), Immutable: true},
 				{Name: "knn_engine", Type: "string", Required: false, Description: "k-NN backend.", Default: "lucene", Enum: []string{"lucene", "faiss"}, Immutable: true},
+			},
+		},
+		{
+			Type: string(AzureAISearchRetrieverEngineType), DisplayName: "Azure AI Search",
+			ConnectionFields: []VectorStoreFieldInfo{
+				{Name: "addr", Type: "string", Required: true, Description: "Azure AI Search endpoint"},
+				{Name: "auth_mode", Type: "string", Required: true, Default: "api_key", Enum: []string{"api_key", "managed_identity"}},
+				{Name: "api_key", Type: "string", Sensitive: true},
+				{Name: "managed_identity_client_id", Type: "string"},
+			},
+			IndexFields: []VectorStoreFieldInfo{
+				{Name: "index_name", Type: "string", Default: "weknora", Immutable: true},
+				{Name: "vector_dimensions", Type: "number", Required: true, Min: floatPtr(1), Max: floatPtr(4096), Immutable: true},
+				{Name: "text_analyzer", Type: "string", Default: "standard.lucene", Enum: []string{"standard.lucene", "zh-Hans.microsoft", "zh-Hans.lucene", "en.microsoft"}, Immutable: true},
 			},
 		},
 	}

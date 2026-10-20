@@ -18,6 +18,7 @@ const schema: Record<string, Schema> = {
   asr_config: { enabled: 'boolean', model_id: 'string', language: 'string' },
   image_processing_config: {
     model_id: 'string', image_attrs_enabled: 'boolean',
+    use_page_images_for_answer: 'boolean', auto_save_page_images: 'boolean',
     image_actions: { ocr: { on: [{ prop: 'string', is: 'string' }], on_unobserved: 'boolean' } },
   },
   storage_backend_id: 'string', storage_provider_config: { provider: 'string' },

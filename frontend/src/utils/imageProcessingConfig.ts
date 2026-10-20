@@ -6,6 +6,8 @@ export interface ImageAttrConditionLike {
 
 /** The fields of the KB editor that feed image_processing_config. */
 export interface ImageProcessingEdits {
+  usePageImagesForAnswer?: boolean
+  autoSavePageImages?: boolean
   imageAttrsEnabled: boolean
   onUnobserved: boolean
   /** The registry's current default OCR conditions (GET /image-attrs/schema). */
@@ -32,6 +34,8 @@ export function buildImageProcessingConfig(
   const on = Array.isArray(storedOn) && storedOn.length > 0 ? storedOn : edits.defaultOn
   const built = {
     ...snap,
+    ...(edits.usePageImagesForAnswer !== undefined ? { use_page_images_for_answer: edits.usePageImagesForAnswer } : {}),
+    ...(edits.autoSavePageImages !== undefined ? { auto_save_page_images: edits.autoSavePageImages } : {}),
     image_attrs_enabled: edits.imageAttrsEnabled,
     image_actions: {
       ocr: {

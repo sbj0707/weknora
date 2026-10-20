@@ -85,6 +85,7 @@ var queuesScanned = func() []string {
 // deliberately narrow: we don't touch FAQ import / KB-level tasks
 // because the cancel API is per-knowledge.
 var taskTypesForKnowledgeCancel = map[string]struct{}{
+	types.TypeDocumentPageImages:   {},
 	types.TypeDocumentProcess:      {},
 	types.TypeManualProcess:        {},
 	types.TypeImageMultimodal:      {},

@@ -53,6 +53,7 @@
               </span>
             </t-option>
           </t-select>
+          <p v-if="selectedAzureStore" class="option-hint">{{ $t('azureAISearch.kbDimension', { dimension: selectedAzureStore.index_config.vector_dimensions }) }}</p>
           <p class="option-hint">{{ $t('kbSettings.vectorStore.immutableHint') }}</p>
           <a
             href="javascript:void(0)"
@@ -126,6 +127,7 @@ const localVectorStoreId = ref<string>(props.vectorStoreId || '')
 // list; including it twice would confuse users about which one is the
 // fallback path.
 const userStores = computed(() => allStores.value.filter((s) => s.source === 'user'))
+const selectedAzureStore = computed(() => userStores.value.find(s => s.id === localVectorStoreId.value && s.engine_type === 'azure_ai_search'))
 
 // Engine type for the env store, shown as a tag next to the "System
 // default" label so users know which storage backend handles unbound

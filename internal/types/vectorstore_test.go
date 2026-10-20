@@ -246,7 +246,7 @@ func TestGetVectorStoreTypes(t *testing.T) {
 	types := GetVectorStoreTypes()
 
 	t.Run("returns supported external engine types (excludes postgres and sqlite)", func(t *testing.T) {
-		assert.Len(t, types, 7)
+		assert.Len(t, types, 8)
 	})
 
 	t.Run("type names match engine constants", func(t *testing.T) {
@@ -261,6 +261,7 @@ func TestGetVectorStoreTypes(t *testing.T) {
 		assert.Contains(t, typeNames, "weaviate")
 		assert.Contains(t, typeNames, "doris")
 		assert.Contains(t, typeNames, "opensearch")
+		assert.Contains(t, typeNames, "azure_ai_search")
 		assert.NotContains(t, typeNames, "postgres")
 		assert.NotContains(t, typeNames, "sqlite")
 	})

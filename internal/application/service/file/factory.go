@@ -34,6 +34,12 @@ func NewFileServiceFromStorageConfig(
 	}
 
 	switch p {
+	case "azure":
+		if sec == nil || sec.Azure == nil {
+			return nil, p, fmt.Errorf("missing Azure Blob Storage config")
+		}
+		svc, err := NewAzureFileService(*sec.Azure)
+		return svc, p, err
 	case "local":
 		baseDir := localBaseDir
 		if sec != nil && sec.Local != nil {

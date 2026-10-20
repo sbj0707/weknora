@@ -1,6 +1,11 @@
 import { get, post, put, del } from '@/utils/request'
 
 export interface StorageBackendConfig {
+  account_name?: string
+  container_name?: string
+  auth_mode?: 'managed_identity' | 'account_key'
+  account_key?: string
+  managed_identity_client_id?: string
   mode?: string
   endpoint?: string
   region?: string

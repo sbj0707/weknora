@@ -219,6 +219,8 @@ export async function fetchImageAttrSchema(kbId: string): Promise<ImageAttrSchem
 // the snapshot back with those fields updated so API-side settings survive a
 // UI edit.
 export interface ImageProcessingConfig {
+  use_page_images_for_answer?: boolean;
+  auto_save_page_images?: boolean;
   model_id?: string;
   image_actions?: ImageActionsConfig;
   image_attrs_enabled?: boolean;

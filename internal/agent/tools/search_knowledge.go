@@ -14,6 +14,7 @@ import (
 	"github.com/Tencent/WeKnora/internal/config"
 	"github.com/Tencent/WeKnora/internal/logger"
 	"github.com/Tencent/WeKnora/internal/models/rerank"
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"github.com/Tencent/WeKnora/internal/reranking"
 	"github.com/Tencent/WeKnora/internal/searchutil"
 	"github.com/Tencent/WeKnora/internal/types"
@@ -100,6 +101,8 @@ type searchResultWithMeta struct {
 // SearchKnowledgeTool searches chunk-indexed knowledge bases in semantic,
 // keyword or hybrid mode and returns reranked, de-duplicated chunks.
 type SearchKnowledgeTool struct {
+	pageImages      interfaces.DocumentPageImageService
+	pageImageBudget *types.PageImageBudget
 	BaseTool
 	knowledgeBaseService interfaces.KnowledgeBaseService
 	knowledgeService     interfaces.KnowledgeService
@@ -111,6 +114,12 @@ type SearchKnowledgeTool struct {
 	// It is not exposed to the model; the MCP grep_chunks endpoint uses it
 	// to keep grep semantics on top of index-backed retrieval.
 	patternFilter *regexp.Regexp
+}
+
+func (t *SearchKnowledgeTool) WithPageImages(images interfaces.DocumentPageImageService, budget *types.PageImageBudget) *SearchKnowledgeTool {
+	t.pageImages = images
+	t.pageImageBudget = budget
+	return t
 }
 
 // WithPatternFilter restricts results to chunks whose text matches re. The
@@ -305,6 +314,19 @@ func (t *SearchKnowledgeTool) Execute(ctx context.Context, args json.RawMessage)
 	}
 
 	result, omitted := t.formatWithinBudget(ctx, final, kbIDs, query, mode)
+	if t.pageImages != nil && len(final) > omitted {
+		kept := make([]*types.SearchResult, 0, len(final)-omitted)
+		for _, r := range final[:len(final)-omitted] {
+			kept = append(kept, r.SearchResult)
+		}
+		evidence := t.pageImages.Collect(ctx, pageimage.CitationResults(kept), t.searchTargets, t.pageImageBudget)
+		result.Images = evidence.Images
+		result.Data["page_image_sources"] = evidence.Sources
+		result.Data["page_image_warnings"] = evidence.Warnings
+		if len(evidence.Warnings) > 0 {
+			result.Output += "\n" + strings.Join(evidence.Warnings, "\n")
+		}
+	}
 	if omitted > 0 {
 		result.Data["omitted_for_budget"] = omitted
 	}

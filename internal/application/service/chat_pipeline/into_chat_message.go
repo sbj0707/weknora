@@ -6,6 +6,7 @@ import (
 	"html"
 	"strings"
 
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"github.com/Tencent/WeKnora/internal/reranking"
 	"github.com/Tencent/WeKnora/internal/searchutil"
 	"github.com/Tencent/WeKnora/internal/types"
@@ -16,6 +17,12 @@ import (
 // PluginIntoChatMessage handles the transformation of search results into chat messages
 type PluginIntoChatMessage struct {
 	messageService interfaces.MessageService
+	pageImages     interfaces.DocumentPageImageService
+}
+
+func (p *PluginIntoChatMessage) WithPageImages(images interfaces.DocumentPageImageService) *PluginIntoChatMessage {
+	p.pageImages = images
+	return p
 }
 
 // NewPluginIntoChatMessage creates and registers a new PluginIntoChatMessage instance
@@ -195,6 +202,15 @@ func (p *PluginIntoChatMessage) OnEvent(ctx context.Context,
 
 	// Set formatted content back to chat management
 	chatManage.UserContent = userContent
+	if p.pageImages != nil && len(chatManage.MergeResult) > 0 {
+		budget := pageimage.NewBudget(chatManage.ChatModelSupportsVision, len(chatManage.Images), pageimage.ImageBytes(chatManage.Images))
+		results := pageimage.CitationResults(chatManage.MergeResult)
+		chatManage.PageImageEvidence = p.pageImages.Collect(ctx, results, chatManage.SearchTargets, budget)
+		pageimage.AnnotateResults(chatManage.MergeResult, chatManage.PageImageEvidence)
+		if len(chatManage.PageImageEvidence.Warnings) > 0 {
+			chatManage.UserContent += "\n\n[图片证据可用性]\n" + strings.Join(chatManage.PageImageEvidence.Warnings, "\n")
+		}
+	}
 	pipelineInfo(ctx, "IntoChatMessage", "output", map[string]interface{}{
 		"session_id":                 chatManage.SessionID,
 		"user_content_len":           len(chatManage.UserContent),

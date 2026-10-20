@@ -241,7 +241,7 @@ func extFromMime(mime string) string {
 
 // isProviderScheme checks if the path uses a provider:// scheme (local://, minio://, cos://, tos://).
 func isProviderScheme(p string) bool {
-	for _, prefix := range []string{"local://", "minio://", "cos://", "tos://", "s3://", "obs://"} {
+	for _, prefix := range []string{"local://", "minio://", "cos://", "tos://", "s3://", "obs://", "azure://"} {
 		if strings.HasPrefix(p, prefix) {
 			return true
 		}

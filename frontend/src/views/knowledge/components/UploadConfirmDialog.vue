@@ -3,7 +3,7 @@
     <Transition name="modal">
       <div v-if="dialogVisible" class="upload-confirm-overlay">
         <div class="upload-confirm-modal" role="dialog" :aria-label="dialogTitle">
-          <button class="close-btn" type="button" :aria-label="t('general.close')" @click="handleCancel">
+          <button class="close-btn" type="button" :disabled="confirming" :aria-label="t('general.close')" @click="handleCancel">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
             </svg>
@@ -421,6 +421,26 @@
                             />
                           </div>
                         </div>
+                        <div class="setting-row" data-page-image-setting="answer">
+                          <div class="setting-info">
+                            <label>{{ t('pageImages.useLabel') }}</label>
+                            <p class="desc">{{ t('pageImages.useDescription') }}</p>
+                          </div>
+                          <div class="setting-control">
+                            <t-switch v-model="pageImageSettings.usePageImagesForAnswer" :disabled="confirming" size="medium" />
+                          </div>
+                        </div>
+                        <div v-if="pageImageSettings.usePageImagesForAnswer" class="setting-row" data-page-image-setting="auto-save">
+                          <div class="setting-info">
+                            <label>{{ t('pageImages.autoLabel') }}</label>
+                            <p class="desc">{{ t('pageImages.autoDescription') }}</p>
+                          </div>
+                          <div class="setting-control">
+                            <t-switch v-model="pageImageSettings.autoSavePageImages" :disabled="confirming" size="medium" />
+                          </div>
+                        </div>
+                        <p class="field-hint">{{ t('pageImages.knowledgeBaseScope') }}</p>
+
                         <div v-if="uiState.multimodalConfig.enabled" class="setting-row">
                           <div class="setting-info">
                             <label>{{ t('knowledgeEditor.advanced.multimodal.imageAttrsLabel') }}</label>
@@ -622,10 +642,10 @@
                 </div>
 
               <footer class="modal-footer">
-                <t-button theme="default" variant="outline" @click="handleCancel">
+                <t-button theme="default" variant="outline" :disabled="confirming" @click="handleCancel">
                   {{ t('uploadConfirm.cancel') }}
                 </t-button>
-                <t-button theme="primary" :disabled="!canConfirm" @click="handleConfirm">
+                <t-button theme="primary" :loading="confirming" :disabled="!canConfirm || confirming" @click="handleConfirm">
                   {{ confirmButtonText }}
                 </t-button>
               </footer>
@@ -649,7 +669,8 @@ import { useEditorResourcesStore } from '@/stores/editorResources'
 import { useUIStore } from '@/stores/ui'
 import { formatFileSize, getFileIcon } from '@/utils/files'
 import { getUploadFileKey } from '../utils/uploadSources'
-import { listKnowledgeTags, mergeImageActions, fetchImageAttrSchema, FALLBACK_IMAGE_ATTR_SCHEMA, type ImageActionsConfig, type ImageAttrSchema } from '@/api/knowledge-base'
+import { getKnowledgeBaseById, updateKnowledgeBase, listKnowledgeTags, mergeImageActions, fetchImageAttrSchema, FALLBACK_IMAGE_ATTR_SCHEMA, type ImageActionsConfig, type ImageAttrSchema } from '@/api/knowledge-base'
+import { readPageImageSettings, savePageImageSettings } from '@/utils/pageImageSettings'
 import { imageAttrDisplay, imageAttrConditionDisplay } from '@/utils/imageAttrDisplay'
 import KbUploadSourceDropdown from './KbUploadSourceDropdown.vue'
 import FolderPickerMenu, { type FolderOption } from './FolderPickerMenu.vue'
@@ -784,6 +805,9 @@ const tagsLoadFailed = ref(false)
 const chunkingMoreOpen = ref(false)
 const activeSection = ref<ConfigSectionKey>('tags')
 const uiState = ref<UploadUIState>(createDefaultUIState())
+const confirming = ref(false)
+const pageImageSettings = ref(readPageImageSettings())
+let initialPageImageSettings = readPageImageSettings()
 // Destination folder for this batch. Pre-filled from the sidebar tree, but
 // editable here so browsing a folder never silently decides where files land.
 const localTargetFolder = ref('')
@@ -1098,6 +1122,7 @@ function getSectionNavStatus(
       }
       const mm = uiState.value.multimodalConfig
       if (!mm.enabled) {
+        if (pageImageSettings.value.usePageImagesForAnswer) return { status: t('pageImages.title') }
         return { status: t('uploadConfirm.statusOff'), statusTone: 'muted' }
       }
       return {
@@ -1442,6 +1467,8 @@ watch(
     pendingFolderPaths.value = []
     destinationPickerVisible.value = false
     initFromKbInfo(props.kbInfo)
+    initialPageImageSettings = readPageImageSettings(props.kbInfo?.image_processing_config)
+    pageImageSettings.value = { ...initialPageImageSettings }
     if (props.mode === 'reparse') {
       applyOverridesToState(props.reparsePreview?.processOverrides)
     }
@@ -1554,11 +1581,13 @@ const validateBeforeConfirm = (): boolean => {
 }
 
 const handleCancel = () => {
+  if (confirming.value) return
   emit('cancel')
   emit('update:visible', false)
 }
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
+  if (confirming.value) return
   if (props.mode === 'file' && batchItemCount.value === 0) {
     MessagePlugin.warning(t('uploadConfirm.noItems'))
     return
@@ -1566,6 +1595,30 @@ const handleConfirm = () => {
   if (!validateBeforeConfirm()) return
 
   const processConfig = buildProcessOverrides()
+  confirming.value = true
+  try {
+    const updated = await savePageImageSettings(props.kbInfo.id, initialPageImageSettings, { ...pageImageSettings.value }, {
+      load: async (id) => {
+        const response: any = await getKnowledgeBaseById(id)
+        if (!response.success || !response.data) throw new Error(response.message || t('pageImages.saveSettingsFailed'))
+        return response.data
+      },
+      save: async (id, data) => {
+        const response: any = await updateKnowledgeBase(id, data)
+        if (!response.success) throw new Error(response.message || t('pageImages.saveSettingsFailed'))
+      },
+    })
+    if (updated) {
+      // Keep the caller's cached KB in sync when this dialog is reopened.
+      props.kbInfo.image_processing_config = updated.image_processing_config
+      initialPageImageSettings = readPageImageSettings(updated.image_processing_config)
+    }
+  } catch (error: any) {
+    MessagePlugin.error(error?.message || t('pageImages.saveSettingsFailed'))
+    return
+  } finally {
+    confirming.value = false
+  }
   if (props.mode === 'manual' && props.manualPreview) {
     emit('confirm', {
       processConfig,

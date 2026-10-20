@@ -818,7 +818,17 @@ func (h *SystemHandler) GetStorageEngineStatus(c *gin.Context) {
 			allowedProviders = append(allowedProviders, provider)
 		}
 	}
+	azureConfigured := activeBackend["azure"]
+	if tenant, ok := c.Get(types.TenantInfoContextKey.String()); ok {
+		if t, ok := tenant.(*types.Tenant); ok && t.StorageEngineConfig != nil && t.StorageEngineConfig.Azure != nil {
+			azureConfigured = t.StorageEngineConfig.Azure.Validate() == nil || azureConfigured
+		}
+	}
+	if backend := types.StorageBackendFromEnvironment(1); backend != nil && backend.Provider == "azure" {
+		azureConfigured = backend.Validate() == nil || azureConfigured
+	}
 	engines := []StorageEngineStatusItem{
+		{Name: "azure", Allowed: allowed["azure"], Available: azureConfigured, Description: "Azure Blob Storage，支持账户密钥和托管身份"},
 		{Name: "local", Allowed: allowed["local"], Available: true, Description: "本地文件系统存储，仅适合单机部署"},
 		{Name: "minio", Allowed: allowed["minio"], Available: minioConfigured || minioEnvAvailable, Description: "S3 兼容的自托管对象存储，适合内网和私有云部署"},
 		{Name: "cos", Allowed: allowed["cos"], Available: cosConfigured, Description: "腾讯云对象存储服务，适合公有云部署，支持 CDN 加速"},
@@ -896,6 +906,7 @@ type StorageCheckRequest struct {
 	OSS      *types.OSSEngineConfig   `json:"oss,omitempty"`
 	KS3      *types.KS3EngineConfig   `json:"ks3,omitempty"`
 	OBS      *types.OBSEngineConfig   `json:"obs,omitempty"`
+	Azure    *types.AzureEngineConfig `json:"azure,omitempty"`
 }
 
 // StorageCheckResponse is the response for a single-engine connectivity check.
@@ -928,6 +939,20 @@ func (h *SystemHandler) CheckStorageEngine(c *gin.Context) {
 	}
 
 	switch req.Provider {
+	case "azure":
+		if req.Azure == nil {
+			c.JSON(400, gin.H{"code": 1, "msg": "Azure configuration is required"})
+			return
+		}
+		svc, err := file.NewAzureFileService(*req.Azure)
+		if err == nil {
+			err = svc.CheckConnectivity(ctx)
+		}
+		if err != nil {
+			c.JSON(200, StorageCheckResponse{OK: false, Message: sanitizeStorageCheckError(err)})
+			return
+		}
+		c.JSON(200, StorageCheckResponse{OK: true, Message: "Container access, upload, read and cleanup passed"})
 	case "minio":
 		h.checkMinio(c, ctx, req.MinIO)
 	case "cos":

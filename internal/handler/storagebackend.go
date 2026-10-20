@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	filesvc "github.com/Tencent/WeKnora/internal/application/service/file"
 	apperrors "github.com/Tencent/WeKnora/internal/errors"
 	"github.com/Tencent/WeKnora/internal/storageallowlist"
 	"github.com/Tencent/WeKnora/internal/types"
@@ -33,6 +34,7 @@ func NewStorageBackendHandler(repo interfaces.StorageBackendRepository, service 
 }
 
 type storageBackendRequest struct {
+	ID       string                     `json:"id,omitempty"`
 	Name     string                     `json:"name" binding:"required"`
 	Provider string                     `json:"provider" binding:"required"`
 	Config   types.StorageBackendConfig `json:"config"`
@@ -219,15 +221,32 @@ func (h *StorageBackendHandler) TestRaw(c *gin.Context) {
 		return
 	}
 	backend := &types.StorageBackend{TenantID: storageTenantID(c), Name: req.Name, Provider: req.Provider, Config: req.Config}
+	if req.ID != "" {
+		existing, err := h.repo.GetByID(c.Request.Context(), backend.TenantID, req.ID)
+		if err != nil {
+			c.Error(err)
+			return
+		}
+		if existing == nil {
+			c.Error(apperrors.NewNotFoundError("storage backend not found"))
+			return
+		}
+		if existing.Provider != backend.Provider {
+			c.Error(apperrors.NewBadRequestError("storage provider cannot be changed"))
+			return
+		}
+		backend.Config = backend.Config.MergeSecrets(existing.Config)
+		if backend.Config.LocationKey(existing.Provider) != existing.Config.LocationKey(existing.Provider) {
+			c.Error(apperrors.NewBadRequestError("storage location cannot be changed when testing an existing instance"))
+			return
+		}
+	}
 	if err := backend.Validate(); err != nil {
 		c.Error(err)
 		return
 	}
-	if err := h.service.Test(c.Request.Context(), backend); err != nil {
-		c.JSON(http.StatusOK, gin.H{"success": false, "error": storageTestErrorMessage(err)})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"success": true})
+	testErr := h.service.Test(c.Request.Context(), backend)
+	c.JSON(http.StatusOK, storageConnectivityResponse(backend.Provider, testErr))
 }
 
 // TestByID godoc
@@ -252,11 +271,8 @@ func (h *StorageBackendHandler) TestByID(c *gin.Context) {
 		c.Error(apperrors.NewNotFoundError("storage backend not found"))
 		return
 	}
-	if err := h.service.Test(c.Request.Context(), backend); err != nil {
-		c.JSON(http.StatusOK, gin.H{"success": false, "error": storageTestErrorMessage(err)})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"success": true})
+	testErr := h.service.Test(c.Request.Context(), backend)
+	c.JSON(http.StatusOK, storageConnectivityResponse(backend.Provider, testErr))
 }
 
 // Types godoc
@@ -270,4 +286,15 @@ func (h *StorageBackendHandler) TestByID(c *gin.Context) {
 // @Router       /storage-backends/types [get]
 func (h *StorageBackendHandler) Types(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true, "data": storageallowlist.AllowedList()})
+}
+
+func storageConnectivityResponse(provider string, err error) gin.H {
+	response := gin.H{"success": err == nil}
+	if err != nil {
+		response["error"] = storageTestErrorMessage(err)
+	}
+	if provider == "azure" {
+		response["stages"] = filesvc.AzureConnectivityStages(err)
+	}
+	return response
 }

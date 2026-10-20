@@ -16,7 +16,7 @@
             <t-option v-for="backend in backends" :key="backend.id" :value="backend.id" :label="backend.name">
               <span class="select-option">
                 <span>{{ backend.name }}</span>
-                <t-tag theme="primary" variant="light" size="small">{{ backend.provider.toUpperCase() }}</t-tag>
+                <t-tag theme="primary" variant="light" size="small">{{ backend.provider === 'azure' ? 'Azure Blob Storage' : backend.provider.toUpperCase() }}</t-tag>
                 <t-tag v-if="backend.id === defaultID" variant="light" size="small">{{ $t('kbSettings.storage.defaultTag') }}</t-tag>
               </span>
             </t-option>

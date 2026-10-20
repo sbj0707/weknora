@@ -23,6 +23,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import DocumentPreview from '@/components/document-preview.vue';
+import DocumentPageImages from '@/components/document-page-images.vue';
 import DocumentIndexStatus from '@/components/document-index-status.vue';
 import ChunkDetailDrawer from '@/components/chunk-detail-drawer.vue';
 import DocumentFileIcon from '@/views/knowledge/components/DocumentFileIcon.vue';
@@ -1701,6 +1702,7 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
               </span>
             </div>
           </div>
+          <DocumentPageImages v-if="visible && details.id" :knowledge-id="details.id" :writable="canEditContent" />
           <DocumentIndexStatus :visible="!!visible" :knowledge-id="details.id"
             :kb-id="details.knowledge_base_id || kbId" :parse-status="details.parse_status" />
         </section>
@@ -2154,6 +2156,9 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
                     <t-icon name="edit" size="14px" />
                     <span>{{ $t('knowledgeBase.editChunkContent') }}</span>
                   </div>
+                  <DocumentPageImages :knowledge-id="details.id" :chunk-id="chunk.original.id"
+                    :revision="chunk.original.content_revision || 0" :writable="canEditContent"
+                    :disabled="chunkDraft !== (chunk.original.content || '') || savingChunkId === chunk.original.id" />
                   <t-textarea v-model="chunkDraft" :autosize="{ minRows: 6, maxRows: 20 }" autofocus />
                   <div class="chunk-editor-actions">
                     <t-button size="small" variant="outline" :disabled="savingChunkId === chunk.original.id"
@@ -2185,7 +2190,7 @@ const handleChunkPageChange = (pageInfo: { current: number }) => {
       </div>
 
     </t-drawer>
-    <ChunkDetailDrawer :visible="!!visible && !!detailChunkId" :knowledge-id="details.id || ''"
+    <ChunkDetailDrawer :writable="canEditContent" :visible="!!visible && !!detailChunkId" :knowledge-id="details.id || ''"
       :chunk-id="detailChunkId" :revision="detailChunkRevision" :render-markdown="processMarkdown"
       @close="detailChunkId = ''" @navigate="detailChunkId = $event" />
   </div>

@@ -408,7 +408,10 @@ func (s *temporaryDocumentService) Process(ctx context.Context, task *asynq.Task
 }
 
 func (s *temporaryDocumentService) parse(ctx context.Context, document *types.TemporaryDocument) (string, []types.TemporaryDocumentImage, map[string]string, error) {
-	file, err := s.fileService.GetFile(ctx, document.ResourceRef)
+	// Storage belongs to the attachment tenant, even when parser/model settings
+	// execute as a verified shared-agent owner in another workspace.
+	fileCtx := context.WithValue(ctx, types.TenantIDContextKey, document.TenantID)
+	file, err := s.fileService.GetFile(fileCtx, document.ResourceRef)
 	if err != nil {
 		return "", nil, nil, fmt.Errorf("open source file: %w", err)
 	}

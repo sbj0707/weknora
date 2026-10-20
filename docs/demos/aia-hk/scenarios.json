@@ -1,0 +1,124 @@
+{
+  "schema_version": "design-1",
+  "implementation_status": "seed_only_not_a_weknora_import",
+  "simulated": true,
+  "timezone": "Asia/Hong_Kong",
+  "demo_customer": {
+    "customer_id": "DEMO-CUSTOMER-001",
+    "display_name": "陳家明",
+    "identity_binding": "server_side_demo_token",
+    "policy_ids": ["DEMO-POLICY-001"]
+  },
+  "policies": [
+    {
+      "policy_id": "DEMO-POLICY-001",
+      "customer_id": "DEMO-CUSTOMER-001",
+      "internal_demo_product_code": "DEMO-HK-SELECTWISE",
+      "product_name": "AIA自願醫保睿選計劃",
+      "issuing_market": "HK",
+      "currency": "HKD",
+      "annual_deductible": 18000,
+      "policy_status": "active",
+      "effective_date": "2026-07-01",
+      "contract_document_id": null,
+      "contract_version": null,
+      "contract_binding_ready": false,
+      "special_terms_review_status": "not_reviewed",
+      "data_updated_at": "2026-10-20T09:00:00+08:00"
+    }
+  ],
+  "provider_fixture": {
+    "hospital_name": "仁安醫院",
+    "hospital_listing_source_url": "https://www.aia.com.hk/zh-hk/products/health/vhis-select-wise",
+    "hospital_listing_source_period": "2025-10",
+    "retrieved_on": "2026-10-20",
+    "validity_verified_for_service_date": false,
+    "demo_qualifications": {
+      "simulated": true,
+      "hospital_designated": true,
+      "doctors": [
+        {"doctor_id": "DEMO-DR-001", "role": "attending", "in_network": true},
+        {"doctor_id": "DEMO-DR-002", "role": "surgeon", "in_network": true}
+      ],
+      "relevant_doctors_complete": true,
+      "verified_at": "2026-10-20T09:00:00+08:00"
+    }
+  },
+  "encounters": [
+    {"encounter_id": "DEMO-VISIT-PLANNED", "policy_id": "DEMO-POLICY-001", "service_date": "2026-10-22", "requested_room": "semi_private"},
+    {"encounter_id": "DEMO-VISIT-PAST", "policy_id": "DEMO-POLICY-001", "service_date": "2026-09-18", "discharge_date": "2026-09-20"}
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "A",
+      "label": "就醫前待批核",
+      "encounter_id": "DEMO-VISIT-PLANNED",
+      "preapproval": {
+        "status": "pending",
+        "approved_services": [],
+        "approved_room": null,
+        "approved_at": null,
+        "valid_until": null,
+        "data_updated_at": "2026-10-20T09:00:00+08:00"
+      },
+      "expected_atoms": ["批核仍待處理", "醫院與醫生關係為模擬", "實際網絡名單時效待核實", "契約尚未綁定時不可輸出個人保障結論"]
+    },
+    {
+      "scenario_id": "B",
+      "label": "就醫前已批核",
+      "encounter_id": "DEMO-VISIT-PLANNED",
+      "preapproval": {
+        "status": "approved",
+        "approval_id": "DEMO-APPROVAL-001",
+        "approved_services": ["DEMO-SERVICE-001"],
+        "approved_room": "semi_private",
+        "approved_at": "2026-10-20T10:00:00+08:00",
+        "valid_until": "2026-10-22T23:59:59+08:00",
+        "limitations": ["僅此模擬事件、所列服務及期間", "其他契約限制仍須核對"],
+        "data_updated_at": "2026-10-20T10:00:00+08:00"
+      },
+      "expected_atoms": ["模擬批核已獲批", "僅列明服務及期限", "不能保證所有費用均獲賠償", "使用 B 場景的新查詢結果"]
+    },
+    {
+      "scenario_id": "C",
+      "label": "既往就醫索償待補件",
+      "encounter_id": "DEMO-VISIT-PAST",
+      "claim": {
+        "claim_id": "DEMO-CLAIM-001",
+        "status": "awaiting_documents",
+        "received_materials": ["invoice", "receipt", "discharge_summary"],
+        "requested_materials": ["medical_claim_form_part_2", "diagnosis_certificate"],
+        "data_updated_at": "2026-10-20T09:00:00+08:00"
+      },
+      "session_attachments": [
+        {"fixture_filename": "demo-invoice.txt", "type": "invoice", "readable": true},
+        {"fixture_filename": "demo-receipt.txt", "type": "receipt", "readable": true},
+        {"fixture_filename": "demo-discharge-summary.txt", "type": "discharge_summary", "readable": true, "contains_diagnosis_certificate": false}
+      ],
+      "expected_atoms": ["兩項待補", "引用適用醫療費用索償指引", "不是 10 月 22 日的預約事件"]
+    },
+    {
+      "scenario_id": "D",
+      "label": "會話補充附件但尚未提交后台",
+      "inherits_business_scenario": "C",
+      "added_session_attachments": [
+        {"fixture_filename": "demo-claim-form-part-2.txt", "type": "medical_claim_form_part_2", "readable": true, "submitted_to_backend": false}
+      ],
+      "expected_atoms": ["本地待備文件剩診斷證明", "申請書第二部分已在會話提供", "后台仍有兩項待補", "未聲稱已正式提交"]
+    }
+  ],
+  "material_labels": {
+    "invoice": "賬單",
+    "receipt": "收據",
+    "discharge_summary": "出院總結",
+    "medical_claim_form_part_2": "醫療賠償申請書第二部份",
+    "diagnosis_certificate": "診斷證明"
+  },
+  "attachment_fixture_status": "filenames_and_fields_are_design_only_create_matching_synthetic_files_before_demo",
+  "reset_requirements": [
+    "restore_fixture_and_selected_scenario",
+    "clear_prior_session_or_explicitly_requery_dynamic_facts",
+    "bind_and_review_actual_contract_before_personal_coverage_demo",
+    "retain_real_network_snapshot_age_and_separate_simulated_relationships"
+  ]
+}

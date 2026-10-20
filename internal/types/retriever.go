@@ -5,6 +5,7 @@ type RetrieverEngineType string
 
 // RetrieverEngineType constants
 const (
+	AzureAISearchRetrieverEngineType   RetrieverEngineType = "azure_ai_search"
 	PostgresRetrieverEngineType        RetrieverEngineType = "postgres"
 	ElasticsearchRetrieverEngineType   RetrieverEngineType = "elasticsearch"
 	InfinityRetrieverEngineType        RetrieverEngineType = "infinity"

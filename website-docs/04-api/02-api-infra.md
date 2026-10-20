@@ -10,6 +10,8 @@
 
 用途：可用引擎类型与配置 schema。权限：Viewer+。
 
+包含 `azure_ai_search`。认证字段按 `auth_mode` 选择；`index_config.vector_dimensions` 必填且不可修改。配置、权限和迁移要求见 [Azure AI Search](../03-features/05-retrieval-engines.md#azure-ai-search)。
+
 响应：200 `{"success":true,"data":[类型定义]}`
 
 ```bash
@@ -37,6 +39,8 @@ curl -X POST $BASE/api/v1/vector-stores/test -H "Authorization: Bearer $TOKEN" \
 用途：创建向量库配置。权限：Admin+。字段：`name`（必填）、`engine_type`（必填）、`connection_config`（必填）、`index_config`（可选）。
 
 响应：201 `{"success":true,"data":{VectorStoreResponse}}`（`id,tenant_id,name,engine_type,connection_config,index_config,...`）
+
+Azure AI Search 响应额外包含 `physical_index_name`；这表示按实例 UUID 派生的物理名称，索引仍在首次写入时创建。Azure 的连接测试只读，成功时 `version` 留空。
 
 ```bash
 curl -X POST $BASE/api/v1/vector-stores -H "Authorization: Bearer $TOKEN" \

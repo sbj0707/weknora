@@ -37,6 +37,8 @@ type QueryKnowledgeGraphInput struct {
 
 // QueryKnowledgeGraphTool queries the knowledge graph for entities and relationships
 type QueryKnowledgeGraphTool struct {
+	pageImages interfaces.DocumentPageImageService
+	pageBudget *types.PageImageBudget
 	BaseTool
 	knowledgeService      interfaces.KnowledgeBaseService
 	scopeKnowledgeService interfaces.KnowledgeService
@@ -444,24 +446,36 @@ func (t *QueryKnowledgeGraphTool) Execute(ctx context.Context, args json.RawMess
 	// Build structured graph data for frontend visualization
 	graphData := buildGraphVisualizationData(allResults, relations)
 
+	var evidence types.PageImageEvidence
+	if t.pageImages != nil {
+		evidence = t.pageImages.Collect(ctx, allResults, t.searchTargets, t.pageBudget)
+	}
 	return &types.ToolResult{
+		Images:  evidence.Images,
 		Success: true,
 		Output:  output,
 		Data: map[string]interface{}{
-			"knowledge_base_ids": input.KnowledgeBaseIDs,
-			"query":              query,
-			"results":            formattedResults,
-			"relations":          relationData,
-			"count":              len(allResults),
-			"kb_counts":          kbCounts,
-			"graph_configs":      graphConfigsToData(graphConfigs),
-			"graph_config":       aggregateGraphConfig(graphConfigs),
-			"graph_data":         graphData,
-			"has_graph_config":   hasGraphConfig,
-			"errors":             errs,
-			"display_type":       "graph_query_results",
+			"knowledge_base_ids":  input.KnowledgeBaseIDs,
+			"query":               query,
+			"results":             formattedResults,
+			"relations":           relationData,
+			"count":               len(allResults),
+			"kb_counts":           kbCounts,
+			"graph_configs":       graphConfigsToData(graphConfigs),
+			"graph_config":        aggregateGraphConfig(graphConfigs),
+			"graph_data":          graphData,
+			"has_graph_config":    hasGraphConfig,
+			"errors":              errs,
+			"display_type":        "graph_query_results",
+			"page_image_sources":  evidence.Sources,
+			"page_image_warnings": evidence.Warnings,
 		},
 	}, nil
+}
+
+func (t *QueryKnowledgeGraphTool) WithPageImages(images interfaces.DocumentPageImageService, budget *types.PageImageBudget) *QueryKnowledgeGraphTool {
+	t.pageImages, t.pageBudget = images, budget
+	return t
 }
 
 // queryGraph looks the query's entity terms up in kbID's graph and returns
@@ -526,6 +540,7 @@ func (t *QueryKnowledgeGraphTool) queryGraph(
 		results = append(results, &types.SearchResult{
 			ID:              c.ID,
 			Content:         c.Content,
+			ContentRevision: c.ContentRevision,
 			KnowledgeID:     c.KnowledgeID,
 			KnowledgeBaseID: c.KnowledgeBaseID,
 			KnowledgeTitle:  titles[c.KnowledgeID],

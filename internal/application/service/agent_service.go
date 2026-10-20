@@ -20,6 +20,7 @@ import (
 	"github.com/Tencent/WeKnora/internal/mcp"
 	"github.com/Tencent/WeKnora/internal/models/chat"
 	"github.com/Tencent/WeKnora/internal/models/rerank"
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"github.com/Tencent/WeKnora/internal/sandbox"
 	"github.com/Tencent/WeKnora/internal/types"
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
@@ -93,6 +94,7 @@ func knowledgeBaseScopesForPrompt(config *types.AgentConfig) ([]string, map[stri
 
 // agentService implements agent-related business logic
 type agentService struct {
+	pageImages            interfaces.DocumentPageImageService
 	browserSkill          *browserskill.Manager
 	userRepo              interfaces.UserRepository
 	graphRepo             interfaces.RetrieveGraphRepository
@@ -123,6 +125,10 @@ type agentService struct {
 	hostSkillInstaller    sandbox.Manager
 	hostSkillsRoot        string
 	hostSkillVersionsRoot string
+}
+
+func (s *agentService) SetPageImageService(images interfaces.DocumentPageImageService) {
+	s.pageImages = images
 }
 
 // NewAgentService creates a new agent service
@@ -1216,6 +1222,7 @@ func (s *agentService) registerTools(
 
 	// logger.Infof(ctx, "Registering tools: %v, webSearchEnabled: %v", allowedTools, config.WebSearchEnabled)
 	// Register each allowed tool
+	pageBudget := pageimage.NewBudget(config.ChatModelSupportsVision, 0, 0)
 	for _, toolName := range allowedTools {
 		var toolToRegister types.Tool
 
@@ -1232,9 +1239,9 @@ func (s *agentService) registerTools(
 				config.SearchTargets,
 				rerankModel,
 				s.cfg,
-			)
+			).WithPageImages(s.pageImages, pageBudget)
 		case tools.ToolReadDocument:
-			toolToRegister = tools.NewReadDocumentTool(s.knowledgeService, s.chunkService, config.SearchTargets)
+			toolToRegister = tools.NewReadDocumentTool(s.knowledgeService, s.chunkService, config.SearchTargets).WithPageImages(s.pageImages, pageBudget)
 		case tools.ToolListDocuments:
 			toolToRegister = tools.NewListDocumentsTool(s.knowledgeService, config.SearchTargets)
 		case tools.ToolQueryKnowledgeGraph:
@@ -1244,7 +1251,7 @@ func (s *agentService) registerTools(
 			}
 			toolToRegister = tools.NewQueryKnowledgeGraphTool(s.knowledgeBaseService, config.SearchTargets).
 				WithKnowledgeScope(s.knowledgeService).
-				WithGraph(s.graphRepo, chunkRepo)
+				WithGraph(s.graphRepo, chunkRepo).WithPageImages(s.pageImages, pageBudget)
 		case tools.ToolSearchConversations:
 			// The owner is captured from the caller's identity here, not read
 			// from the model's arguments, so no prompt can redirect the search

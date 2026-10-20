@@ -9,6 +9,7 @@
 | 单机或桌面部署，使用内嵌数据库 | SQLite（内嵌，零依赖） |
 | 需要独立扩容向量检索服务 | Qdrant、Milvus |
 | 公司已有 Elasticsearch / OpenSearch 栈 | 复用现有集群 |
+| 使用 Azure 托管搜索 | Azure AI Search，支持向量和 BM25，通过后台注册实例 |
 | 要按知识库分开存放数据 | 保持默认引擎，另在「设置 → 向量存储」注册实例并绑定到指定知识库 |
 
 切换引擎需要重建索引。知识库绑定的向量存储在创建后不可修改，应在建库前确定实例。
@@ -26,6 +27,7 @@
 | Milvus | `milvus` | HNSW（IP/COSINE/L2） | BM25 Function 稀疏向量 | BM25 | Milvus analyzer | 每维一个 collection | 应用侧 | 中高 | 大规模向量、需要原生 BM25 混检 |
 | Weaviate | `weaviate` | nearVector（certainty） | 原生 BM25 | BM25 | Weaviate tokenizer | 动态 Class | certainty 原生 | 中 | GraphQL 生态、需副本/分片配置 |
 | Doris | `doris` | ANN HNSW inner_product/cosine | 倒排索引 MATCH_ANY | 倒排命中 | 建表声明 chinese parser | 每维一张表 | SQL 内 | 高 | 已有 Doris 数仓，检索与分析一体 |
+| Azure AI Search | 仅后台实例 `azure_ai_search` | HNSW cosine | BM25 | BM25 | 可选中文分析器 | 每实例固定维度索引 | 应用侧 | 低（云托管） | Azure 部署、托管身份认证 |
 | 腾讯云 VectorDB | `tencent_vectordb` | HNSW COSINE | 稀疏向量 BM25（SPARSE_INVERTED） | BM25 | SDK SparseEncoder | 每维一个 collection | 应用侧 | 低（云托管） | 腾讯云托管、免运维 |
 
 > 说明：无论引擎自身是否提供"混合检索"，WeKnora 的混合始终是**上层统一的 RRF 融合**（`knowledgebase_search_fusion.go`）——向量与关键词各自独立检索，按 rank 加权合并（见 [混合检索打分与归一化](#_5-混合检索打分与归一化)），因此各引擎只需分别提供两类单模检索。
@@ -224,6 +226,7 @@ WeKnora 允许不同 KB 使用不同 embedding 模型（维度各异），各引
 | Qdrant / Milvus / TencentVectorDB | 每维度一个 collection：`{base}_{dim}`，首写时 `ensureCollection` 惰性创建（sync.Map 记忆已建维度） |
 | Doris | 每维度一张表：`{prefix}_{dim}`，`schema.go` 生成 DDL 并轮询 ANN 索引就绪 |
 | Elasticsearch | 单索引 `dense_vector` mapping（`ELASTICSEARCH_INDEX`），维度在 mapping 中固定 |
+| Azure AI Search | 每实例一个固定维度的索引；维度必填且绑定时校验，不同维度使用不同实例 |
 | OpenSearch | 按维度创建 `{OPENSEARCH_INDEX}_{dim}` 别名及物理索引；另有无维度的关键词索引 |
 
 查询向量生成后会与模型配置的维度比对。不一致时（如模型服务更换了输出维度）直接返回错误码 2201，详情包含模型名、期望维度与实际维度，提示检查 Embedding 模型配置并重建索引；不会继续发往向量库后得到含糊的失败或空结果。
@@ -243,6 +246,7 @@ WeKnora 允许不同 KB 使用不同 embedding 模型（维度各异），各引
 | Milvus（IP / COSINE） | 内积 / cosine | 直通 |
 | Milvus（L2） | 平方欧氏距离，单位向量下 = `2 - 2cos` | 分数 `1 - d/2`，阈值换成半径 `2(1 - threshold)` |
 | Elasticsearch v8 | `cosineSimilarity` script_score（Lucene 要求非负） | 直通 |
+| Azure AI Search | `1/(2-cosine)` | `2-1/score`，再按 cosine 阈值过滤 |
 | OpenSearch | k-NN COSINESIMIL：`(1+cos)/2` | 分数 `2*score-1`，阈值 `(1+threshold)/2` |
 | Weaviate | certainty：`(1+cos)/2` | 分数 `2*certainty-1`，阈值 `(1+threshold)/2` |
 
@@ -311,7 +315,7 @@ sequenceDiagram
 |------|----------|
 | 引擎注册（env + DB store） | `internal/container/container.go`（`initRetrieveEngineRegistry`）、`engine_factory.go` |
 | 注册表 / 组合引擎 / 工厂 | `internal/application/service/retriever/`（`registry.go`、`composite.go`、`factory.go`、`normalizer.go`） |
-| 各引擎实现 | `internal/application/repository/retriever/{postgres,sqlite,elasticsearch,opensearch,qdrant,milvus,weaviate,doris,tencentvectordb,neo4j}` |
+| 各引擎实现 | `internal/application/repository/retriever/{postgres,sqlite,elasticsearch,opensearch,azureaisearch,qdrant,milvus,weaviate,doris,tencentvectordb,neo4j}` |
 | 混合检索调度与融合 | `internal/application/service/knowledgebase_search*.go` |
 | 引擎类型常量 | `internal/types/retriever.go` |
 | 租户默认引擎 | `internal/types/tenant.go`（`GetDefaultRetrieverEngines`） |
@@ -354,3 +358,50 @@ docker compose -f docker-compose.dev.yml --profile opensearch stop opensearch
 # 若启动过 Dashboards
 docker compose -f docker-compose.dev.yml --profile opensearch-ui stop opensearch-dashboards
 ```
+
+
+### Azure AI Search 配置与验收 {#azure-ai-search}
+
+首版通过「设置 → 向量存储 → 添加 → Azure AI Search」注册实例，建库时选择该实例；不使用 `RETRIEVE_DRIVER=azure_ai_search`。无需数据库表结构迁移。WeKnora 继续生成 Embedding，并按原有流程执行 RRF 和 Rerank。
+
+**服务与认证准备**：先创建 Azure 公有云的 Search Service，Endpoint 使用 `https://<service>.search.windows.net`。选择 API Key 时填写 **Admin Key**，并在后端配置有效的 32 字节 `SYSTEM_AES_KEY` 以加密持久化凭据。不要使用只读 Query Key。
+
+选择托管身份时，WeKnora 必须运行在支持 Managed Identity 的 Azure 环境。留空 Client ID 使用系统分配身份，填写 UUID 则使用用户分配身份；不会回退到本机 Azure CLI 登录。为该身份启用 Azure AI Search 数据面 RBAC，授予服务范围内的 `Search Service Contributor`（读取定义、按需建索引）和 `Search Index Data Contributor`（读写文档、查询）。`Search Index Data Reader` 适用于只读应用，单独授予它不能完成本驱动的建索引、写入或列举索引探测。[Azure RBAC 官方说明](https://learn.microsoft.com/en-us/azure/search/search-security-rbac)
+
+**实例参数**：
+
+| 字段 | 示例 / 要求 |
+| --- | --- |
+| 地址 | `https://example-search.search.windows.net`，HTTPS 标准域名，无端口、查询串或路径 |
+| 认证模式 | `api_key` 或 `managed_identity` |
+| 索引名称前缀 | 默认 `weknora`；1–92 个小写字母、数字或单个连字符，以字母开头、字母或数字结尾 |
+| 向量维度 | 1–4096 的整数，必须等于 Embedding 模型输出维度，例如 1536 |
+| 文本分析器 | 默认 `standard.lucene`；中文可选 `zh-Hans.microsoft` / `zh-Hans.lucene`，英文可选 `en.microsoft` |
+
+连接测试只读取索引列表，证明地址可达和相应读权限；不会建索引或验证写权限。首次写入才创建 `<prefix>-<完整实例UUID去连字符>-v1` 索引，实例详情会显示实际名称。一个实例的维度、分析器和连接配置创建后不可更改。不同维度可在同一 Search Service、同一前缀下创建多个实例，每个实例占用独立索引配额。
+
+Private Endpoint 继续填写标准服务域名，通过私有 DNS 解析；按现有 `SSRF_WHITELIST` 配置显式允许该主机。驱动保留 TLS 证书校验、连接时 SSRF 检查，并禁用重定向。首版不支持 Azure 中国区域名和自定义代理域名。
+
+API 创建示例（使用现有向量存储 API）：
+
+```json
+{
+  "name": "Azure Search 1536",
+  "engine_type": "azure_ai_search",
+  "connection_config": {
+    "addr": "https://example-search.search.windows.net",
+    "auth_mode": "managed_identity"
+  },
+  "index_config": {
+    "index_name": "weknora",
+    "vector_dimensions": 1536,
+    "text_analyzer": "zh-Hans.microsoft"
+  }
+}
+```
+
+已有知识库的绑定不可直接修改。迁移时创建绑定 Azure 的新知识库并重新导入；非空 Azure 知识库更换 Embedding 模型也需要新库重建。纯关键词库可以不填写 Embedding 模型。向量复制复用已有向量，状态、标签更新保留原向量，并覆盖同一分块的生成问题记录。
+
+驱动使用固定 REST API `2025-09-01`，显式 HNSW/cosine 和 BM25 Schema；对现有索引先验证所有权与 Schema，拒绝接管不兼容索引。写入和元数据更新会等待版本 token 可检索，最长 45 秒且服从请求 context；超时、429、权限错误和批量永久失败均返回错误，后台任务可幂等重试。删除按主键扫描并复查，不删除 Azure 索引本身。软删除实例也不释放物理索引，人工清理前需核对实际索引名与绑定情况。存储量显示为逻辑估算，实际容量以 Azure 指标为准。
+
+本地契约测试覆盖请求结构、部分失败、分页、维度、分数、复制/移动/删除及租户实例隔离。真实 Azure 上线前需验证：Admin Key 和托管身份、中文检索、导入后的混合检索、停用/标签更新、复制重试、移动、删除与重启恢复；并确认服务的索引数、向量配额、分区容量及网络策略。当前仓库验证不代替该环境验收。

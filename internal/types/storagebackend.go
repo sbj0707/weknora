@@ -64,6 +64,9 @@ func (b *StorageBackend) Validate() error {
 		return errors.NewValidationError("name is required")
 	}
 	b.Provider = strings.ToLower(strings.TrimSpace(b.Provider))
+	if b.Provider == "azure" {
+		b.Config = StorageBackendConfigFromAzure(b.Config.AzureConfig())
+	}
 	if !storageallowlist.IsAllowed(b.Provider) {
 		return errors.NewValidationError(fmt.Sprintf("storage provider %q is not allowed", b.Provider))
 	}
@@ -92,22 +95,38 @@ func isSupportedStorageBackendProvider(provider string) bool {
 // settings. AccessKeyID/SecretAccessKey map to COS SecretID/SecretKey and to
 // the access/secret key pair used by S3-compatible providers.
 type StorageBackendConfig struct {
-	Mode            string `json:"mode,omitempty"`
-	Endpoint        string `json:"endpoint,omitempty"`
-	Region          string `json:"region,omitempty"`
-	AccessKeyID     string `json:"access_key_id,omitempty"`
-	SecretAccessKey string `json:"secret_access_key,omitempty"`
-	BucketName      string `json:"bucket_name,omitempty"`
-	PathPrefix      string `json:"path_prefix,omitempty"`
-	AppID           string `json:"app_id,omitempty"`
-	UseSSL          bool   `json:"use_ssl,omitempty"`
-	ForcePathStyle  bool   `json:"force_path_style,omitempty"`
-	UseTempBucket   bool   `json:"use_temp_bucket,omitempty"`
-	TempBucketName  string `json:"temp_bucket_name,omitempty"`
-	TempRegion      string `json:"temp_region,omitempty"`
+	AccountName             string `json:"account_name,omitempty"`
+	ContainerName           string `json:"container_name,omitempty"`
+	AuthMode                string `json:"auth_mode,omitempty"`
+	AccountKey              string `json:"account_key,omitempty"`
+	ManagedIdentityClientID string `json:"managed_identity_client_id,omitempty"`
+	Mode                    string `json:"mode,omitempty"`
+	Endpoint                string `json:"endpoint,omitempty"`
+	Region                  string `json:"region,omitempty"`
+	AccessKeyID             string `json:"access_key_id,omitempty"`
+	SecretAccessKey         string `json:"secret_access_key,omitempty"`
+	BucketName              string `json:"bucket_name,omitempty"`
+	PathPrefix              string `json:"path_prefix,omitempty"`
+	AppID                   string `json:"app_id,omitempty"`
+	UseSSL                  bool   `json:"use_ssl,omitempty"`
+	ForcePathStyle          bool   `json:"force_path_style,omitempty"`
+	UseTempBucket           bool   `json:"use_temp_bucket,omitempty"`
+	TempBucketName          string `json:"temp_bucket_name,omitempty"`
+	TempRegion              string `json:"temp_region,omitempty"`
 }
 
 func (c StorageBackendConfig) Value() (driver.Value, error) {
+	if c.AccountKey != "" {
+		key := utils.GetAESKey()
+		if key == nil {
+			return nil, fmt.Errorf("storage credential encryption is not configured")
+		}
+		encrypted, err := utils.EncryptAESGCM(c.AccountKey, key)
+		if err != nil {
+			return nil, fmt.Errorf("encrypt Azure storage credential: %w", err)
+		}
+		c.AccountKey = encrypted
+	}
 	if key := utils.GetAESKey(); key != nil {
 		if c.AccessKeyID != "" {
 			if encrypted, err := utils.EncryptAESGCM(c.AccessKeyID, key); err == nil {
@@ -144,11 +163,19 @@ func (c *StorageBackendConfig) Scan(value interface{}) error {
 	}
 	c.AccessKeyID = accessKey
 	c.SecretAccessKey = secretKey
+	accountKey, err := utils.DecryptStoredSecret(c.AccountKey)
+	if err != nil {
+		return fmt.Errorf("decrypt Azure storage credential: %w", err)
+	}
+	c.AccountKey = accountKey
 	return nil
 }
 
 func (c StorageBackendConfig) MaskSensitiveFields() StorageBackendConfig {
 	out := c
+	if out.AccountKey != "" {
+		out.AccountKey = RedactedSecretPlaceholder
+	}
 	if out.AccessKeyID != "" {
 		out.AccessKeyID = RedactedSecretPlaceholder
 	}
@@ -159,6 +186,11 @@ func (c StorageBackendConfig) MaskSensitiveFields() StorageBackendConfig {
 }
 
 func (c StorageBackendConfig) MergeSecrets(existing StorageBackendConfig) StorageBackendConfig {
+	if c.AuthMode == AzureAuthManagedIdentity {
+		c.AccountKey = ""
+	} else if c.AccountKey == RedactedSecretPlaceholder && existing.AuthMode == AzureAuthAccountKey {
+		c.AccountKey = existing.AccountKey
+	}
 	c.AccessKeyID = PreserveIfRedacted(c.AccessKeyID, existing.AccessKeyID)
 	c.SecretAccessKey = PreserveIfRedacted(c.SecretAccessKey, existing.SecretAccessKey)
 	return c
@@ -177,6 +209,11 @@ func (c StorageBackendConfig) ValidateForProvider(provider string) error {
 		return nil
 	}
 	switch provider {
+	case "azure":
+		if err := c.AzureConfig().Validate(); err != nil {
+			return errors.NewValidationError(err.Error())
+		}
+		return nil
 	case "local":
 		return nil
 	case "minio":
@@ -211,6 +248,10 @@ func (c StorageBackendConfig) ValidateForProvider(provider string) error {
 // LocationKey identifies the physical destination. Credentials deliberately do
 // not participate so they can be rotated without changing object identity.
 func (c StorageBackendConfig) LocationKey(provider string) string {
+	if provider == "azure" {
+		cfg := c.AzureConfig().Normalized()
+		return strings.Join([]string{provider, cfg.AccountName, strings.ToLower(cfg.Endpoint), cfg.ContainerName, strings.Trim(cfg.PathPrefix, "/")}, "|")
+	}
 	mode := strings.TrimSpace(c.Mode)
 	if provider == "minio" && mode == "" {
 		mode = "remote"
@@ -224,6 +265,9 @@ func (b StorageBackend) ToStorageEngineConfig() *StorageEngineConfig {
 	c := b.Config
 	result := &StorageEngineConfig{DefaultProvider: b.Provider}
 	switch b.Provider {
+	case "azure":
+		cfg := c.AzureConfig().Normalized()
+		result.Azure = &cfg
 	case "local":
 		result.Local = &LocalEngineConfig{PathPrefix: c.PathPrefix}
 	case "minio":
@@ -263,6 +307,11 @@ func StorageBackendFromLegacy(tenantID uint64, provider string, legacy *StorageE
 	provider = strings.ToLower(strings.TrimSpace(provider))
 	b := &StorageBackend{TenantID: tenantID, Provider: provider, Source: StorageBackendSourceUser, Status: StorageBackendStatusActive, LegacyAlias: true}
 	switch provider {
+	case "azure":
+		if legacy.Azure == nil {
+			return nil
+		}
+		b.Name, b.Config = "Azure Blob Storage", StorageBackendConfigFromAzure(*legacy.Azure)
 	case "local":
 		if legacy.Local == nil {
 			return nil
@@ -338,6 +387,13 @@ func StorageBackendFromEnvironment(tenantID uint64) *StorageBackend {
 	switch provider {
 	case "local":
 		b.Config.PathPrefix = strings.TrimSpace(os.Getenv("LOCAL_STORAGE_PATH_PREFIX"))
+	case "azure":
+		b.Config = StorageBackendConfigFromAzure(AzureEngineConfig{
+			AccountName: os.Getenv("AZURE_STORAGE_ACCOUNT_NAME"), Endpoint: os.Getenv("AZURE_STORAGE_BLOB_ENDPOINT"),
+			ContainerName: os.Getenv("AZURE_STORAGE_CONTAINER_NAME"), PathPrefix: os.Getenv("AZURE_STORAGE_PATH_PREFIX"),
+			AuthMode: os.Getenv("AZURE_STORAGE_AUTH_MODE"), AccountKey: os.Getenv("AZURE_STORAGE_ACCOUNT_KEY"),
+			ManagedIdentityClientID: os.Getenv("AZURE_STORAGE_MANAGED_IDENTITY_CLIENT_ID"),
+		})
 	case "minio":
 		b.Config = StorageBackendConfig{Mode: "remote", Endpoint: os.Getenv("MINIO_ENDPOINT"), AccessKeyID: os.Getenv("MINIO_ACCESS_KEY_ID"), SecretAccessKey: os.Getenv("MINIO_SECRET_ACCESS_KEY"), BucketName: os.Getenv("MINIO_BUCKET_NAME"), PathPrefix: os.Getenv("MINIO_PATH_PREFIX"), UseSSL: strings.EqualFold(os.Getenv("MINIO_USE_SSL"), "true")}
 	case "cos":

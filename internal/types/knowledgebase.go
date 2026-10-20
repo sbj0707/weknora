@@ -3,6 +3,7 @@ package types
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -528,7 +529,7 @@ func ParseProviderScheme(filePath string) string {
 	if _, inner, ok := ParseStorageBackendPath(filePath); ok {
 		filePath = inner
 	}
-	for _, provider := range []string{"local", "minio", "cos", "tos", "s3", "oss", "ks3", "obs", "dummy"} {
+	for _, provider := range []string{"local", "minio", "cos", "tos", "s3", "oss", "ks3", "obs", "azure", "dummy"} {
 		if strings.HasPrefix(filePath, provider+"://") {
 			return provider
 		}
@@ -539,7 +540,7 @@ func ParseProviderScheme(filePath string) string {
 // ImageProcessingConfig represents the image processing configuration
 type ImageProcessingConfig struct {
 	UsePageImagesForAnswer bool `yaml:"use_page_images_for_answer" json:"use_page_images_for_answer"`
-	AutoSavePageImages bool `yaml:"auto_save_page_images" json:"auto_save_page_images"`
+	AutoSavePageImages     bool `yaml:"auto_save_page_images" json:"auto_save_page_images"`
 	// Model ID
 	ModelID string `yaml:"model_id" json:"model_id"`
 	// ImageActions overrides the built-in attribute→work table (see
@@ -581,14 +582,20 @@ func (c ImageProcessingConfig) Value() (driver.Value, error) {
 
 // Scan implements the sql.Scanner interface, used to convert database value to ImageProcessingConfig
 func (c *ImageProcessingConfig) Scan(value interface{}) error {
+	*c = ImageProcessingConfig{}
 	if value == nil {
 		return nil
 	}
-	b, ok := value.([]byte)
-	if !ok {
-		return nil
+	var data []byte
+	switch value := value.(type) {
+	case []byte:
+		data = value
+	case string:
+		data = []byte(value)
+	default:
+		return fmt.Errorf("invalid image processing configuration type %T", value)
 	}
-	return json.Unmarshal(b, c)
+	return json.Unmarshal(data, c)
 }
 
 // VLMConfig represents the VLM configuration

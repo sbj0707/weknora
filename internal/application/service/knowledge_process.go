@@ -662,6 +662,11 @@ func (s *knowledgeService) processChunks(ctx context.Context,
 		"chunks_written":   len(insertChunks),
 		"total_text_chars": totalChunkChars,
 	})
+	if s.pageImages != nil {
+		if err := s.pageImages.AutoSave(ctx, knowledge, kb); err != nil {
+			logger.Warnf(ctx, "Page image task enqueue failed for document %s: %v", knowledge.ID, err)
+		}
+	}
 
 	// Create index information and perform vector indexing — only when vector/keyword is enabled.
 	// Chunks are ALWAYS saved to DB (above) because wiki and graph need them even without vector indexing.

@@ -16,12 +16,16 @@ export type KnowledgeReferenceLike = {
   /** Where the knowledge came from: an upload, "manual", or the imported URL. */
   knowledge_source?: string
   /** Positions of the chunk in the original file. */
+  page_image_sources?: { id: string; page: number; chunk_ids: string[] }[]
+  page_image_warnings?: string[]
   source_locators?: SourceLocator[]
   /** After merging a document's chunks: the first one with positions. */
   source_chunk_id?: string
 }
 
 export type ReferenceListItem = {
+  pageImagePages?: number[]
+  pageImageWarnings?: string[]
   key: string
   kind: ReferenceItemKind
   index: number
@@ -200,6 +204,8 @@ function buildDocumentItem(item: KnowledgeReferenceLike, index: number): Referen
     title,
     chunkId,
     chunkIds: item.chunk_ids,
+    pageImagePages: [...new Set(item.page_image_sources?.map(source => source.page) || [])],
+    pageImageWarnings: item.page_image_warnings,
     sourceChunkId: item.source_chunk_id,
     knowledgeId: item.knowledge_id,
     knowledgeBaseId: item.knowledge_base_id,
@@ -253,6 +259,8 @@ export function mergeDocumentReferences(refs: KnowledgeReferenceLike[]): Knowled
       return
     }
 
+    existing.page_image_sources = [...new Map([...(existing.page_image_sources || []), ...(item.page_image_sources || [])].map(source => [source.id, source])).values()]
+    existing.page_image_warnings = [...new Set([...(existing.page_image_warnings || []), ...(item.page_image_warnings || [])])]
     if (!existing.source_chunk_id && located) existing.source_chunk_id = located
     if (!existing.knowledge_id && item.knowledge_id) existing.knowledge_id = item.knowledge_id
     if (!existing.knowledge_title && item.knowledge_title) existing.knowledge_title = item.knowledge_title

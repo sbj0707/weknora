@@ -192,7 +192,7 @@
               <span class="readonly-value">{{ selectedType?.display_name || editingStore.engine_type }}</span>
             </div>
             <template v-if="selectedType">
-              <template v-for="field in selectedType.connection_fields" :key="field.name">
+              <template v-for="field in visibleConnectionFields" :key="field.name">
                 <div v-if="field.sensitive || form.connection_config[field.name]" class="readonly-row">
                   <span class="readonly-label">{{ fieldLabel(field.name) }}</span>
                   <span class="readonly-value">
@@ -201,6 +201,10 @@
                 </div>
               </template>
             </template>
+            <div v-if="editingStore.physical_index_name" class="readonly-row">
+              <span class="readonly-label">{{ t('azureAISearch.physicalIndex') }}</span>
+              <span class="readonly-value">{{ editingStore.physical_index_name }}</span>
+            </div>
             <template v-if="selectedType?.index_fields?.length">
               <template v-for="field in selectedType.index_fields" :key="field.name">
                 <div v-if="form.index_config[field.name]" class="readonly-row">
@@ -240,8 +244,9 @@
           <section v-if="selectedType" class="setting-drawer__section">
             <h4 class="setting-drawer__section-title">{{ t('vectorStoreSettings.connectionInfo') }}</h4>
 
+            <p v-if="form.engine_type === azureAISearchType" class="form-desc">{{ t('azureAISearch.connectionHint') }}</p>
             <div
-              v-for="field in selectedType.connection_fields"
+              v-for="field in visibleConnectionFields"
               :key="field.name"
               class="form-item"
             >
@@ -262,6 +267,10 @@
                   {{ t('vectorStoreSettings.insecureSkipVerifyWarning') }}
                 </p>
               </template>
+
+              <t-select v-else-if="field.enum?.length" v-model="form.connection_config[field.name]">
+                <t-option v-for="option in field.enum" :key="option" :value="option" :label="form.engine_type === azureAISearchType ? t(`azureAISearch.modes.${option}`) : option" />
+              </t-select>
 
               <!-- 敏感字段（password / api key 等）：lock prefix + password -->
               <t-input
@@ -297,6 +306,7 @@
 
             <!-- 折叠/展开开关：保留之前的可选展示行为，但样式更轻量 -->
             <button
+              v-if="form.engine_type !== azureAISearchType"
               type="button"
               class="advanced-toggle"
               @click="showAdvanced = !showAdvanced"
@@ -305,13 +315,14 @@
               <span>{{ showAdvanced ? t('common.collapse', '收起') : t('common.expand', '展开') }}</span>
             </button>
 
-            <template v-if="showAdvanced">
+            <p v-if="form.engine_type === azureAISearchType" class="form-desc">{{ t('azureAISearch.dimensionHint') }}</p>
+            <template v-if="showAdvanced || form.engine_type === azureAISearchType">
               <div
                 v-for="field in selectedType.index_fields"
                 :key="field.name"
                 class="form-item"
               >
-                <label class="form-label">{{ fieldLabel(field.name) }}</label>
+                <label class="form-label" :class="{ required: field.required }">{{ fieldLabel(field.name) }}</label>
 
                 <!-- 枚举 → 下拉 -->
                 <t-select
@@ -364,6 +375,7 @@ import {
   type VectorStoreEntity,
   type VectorStoreTypeInfo,
 } from '@/api/vector-store'
+import { azureConnectionFields, cleanAzureConnection, validateAzureIndex, azureAISearchType } from './azureAISearchForm'
 import { useAuthStore } from '@/stores/auth'
 import { providerLogo } from './providerLogos'
 import SettingDrawer from '@/components/settings/SettingDrawer.vue'
@@ -410,6 +422,17 @@ watch(
 const envStores = computed(() => stores.value.filter(s => s.source === 'env'))
 const userStores = computed(() => stores.value.filter(s => s.source === 'user'))
 const selectedType = computed(() => storeTypes.value.find(st => st.type === form.value.engine_type))
+const visibleConnectionFields = computed(() => {
+  const fields = selectedType.value?.connection_fields || []
+  return form.value.engine_type === azureAISearchType ? azureConnectionFields(fields, form.value.connection_config) : fields
+})
+watch(() => form.value.connection_config.auth_mode, () => {
+  if (form.value.engine_type === azureAISearchType && !editingStore.value) {
+    const cleaned = cleanAzureConnection(form.value.connection_config)
+    if (!('api_key' in cleaned)) delete form.value.connection_config.api_key
+    if (!('managed_identity_client_id' in cleaned)) delete form.value.connection_config.managed_identity_client_id
+  }
+})
 
 // Drawer header logo — 与列表 .store-card__badge 同源（providerLogo()），让
 // 列表卡 → 抽屉 hand-off 视觉连贯。
@@ -437,7 +460,7 @@ const canTestConnection = computed(() => {
   if (editingStore.value) return false
   const st = selectedType.value
   if (!st) return false
-  for (const f of st.connection_fields) {
+  for (const f of visibleConnectionFields.value) {
     if (!f.required) continue
     const v = form.value.connection_config[f.name]
     if (v == null || v === '' || (typeof v === 'string' && v.trim() === '')) return false
@@ -463,7 +486,7 @@ const formRules = computed(() => {
   if (!editingStore.value) {
     rules.engine_type = [{ required: true, message: t('vectorStoreSettings.validation.engineTypeRequired') }]
     if (selectedType.value) {
-      for (const field of selectedType.value.connection_fields) {
+      for (const field of visibleConnectionFields.value) {
         if (field.required) {
           rules[`connection_config.${field.name}`] = [
             { required: true, message: t('vectorStoreSettings.validation.fieldRequired', { field: fieldLabel(field.name) }) },
@@ -472,7 +495,7 @@ const formRules = computed(() => {
       }
       // Index name/collection string fields: pattern validation (optional — empty is allowed)
       for (const field of (selectedType.value.index_fields || [])) {
-        if (field.type === 'string') {
+        if (field.type === 'string' && !field.enum?.length) {
           rules[`index_config.${field.name}`] = [
             {
               validator: (val: string) => !val || indexNamePattern.test(val),
@@ -492,6 +515,11 @@ const indexNamePattern = /^[a-zA-Z][a-zA-Z0-9_-]{0,127}$/
 
 // ===== Methods =====
 const fieldLabel = (name: string): string => {
+  if (form.value.engine_type === azureAISearchType) {
+    const azureKey = `azureAISearch.fields.${name}`
+    const azureLabel = t(azureKey)
+    if (azureLabel !== azureKey) return azureLabel
+  }
   const key = `vectorStoreSettings.fields.${name}`
   const translated = t(key)
   // If i18n key not found, vue-i18n returns the key itself — fall back to field name
@@ -534,7 +562,11 @@ const badgeStyle = (engineType: string): Record<string, string> => {
 const onEngineTypeChange = () => {
   form.value.connection_config = {}
   form.value.index_config = {}
-  showAdvanced.value = false
+  showAdvanced.value = form.value.engine_type === azureAISearchType
+  if (form.value.engine_type === azureAISearchType) {
+    form.value.connection_config.auth_mode = 'api_key'
+    form.value.index_config.text_analyzer = 'standard.lucene'
+  }
   // Drop cached number-text proxies so a switch to a different engine
   // doesn't keep stale entries pointing at the old field set.
   for (const k of Object.keys(connectionNumberText)) delete connectionNumberText[k]
@@ -611,6 +643,7 @@ const openAddDialog = () => {
     connection_config: {},
     index_config: {},
   }
+  onEngineTypeChange()
   lastTestOk.value = null
   showDialog.value = true
 }
@@ -661,6 +694,11 @@ const onDrawerConfirm = async () => {
     return
   }
 
+  if (!editingStore.value && form.value.engine_type === azureAISearchType) {
+    const error = validateAzureIndex(form.value.index_config)
+    if (error) { MessagePlugin.warning(t(`azureAISearch.validation.${error}`)); return }
+    if (!canTestConnection.value) { MessagePlugin.warning(t('azureAISearch.validation.connection')); return }
+  }
   saving.value = true
   try {
     if (editingStore.value) {
@@ -670,8 +708,8 @@ const onDrawerConfirm = async () => {
       const data: Partial<VectorStoreEntity> = {
         name: form.value.name.trim(),
         engine_type: form.value.engine_type,
-        connection_config: { ...form.value.connection_config },
-        index_config: showAdvanced.value ? { ...form.value.index_config } : {},
+        connection_config: form.value.engine_type === azureAISearchType ? cleanAzureConnection(form.value.connection_config) : { ...form.value.connection_config },
+        index_config: showAdvanced.value || form.value.engine_type === azureAISearchType ? { ...form.value.index_config } : {},
       }
       await createVectorStore(data)
       MessagePlugin.success(t('vectorStoreSettings.toasts.storeCreated'))
@@ -726,12 +764,12 @@ const onDrawerTest = async () => {
   try {
     const data = {
       engine_type: form.value.engine_type,
-      connection_config: { ...form.value.connection_config },
+      connection_config: form.value.engine_type === azureAISearchType ? cleanAzureConnection(form.value.connection_config) : { ...form.value.connection_config },
     }
     const res = await testVectorStoreRaw(data)
     lastTestOk.value = !!res.success
     if (res.success) {
-      MessagePlugin.success(t('vectorStoreSettings.toasts.testSuccess'))
+      MessagePlugin.success(t(form.value.engine_type === azureAISearchType ? 'azureAISearch.testSuccess' : 'vectorStoreSettings.toasts.testSuccess'))
     } else {
       MessagePlugin.error(res.error || t('vectorStoreSettings.toasts.testFailed'))
     }

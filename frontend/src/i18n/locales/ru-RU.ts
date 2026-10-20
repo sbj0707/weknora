@@ -1,4 +1,10 @@
+import { azureAISearchLocales } from '../azureAISearch'
+import { azureStorageLocales } from '../azureStorage'
+import { pageImageLocales } from '../pageImages'
 export default {
+  azureAISearch: azureAISearchLocales['ru-RU'],
+  azureStorage: azureStorageLocales['ru-RU'],
+  pageImages: pageImageLocales['ru-RU'],
   evaluationPlan: {
     "basicGroup": "Основное",
     "rulesGroup": "Настройки оценки",

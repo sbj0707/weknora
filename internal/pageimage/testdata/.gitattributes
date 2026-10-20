@@ -1,0 +1,2 @@
+# PDF fixtures contain fixed-width xref entries; preserve their exact bytes.
+*.pdf binary

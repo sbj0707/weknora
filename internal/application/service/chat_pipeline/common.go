@@ -11,6 +11,7 @@ import (
 	"github.com/Tencent/WeKnora/internal/common"
 	"github.com/Tencent/WeKnora/internal/logger"
 	"github.com/Tencent/WeKnora/internal/models/chat"
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"github.com/Tencent/WeKnora/internal/types"
 	"github.com/Tencent/WeKnora/internal/types/interfaces"
 )
@@ -96,6 +97,10 @@ func prepareMessagesWithHistory(chatManage *types.ChatManage) []chat.Message {
 	userMsg := chat.Message{Role: "user", Content: chatManage.UserContent}
 	if chatManage.ChatModelSupportsVision && len(chatManage.Images) > 0 {
 		userMsg.Images = chatManage.Images
+	}
+	if chatManage.ChatModelSupportsVision && len(chatManage.PageImageEvidence.Images) > 0 {
+		userMsg.MultiContent = pageimage.MessageParts(chatManage.UserContent, chatManage.Images, chatManage.PageImageEvidence)
+		userMsg.Images = nil
 	}
 	chatMessages = append(chatMessages, userMsg)
 

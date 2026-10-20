@@ -171,7 +171,7 @@ func (s *cosFileService) DeleteFile(ctx context.Context, filePath string) error 
 // through to the legacy-URL branch and is returned unchanged (#3151).
 func (s *cosFileService) parseCosObjectName(filePath string) (string, error) {
 	filePath = storageBackendInnerPath(filePath)
-	for _, other := range []string{"local://", "minio://", "s3://", "tos://", "oss://", "ks3://", "obs://"} {
+	for _, other := range []string{"local://", "minio://", "s3://", "tos://", "oss://", "ks3://", "obs://", "azure://"} {
 		if strings.HasPrefix(filePath, other) {
 			return "", fmt.Errorf("cos file service cannot resolve %s path", strings.Split(other, "://")[0])
 		}

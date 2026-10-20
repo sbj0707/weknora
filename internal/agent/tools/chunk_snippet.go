@@ -312,16 +312,17 @@ func writeChunkImagesMarkdown(b *strings.Builder, c *types.Chunk) {
 // payloads and the modelcontext renderer.
 func chunkDataMap(seq int, c *types.Chunk) map[string]interface{} {
 	chunkData := map[string]interface{}{
-		"seq":             seq,
-		"chunk_id":        c.ID,
-		"chunk_index":     c.ChunkIndex,
-		"content":         c.Content,
-		"chunk_type":      c.ChunkType,
-		"knowledge_id":    c.KnowledgeID,
-		"knowledge_base":  c.KnowledgeBaseID,
-		"start_at":        c.StartAt,
-		"end_at":          c.EndAt,
-		"parent_chunk_id": c.ParentChunkID,
+		"seq":              seq,
+		"chunk_id":         c.ID,
+		"content_revision": c.ContentRevision,
+		"chunk_index":      c.ChunkIndex,
+		"content":          c.Content,
+		"chunk_type":       c.ChunkType,
+		"knowledge_id":     c.KnowledgeID,
+		"knowledge_base":   c.KnowledgeBaseID,
+		"start_at":         c.StartAt,
+		"end_at":           c.EndAt,
+		"parent_chunk_id":  c.ParentChunkID,
 	}
 	appendFAQChunkData(chunkData, c)
 	normalizeFAQChunkDataMap(chunkData, c)

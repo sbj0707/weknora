@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"strings"
 	"time"
 
@@ -310,6 +311,9 @@ func (e *AgentEngine) Execute(
 	llmContext []chat.Message,
 	imageURLs ...[]string,
 ) (*types.AgentState, error) {
+	if len(imageURLs) > 0 {
+		ctx = pageimage.WithUserImages(ctx, imageURLs[0])
+	}
 	logger.Infof(ctx, "[Agent] Starting execution: session=%s, message=%s, query_len=%d, context_msgs=%d",
 		sessionID, messageID, len(query), len(llmContext))
 	// Ensure tools are cleaned up after execution

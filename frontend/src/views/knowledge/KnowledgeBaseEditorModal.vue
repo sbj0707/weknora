@@ -366,6 +366,21 @@
               </div>
             </div>
 
+            <div class="setting-row">
+              <div class="setting-info">
+                <label>{{ $t('pageImages.useLabel') }}</label>
+                <p class="desc">{{ $t('pageImages.useDescription') }}</p>
+              </div>
+              <t-switch v-model="formData.usePageImagesForAnswer" size="medium" />
+            </div>
+            <div v-if="formData.usePageImagesForAnswer" class="setting-row">
+              <div class="setting-info">
+                <label>{{ $t('pageImages.autoLabel') }}</label>
+                <p class="desc">{{ $t('pageImages.autoDescription') }}</p>
+              </div>
+              <t-switch v-model="formData.autoSavePageImages" size="medium" />
+            </div>
+
             <div v-if="formData.multimodalConfig.enabled" class="setting-row">
               <div class="setting-info">
                 <label>{{ $t('knowledgeEditor.advanced.multimodal.imageAttrsLabel') }}</label>
@@ -914,6 +929,8 @@ const initFormData = (type: 'document' | 'faq' = 'document') => {
     // （model_id 等）按加载时的快照原样回传，避免把 API 侧写入的设置洗掉。
     // 新建模式也必须用完整默认动作初始化——imageActions.ocr.on_unobserved
     // 直接被开关绑定，缺省会让打开开关的瞬间渲染崩溃。
+    usePageImagesForAnswer: false,
+    autoSavePageImages: false,
     imageAttrsEnabled: false,
     imageActions: mergeImageActions(),
     imageProcessingConfigSnapshot: null as Record<string, unknown> | null,
@@ -1040,6 +1057,8 @@ const applyKBFormData = (kb: any) => {
       descriptionLanguage: kb.vlm_config?.description_language || '',
       customInstructions: kb.vlm_config?.custom_instructions || ''
     },
+    usePageImagesForAnswer: !!kb.image_processing_config?.use_page_images_for_answer,
+    autoSavePageImages: !!kb.image_processing_config?.auto_save_page_images,
     imageAttrsEnabled:
       !!(kb as Record<string, any>).image_processing_config?.image_attrs_enabled,
     imageActions: mergeImageActions(
@@ -1492,6 +1511,8 @@ const buildSubmitData = () => {
   // 没有自定义时才取注册表默认值。合并规则见 buildImageProcessingConfig。
   {
     const built = buildImageProcessingConfig(formData.value.imageProcessingConfigSnapshot, {
+      usePageImagesForAnswer: formData.value.usePageImagesForAnswer,
+      autoSavePageImages: formData.value.autoSavePageImages,
       imageAttrsEnabled: formData.value.imageAttrsEnabled,
       onUnobserved: formData.value.imageActions.ocr.on_unobserved,
       defaultOn: displaySchema.value.default_actions.ocr.on,
