@@ -58,6 +58,20 @@ func encode(w http.ResponseWriter, value any) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(value)
 }
+
+func encodeAzureSchema(w http.ResponseWriter, value any) {
+	if schema, ok := value.(indexSchema); ok {
+		schema.Fields = append([]field(nil), schema.Fields...)
+		for i := range schema.Fields {
+			if schema.Fields[i].Stored == nil {
+				schema.Fields[i].Stored = boolPointer(true)
+			}
+		}
+		value = schema
+	}
+	encode(w, value)
+}
+
 func (f *fakeAzure) serve(t *testing.T, w http.ResponseWriter, req *http.Request) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
@@ -79,7 +93,7 @@ func (f *fakeAzure) serve(t *testing.T, w http.ResponseWriter, req *http.Request
 			encode(w, map[string]any{"error": map[string]any{"code": "", "message": "No index with the name '" + strings.TrimPrefix(req.URL.Path, "/indexes/") + "' was found in the service 'test'."}})
 			return
 		}
-		encode(w, f.schema)
+		encodeAzureSchema(w, f.schema)
 		return
 	}
 	if req.Method == http.MethodPut {
@@ -99,7 +113,7 @@ func (f *fakeAzure) serve(t *testing.T, w http.ResponseWriter, req *http.Request
 			return
 		}
 		w.WriteHeader(201)
-		encode(w, schema)
+		encodeAzureSchema(w, schema)
 		return
 	}
 	if strings.HasSuffix(req.URL.Path, "/docs/index") {
@@ -318,6 +332,49 @@ func TestAzureSchemaDriftRejectedBeforeMutation(t *testing.T) {
 		})
 	}
 }
+
+// Azure materializes stored=true on scalar fields in its GET/PUT responses,
+// even when the create request omitted stored. Exercise that response shape
+// without weakening validation of an explicitly disabled stored field.
+func TestAzureSchemaStoredDefaults(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		vector   bool
+		stored   *bool
+		accepted bool
+	}{
+		{"scalar omitted", false, nil, true},
+		{"scalar Azure default", false, boolPointer(true), true},
+		{"scalar disabled", false, boolPointer(false), false},
+		{"vector omitted default", true, nil, true},
+		{"vector explicit true", true, boolPointer(true), true},
+		{"vector disabled", true, boolPointer(false), false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			r, f := newFake(t)
+			schema := r.schema()
+			for i := range schema.Fields {
+				schema.Fields[i].Stored = boolPointer(true)
+			}
+			index := 0
+			if tc.vector {
+				index = len(schema.Fields) - 1
+			}
+			schema.Fields[index].Stored = tc.stored
+			f.schema = schema
+			_, err := r.ensureReady(context.Background(), false)
+			if tc.accepted {
+				require.NoError(t, err)
+			} else {
+				require.ErrorIs(t, err, ErrSchema)
+			}
+			assert.Empty(t, f.batches)
+			assert.Zero(t, f.creates)
+		})
+	}
+}
+
+func boolPointer(value bool) *bool { return &value }
 func TestAzureWriteValidation(t *testing.T) {
 	r, f := newFake(t)
 	for _, vectors := range [][]float32{{1, 0}, {0, 0, 0}, {1, float32(math.Inf(1)), 0}} {

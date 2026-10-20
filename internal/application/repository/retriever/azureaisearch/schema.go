@@ -116,10 +116,15 @@ func (r *Repository) ensureReady(ctx context.Context, create bool) (bool, error)
 	}
 	for _, f := range expected.Fields {
 		got, ok := fields[f.Name]
-		// Azure may omit stored=true because it is the default. Other attributes
-		// including retrievability and the cosine metric must match explicitly.
-		if f.Stored != nil && got.Stored == nil {
-			got.Stored = f.Stored
+		// Azure can materialize stored=true on every field or omit it. Both
+		// representations mean true, including on non-vector fields. Normalize
+		// both sides while retaining explicit false as an incompatible change.
+		stored := true
+		if f.Stored == nil {
+			f.Stored = &stored
+		}
+		if got.Stored == nil {
+			got.Stored = &stored
 		}
 		if !ok || !reflect.DeepEqual(got, f) {
 			return false, fmt.Errorf("%w: field %s; create a new store and rebuild", ErrSchema, f.Name)
