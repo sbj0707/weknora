@@ -8,6 +8,7 @@ export interface VectorStoreEntity {
   engine_type: string
   connection_config: Record<string, any>
   index_config: Record<string, any>
+  physical_index_name?: string
   source: 'env' | 'user'
   readonly: boolean
   tenant_id?: number

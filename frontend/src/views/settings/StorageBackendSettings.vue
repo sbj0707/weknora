@@ -61,7 +61,7 @@
               </div>
             </div>
             <p class="backend-card__subtitle">
-              <span>{{ backend.provider.toUpperCase() }}</span>
+              <span>{{ providerLabel(backend.provider) }}</span>
               <template v-if="backendMeta(backend)">
                 <span class="backend-card__sep">·</span>
                 <span class="backend-card__meta">{{ backendMeta(backend) }}</span>
@@ -124,7 +124,7 @@
                 v-for="provider in providers"
                 :key="provider"
                 :value="provider"
-                :label="provider.toUpperCase()"
+                :label="providerLabel(provider)"
               />
             </t-select>
           </div>
@@ -157,12 +157,48 @@
 
         <section class="setting-drawer__section">
           <h4 class="setting-drawer__section-title">{{ t('settings.storageBackend.connectionSection') }}</h4>
+          <template v-if="form.provider === 'azure'">
+            <details class="azure-connection-helper">
+              <summary>{{ t('azureStorage.fromConnectionString') }}</summary>
+              <div class="form-item">
+                <label for="azure-connection-string" class="form-label">{{ t('azureStorage.connectionString') }}</label>
+                <t-input id="azure-connection-string" v-model="connectionString" type="password" autocomplete="off" clearable />
+                <p class="form-desc">{{ t('azureStorage.localOnly') }}</p>
+                <t-button variant="outline" :disabled="!connectionString.trim()" @click="parseConnection">{{ t('azureStorage.parse') }}</t-button>
+              </div>
+            </details>
+            <div class="form-item">
+              <label class="form-label required">Storage Account</label>
+              <t-input v-model="form.config.account_name" :disabled="!!editing" placeholder="giostorageblob" clearable />
+            </div>
+            <div class="form-item">
+              <label class="form-label required">Container</label>
+              <t-input v-model="form.config.container_name" :disabled="!!editing" placeholder="weknora" clearable />
+            </div>
+            <div class="form-item">
+              <label class="form-label required">{{ t('azureStorage.authMode') }}</label>
+              <t-select v-model="form.config.auth_mode" @change="resetAzureCredentials">
+                <t-option value="managed_identity" :label="t('azureStorage.managedIdentity')" />
+                <t-option value="account_key" :label="t('azureStorage.accountKey')" />
+              </t-select>
+            </div>
+            <div v-if="form.config.auth_mode === 'account_key'" class="form-item">
+              <label class="form-label required">Account Key</label>
+              <t-input v-model="form.config.account_key" type="password" autocomplete="off" clearable />
+            </div>
+            <div v-else class="form-item">
+              <label class="form-label">Managed Identity Client ID</label>
+              <t-input v-model="form.config.managed_identity_client_id" :placeholder="t('azureStorage.systemIdentity')" clearable />
+              <p class="form-desc">{{ t('azureStorage.identityHint') }}</p>
+            </div>
+            <p class="form-desc">{{ t('azureStorage.probeHint') }}</p>
+          </template>
           <div v-if="needsEndpoint" class="form-item">
             <label class="form-label required">Endpoint</label>
             <t-input
               v-model="form.config.endpoint"
               :disabled="!!editing"
-              :placeholder="form.provider === 'minio' ? 'storage.example.com:9000' : 'https://storage.example.com'"
+              :placeholder="form.provider === 'azure' ? `https://${form.config.account_name || 'account'}.blob.core.windows.net` : form.provider === 'minio' ? 'storage.example.com:9000' : 'https://storage.example.com'"
               clearable
             />
           </div>
@@ -184,7 +220,7 @@
               </t-input>
             </div>
           </template>
-          <div v-if="form.provider !== 'local'" class="form-item">
+          <div v-if="!['local', 'azure'].includes(form.provider)" class="form-item">
             <label class="form-label required">Bucket</label>
             <t-input v-model="form.config.bucket_name" :disabled="!!editing" clearable />
           </div>
@@ -245,11 +281,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { DialogPlugin, MessagePlugin } from 'tdesign-vue-next'
 import { AddIcon } from 'tdesign-icons-vue-next'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { applyAzureConnectionString, AzureConnectionStringError } from '@/utils/azureConnectionString'
 import SettingDrawer from '@/components/settings/SettingDrawer.vue'
 import { providerLogo } from './providerLogos'
 import {
@@ -264,11 +301,31 @@ const loading = ref(false), saving = ref(false), testing = ref(false), visible =
 const backends = ref<StorageBackend[]>([]), providers = ref<string[]>([]), defaultID = ref('')
 const editing = ref<StorageBackend | null>(null)
 const rawTestResult = ref<'ok' | 'error' | null>(null)
-const blankConfig = (): StorageBackendConfig => ({ mode: 'remote', endpoint: '', region: '', access_key_id: '', secret_access_key: '', bucket_name: '', path_prefix: '', use_ssl: true })
+const connectionString = ref('')
+const providerLabel = (provider: string) => provider === 'azure' ? 'Azure Blob Storage' : provider.toUpperCase()
+function resetAzureCredentials() {
+  form.config.account_key = ''; form.config.managed_identity_client_id = ''
+  rawTestResult.value = null
+}
+function parseConnection() {
+  try {
+    const parsed = applyAzureConnectionString(connectionString.value, form.config, !!editing.value)
+    form.config = parsed.config
+    connectionString.value = ''; rawTestResult.value = null
+    MessagePlugin.success(t('azureStorage.parsed'))
+    if (parsed.hasUnusedFields) MessagePlugin.warning(t('azureStorage.unusedFields'))
+  } catch (error) {
+    MessagePlugin.error(t(`azureStorage.errors.${error instanceof AzureConnectionStringError ? error.code : 'format'}`))
+  }
+}
+watch(visible, value => { if (!value) { connectionString.value = ''; form.config.account_key = '' } })
+watch(() => form.provider, () => { connectionString.value = '' })
+
+const blankConfig = (): StorageBackendConfig => ({ mode: 'remote', endpoint: '', region: '', access_key_id: '', secret_access_key: '', bucket_name: '', path_prefix: '', use_ssl: true, auth_mode: 'managed_identity', account_name: '', container_name: '', account_key: '', managed_identity_client_id: '' })
 const form = reactive<{ name: string; provider: string; config: StorageBackendConfig }>({ name: '', provider: 'local', config: blankConfig() })
 const needsEndpoint = computed(() => !['local', 'cos'].includes(form.provider) && !(form.provider === 'minio' && form.config.mode === 'docker'))
-const needsRegion = computed(() => !['local', 'minio'].includes(form.provider))
-const needsCredentials = computed(() => form.provider !== 'local' && !(form.provider === 'minio' && form.config.mode === 'docker'))
+const needsRegion = computed(() => !['local', 'minio', 'azure'].includes(form.provider))
+const needsCredentials = computed(() => !['local', 'azure'].includes(form.provider) && !(form.provider === 'minio' && form.config.mode === 'docker'))
 
 const resolveLogo = (provider: string) => providerLogo('storage', provider)
 const providerInitial = (provider: string) => (provider || '?').trim().charAt(0).toUpperCase() || '?'
@@ -332,19 +389,29 @@ async function load() {
     backends.value = list.data || []; defaultID.value = list.default_storage_backend_id || ''; providers.value = types.data || []
   } finally { loading.value = false }
 }
-function resetConfig() { form.config = blankConfig(); rawTestResult.value = null }
-function openCreate() { editing.value = null; form.name = ''; form.provider = providers.value[0] || 'local'; form.config = blankConfig(); rawTestResult.value = null; visible.value = true }
-function openEdit(backend: StorageBackend) { editing.value = backend; form.name = backend.name; form.provider = backend.provider; form.config = { ...blankConfig(), ...backend.config }; rawTestResult.value = null; visible.value = true }
+function resetConfig() { connectionString.value = ''; form.config = blankConfig(); rawTestResult.value = null }
+function openCreate() { connectionString.value = ''; editing.value = null; form.name = ''; form.provider = providers.value[0] || 'local'; form.config = blankConfig(); rawTestResult.value = null; visible.value = true }
+function openEdit(backend: StorageBackend) { connectionString.value = ''; editing.value = backend; form.name = backend.name; form.provider = backend.provider; form.config = { ...blankConfig(), ...backend.config }; rawTestResult.value = null; visible.value = true }
 async function testRaw() {
   testing.value = true
   rawTestResult.value = null
   try {
-    const r: any = editing.value ? await testStorageBackendByID(editing.value.id) : await testStorageBackend(form)
+    const r: any = editing.value && form.provider !== 'azure' ? await testStorageBackendByID(editing.value.id) : await testStorageBackend({ ...form, id: editing.value?.id })
     if (r.success) { rawTestResult.value = 'ok'; MessagePlugin.success(t('settings.storageBackend.testSuccess')) }
     else { rawTestResult.value = 'error'; MessagePlugin.error(r.error || t('settings.storageBackend.testFailed')) }
+  } catch (error: any) {
+    rawTestResult.value = 'error'
+    MessagePlugin.error(error?.message || t('settings.storageBackend.testFailed'))
   } finally { testing.value = false }
 }
-async function testSaved(backend: StorageBackend) { const r: any = await testStorageBackendByID(backend.id); r.success ? MessagePlugin.success(t('settings.storageBackend.testSuccess')) : MessagePlugin.error(r.error || t('settings.storageBackend.testFailed')) }
+async function testSaved(backend: StorageBackend) {
+  try {
+    const r: any = await testStorageBackendByID(backend.id)
+    r.success ? MessagePlugin.success(t('settings.storageBackend.testSuccess')) : MessagePlugin.error(r.error || t('settings.storageBackend.testFailed'))
+  } catch (error: any) {
+    MessagePlugin.error(error?.message || t('settings.storageBackend.testFailed'))
+  }
+}
 async function save() {
   if (!form.name.trim()) { MessagePlugin.warning(t('settings.storageBackend.nameRequired')); return }
   saving.value = true
@@ -362,6 +429,11 @@ onMounted(load)
 </script>
 
 <style scoped lang="less">
+.azure-connection-helper { margin-bottom: 20px; border: 1px solid var(--td-component-border); border-radius: var(--app-radius-md); padding: 12px; }
+.azure-connection-helper summary { cursor: pointer; color: var(--td-brand-color); }
+.azure-connection-helper .form-item { margin-top: 12px; }
+.backend-card--azure .backend-card__badge { background: color-mix(in srgb, #0078d4 10%, transparent); }
+
 @import (reference) '@/components/css/provider-card.less';
 
 @import (reference) '@/components/css/settings-section.less';

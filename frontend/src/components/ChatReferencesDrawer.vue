@@ -126,6 +126,8 @@
                           <t-icon name="jump" size="14px" />
                         </a>
                       </div>
+                      <p v-if="item.pageImagePages?.length" class="reference-item__snippet">{{ t('pageImages.used', { pages: item.pageImagePages.join(', ') }) }}</p>
+                      <p v-for="warning in item.pageImageWarnings" :key="warning" class="reference-item__snippet" role="status">{{ warning }}</p>
                       <p v-if="item.snippet && !expandedKeys.has(item.key)" class="reference-item__snippet">
                         {{ formatReferenceSnippet(item.snippet) }}
                       </p>

@@ -175,7 +175,7 @@ func hasMixedEngineTypes(results []*types.RetrieveResult) bool {
 // request.
 func isKnownEngineType(t types.RetrieverEngineType) bool {
 	switch t {
-	case types.ElasticsearchRetrieverEngineType,
+	case types.AzureAISearchRetrieverEngineType, types.ElasticsearchRetrieverEngineType,
 		types.ElasticFaissRetrieverEngineType,
 		types.MilvusRetrieverEngineType,
 		types.PostgresRetrieverEngineType,

@@ -317,6 +317,9 @@ func (r *Registry) ModelToolResultForTool(toolName string, result *types.ToolRes
 	if result.Success && (toolName == "call_mcp_tool" || strings.HasPrefix(toolName, "mcp_")) {
 		modelOutput += r.mcpSourceCandidates(result.Output)
 	}
+	if warnings, ok := result.Data["page_image_warnings"].([]string); ok && len(warnings) > 0 {
+		modelOutput += "\nPage image availability: " + strings.Join(warnings, " ")
+	}
 	return r.resources.EncodeText(modelOutput) + outputFilesPrompt(result)
 }
 

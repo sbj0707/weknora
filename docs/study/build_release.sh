@@ -1,6 +1,6 @@
 set -euo pipefail
 
-# 1. 从最新源码构建两个镜像
+# 1. 从最新源码构建三个镜像
 cd /home/azureuser/projects/weknora
 release="$(git rev-parse --short=12 HEAD)"
 
@@ -9,6 +9,10 @@ docker build \
   --build-arg COMMIT_ID_ARG="$release" \
   -f docker/Dockerfile.app \
   -t "weknora-local/app:$release" .
+
+docker build \
+  -f docker/Dockerfile.docreader \
+  -t "weknora-local/docreader:$release" .
 
 docker build \
   --build-arg VITE_FRONTEND_COMMIT="$release" \
@@ -21,25 +25,29 @@ cd /home/azureuser/runner/WeKnora
 # 保留旧镜像
 docker tag "$(docker inspect -f '{{.Image}}' WeKnora-app)" \
   weknora-local/app:previous
+docker tag "$(docker inspect -f '{{.Image}}' WeKnora-docreader)" \
+  weknora-local/docreader:previous
 docker tag "$(docker inspect -f '{{.Image}}' WeKnora-frontend)" \
   weknora-local/frontend:previous
 
-# 仅覆盖两个服务的镜像
+# 仅覆盖三个服务的镜像
 cat > docker-compose.code.yml <<YAML
 services:
   app:
     image: weknora-local/app:$release
+  docreader:
+    image: weknora-local/docreader:$release
   frontend:
     image: weknora-local/frontend:$release
 YAML
 
-# 3. 仅替换 app、frontend
+# 3. 仅替换 docreader、app、frontend
 docker compose -p weknora \
   -f docker-compose.yml \
   -f docker-compose.code.yml \
   up -d --no-deps --no-build --pull never \
   --wait --wait-timeout 180 \
-  app frontend
+  docreader app frontend
 
 # 4. 检查
 curl -fsS http://127.0.0.1:18080/health

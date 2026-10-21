@@ -1,4 +1,10 @@
+import { azureAISearchLocales } from '../azureAISearch'
+import { azureStorageLocales } from '../azureStorage'
+import { pageImageLocales } from '../pageImages'
 export default {
+  azureAISearch: azureAISearchLocales['ko-KR'],
+  azureStorage: azureStorageLocales['ko-KR'],
+  pageImages: pageImageLocales['ko-KR'],
   evaluationPlan: {
     "basicGroup": "기본",
     "rulesGroup": "평가 설정",

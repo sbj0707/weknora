@@ -519,6 +519,7 @@ type StorageEngineConfig struct {
 	OSS             *OSSEngineConfig   `json:"oss,omitempty"`
 	KS3             *KS3EngineConfig   `json:"ks3,omitempty"`
 	OBS             *OBSEngineConfig   `json:"obs,omitempty"`
+	Azure           *AzureEngineConfig `json:"azure,omitempty"`
 }
 
 // LocalEngineConfig is for local file system storage (single-machine deployment only).
@@ -613,7 +614,22 @@ func (c *StorageEngineConfig) Value() (driver.Value, error) {
 	if c == nil {
 		return nil, nil
 	}
-	return json.Marshal(c)
+	out := *c
+	if c.Azure != nil {
+		azure := *c.Azure
+		// Share the instance credential encryption contract with legacy settings.
+		value, err := (StorageBackendConfig{AccountKey: azure.AccountKey}).Value()
+		if err != nil {
+			return nil, err
+		}
+		var encrypted StorageBackendConfig
+		if err := json.Unmarshal(value.([]byte), &encrypted); err != nil {
+			return nil, err
+		}
+		azure.AccountKey = encrypted.AccountKey
+		out.Azure = &azure
+	}
+	return json.Marshal(out)
 }
 
 // Scan implements the sql.Scanner interface for StorageEngineConfig
@@ -625,7 +641,17 @@ func (c *StorageEngineConfig) Scan(value interface{}) error {
 	if !ok {
 		return nil
 	}
-	return json.Unmarshal(b, c)
+	if err := json.Unmarshal(b, c); err != nil {
+		return err
+	}
+	if c.Azure != nil {
+		key, err := utils.DecryptStoredSecret(c.Azure.AccountKey)
+		if err != nil {
+			return err
+		}
+		c.Azure.AccountKey = key
+	}
+	return nil
 }
 
 // TenantSandboxConfig is one named sandbox backend a workspace maintains.

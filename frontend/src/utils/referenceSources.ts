@@ -2,6 +2,14 @@ import type { SourceLocator } from './sourceLocator'
 
 export type ReferenceItemKind = 'web' | 'document' | 'tool'
 
+type PageImageSource = {
+  id: string
+  page: number
+  chunk_ids: string[]
+  knowledge_id?: string
+  knowledge_base_id?: string
+}
+
 export type KnowledgeReferenceLike = {
   id?: string
   chunk_ids?: string[]
@@ -16,12 +24,16 @@ export type KnowledgeReferenceLike = {
   /** Where the knowledge came from: an upload, "manual", or the imported URL. */
   knowledge_source?: string
   /** Positions of the chunk in the original file. */
+  page_image_sources?: PageImageSource[]
+  page_image_warnings?: string[]
   source_locators?: SourceLocator[]
   /** After merging a document's chunks: the first one with positions. */
   source_chunk_id?: string
 }
 
 export type ReferenceListItem = {
+  pageImagePages?: number[]
+  pageImageWarnings?: string[]
   key: string
   kind: ReferenceItemKind
   index: number
@@ -43,6 +55,33 @@ export type ReferenceListItem = {
 export type ReferenceDrawerSection = {
   id: 'web' | 'documents' | 'tools'
   items: ReferenceListItem[]
+}
+
+/** Tool-level image metadata must survive conversion into document cards. */
+export function attachToolPageImageEvidence(
+  refs: KnowledgeReferenceLike[],
+  evidence?: Pick<KnowledgeReferenceLike, 'page_image_sources' | 'page_image_warnings'>,
+): KnowledgeReferenceLike[] {
+  const sources = Array.isArray(evidence?.page_image_sources) ? evidence.page_image_sources : []
+  const warnings = Array.isArray(evidence?.page_image_warnings) ? evidence.page_image_warnings : []
+  if (!sources.length && !warnings.length) return refs
+
+  return refs.map(ref => {
+    if (!ref.knowledge_id || isWebReference(ref) || isToolReference(ref)) return ref
+    const chunkIds = [ref.id, ref.source_chunk_id, ...(ref.chunk_ids || [])]
+      .filter((id): id is string => !!id && id !== ref.knowledge_id)
+    const matchingSources = sources.filter(source => {
+      if (source.knowledge_id && source.knowledge_id !== ref.knowledge_id) return false
+      if (source.knowledge_base_id && ref.knowledge_base_id && source.knowledge_base_id !== ref.knowledge_base_id) return false
+      const chunkMatches = source.chunk_ids?.some(id => chunkIds.includes(id))
+      return chunkMatches || (!chunkIds.length && source.knowledge_id === ref.knowledge_id)
+    })
+    return {
+      ...ref,
+      page_image_sources: [...new Map([...(ref.page_image_sources || []), ...matchingSources].map(source => [source.id, source])).values()],
+      page_image_warnings: [...new Set([...(ref.page_image_warnings || []), ...warnings])],
+    }
+  })
 }
 
 /** Keep the cited chunk when a reference card aggregates several chunks. */
@@ -200,6 +239,8 @@ function buildDocumentItem(item: KnowledgeReferenceLike, index: number): Referen
     title,
     chunkId,
     chunkIds: item.chunk_ids,
+    pageImagePages: [...new Set(item.page_image_sources?.map(source => source.page) || [])],
+    pageImageWarnings: item.page_image_warnings,
     sourceChunkId: item.source_chunk_id,
     knowledgeId: item.knowledge_id,
     knowledgeBaseId: item.knowledge_base_id,
@@ -253,6 +294,8 @@ export function mergeDocumentReferences(refs: KnowledgeReferenceLike[]): Knowled
       return
     }
 
+    existing.page_image_sources = [...new Map([...(existing.page_image_sources || []), ...(item.page_image_sources || [])].map(source => [source.id, source])).values()]
+    existing.page_image_warnings = [...new Set([...(existing.page_image_warnings || []), ...(item.page_image_warnings || [])])]
     if (!existing.source_chunk_id && located) existing.source_chunk_id = located
     if (!existing.knowledge_id && item.knowledge_id) existing.knowledge_id = item.knowledge_id
     if (!existing.knowledge_title && item.knowledge_title) existing.knowledge_title = item.knowledge_title

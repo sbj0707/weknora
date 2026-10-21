@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	azureSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/azureaisearch"
 	openSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/opensearch"
 	"github.com/Tencent/WeKnora/internal/errors"
 	"github.com/Tencent/WeKnora/internal/logger"
@@ -35,6 +36,17 @@ func (s *vectorStoreService) TestConnection(
 	config types.ConnectionConfig,
 ) (string, error) {
 	switch engineType {
+	case types.AzureAISearchRetrieverEngineType:
+		testCtx, cancel := context.WithTimeout(ctx, connectionTestTimeout)
+		defer cancel()
+		client, err := azureSearchRepo.NewClient(config)
+		if err != nil {
+			return "", errors.NewBadRequestError(err.Error())
+		}
+		if err := client.TestConnection(testCtx); err != nil {
+			return "", errors.NewBadRequestError(err.Error())
+		}
+		return "", nil
 	case types.ElasticsearchRetrieverEngineType:
 		return testElasticsearchConnection(ctx, config)
 	case types.PostgresRetrieverEngineType:

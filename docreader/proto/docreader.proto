@@ -14,6 +14,37 @@ service DocReader {
   // with bounded memory on both ends.
   rpc ReadStream(ReadRequest) returns (stream ReadStreamResponse) {}
   rpc ListEngines(ListEnginesRequest) returns (ListEnginesResponse) {}
+  // Upload a PDF once in bounded chunks, then render requested 1-based pages.
+  // No text extraction, OCR, model calls, URLs or storage credentials.
+  rpc RenderPages(stream RenderPagesRequest) returns (stream RenderPagesResponse) {}
+}
+
+message RenderPagesRequest {
+  oneof payload {
+    bytes file_chunk = 1;
+    bool finish_upload = 2;
+    uint32 page_number = 3;
+  }
+}
+
+message PDFPageInfo {
+  uint32 page_count = 1;
+  string render_profile = 2;
+}
+
+message RenderedPage {
+  uint32 page_number = 1;
+  bytes image_data = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+  string error = 5;
+}
+
+message RenderPagesResponse {
+  oneof payload {
+    PDFPageInfo info = 1;
+    RenderedPage page = 2;
+  }
 }
 
 message ReadConfig {

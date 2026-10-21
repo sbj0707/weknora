@@ -1,6 +1,9 @@
 package utils
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 // SanitizeStorageConnectivityError converts a raw storage connectivity error
 // into a safe, user-facing message. It deliberately avoids echoing the raw
@@ -10,6 +13,18 @@ import "strings"
 func SanitizeStorageConnectivityError(err error) string {
 	if err == nil {
 		return ""
+	}
+	if joined, ok := err.(interface{ Unwrap() []error }); ok {
+		messages := make([]string, 0, len(joined.Unwrap()))
+		for _, cause := range joined.Unwrap() {
+			messages = append(messages, SanitizeStorageConnectivityError(cause))
+		}
+		return strings.Join(messages, "; ")
+	}
+	var safe interface{ SafeStorageMessage() string }
+	if errors.As(err, &safe) {
+		// Return only the safe contract, even when an outer wrapper contains sensitive text.
+		return safe.SafeStorageMessage()
 	}
 	msg := err.Error()
 	switch {

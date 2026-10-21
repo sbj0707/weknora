@@ -46,3 +46,22 @@ test('an unchanged configuration is not sent', () => {
     null,
   )
 })
+
+test('page evidence switches are independent of image observation and preserve other configuration', () => {
+  const snapshot = { model_id: 'keep-model', vendor_setting: { custom: true }, image_attrs_enabled: false }
+  const built = buildImageProcessingConfig(snapshot, {
+    imageAttrsEnabled: false, onUnobserved: true, defaultOn: DEFAULT_ON,
+    usePageImagesForAnswer: true, autoSavePageImages: true,
+  })
+  assert.equal(built?.use_page_images_for_answer, true)
+  assert.equal(built?.auto_save_page_images, true)
+  assert.equal(built?.image_attrs_enabled, false)
+  assert.equal(built?.model_id, 'keep-model')
+  assert.deepEqual(built?.vendor_setting, { custom: true })
+  const disabled = buildImageProcessingConfig(built, {
+    imageAttrsEnabled: false, onUnobserved: true, defaultOn: DEFAULT_ON,
+    usePageImagesForAnswer: false, autoSavePageImages: true,
+  })
+  assert.equal(disabled?.use_page_images_for_answer, false)
+  assert.equal(disabled?.auto_save_page_images, true, 'retain the hidden preference; backend gates its effect')
+})

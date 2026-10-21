@@ -202,7 +202,7 @@ func ParseTenantIDFromStoragePath(filePath string) uint64 {
 	// provider path, not the (opaque) backend id.
 	filePath = unwrapStorageBackendPath(filePath)
 	// Strip scheme: "local://1/abc/img.png" → "1/abc/img.png"
-	_, rest, ok := strings.Cut(filePath, "://")
+	scheme, rest, ok := strings.Cut(filePath, "://")
 	if !ok {
 		return 0
 	}
@@ -216,6 +216,16 @@ func ParseTenantIDFromStoragePath(filePath string) uint64 {
 	//   oss://bucket/prefix/TENANT_ID/...
 	// We try each slash-separated segment until we find a numeric tenant ID.
 	parts := strings.Split(rest, "/")
+	if scheme == "azure" {
+		// Azure paths use an explicit marker; numeric containers/prefixes are not tenant IDs.
+		for i := len(parts) - 3; i >= 1; i-- {
+			if parts[i] == "tenants" {
+				id, _ := strconv.ParseUint(parts[i+1], 10, 64)
+				return id
+			}
+		}
+		return 0
+	}
 	for _, part := range parts {
 		if id, err := strconv.ParseUint(part, 10, 64); err == nil {
 			return id

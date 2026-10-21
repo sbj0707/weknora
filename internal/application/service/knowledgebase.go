@@ -31,6 +31,7 @@ const kbTaskCleanupTimeout = 5 * time.Second
 
 // knowledgeBaseService implements the knowledge base service interface
 type knowledgeBaseService struct {
+	pageImages      interfaces.DocumentPageImageService
 	repo            interfaces.KnowledgeBaseRepository
 	kgRepo          interfaces.KnowledgeRepository
 	chunkRepo       interfaces.ChunkRepository
@@ -102,6 +103,10 @@ func NewKnowledgeBaseService(repo interfaces.KnowledgeBaseRepository,
 	}
 }
 
+func (s *knowledgeBaseService) SetPageImageService(images interfaces.DocumentPageImageService) {
+	s.pageImages = images
+}
+
 // GetRepository gets the knowledge base repository
 // Parameters:
 //   - ctx: Context with authentication and request information
@@ -157,6 +162,9 @@ func (s *knowledgeBaseService) CreateKnowledgeBase(ctx context.Context,
 
 	if kb.HasVectorStore() {
 		if err := s.validateVectorStoreBinding(ctx, kb.TenantID, *kb.VectorStoreID); err != nil {
+			return nil, err
+		}
+		if err := s.validateBoundVectorDimensions(ctx, kb); err != nil {
 			return nil, err
 		}
 	}
@@ -572,6 +580,9 @@ func (s *knowledgeBaseService) UpdateKnowledgeBase(ctx context.Context,
 	kb.UpdatedAt = time.Now()
 	kb.EnsureDefaults()
 
+	if err := s.validateBoundVectorDimensions(ctx, kb); err != nil {
+		return nil, err
+	}
 	logger.Info(ctx, "Saving knowledge base update")
 	if err := s.repo.UpdateKnowledgeBase(ctx, kb); err != nil {
 		logger.ErrorWithFields(ctx, err, map[string]interface{}{
@@ -931,13 +942,19 @@ func (s *knowledgeBaseService) ProcessKBDelete(ctx context.Context, t *asynq.Tas
 			}
 
 			for key, knowledgeGroup := range embeddingGroups {
-				embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, key.EmbeddingModelID)
+				dimension, err := retrievalDimension(ctx, retrieveEngine, s.modelService, key.EmbeddingModelID)
 				if err != nil {
 					logger.Warnf(ctx, "Failed to get embedding model %s: %v", key.EmbeddingModelID, err)
 					continue
 				}
-				if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, knowledgeGroup, embeddingModel.GetDimensions(), key.Type); err != nil {
+				if dimension == 0 {
+					continue
+				}
+				if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, knowledgeGroup, dimension, key.Type); err != nil {
 					logger.Warnf(ctx, "Failed to delete embeddings for model %s: %v", key.EmbeddingModelID, err)
+					if retrieveEngine.VectorDimensions() > 0 {
+						return err
+					}
 				}
 			}
 		}
@@ -953,6 +970,11 @@ func (s *knowledgeBaseService) ProcessKBDelete(ctx context.Context, t *asynq.Tas
 		}
 		imageURLs := collectImageURLs(ctx, imageInfoStrs)
 
+		if s.pageImages != nil {
+			if err := s.pageImages.Delete(ctx, tenantID, knowledgeIDs); err != nil {
+				return fmt.Errorf("delete page images: %w", err)
+			}
+		}
 		// Delete all chunks
 		logger.Infof(ctx, "Deleting all chunks in knowledge base")
 		for _, knowledgeID := range knowledgeIDs {
@@ -1144,6 +1166,15 @@ func (s *knowledgeBaseService) SetEmbeddingModel(ctx context.Context, id string,
 		return err
 	}
 
+	// Validate the selected model before mutating the persisted KB.
+	candidate := *kb
+	candidate.EmbeddingModelID = modelID
+	if err := s.validateBoundVectorDimensions(ctx, &candidate); err != nil {
+		return err
+	}
+	if err := s.validateBoundEmbeddingModelChange(ctx, kb, modelID); err != nil {
+		return err
+	}
 	// Update the knowledge base's embedding model
 	kb.EmbeddingModelID = modelID
 	kb.UpdatedAt = time.Now()
@@ -1322,6 +1353,9 @@ func (s *knowledgeBaseService) DuplicateKnowledgeBase(
 
 	if targetKB.HasVectorStore() {
 		if err := s.validateVectorStoreBinding(ctx, tenantID, *targetKB.VectorStoreID); err != nil {
+			return nil, err
+		}
+		if err := s.validateBoundVectorDimensions(ctx, targetKB); err != nil {
 			return nil, err
 		}
 	}

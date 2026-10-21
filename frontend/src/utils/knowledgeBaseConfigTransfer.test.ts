@@ -15,6 +15,7 @@ const source = {
     relations: [{ node1: '项目', node2: '单位', type: '建设' }], custom_instructions: '提取项目' },
   wiki_config: { synthesis_model_id: 'wiki', max_pages_per_ingest: 0, extraction_granularity: 'focused' },
   image_processing_config: { model_id: 'image', image_attrs_enabled: false,
+    use_page_images_for_answer: true, auto_save_page_images: false,
     image_actions: { ocr: { on: [{ prop: 'contain.text', is: 'block' }], on_unobserved: false } } },
   storage_provider_config: { provider: 'cos', secret_key: 'DO_NOT_EXPORT' },
   storage_config: { secret_key: 'DO_NOT_EXPORT' }, vector_store_id: 'immutable-store',

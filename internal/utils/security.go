@@ -200,7 +200,7 @@ func IsValidURL(url string) bool {
 	// proxies; provider schemes remain supported for legacy stored content.
 	allowedProtocols := []string{
 		"http://", "https://", "resource://", "storage://", "local://", "minio://",
-		"cos://", "tos://", "s3://", "oss://", "ks3://", "obs://",
+		"cos://", "tos://", "s3://", "oss://", "ks3://", "obs://", "azure://",
 	}
 	isAllowed := false
 	for _, protocol := range allowedProtocols {

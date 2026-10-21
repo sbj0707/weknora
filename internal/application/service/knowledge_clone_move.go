@@ -301,6 +301,11 @@ func (s *knowledgeService) CloneChunk(ctx context.Context, src, dst *types.Knowl
 				return
 			}
 		}
+		if s.pageImages != nil && chunksAttempted {
+			if cleanupErr := s.pageImages.Delete(ctx, dst.TenantID, []string{dst.ID}); cleanupErr != nil {
+				err = errors.Join(err, cleanupErr)
+			}
+		}
 		cleanupCopiedObjects(ctx, dstSvc, copiedURLs)
 	}()
 
@@ -395,13 +400,18 @@ func (s *knowledgeService) CloneChunk(ctx context.Context, src, dst *types.Knowl
 		}
 	}
 
+	if s.pageImages != nil {
+		if err := s.pageImages.Copy(ctx, src, dst, srcTodst); err != nil {
+			return err
+		}
+	}
 	tenantID := types.MustTenantIDFromContext(ctx)
 	// Route CopyIndices via the source KB's bound store. This function does
 	// not handle cross-store copies — embeddings written by different
 	// VectorStore backends are not bit-compatible, so callers that allow
 	// source/target KBs to bind to different stores must perform their own
 	// cross-store migration before invoking this.
-	if len(srcTodst) == 0 || dst.EmbeddingModelID == "" {
+	if len(srcTodst) == 0 || dst.EmbeddingModelID == "" && !sourceKB.HasVectorStore() {
 		return nil
 	}
 	sourceStoreID := sourceKB.VectorStoreID
@@ -410,17 +420,20 @@ func (s *knowledgeService) CloneChunk(ctx context.Context, src, dst *types.Knowl
 	if err != nil {
 		return err
 	}
-	embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, dst.EmbeddingModelID)
+	dimension, err := retrievalDimension(ctx, retrieveEngine, s.modelService, dst.EmbeddingModelID)
 	if err != nil {
 		return err
 	}
+	if dimension == 0 {
+		return nil
+	}
 	rollbackIndices = func() error {
-		return retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{dst.ID}, embeddingModel.GetDimensions(), dst.Type)
+		return retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{dst.ID}, dimension, dst.Type)
 	}
 	if err := retrieveEngine.CopyIndices(ctx, src.KnowledgeBaseID, dst.KnowledgeBaseID,
 		map[string]string{src.ID: dst.ID},
 		srcTodst,
-		embeddingModel.GetDimensions(),
+		dimension,
 		dst.Type,
 	); err != nil {
 		return err
@@ -1328,7 +1341,7 @@ func (s *knowledgeService) moveKnowledgeReuseVectors(
 	for _, chunk := range oldChunks {
 		chunkIDs = append(chunkIDs, chunk.ID)
 	}
-	if knowledge.EmbeddingModelID != "" {
+	if knowledge.EmbeddingModelID != "" || sourceKB.HasVectorStore() {
 		engine, err := retriever.CreateRetrieveEngineForKB(
 			ctx,
 			s.retrieveEngine,
@@ -1339,20 +1352,22 @@ func (s *knowledgeService) moveKnowledgeReuseVectors(
 		if err != nil {
 			return err
 		}
-		model, err := s.modelService.GetEmbeddingModel(ctx, knowledge.EmbeddingModelID)
+		dimension, err := retrievalDimension(ctx, engine, s.modelService, knowledge.EmbeddingModelID)
 		if err != nil {
 			return err
 		}
 		// Move index metadata in place. Copy + delete by the unchanged document ID
 		// would also delete the just-created target indices.
-		if err := engine.MoveKnowledgeIndices(ctx,
-			sourceKB.ID,
-			targetKB.ID,
-			knowledge.ID,
-			chunkIDs,
-			model.GetDimensions(),
-			sourceKB.Type); err != nil {
-			return err
+		if dimension > 0 {
+			if err := engine.MoveKnowledgeIndices(ctx,
+				sourceKB.ID,
+				targetKB.ID,
+				knowledge.ID,
+				chunkIDs,
+				dimension,
+				sourceKB.Type); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -1376,6 +1391,11 @@ func (s *knowledgeService) moveKnowledgeReuseVectors(
 	// 4. Update knowledge record (tags are KB-scoped; clear relations before moving)
 	if err := s.repo.DeleteKnowledgeTagRelations(ctx, knowledge.ID); err != nil {
 		return fmt.Errorf("failed to clear knowledge tag relations: %w", err)
+	}
+	if s.pageImages != nil {
+		if err := s.pageImages.Move(ctx, knowledge, targetKB); err != nil {
+			return err
+		}
 	}
 	before := *knowledge
 	knowledge.KnowledgeBaseID = targetKB.ID
@@ -1413,6 +1433,11 @@ func (s *knowledgeService) moveKnowledgeReparse(
 	}
 	if err := s.repo.DeleteKnowledgeTagRelations(ctx, knowledge.ID); err != nil {
 		return err
+	}
+	if s.pageImages != nil {
+		if err := s.pageImages.Move(ctx, knowledge, targetKB); err != nil {
+			return err
+		}
 	}
 	knowledge.KnowledgeBaseID = targetKB.ID
 	knowledge.EmbeddingModelID = targetKB.EmbeddingModelID

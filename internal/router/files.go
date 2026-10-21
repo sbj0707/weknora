@@ -274,6 +274,7 @@ func serveResourceGrants(
 			c.Status(http.StatusNotFound)
 			return
 		}
+		ctx = types.WithExecutionTenant(ctx, resource.TenantID)
 		tenant, err := tenantService.GetTenantByID(ctx, resource.TenantID)
 		if err != nil || tenant == nil {
 			c.Status(http.StatusNotFound)
@@ -586,6 +587,7 @@ func presignedFileHandler(tenantService interfaces.TenantService, absDir string,
 			return
 		}
 
+		ctx = types.WithExecutionTenant(ctx, tenantID)
 		tenant, err := tenantService.GetTenantByID(ctx, tenantID)
 		if err != nil {
 			logger.Warnf(ctx, "[Router] /files/presigned tenant lookup failed: client_ip=%s tenant_id=%d err=%v", clientIP, tenantID, err)

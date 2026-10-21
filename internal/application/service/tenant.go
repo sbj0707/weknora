@@ -288,6 +288,14 @@ func (s *tenantService) GetWeKnoraCloudCredentials(ctx context.Context) *types.W
 }
 
 func (s *tenantService) validateStorageBucketUniqueness(ctx context.Context, tenant *types.Tenant) error {
+	if tenant.StorageEngineConfig != nil && tenant.StorageEngineConfig.Azure != nil {
+		azure := tenant.StorageEngineConfig.Azure.Normalized()
+		if err := azure.Validate(); err != nil {
+			return werrors.NewValidationError(err.Error())
+		}
+		tenant.StorageEngineConfig.Azure = &azure
+	}
+
 	if tenant.StorageEngineConfig == nil {
 		return nil
 	}

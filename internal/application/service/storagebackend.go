@@ -53,6 +53,9 @@ func (s *StorageBackendService) Create(ctx context.Context, backend *types.Stora
 	if err := backend.Validate(); err != nil {
 		return err
 	}
+	if err := validateAzureCredentialEncryption(backend); err != nil {
+		return err
+	}
 	if err := validateStorageBackendEndpoint(backend); err != nil {
 		return err
 	}
@@ -115,6 +118,9 @@ func (s *StorageBackendService) Update(ctx context.Context, incoming *types.Stor
 		}
 	}
 	if err := incoming.Validate(); err != nil {
+		return err
+	}
+	if err := validateAzureCredentialEncryption(incoming); err != nil {
 		return err
 	}
 	if err := validateStorageBackendEndpoint(incoming); err != nil {
@@ -215,6 +221,12 @@ func (s *StorageBackendService) Test(ctx context.Context, backend *types.Storage
 	}
 	c := backend.Config
 	switch backend.Provider {
+	case "azure":
+		fileService, err := filesvc.NewAzureFileService(c.AzureConfig())
+		if err != nil {
+			return err
+		}
+		return fileService.CheckConnectivity(ctx)
 	case "local":
 		fileService, _, err := filesvc.NewFileServiceFromStorageConfig("local", backend.ToStorageEngineConfig(), "")
 		if err != nil {
@@ -384,3 +396,10 @@ var (
 	_ interfaces.StorageBackendService  = (*StorageBackendService)(nil)
 	_ interfaces.StorageBackendResolver = (*StorageBackendService)(nil)
 )
+
+func validateAzureCredentialEncryption(backend *types.StorageBackend) error {
+	if backend.Provider == "azure" && backend.Config.AuthMode == types.AzureAuthAccountKey && secutils.GetAESKey() == nil {
+		return apperrors.NewValidationError("SYSTEM_AES_KEY must be configured with 32 bytes before saving an Azure account key")
+	}
+	return nil
+}

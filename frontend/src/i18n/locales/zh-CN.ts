@@ -1,4 +1,10 @@
+import { azureAISearchLocales } from '../azureAISearch'
+import { azureStorageLocales } from '../azureStorage'
+import { pageImageLocales } from '../pageImages'
 export default {
+  azureAISearch: azureAISearchLocales['zh-CN'],
+  azureStorage: azureStorageLocales['zh-CN'],
+  pageImages: pageImageLocales['zh-CN'],
   evaluationPlan: {
     "basicGroup": "基础",
     "rulesGroup": "评估配置",

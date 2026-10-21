@@ -1,5 +1,7 @@
 <template>
   <div class="tool-result-renderer">
+    <p v-for="warning in toolData.page_image_warnings" :key="warning" role="status" class="page-image-note">{{ warning }}</p>
+    <p v-if="toolData.page_image_sources?.length" class="page-image-note">{{ t('pageImages.used', { pages: [...new Set(toolData.page_image_sources.map((s: any) => s.page))].join(', ') }) }}</p>
     <!-- Search Results -->
     <SearchResults v-if="displayType === 'search_results'" :data="toolData as SearchResultsData"
       :arguments="toolArguments" />
@@ -88,6 +90,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 import type {
   DisplayType,
   SearchResultsData,
@@ -147,6 +151,7 @@ const toolArguments = computed(() => props.arguments || {});
 </script>
 
 <style lang="less" scoped>
+.page-image-note { color: var(--td-text-color-secondary); font-size: 12px; margin: 4px 0; }
 .tool-result-renderer {
   margin: 0;
 }

@@ -91,6 +91,7 @@ import (
 	"github.com/Tencent/WeKnora/internal/models/embedding"
 	"github.com/Tencent/WeKnora/internal/models/limiter" // register built-in vendors
 	"github.com/Tencent/WeKnora/internal/models/utils/ollama"
+	"github.com/Tencent/WeKnora/internal/pageimage"
 	"github.com/Tencent/WeKnora/internal/router"
 	"github.com/Tencent/WeKnora/internal/sandbox"
 	"github.com/Tencent/WeKnora/internal/storageallowlist"
@@ -240,6 +241,8 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Provide(service.NewKBShareService)) // KBShareService must be registered before KnowledgeService and KnowledgeTagService
 	must(container.Provide(service.NewAgentShareService))
 	must(container.Provide(service.NewKnowledgeService))
+	must(container.Provide(repository.NewDocumentPageImageRepository))
+	must(container.Provide(pageimage.NewService))
 	must(container.Provide(service.NewSpanTracker))
 	must(container.Provide(service.NewChunkService))
 	must(container.Provide(service.NewKnowledgeTagService))
@@ -496,7 +499,20 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Invoke(chatpipeline.NewPluginWebFetch))
 	must(container.Invoke(chatpipeline.NewPluginMerge))
 	must(container.Invoke(chatpipeline.NewPluginDataAnalysis))
-	must(container.Invoke(chatpipeline.NewPluginIntoChatMessage))
+	must(container.Invoke(func(events *chatpipeline.EventManager, messages interfaces.MessageService, images interfaces.DocumentPageImageService) {
+		chatpipeline.NewPluginIntoChatMessage(events, messages).WithPageImages(images)
+	}))
+	must(container.Invoke(func(knowledge interfaces.KnowledgeService, agents interfaces.AgentService, kbs interfaces.KnowledgeBaseService, images interfaces.DocumentPageImageService) {
+		kbs.(interface {
+			SetPageImageService(interfaces.DocumentPageImageService)
+		}).SetPageImageService(images)
+		knowledge.(interface {
+			SetPageImageService(interfaces.DocumentPageImageService)
+		}).SetPageImageService(images)
+		agents.(interface {
+			SetPageImageService(interfaces.DocumentPageImageService)
+		}).SetPageImageService(images)
+	}))
 	must(container.Invoke(chatpipeline.NewPluginChatCompletion))
 	must(container.Invoke(chatpipeline.NewPluginChatCompletionStream))
 	must(container.Invoke(chatpipeline.NewPluginFilterTopK))
@@ -537,6 +553,7 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Provide(handler.NewKnowledgeBaseHandler))
 	must(container.Provide(handler.NewKnowledgeHandler))
 	must(container.Provide(handler.NewChunkHandler))
+	must(container.Provide(handler.NewDocumentPageImageHandler))
 	must(container.Provide(handler.NewFAQHandler))
 	must(container.Provide(handler.NewTagHandler))
 	must(container.Provide(session.NewHandler))
@@ -1143,6 +1160,9 @@ func initRawFileService(_ *config.Config) (interfaces.FileService, error) {
 		storageType = "local"
 	}
 	switch storageType {
+	case "azure":
+		backend := types.StorageBackendFromEnvironment(1)
+		return file.NewAzureFileService(backend.Config.AzureConfig())
 	case "minio":
 		if os.Getenv("MINIO_ENDPOINT") == "" ||
 			os.Getenv("MINIO_ACCESS_KEY_ID") == "" ||

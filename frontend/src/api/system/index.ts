@@ -177,6 +177,10 @@ export function reconnectDocReader(addr: string): Promise<ParserEnginesResponse 
 // ---- 存储引擎配置（空间级，供文档/图片存储与 docreader 使用） ----
 
 export interface StorageEngineConfig {
+  azure?: {
+    account_name: string; endpoint: string; container_name: string; path_prefix: string
+    auth_mode: 'managed_identity' | 'account_key'; account_key?: string; managed_identity_client_id?: string
+  }
   default_provider: string // "local" | "minio" | "cos" | "tos" | "s3" | "oss" | "ks3" | "obs"
   local: { path_prefix: string }
   minio: { mode: string; endpoint: string; access_key_id: string; secret_access_key: string; bucket_name: string; use_ssl: boolean; path_prefix: string }
@@ -267,6 +271,7 @@ export interface StorageCheckRequest {
   oss?: StorageEngineConfig['oss']
   ks3?: StorageEngineConfig['ks3']
   obs?: StorageEngineConfig['obs']
+  azure?: StorageEngineConfig['azure']
 }
 
 export interface StorageCheckResponse {

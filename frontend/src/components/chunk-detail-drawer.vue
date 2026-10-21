@@ -7,12 +7,14 @@ import { getDocumentChunkDetail } from '@/api/knowledge-base'
 import { useChunkDetail } from '@/composables/useChunkDetail'
 import { hydrateProtectedFileImages } from '@/utils/security'
 import mermaid from 'mermaid'
+import DocumentPageImages from '@/components/document-page-images.vue'
 import type { ChunkIndexDetail } from '@/types/chunkDetail'
 import type { KnowledgeIndexBuildState, KnowledgeIndexKind } from '@/types/knowledgeIndexStatus'
 
 const props = defineProps<{
   visible: boolean; knowledgeId: string; chunkId: string; revision?: number
   renderMarkdown: (value: string) => string
+  writable?: boolean
   inline?: boolean
   chunkIndexes?: ReadonlyMap<string, number>
 }>()
@@ -23,7 +25,7 @@ const { detail, loading, failed, refresh } = useChunkDetail(
   () => props.visible, () => props.knowledgeId, () => props.chunkId, getDocumentChunkDetail,
 )
 const fullscreen = ref(false)
-const activeTab = ref<'content' | 'metadata' | KnowledgeIndexKind>('content')
+const activeTab = ref<'content' | 'pageImages' | 'metadata' | KnowledgeIndexKind>('content')
 const rawContent = ref(false)
 const contentRoot = ref<HTMLElement | null>(null)
 const kinds: KnowledgeIndexKind[] = ['vector', 'keywords', 'graph', 'wiki', 'questions']
@@ -126,9 +128,9 @@ function wikiHref(slug: string) {
       </div>
       <template v-else-if="detail">
         <nav class="detail-tabs" :aria-label="t('knowledgeBase.chunkDetail.title')">
-          <button v-for="tab in ['content', 'metadata', ...kinds] as const" :key="tab" type="button"
+          <button v-for="tab in ['content', 'pageImages', 'metadata', ...kinds] as const" :key="tab" type="button"
             :class="{ active: activeTab === tab }" :aria-pressed="activeTab === tab" @click="activeTab = tab">
-            {{ t(tab === 'content' || tab === 'metadata' ? `knowledgeBase.chunkDetail.${tab}` : `knowledgeBase.indexBuild.kinds.${tab}`) }}
+            {{ t(tab === 'pageImages' ? 'pageImages.previewTitle' : tab === 'content' || tab === 'metadata' ? `knowledgeBase.chunkDetail.${tab}` : `knowledgeBase.indexBuild.kinds.${tab}`) }}
             <t-icon v-if="indexes.find(row => row.kind === tab)?.status === 'failed'" name="error-circle" size="13px" />
           </button>
         </nav>
@@ -140,6 +142,8 @@ function wikiHref(slug: string) {
                 {{ t(`knowledgeBase.chunkDetail.${rawContent ? 'rendered' : 'raw'}`) }}
               </t-button>
             </div>
+            <DocumentPageImages v-if="visible" :knowledge-id="knowledgeId" :chunk-id="chunkId"
+              :revision="detail.chunk.content_revision || 0" :writable="writable" />
             <pre v-if="rawContent" class="detail-text">{{ detail.chunk.content }}</pre>
             <div v-else class="md-content" v-html="renderMarkdown(detail.chunk.content)"></div>
             <details v-if="detail.context_header" class="detail-card">
@@ -169,6 +173,10 @@ function wikiHref(slug: string) {
               </article>
             </template>
             <p v-else-if="detail.children_available === false" class="detail-muted">{{ t('knowledgeBase.chunkDetail.childrenUnavailable') }}</p>
+          </template>
+          <template v-else-if="activeTab === 'pageImages'">
+            <DocumentPageImages v-if="visible" :knowledge-id="knowledgeId" :chunk-id="chunkId"
+              :revision="detail.chunk.content_revision || 0" :writable="writable" thumbnails show-when-disabled />
           </template>
           <template v-else-if="activeTab === 'metadata'">
             <h4>{{ t('knowledgeBase.chunkDetail.metadata') }}</h4>

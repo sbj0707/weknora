@@ -10,7 +10,7 @@ import (
 // reference checks. Matching an entire token prevents path/handle prefix grants.
 var StorageReferencePattern = regexp.MustCompile(
 	`\b(?:resource://[0-9A-Za-z_-]+|(?:storage://[0-9A-Za-z_-]+/)?` +
-		`(?:local|minio|s3|cos|tos|oss|obs|ks3)://[^\s)\]>"]+)`,
+		`(?:local|minio|s3|cos|tos|oss|obs|ks3|azure)://[^\s)\]>"]+)`,
 )
 
 // ContainsStorageReference matches an exact token in text or nested JSON.

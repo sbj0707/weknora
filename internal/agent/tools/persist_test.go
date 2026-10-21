@@ -366,3 +366,16 @@ func TestCompactToolOutputForHistory_editSandboxFileIncludesDiffStat(t *testing.
 		t.Fatalf("history should include +/- and replacements, got %q", history)
 	}
 }
+
+func TestPageImagesStoreOnlyProvenanceWithoutMutatingLiveAttachments(t *testing.T) {
+	result := &types.ToolResult{Success: true, Images: []string{"data:image/jpeg;base64,SECRET"}, Data: map[string]interface{}{
+		"display_type": "search_results", "page_image_sources": []types.PageImageSource{{KnowledgeID: "doc", Page: 42}},
+	}}
+	stored := SanitizeAgentStepsForStorage([]types.AgentStep{{ToolCalls: []types.ToolCall{{Name: ToolSearchKnowledge, Result: result}}}})[0].ToolCalls[0].Result
+	if len(stored.Images) != 0 || len(result.Images) != 1 {
+		t.Fatal("storage must strip page bytes while preserving live multimodal inputs")
+	}
+	if stored.Data["page_image_sources"] == nil {
+		t.Fatal("page source metadata must survive history reload")
+	}
+}

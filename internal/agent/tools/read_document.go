@@ -89,6 +89,8 @@ type ReadDocumentInput struct {
 // handle, or by an in-document text search.
 type ReadDocumentTool struct {
 	BaseTool
+	pageImages       interfaces.DocumentPageImageService
+	pageBudget       *types.PageImageBudget
 	knowledgeService interfaces.KnowledgeService
 	chunkService     interfaces.ChunkService
 	searchTargets    types.SearchTargets
@@ -108,6 +110,11 @@ func NewReadDocumentTool(
 	}
 }
 
+func (t *ReadDocumentTool) WithPageImages(images interfaces.DocumentPageImageService, budget *types.PageImageBudget) *ReadDocumentTool {
+	t.pageImages, t.pageBudget = images, budget
+	return t
+}
+
 // readChunkRow is one chunk in the rendered result together with its role
 // (page entry, search match, or context around a match).
 type readChunkRow struct {
@@ -117,7 +124,28 @@ type readChunkRow struct {
 }
 
 // Execute resolves the id, then dispatches to page, chunk or query reading.
-func (t *ReadDocumentTool) Execute(ctx context.Context, args json.RawMessage) (*types.ToolResult, error) {
+func (t *ReadDocumentTool) Execute(ctx context.Context, args json.RawMessage) (result *types.ToolResult, err error) {
+	defer func() {
+		if t.pageImages == nil || result == nil || !result.Success {
+			return
+		}
+		rows, _ := result.Data["chunks"].([]map[string]interface{})
+		var sources []*types.SearchResult
+		for _, row := range rows {
+			id, _ := row["chunk_id"].(string)
+			doc, _ := row["knowledge_id"].(string)
+			kb, _ := row["knowledge_base"].(string)
+			revision, _ := row["content_revision"].(int)
+			sources = append(sources, &types.SearchResult{ID: id, KnowledgeID: doc, KnowledgeBaseID: kb, ContentRevision: revision})
+		}
+		evidence := t.pageImages.Collect(ctx, sources, t.searchTargets, t.pageBudget)
+		result.Images = evidence.Images
+		result.Data["page_image_sources"], result.Data["page_image_warnings"] = evidence.Sources, evidence.Warnings
+		if len(evidence.Warnings) > 0 {
+			result.Output += "\n" + strings.Join(evidence.Warnings, "\n")
+		}
+	}()
+
 	var input ReadDocumentInput
 	if err := json.Unmarshal(args, &input); err != nil {
 		return &types.ToolResult{Success: false, Error: fmt.Sprintf("Failed to parse args: %v", err)}, err

@@ -95,6 +95,10 @@ func prepareMessagesWithModelContext(
 	if !replaced {
 		messages[last].Content = modelContexts + "\n\n" + messages[last].Content
 	}
+	// Providers prefer MultiContent over Content. Keep the rewritten source body in both.
+	if len(messages[last].MultiContent) > 0 && messages[last].MultiContent[0].Type == "text" {
+		messages[last].MultiContent[0].Text = messages[last].Content
+	}
 	return messages, registry
 }
 

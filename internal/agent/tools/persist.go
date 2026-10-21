@@ -127,6 +127,10 @@ func SanitizeAgentStepsForStorage(steps []types.AgentStep) []types.AgentStep {
 				continue
 			}
 			result := *tc.Result
+			if _, hasPageEvidence := result.Data["page_image_sources"]; hasPageEvidence {
+				// Persist asset/page/chunk provenance, never the request's JPEG payloads.
+				result.Images = nil
+			}
 			if tc.Name == "local_browser" {
 				// Screenshot bytes already live in Data for the result card.
 				result.Images = nil

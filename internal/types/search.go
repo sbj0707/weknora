@@ -215,7 +215,9 @@ type SearchResult struct {
 
 	// SourceLocators point back into the original file for citation
 	// navigation. Merged results carry the union of their chunks' locators.
-	SourceLocators SourceLocators `json:"source_locators,omitempty"`
+	SourceLocators    SourceLocators    `json:"source_locators,omitempty"`
+	PageImageSources  []PageImageSource `json:"page_image_sources,omitempty"`
+	PageImageWarnings []string          `json:"page_image_warnings,omitempty"`
 
 	// ContentRevision is the chunk edit revision at retrieval time.
 	// Internal only: used by the merge pipeline to decide whether source

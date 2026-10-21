@@ -137,3 +137,24 @@ func TestPrepareMessagesWithModelContextSuppressesCitationsWhenDisabled(t *testi
 	require.NotContains(t, messages[1].Content, "chunk-1")
 	require.Equal(t, "answer ", refs.DecodeOutputText(`answer <ref id="c1"/>`))
 }
+
+func TestPageImagePartsKeepRewrittenSourcesAndUserAttachments(t *testing.T) {
+	manage := &types.ChatManage{
+		PipelineRequest: types.PipelineRequest{ChatModelSupportsVision: true, Query: "question", Images: []string{"data:image/jpeg;base64,dXNlcg=="}, SummaryConfig: types.SummaryConfig{Prompt: "system"}},
+		PipelineState: types.PipelineState{
+			RenderedContexts: `<context id="1">source text</context>`, UserContent: `Question <context id="1">source text</context>`,
+			MergeResult:       []*types.SearchResult{{ID: "chunk-real", KnowledgeID: "doc-real", KnowledgeBaseID: "kb-real", KnowledgeTitle: "Report", Content: "source text"}},
+			PageImageEvidence: types.PageImageEvidence{Images: []string{"data:image/jpeg;base64,cGFnZQ=="}, Sources: []types.PageImageSource{{KnowledgeID: "doc-real", KnowledgeBaseID: "kb-real", Title: "Report", Page: 42, ChunkIDs: []string{"chunk-real"}}}},
+		},
+	}
+	messages, registry := prepareMessagesWithModelContext(context.Background(), manage)
+	messages = registry.EncodeMessages(messages)
+	last := messages[len(messages)-1]
+	require.Equal(t, last.Content, last.MultiContent[0].Text, "wire multimodal text must contain the same compact source handles")
+	require.NotContains(t, last.MultiContent[0].Text, `<context id="1">`)
+	require.Contains(t, last.MultiContent[0].Text, `<chunk id="c1"`)
+	require.Len(t, last.MultiContent, 4)
+	require.Equal(t, "data:image/jpeg;base64,dXNlcg==", last.MultiContent[1].ImageURL.URL)
+	require.Equal(t, "data:image/jpeg;base64,cGFnZQ==", last.MultiContent[3].ImageURL.URL)
+	require.Contains(t, last.MultiContent[2].Text, `"page":42`)
+}

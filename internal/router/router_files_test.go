@@ -234,7 +234,10 @@ func TestResourceGrantServesShortPublicURL(t *testing.T) {
 		&stubTenantService{get: func(_ context.Context, id uint64) (*types.Tenant, error) {
 			return &types.Tenant{ID: id}, nil
 		}},
-		&stubFileService{getFile: func(_ context.Context, path string) (io.ReadCloser, error) {
+		&stubFileService{getFile: func(ctx context.Context, path string) (io.ReadCloser, error) {
+			if tenant, _ := types.TenantIDFromContext(ctx); tenant != 42 {
+				t.Fatal("grant must execute storage as the resource owner")
+			}
 			if path != physical {
 				t.Fatalf("path = %q, want %q", path, physical)
 			}

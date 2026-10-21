@@ -63,3 +63,19 @@ func TestToolImagesReachNextModelTurnAfterAllReplies(t *testing.T) {
 	messages = engine.appendToolImages(t.Context(), engine.appendToolResults(nil, step), step)
 	require.Contains(t, messages[1].Content, "cannot view")
 }
+
+func TestRetrievedPageImagesCarryCitationPagesToModel(t *testing.T) {
+	source := types.PageImageSource{ID: "asset-private", KnowledgeID: "doc", KnowledgeBaseID: "kb", Title: "Report", Page: 42, ChunkIDs: []string{"chunk"}, SourceHash: "private-hash"}
+	step := types.AgentStep{ToolCalls: []types.ToolCall{{ID: "search", Name: "search_knowledge", Result: &types.ToolResult{
+		Success: true, Output: "Source text", Images: []string{"data:image/jpeg;base64,YQ=="}, Data: map[string]interface{}{"page_image_sources": []types.PageImageSource{source}},
+	}}}}
+	engine := &AgentEngine{config: &types.AgentConfig{ChatModelSupportsVision: true}}
+	messages := engine.appendToolImages(t.Context(), engine.appendToolResults(nil, step), step)
+	require.Equal(t, "tool", messages[len(messages)-2].Role)
+	last := messages[len(messages)-1]
+	require.Contains(t, last.Content, `"page":42`)
+	require.Contains(t, last.Content, `"chunk_ids":["chunk"]`)
+	require.NotContains(t, last.Content, "private-hash")
+	require.NotContains(t, last.Content, "asset-private")
+	require.Equal(t, step.ToolCalls[0].Result.Images, last.Images)
+}

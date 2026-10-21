@@ -497,6 +497,16 @@ func searchResultFromMap(refMap map[string]interface{}) *types.SearchResult {
 			}
 		}
 	}
+	if raw := refMap["page_image_sources"]; raw != nil {
+		if b, err := json.Marshal(raw); err == nil {
+			_ = json.Unmarshal(b, &sr.PageImageSources)
+		}
+	}
+	if raw := refMap["page_image_warnings"]; raw != nil {
+		if b, err := json.Marshal(raw); err == nil {
+			_ = json.Unmarshal(b, &sr.PageImageWarnings)
+		}
+	}
 	return sr
 }
 

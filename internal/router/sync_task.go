@@ -222,6 +222,7 @@ type SyncTaskParams struct {
 
 	Executor             *SyncTaskExecutor
 	KnowledgeService     interfaces.KnowledgeService
+	PageImages           interfaces.DocumentPageImageService `optional:"true"`
 	KnowledgeBaseService interfaces.KnowledgeBaseService
 	TagService           interfaces.KnowledgeTagService
 	DataSourceService    interfaces.DataSourceService
@@ -259,6 +260,9 @@ func RegisterSyncHandlers(params SyncTaskParams) {
 	params.Executor.RegisterHandler(types.TypeIndexDelete, params.TagService.ProcessIndexDelete)
 	params.Executor.RegisterHandler(types.TypeKBDelete, params.KnowledgeBaseService.ProcessKBDelete)
 	params.Executor.RegisterHandler(types.TypeImageMultimodal, params.ImageMultimodal.Handle)
+	if params.PageImages != nil {
+		params.Executor.RegisterHandler(types.TypeDocumentPageImages, params.PageImages.Handle)
+	}
 	params.Executor.RegisterHandler(types.TypeKnowledgePostProcess, params.KnowledgePostProcess.Handle)
 	params.Executor.RegisterHandler(types.TypeKnowledgeAutoTag, params.KnowledgeAutoTag.Handle)
 	params.Executor.RegisterHandler(types.TypeKnowledgeBaseProfile, params.KnowledgeBaseProfile.Handle)

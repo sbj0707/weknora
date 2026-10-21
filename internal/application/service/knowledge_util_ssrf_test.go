@@ -11,6 +11,10 @@ import (
 )
 
 func TestDownloadFileFromURLBlocksRedirectToLoopback(t *testing.T) {
+	// Other tests explicitly allow loopback. This test requires a deny policy,
+	// independent of the process environment and the cached whitelist.
+	secutils.SetSSRFWhitelistFromRaw("")
+	t.Cleanup(secutils.ResetSSRFWhitelistForTest)
 	internal := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
 		_, _ = w.Write([]byte("INTERNAL_SECRET=metadata-token-AKIAEXAMPLE"))

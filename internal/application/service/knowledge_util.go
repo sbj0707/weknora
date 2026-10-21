@@ -239,7 +239,7 @@ func (s *knowledgeService) buildStorageConfig(ctx context.Context, kb *types.Kno
 		hasKBFull = sc.SecretID != "" && sc.BucketName != ""
 	case "minio":
 		hasKBFull = sc.BucketName != ""
-	case "local", "tos", "s3", "oss", "ks3", "obs":
+	case "local", "tos", "s3", "oss", "ks3", "obs", "azure":
 		hasKBFull = false
 	}
 
@@ -272,6 +272,13 @@ func (s *knowledgeService) buildStorageConfig(ctx context.Context, kb *types.Kno
 		// Provider set — bucket/endpoint/credentials are silently dropped, and the
 		// docreader then fails or fetches from the wrong location. See issue #1117.
 		switch provider {
+		case "azure":
+			// Azure files are persisted by Go's FileService; never send account keys to DocReader.
+			if sec.Azure != nil {
+				out.Endpoint = sec.Azure.Endpoint
+				out.BucketName = sec.Azure.ContainerName
+				out.PathPrefix = sec.Azure.PathPrefix
+			}
 		case "local":
 			if sec.Local != nil {
 				out.PathPrefix = sec.Local.PathPrefix

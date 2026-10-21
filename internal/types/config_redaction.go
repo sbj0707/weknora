@@ -52,6 +52,13 @@ func StorageEngineConfigForResponse(cfg *StorageEngineConfig, maskSecrets bool) 
 	if !maskSecrets {
 		return &out
 	}
+	if out.Azure != nil {
+		azure := *out.Azure
+		if azure.AccountKey != "" {
+			azure.AccountKey = RedactedSecretPlaceholder
+		}
+		out.Azure = &azure
+	}
 	if out.MinIO != nil {
 		minio := *out.MinIO
 		if minio.AccessKeyID != "" {
@@ -187,6 +194,14 @@ func MergeStorageEngineConfigForUpdate(incoming, existing *StorageEngineConfig) 
 		return nil
 	}
 	out := *incoming
+	if out.Azure != nil {
+		azure := *out.Azure
+		if existing != nil && existing.Azure != nil && azure.AccountKey == RedactedSecretPlaceholder && azure.AuthMode == AzureAuthAccountKey && existing.Azure.AuthMode == AzureAuthAccountKey {
+			azure.AccountKey = existing.Azure.AccountKey
+		}
+		azure = azure.Normalized()
+		out.Azure = &azure
+	}
 	if out.MinIO != nil {
 		minio := *out.MinIO
 		var prev MinIOEngineConfig

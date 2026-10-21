@@ -1,4 +1,10 @@
+import { azureAISearchLocales } from '../azureAISearch'
+import { azureStorageLocales } from '../azureStorage'
+import { pageImageLocales } from '../pageImages'
 export default {
+  azureAISearch: azureAISearchLocales['ja-JP'],
+  azureStorage: azureStorageLocales['ja-JP'],
+  pageImages: pageImageLocales['ja-JP'],
   evaluationPlan: {
     "basicGroup": "基本",
     "rulesGroup": "評価設定",

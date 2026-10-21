@@ -485,7 +485,7 @@ func (s *knowledgeService) executeKnowledgeDelete(plan *knowledgeDeletePlan, sin
 			// Wiki-only knowledge never had embeddings written to the vector store,
 			// and its EmbeddingModelID is intentionally empty. Skip the whole group
 			// to avoid the spurious "model ID cannot be empty" failure.
-			if strings.TrimSpace(group.EmbeddingModelID) == "" {
+			if strings.TrimSpace(group.EmbeddingModelID) == "" && group.VectorStoreID == "" {
 				logger.Infof(ctx, "Skipping vector store cleanup for %d knowledge entries without embedding model", len(group.KnowledgeIDs))
 				continue
 			}
@@ -501,12 +501,15 @@ func (s *knowledgeService) executeKnowledgeDelete(plan *knowledgeDeletePlan, sin
 				logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
 				return err
 			}
-			embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, group.EmbeddingModelID)
+			dimension, err := retrievalDimension(ctx, retrieveEngine, s.modelService, group.EmbeddingModelID)
 			if err != nil {
 				logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge get embedding model failed")
 				return err
 			}
-			if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, group.KnowledgeIDs, embeddingModel.GetDimensions(), group.Type); err != nil {
+			if dimension == 0 {
+				continue
+			}
+			if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, group.KnowledgeIDs, dimension, group.Type); err != nil {
 				logger.GetLogger(ctx).
 					WithField("error", err).
 					Errorf("DeleteKnowledge delete knowledge embedding failed")
@@ -552,6 +555,11 @@ func (s *knowledgeService) executeKnowledgeDelete(plan *knowledgeDeletePlan, sin
 
 	if err := wg.Wait(); err != nil {
 		return err
+	}
+	if s.pageImages != nil {
+		if err := s.pageImages.Delete(ctx, tenantInfo.ID, ids); err != nil {
+			return fmt.Errorf("delete page images: %w", err)
+		}
 	}
 	for _, knowledgeID := range ids {
 		if err := s.repo.DeleteKnowledgeTagRelations(ctx, knowledgeID); err != nil {
@@ -638,19 +646,19 @@ func (s *knowledgeService) cleanupKnowledgeResources(ctx context.Context, knowle
 		return fmt.Errorf("resolve cleanup knowledge base: %w", err)
 	}
 	tenantInfo := ctx.Value(types.TenantInfoContextKey).(*types.Tenant)
-	if knowledge.EmbeddingModelID != "" {
+	if knowledge.EmbeddingModelID != "" || kb.HasVectorStore() {
 		retrieveEngine, err := retriever.CreateRetrieveEngineForKB(
 			ctx, s.retrieveEngine, s.ownership, tenantInfo.ID, kb.VectorStoreID)
 		if err != nil {
 			logger.GetLogger(ctx).WithField("error", err).Error("Failed to init retrieve engine during cleanup")
 			cleanupErr = errors.Join(cleanupErr, err)
 		} else {
-			embeddingModel, modelErr := s.modelService.GetEmbeddingModel(ctx, knowledge.EmbeddingModelID)
+			dimension, modelErr := retrievalDimension(ctx, retrieveEngine, s.modelService, knowledge.EmbeddingModelID)
 			if modelErr != nil {
 				logger.GetLogger(ctx).WithField("error", modelErr).Error("Failed to get embedding model during cleanup")
 				cleanupErr = errors.Join(cleanupErr, modelErr)
-			} else {
-				if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{knowledge.ID}, embeddingModel.GetDimensions(), knowledge.Type); err != nil {
+			} else if dimension > 0 {
+				if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{knowledge.ID}, dimension, knowledge.Type); err != nil {
 					logger.GetLogger(ctx).WithField("error", err).Error("Failed to delete manual knowledge index")
 					cleanupErr = errors.Join(cleanupErr, err)
 				}

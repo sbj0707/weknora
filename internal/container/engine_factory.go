@@ -20,6 +20,7 @@ import (
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 
+	azureSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/azureaisearch"
 	dorisRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/doris"
 	elasticsearchRepoV7 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v7"
 	elasticsearchRepoV8 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v8"
@@ -64,6 +65,16 @@ func createEngineServiceFromStore(
 		return nil, err
 	}
 	switch store.EngineType {
+	case types.AzureAISearchRetrieverEngineType:
+		client, err := azureSearchRepo.NewClient(store.ConnectionConfig)
+		if err != nil {
+			return nil, err
+		}
+		repo, err := azureSearchRepo.NewRepository(client, store)
+		if err != nil {
+			return nil, err
+		}
+		return retriever.NewKVHybridRetrieveEngine(repo, store.EngineType), nil
 	case types.PostgresRetrieverEngineType:
 		return createPostgresEngine(store, db)
 	case types.ElasticsearchRetrieverEngineType:
@@ -105,6 +116,11 @@ func validateRuntimeVectorStoreAddresses(store types.VectorStore) error {
 	}
 
 	switch store.EngineType {
+	case types.AzureAISearchRetrieverEngineType:
+		if err := types.ValidateAzureAISearchConnection(cc.NormalizeAzureAISearch()); err != nil {
+			return err
+		}
+		return check("Azure AI Search address", cc.Addr)
 	case types.PostgresRetrieverEngineType, types.SQLiteRetrieverEngineType:
 		return nil
 	case types.ElasticsearchRetrieverEngineType,

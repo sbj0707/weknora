@@ -48,6 +48,7 @@ var (
 // knowledgeService implements the knowledge service interface
 // service 实现知识服务接口
 type knowledgeService struct {
+	pageImages      interfaces.DocumentPageImageService
 	config          *config.Config
 	retrieveEngine  interfaces.RetrieveEngineRegistry
 	ownership       retriever.TenantStoreOwnership
@@ -84,6 +85,10 @@ type knowledgeService struct {
 	// which has a no-op fallback. See knowledge_span_tracker.go.
 	spanTracker SpanTracker
 	audit       interfaces.AuditLogService
+}
+
+func (s *knowledgeService) SetPageImageService(images interfaces.DocumentPageImageService) {
+	s.pageImages = images
 }
 
 const (

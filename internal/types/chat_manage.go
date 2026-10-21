@@ -128,6 +128,7 @@ type PipelineState struct {
 	SearchResult         []*SearchResult   `json:"-"`
 	RerankResult         []*SearchResult   `json:"-"`
 	MergeResult          []*SearchResult   `json:"-"`
+	PageImageEvidence    PageImageEvidence `json:"-"`
 	Entity               []string          `json:"-"`
 	EntityKBIDs          []string          `json:"-"`
 	EntityKnowledge      map[string]string `json:"-"`

@@ -52,6 +52,15 @@ func NewVectorStoreService(
 
 // CreateStore validates and creates a new vector store.
 func (s *vectorStoreService) CreateStore(ctx context.Context, store *types.VectorStore) error {
+	if store.EngineType == types.AzureAISearchRetrieverEngineType {
+		store.ConnectionConfig = store.ConnectionConfig.NormalizeAzureAISearch()
+		if store.ConnectionConfig.AuthMode == "api_key" && secutils.GetAESKey() == nil {
+			return errors.NewValidationError("configure a 32-byte SYSTEM_AES_KEY before saving Azure AI Search credentials")
+		}
+		if err := types.ValidateAzureAISearchIndex(store.IndexConfig); err != nil {
+			return errors.NewValidationError(err.Error())
+		}
+	}
 	// 1. Basic validation (name, engine_type, tenant_id)
 	if err := store.Validate(); err != nil {
 		return err
@@ -82,28 +91,32 @@ func (s *vectorStoreService) CreateStore(ctx context.Context, store *types.Vecto
 		}
 	}
 
-	// 3. Duplicate check — DB stores
-	endpoint := store.ConnectionConfig.GetEndpoint()
-	indexName := store.IndexConfig.GetIndexNameOrDefault(store.EngineType)
+	// Azure namespaces every physical index by its full store UUID, so two
+	// instances may intentionally share an endpoint and prefix (e.g. dimensions).
+	if store.EngineType != types.AzureAISearchRetrieverEngineType {
+		// 3. Duplicate check — DB stores
+		endpoint := store.ConnectionConfig.GetEndpoint()
+		indexName := store.IndexConfig.GetIndexNameOrDefault(store.EngineType)
 
-	exists, err := s.repo.ExistsByEndpointAndIndex(ctx, store.TenantID, store.EngineType, endpoint, indexName)
-	if err != nil {
-		return errors.NewInternalServerError("failed to check for duplicates")
-	}
-	if exists {
-		return errors.NewConflictError("a vector store with the same endpoint and index already exists")
-	}
+		exists, err := s.repo.ExistsByEndpointAndIndex(ctx, store.TenantID, store.EngineType, endpoint, indexName)
+		if err != nil {
+			return errors.NewInternalServerError("failed to check for duplicates")
+		}
+		if exists {
+			return errors.NewConflictError("a vector store with the same endpoint and index already exists")
+		}
 
-	// 4. Duplicate check — env stores. We re-derive on each create because
-	// CreateStore is a low-frequency admin action; consistency with the
-	// startup-cached envStores is enforced by RETRIEVE_DRIVER being read
-	// only at process start.
-	for _, envStore := range s.envStores {
-		if envStore.EngineType == store.EngineType &&
-			envStore.ConnectionConfig.GetEndpoint() == endpoint &&
-			envStore.IndexConfig.GetIndexNameOrDefault(store.EngineType) == indexName {
-			return errors.NewConflictError(
-				"a vector store with the same endpoint and index is already configured via environment variables")
+		// 4. Duplicate check — env stores. We re-derive on each create because
+		// CreateStore is a low-frequency admin action; consistency with the
+		// startup-cached envStores is enforced by RETRIEVE_DRIVER being read
+		// only at process start.
+		for _, envStore := range s.envStores {
+			if envStore.EngineType == store.EngineType &&
+				envStore.ConnectionConfig.GetEndpoint() == endpoint &&
+				envStore.IndexConfig.GetIndexNameOrDefault(store.EngineType) == indexName {
+				return errors.NewConflictError(
+					"a vector store with the same endpoint and index is already configured via environment variables")
+			}
 		}
 	}
 
@@ -430,6 +443,10 @@ func (s *vectorStoreService) registerInRegistry(ctx context.Context, store *type
 // validateConnectionConfig validates required fields per engine type.
 func validateConnectionConfig(engineType types.RetrieverEngineType, config types.ConnectionConfig) error {
 	switch engineType {
+	case types.AzureAISearchRetrieverEngineType:
+		if err := types.ValidateAzureAISearchConnection(config.NormalizeAzureAISearch()); err != nil {
+			return errors.NewValidationError(err.Error())
+		}
 	case types.ElasticsearchRetrieverEngineType:
 		if config.Addr == "" {
 			return errors.NewValidationError("addr is required for elasticsearch")
@@ -502,7 +519,7 @@ func validateConnectionAddrSSRF(engineType types.RetrieverEngineType, config typ
 	}
 
 	switch engineType {
-	case types.ElasticsearchRetrieverEngineType,
+	case types.AzureAISearchRetrieverEngineType, types.ElasticsearchRetrieverEngineType,
 		types.OpenSearchRetrieverEngineType,
 		types.MilvusRetrieverEngineType,
 		types.TencentVectorDBRetrieverEngineType,

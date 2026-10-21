@@ -169,3 +169,9 @@ type KnowledgeIndexMover interface {
 		knowledgeType string,
 	) error
 }
+
+// FixedVectorDimensions is an optional capability for immutable vector schemas.
+// Zero means the backend has no single fixed dimension.
+type FixedVectorDimensions interface {
+	VectorDimensions() int
+}

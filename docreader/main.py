@@ -152,6 +152,11 @@ class DocReaderServicer(docreader_pb2_grpc.DocReaderServicer):
         super().__init__()
         self.parser = Parser()
 
+    def RenderPages(self, request_iterator, context):
+        from docreader.page_images import render_pages
+
+        yield from render_pages(iter(request_iterator), context)
+
     def _parse_request(self, request: ReadRequest):
         """Run the parser for a ReadRequest, returning (result, source_desc).
 

@@ -6,6 +6,46 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class RenderPagesRequest(_message.Message):
+    __slots__ = ("file_chunk", "finish_upload", "page_number")
+    FILE_CHUNK_FIELD_NUMBER: _ClassVar[int]
+    FINISH_UPLOAD_FIELD_NUMBER: _ClassVar[int]
+    PAGE_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    file_chunk: bytes
+    finish_upload: bool
+    page_number: int
+    def __init__(self, file_chunk: _Optional[bytes] = ..., finish_upload: bool = ..., page_number: _Optional[int] = ...) -> None: ...
+
+class PDFPageInfo(_message.Message):
+    __slots__ = ("page_count", "render_profile")
+    PAGE_COUNT_FIELD_NUMBER: _ClassVar[int]
+    RENDER_PROFILE_FIELD_NUMBER: _ClassVar[int]
+    page_count: int
+    render_profile: str
+    def __init__(self, page_count: _Optional[int] = ..., render_profile: _Optional[str] = ...) -> None: ...
+
+class RenderedPage(_message.Message):
+    __slots__ = ("page_number", "image_data", "width", "height", "error")
+    PAGE_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    IMAGE_DATA_FIELD_NUMBER: _ClassVar[int]
+    WIDTH_FIELD_NUMBER: _ClassVar[int]
+    HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    ERROR_FIELD_NUMBER: _ClassVar[int]
+    page_number: int
+    image_data: bytes
+    width: int
+    height: int
+    error: str
+    def __init__(self, page_number: _Optional[int] = ..., image_data: _Optional[bytes] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., error: _Optional[str] = ...) -> None: ...
+
+class RenderPagesResponse(_message.Message):
+    __slots__ = ("info", "page")
+    INFO_FIELD_NUMBER: _ClassVar[int]
+    PAGE_FIELD_NUMBER: _ClassVar[int]
+    info: PDFPageInfo
+    page: RenderedPage
+    def __init__(self, info: _Optional[_Union[PDFPageInfo, _Mapping]] = ..., page: _Optional[_Union[RenderedPage, _Mapping]] = ...) -> None: ...
+
 class ReadConfig(_message.Message):
     __slots__ = ("parser_engine", "parser_engine_overrides")
     class ParserEngineOverridesEntry(_message.Message):
