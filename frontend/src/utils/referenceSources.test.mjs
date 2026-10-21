@@ -8,8 +8,50 @@ import {
   resolveReferenceHighlightKey,
   referenceNavigationChunkId,
   documentChunkRelationsRoute,
+  attachToolPageImageEvidence,
+  mergeDocumentReferences,
 } from './referenceSources.ts'
 import { createRouter, createMemoryHistory } from 'vue-router'
+
+test('tool page images reach grouped document cards and remain available on replay', () => {
+  const refs = mergeDocumentReferences([
+    { id: 'chunk-1', knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+    { id: 'chunk-2', knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+  ])
+  const evidence = { page_image_sources: [
+    { id: 'image-1', page: 1, chunk_ids: ['chunk-2'], knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+  ] }
+  const original = structuredClone(refs)
+  const enriched = attachToolPageImageEvidence(refs, evidence)
+  assert.deepEqual(buildReferenceList(enriched)[0].pageImagePages, [1])
+  assert.deepEqual(attachToolPageImageEvidence(enriched, evidence), enriched)
+  assert.deepEqual(refs, original)
+})
+
+test('page images are limited to the matching document, knowledge base and retrieved chunks', () => {
+  const refs = [
+    { id: 'chunk-1', knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+    { id: 'chunk-1', knowledge_id: 'doc-2', knowledge_base_id: 'kb-1' },
+    { id: 'chunk-1', knowledge_id: 'doc-1', knowledge_base_id: 'kb-2' },
+    { id: 'chunk-2', knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+  ]
+  const result = attachToolPageImageEvidence(refs, { page_image_sources: [
+    { id: 'image-1', page: 1, chunk_ids: ['chunk-1'], knowledge_id: 'doc-1', knowledge_base_id: 'kb-1' },
+  ] })
+  assert.deepEqual(result.map(ref => ref.page_image_sources.length), [1, 0, 0, 0])
+})
+
+test('whole-document tool cards retain page images and textual fallback warnings', () => {
+  const refs = [{ id: 'doc-1', knowledge_id: 'doc-1' }]
+  const evidence = {
+    page_image_sources: [{ id: 'image-1', page: 3, chunk_ids: ['chunk-1'], knowledge_id: 'doc-1' }],
+    page_image_warnings: ['部分页面图片尚未就绪，本次使用其文本证据。'],
+  }
+  const [card] = buildReferenceList(attachToolPageImageEvidence(refs, evidence))
+  assert.deepEqual(card.pageImagePages, [3])
+  assert.deepEqual(card.pageImageWarnings, evidence.page_image_warnings)
+  assert.equal(attachToolPageImageEvidence(refs, undefined), refs)
+})
 
 test('relationship links preserve the cited chunk after grouping and encode document scope', () => {
   const [item] = buildReferenceList([

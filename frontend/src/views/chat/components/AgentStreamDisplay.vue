@@ -652,7 +652,7 @@ import { getKnowledgeChunksSummaryHtml } from '@/utils/knowledgeChunksDisplay';
 import { getAttachmentParsingSummaryHtml } from '@/utils/attachmentParsingDisplay';
 import { useChatCitationPopover } from '@/composables/useChatCitationPopover';
 import { useChatReferencesDrawer } from '@/composables/useChatReferencesDrawer';
-import { mergeDocumentReferences, type KnowledgeReferenceLike, type ReferenceHighlightTarget } from '@/utils/referenceSources';
+import { attachToolPageImageEvidence, mergeDocumentReferences, type KnowledgeReferenceLike, type ReferenceHighlightTarget } from '@/utils/referenceSources';
 import { resolveCitationChunkId } from '@/utils/citationMarkdown';
 import { citationAnchorText } from '@/utils/citationAnchor';
 import { getWikiPage, type WikiPage } from '@/api/wiki';
@@ -1134,7 +1134,12 @@ const getReferencesForDrawer = (
   const messageReferences = refsOverride?.length
     ? refsOverride
     : props.session?.knowledge_references;
-  if (messageReferences?.length) return messageReferences;
+  if (messageReferences?.length) {
+    return (props.session?.agentEventStream || []).reduce(
+      (refs, event) => attachToolPageImageEvidence(refs, event.tool_data),
+      messageReferences,
+    );
+  }
 
   // Agent answers can already contain citation tags before the aggregated
   // knowledge_references event is emitted (and some restored conversations do
@@ -1292,6 +1297,10 @@ const buildToolResultReference = (
 };
 
 function getToolReferenceItems(event: any): KnowledgeReferenceLike[] {
+  return attachToolPageImageEvidence(getRawToolReferenceItems(event), event?.tool_data);
+}
+
+function getRawToolReferenceItems(event: any): KnowledgeReferenceLike[] {
   if (!event || event.pending) return [];
   const toolName = event.tool_name;
   const toolData = event.tool_data;
